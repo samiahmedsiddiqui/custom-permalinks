@@ -1,32 +1,37 @@
 <?php
-/*
-Plugin Name: Custom Permalinks
-Plugin URI: https://wordpress.org/plugins/custom-permalinks/
-Donate link: http://atastypixel.com/blog/wordpress/plugins/custom-permalinks/
-Description: Set custom permalinks on a per-post basis
-Version: 0.8
-Author: Michael Tyson
-Author URI: http://atastypixel.com/blog
-Text Domain: custom-permalinks
-*/
 
-/*  Copyright 2008-2017 Michael Tyson <michael@atastypixel.com> and Sami Ahmed Siddiqui <sami@samisiddiqui.com>
+/**
+ * Plugin Name: Custom Permalinks
+ * Plugin URI: https://wordpress.org/plugins/custom-permalinks/
+ * Donate link: https://www.paypal.me/yasglobal
+ * Description: Set custom permalinks on a per-post basis
+ * Version: 0.9
+ * Author: Sami Ahmed Siddiqui
+ * Author URI: https://www.yasglobal.com/web-design-development/wordpress/custom-permalinks/
+ * Text Domain: custom-permalinks
+ */
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+/**
+ * Copyright 2008-2017 Michael Tyson <michael@atastypixel.com> and Sami Ahmed Siddiqui <sami@samisiddiqui.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // don't access directly
+}
 
 /**
  ** Actions and filters
@@ -48,7 +53,6 @@ function custom_permalinks_post_link($permalink, $post) {
   return $permalink;
 }
 
-
 /**
  * Filter to replace the page permalink with the custom one
  *
@@ -63,7 +67,6 @@ function custom_permalinks_page_link($permalink, $page) {
   
   return $permalink;
 }
-
 
 /**
  * Filter to replace the term permalink with the custom one
@@ -84,7 +87,6 @@ function custom_permalinks_term_link($permalink, $term) {
   return $permalink;
 }
 
-
 /**
  * Action to redirect to the custom permalink
  *
@@ -98,6 +100,8 @@ function custom_permalinks_redirect() {
   $request = ltrim(substr($_SERVER['REQUEST_URI'], strlen($url)),'/');
   if ( ($pos=strpos($request, "?")) ) $request = substr($request, 0, $pos);
   
+  $request = custom_permalinks_check_conflicts($request);
+
   global $wp_query;
   
   $custom_permalink = '';
@@ -156,10 +160,12 @@ function custom_permalinks_request($query) {
   $url = isset($url['path']) ? $url['path'] : '';
   $request = ltrim(substr($_SERVER['REQUEST_URI'], strlen($url)),'/');
   $request = (($pos=strpos($request, '?')) ? substr($request, 0, $pos) : $request);
-  $request_noslash = preg_replace('@/+@','/', trim($request, '/'));
 
   if ( !$request ) return $query;
   
+  $request = custom_permalinks_check_conflicts($request); 
+  $request_noslash = preg_replace('@/+@','/', trim($request, '/'));
+
   // Queries are now WP3.9 compatible (by Steve from Sowmedia.nl)
   $sql = $wpdb->prepare("SELECT $wpdb->posts.ID, $wpdb->postmeta.meta_value, $wpdb->posts.post_type, $wpdb->posts.post_status FROM $wpdb->posts  ".
             "LEFT JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id) WHERE ".
@@ -280,9 +286,9 @@ function custom_permalinks_trailingslash($string, $type) {
   if ( !trim($request) ) return $string;
 
   if ( trim($_CPRegisteredURL,'/') == trim($request,'/') ) {
-		if( isset($url['path']) ){
+		if( isset($url['path']) ) {
 			return ($string{0} == '/' ? '/' : '') . trailingslashit($url['path']) . $_CPRegisteredURL;
-		}else{
+		} else {
 			return ($string{0} == '/' ? '/' : '') . $_CPRegisteredURL;
 		}
 	}
@@ -354,7 +360,6 @@ function custom_permalinks_post_options() {
   <?php
 }
 
-
 /**
  * Per-page options (Wordpress < 2.9)
  *
@@ -379,7 +384,6 @@ function custom_permalinks_page_options() {
   </div>
   <?php
 }
-
 
 /**
  * Per-category/tag options
@@ -431,6 +435,13 @@ function custom_permalinks_form($permalink, $original="", $renderContainers=true
     <th scope="row"><?php _e('Custom Permalink', 'custom-permalinks') ?></th>
     <td>
   <?php endif; ?>
+  
+  <?php 
+    if ($permalink == '') {
+      $original = custom_permalinks_check_conflicts($original);
+    }
+  ?>
+  
       <?php echo home_url() ?>/
       <span id="editable-post-name" title="Click to edit this part of the permalink">
         <input type="text" id="new-post-slug" class="text" value="<?php echo htmlspecialchars($permalink ? urldecode($permalink) : urldecode($original)) ?>"
@@ -448,7 +459,6 @@ function custom_permalinks_form($permalink, $original="", $renderContainers=true
   <?php
   endif;
 }
-
 
 /**
  * Save per-post options
@@ -468,7 +478,6 @@ function custom_permalinks_save_post($id) {
       add_post_meta( $id, 'custom_permalink', str_replace('%2F', '/', urlencode(ltrim(stripcslashes($_REQUEST['custom_permalink']),"/"))) );
   }
 }
-
 
 /**
  * Save per-tag options
@@ -679,7 +688,6 @@ function custom_permalinks_admin_rows() {
   return $rows;
 }
 
-
 /**
  * Get original permalink for post
  *
@@ -720,7 +728,6 @@ function custom_permalinks_original_page_link($post_id) {
     add_filter( 'page_link', 'custom_permalinks_page_link', 'edit_files', 2 );
     return $permalink;
 }
-
 
 /**
  * Get original permalink for tag
@@ -789,9 +796,33 @@ function custom_permalinks_setup_admin_head() {
   wp_enqueue_script('admin-forms');
 }
 
-# Check whether we're running within the WP environment, to avoid showing errors like
-# "Fatal error: Call to undefined function get_bloginfo() in C:\xampp\htdocs\custom-permalinks\custom-permalinks.php on line 753"
-# and similar errors that occurs when the script is called directly to e.g. find out the full path.
+/**
+ * Check Conflicts and resolve it (e.g: Polylang) 
+ *
+ * @package CustomPermalinks
+ * @since 0.9
+ */
+function custom_permalinks_check_conflicts($requested_url = '') {
+  
+  if ($requested_url == '') return;
+  
+  // Check if the Polylang Plugin is installed so, make changes in the URL
+  include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+  if (is_plugin_active("polylang/polylang.php")) {
+    $polylang_config = get_option('polylang');
+    if ($polylang_config['force_lang'] == 1) {
+
+      if(strpos($requested_url, 'language/') !== false)
+        $requested_url = str_replace("language/", "", $requested_url);
+      
+      $remove_lang = ltrim(strstr($requested_url, '/'), '/');
+      if ($remove_lang != '')
+        return $remove_lang;
+    }
+  }
+
+  return $requested_url;
+}
 
 if (function_exists("add_action") && function_exists("add_filter")) {
   add_action( 'template_redirect', 'custom_permalinks_redirect', 5 );

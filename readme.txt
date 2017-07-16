@@ -1,11 +1,11 @@
 === Custom Permalinks ===
 
 Contributors: sasiddiqui, michaeltyson
-Donate link: http://atastypixel.com/blog/wordpress/plugins/custom-permalinks/
+Donate link: https://www.paypal.me/yasglobal
 Tags: permalink, url, link, address, custom, redirect, custom post type
 Requires at least: 2.6
 Tested up to: 4.7
-Stable tag: 0.8
+Stable tag: 0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,10 @@ within that category.
 3. Edit any post, page, tag or category to set a custom permalink.
 
 == Changelog ==
+
+= 0.9 =
+
+ * Resolved the conflict with PolyLang Plugin
 
 = 0.8 =
 
