@@ -1,7 +1,5 @@
 # Custom Permalinks
 
-## Description
-
 Lay out your site the way *you* want it. Set the URL of any post, page, tag or category to anything you want.
 Old permalinks will redirect properly to the new address.  Custom Permalinks gives you ultimate control
 over your site structure.
