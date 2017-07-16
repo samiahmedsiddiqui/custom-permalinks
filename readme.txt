@@ -1,11 +1,11 @@
 === Custom Permalinks ===
 
-Contributors: michaeltyson, sasiddiqui
+Contributors: sasiddiqui, michaeltyson
 Donate link: http://atastypixel.com/blog/wordpress/plugins/custom-permalinks/
-Tags: permalink, url, link, address, custom, redirect
+Tags: permalink, url, link, address, custom, redirect, custom post type
 Requires at least: 2.6
-Tested up to: 4.5
-Stable tag: 0.7.28
+Tested up to: 4.7
+Stable tag: 0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,8 @@ This plugin is only useful for assigning custom permalinks for *individual* post
 It will not apply whole permalink structures, or automatically apply a category's custom permalink to the posts 
 within that category.
 
+> If anyone wants the different Structure Tags for their Post types or use symbols in the URLs So, use the [Permalinks Customizer](https://wordpress.org/plugins/permalinks-customizer/) which is a fork of this plugin and contains the enhancement of this plugin. 
+
 == Installation ==
 
 1. Unzip the package, and upload `custom-permalinks` to the `/wp-content/plugins/` directory
@@ -31,6 +33,10 @@ within that category.
 3. Edit any post, page, tag or category to set a custom permalink.
 
 == Changelog ==
+
+= 0.8 =
+
+ * Fixed (Draft preview issue for custom post types + some PHP Warnings)
 
 = 0.7.28 =
 

@@ -1,16 +1,16 @@
 <?php
 /*
 Plugin Name: Custom Permalinks
-Plugin URI: http://atastypixel.com/blog/wordpress/plugins/custom-permalinks/
+Plugin URI: https://wordpress.org/plugins/custom-permalinks/
 Donate link: http://atastypixel.com/blog/wordpress/plugins/custom-permalinks/
 Description: Set custom permalinks on a per-post basis
-Version: 0.7.28
+Version: 0.8
 Author: Michael Tyson
 Author URI: http://atastypixel.com/blog
 Text Domain: custom-permalinks
 */
 
-/*  Copyright 2008-2016 Michael Tyson <michael@atastypixel.com> and Sami Ahmed Siddiqui <sami@samisiddiqui.com>
+/*  Copyright 2008-2017 Michael Tyson <michael@atastypixel.com> and Sami Ahmed Siddiqui <sami@samisiddiqui.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -188,7 +188,7 @@ function custom_permalinks_request($query) {
       if( $posts[0]->post_type == 'page' ) {
         $originalUrl = "?page_id=" . $posts[0]->ID;
       } else {
-        $originalUrl = "?p=" . $posts[0]->ID;
+        $originalUrl = "?post_type=".$posts[0]->post_type."&p=" . $posts[0]->ID;
       }
     } else {
       $originalUrl =  preg_replace( '@/+@', '/', str_replace( trim( strtolower($posts[0]->meta_value),'/' ),
@@ -302,7 +302,7 @@ function custom_permalinks_trailingslash($string, $type) {
  */
 function custom_permalink_get_sample_permalink_html($html, $id, $new_title, $new_slug) {
   $permalink = get_post_meta( $id, 'custom_permalink', true );
-  $post = &get_post($id);
+  $post = get_post($id);
   
   ob_start();
   ?>
@@ -388,15 +388,19 @@ function custom_permalinks_page_options() {
  * @since 0.1
  */
 function custom_permalinks_term_options($object) {
-  $permalink = custom_permalinks_permalink_for_term($object->term_id);
+  if ( is_object($object) && isset($object->term_id) ) {
+    $permalink = custom_permalinks_permalink_for_term($object->term_id);
   
-  if ( $object->term_id ) {
+    if ( $object->term_id ) {
       $originalPermalink = ($object->taxonomy == 'post_tag' ? 
                     custom_permalinks_original_tag_link($object->term_id) :
                     custom_permalinks_original_category_link($object->term_id) );
     }
-      
-  custom_permalinks_form($permalink, $originalPermalink);
+
+    custom_permalinks_form($permalink, $originalPermalink);
+  } else {
+    custom_permalinks_form('');
+  }
 
   // Move the save button to above this form
   wp_enqueue_script('jquery');
