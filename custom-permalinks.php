@@ -5,7 +5,7 @@
  * Plugin URI: https://wordpress.org/plugins/custom-permalinks/
  * Donate link: https://www.paypal.me/yasglobal
  * Description: Set custom permalinks on a per-post basis
- * Version: 0.9.1
+ * Version: 0.9.2
  * Author: Michael Tyson
  * Author URI: http://atastypixel.com/blog
  * Text Domain: custom-permalinks
@@ -29,8 +29,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+// Make sure we don't expose any info if called directly
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // don't access directly
+  echo 'Hi there!  I\'m just a plugin, not much I can do when called directly.';
+  exit;
 }
 
 /**
@@ -47,7 +49,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function custom_permalinks_post_link($permalink, $post) {
   $custom_permalink = get_post_meta( $post->ID, 'custom_permalink', true );
   if ( $custom_permalink ) {
-    return home_url()."/".$custom_permalink;
+    return apply_filters( 'wpml_permalink', home_url()."/".$custom_permalink );
   }
   
   return $permalink;
@@ -62,7 +64,7 @@ function custom_permalinks_post_link($permalink, $post) {
 function custom_permalinks_page_link($permalink, $page) {
   $custom_permalink = get_post_meta( $page, 'custom_permalink', true );
   if ( $custom_permalink ) {
-    return home_url()."/".$custom_permalink;
+    return apply_filters( 'wpml_permalink', home_url()."/".$custom_permalink );
   }
   
   return $permalink;
@@ -81,7 +83,7 @@ function custom_permalinks_term_link($permalink, $term) {
   $custom_permalink = custom_permalinks_permalink_for_term($term);
   
   if ( $custom_permalink ) {
-    return home_url()."/".$custom_permalink;
+    return apply_filters( 'wpml_permalink', home_url()."/".$custom_permalink );
   }
   
   return $permalink;
@@ -280,8 +282,10 @@ function custom_permalinks_request($query) {
 function custom_permalinks_trailingslash($string, $type) {     
   global $_CPRegisteredURL;
 
+  remove_filter( 'user_trailingslashit', 'custom_permalinks_trailingslash', 10, 2 );
   $url = parse_url(get_bloginfo('url'));
   $request = ltrim(isset($url['path']) ? substr($string, strlen($url['path'])) : $string, '/');
+  add_filter( 'user_trailingslashit', 'custom_permalinks_trailingslash', 10, 2 );
 
   if ( !trim($request) ) return $string;
 

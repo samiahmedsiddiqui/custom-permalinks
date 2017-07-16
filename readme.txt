@@ -4,8 +4,8 @@ Contributors: sasiddiqui, michaeltyson
 Donate link: https://www.paypal.me/yasglobal
 Tags: permalink, url, link, address, custom, redirect, custom post type
 Requires at least: 2.6
-Tested up to: 4.7
-Stable tag: 0.9.1
+Tested up to: 4.8
+Stable tag: 0.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,10 @@ within that category.
 3. Edit any post, page, tag or category to set a custom permalink.
 
 == Changelog ==
+
+= 0.9.2 =
+
+ * Fixed WPML Conflicts
 
 = 0.9.1 =
 
