@@ -5,7 +5,7 @@
  * Plugin URI: https://wordpress.org/plugins/custom-permalinks/
  * Donate link: https://www.paypal.me/yasglobal
  * Description: Set custom permalinks on a per-post basis
- * Version: 0.9.2
+ * Version: 0.9.3
  * Author: Michael Tyson
  * Author URI: http://atastypixel.com/blog
  * Text Domain: custom-permalinks
@@ -42,14 +42,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Filter to replace the post permalink with the custom one
- *
- * @package CustomPermalinks
- * @since 0.1
  */
 function custom_permalinks_post_link($permalink, $post) {
   $custom_permalink = get_post_meta( $post->ID, 'custom_permalink', true );
   if ( $custom_permalink ) {
-    return apply_filters( 'wpml_permalink', home_url()."/".$custom_permalink );
+    $post_type = isset($post->post_type) ? $post->post_type : 'post';
+    $language_code = apply_filters( 'wpml_element_language_code', null, array( 'element_id' => $post->ID, 'element_type' => $post_type ) );
+    if ( $language_code ) 
+		  return apply_filters( 'wpml_permalink', home_url()."/".$custom_permalink, $language_code );
+    else 
+      return apply_filters( 'wpml_permalink', home_url()."/".$custom_permalink );
   }
   
   return $permalink;
@@ -57,14 +59,15 @@ function custom_permalinks_post_link($permalink, $post) {
 
 /**
  * Filter to replace the page permalink with the custom one
- *
- * @package CustomPermalinks
- * @since 0.4
  */
 function custom_permalinks_page_link($permalink, $page) {
   $custom_permalink = get_post_meta( $page, 'custom_permalink', true );
-  if ( $custom_permalink ) {
-    return apply_filters( 'wpml_permalink', home_url()."/".$custom_permalink );
+  if ( $custom_permalink ) {    
+    $language_code = apply_filters( 'wpml_element_language_code', null, array( 'element_id' => $page, 'element_type' => 'page' ) );
+	  if ( $language_code )
+      return apply_filters( 'wpml_permalink', home_url()."/".$custom_permalink, $language_code );
+    else 
+      return apply_filters( 'wpml_permalink', home_url()."/".$custom_permalink );
   }
   
   return $permalink;
@@ -72,18 +75,21 @@ function custom_permalinks_page_link($permalink, $page) {
 
 /**
  * Filter to replace the term permalink with the custom one
- *
- * @package CustomPermalinks
- * @since 0.1
  */
 function custom_permalinks_term_link($permalink, $term) {
   $table = get_option('custom_permalink_table');
   if ( is_object($term) ) $term = $term->term_id;
   
   $custom_permalink = custom_permalinks_permalink_for_term($term);
-  
   if ( $custom_permalink ) {
-    return apply_filters( 'wpml_permalink', home_url()."/".$custom_permalink );
+    $taxonomy = get_term($term);
+    if ( isset($taxonomy) && isset($taxonomy->term_taxonomy_id) ) {
+      $term_type = isset($taxonomy->taxonomy) ? $taxonomy->taxonomy : 'category';
+      $language_code = apply_filters( 'wpml_element_language_code', null, array( 'element_id' => $taxonomy->term_taxonomy_id, 'element_type' => $term_type ) );
+		  return apply_filters( 'wpml_permalink', home_url()."/".$custom_permalink, $language_code );
+    } else {
+      return apply_filters( 'wpml_permalink', home_url()."/".$custom_permalink );
+    }
   }
   
   return $permalink;
@@ -811,8 +817,7 @@ function custom_permalinks_check_conflicts($requested_url = '') {
   if ($requested_url == '') return;
   
   // Check if the Polylang Plugin is installed so, make changes in the URL
-  include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-  if (is_plugin_active("polylang/polylang.php")) {
+  if (defined( 'POLYLANG_VERSION' )) {
     $polylang_config = get_option('polylang');
     if ($polylang_config['force_lang'] == 1) {
 
