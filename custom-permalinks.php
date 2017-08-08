@@ -6,8 +6,8 @@
  * Donate link: https://www.paypal.me/yasglobal
  * Description: Set custom permalinks on a per-post basis
  * Version: 0.9.3
- * Author: Michael Tyson
- * Author URI: http://atastypixel.com/blog
+ * Author: Sami Ahmed Siddiqui
+ * Author URI: https://www.yasglobal.com/web-design-development/wordpress/custom-permalinks/
  * Text Domain: custom-permalinks
  */
 
