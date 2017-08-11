@@ -5,14 +5,14 @@
  * Plugin URI: https://wordpress.org/plugins/custom-permalinks/
  * Donate link: https://www.paypal.me/yasglobal
  * Description: Set custom permalinks on a per-post basis
- * Version: 0.9.3
+ * Version: 1.0
  * Author: Sami Ahmed Siddiqui
  * Author URI: https://www.yasglobal.com/web-design-development/wordpress/custom-permalinks/
  * Text Domain: custom-permalinks
  */
 
 /**
- * Copyright 2008-2017 Michael Tyson <michael@atastypixel.com> and Sami Ahmed Siddiqui <sami@samisiddiqui.com>
+ * Copyright 2008-2017 Sami Ahmed Siddiqui <sami@samisiddiqui.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -175,7 +175,7 @@ function custom_permalinks_request($query) {
   $request_noslash = preg_replace('@/+@','/', trim($request, '/'));
 
   // Queries are now WP3.9 compatible (by Steve from Sowmedia.nl)
-  $sql = $wpdb->prepare("SELECT $wpdb->posts.ID, $wpdb->postmeta.meta_value, $wpdb->posts.post_type, $wpdb->posts.post_status FROM $wpdb->posts  ".
+  /* $sql = $wpdb->prepare("SELECT $wpdb->posts.ID, $wpdb->postmeta.meta_value, $wpdb->posts.post_type, $wpdb->posts.post_status FROM $wpdb->posts  ".
             "LEFT JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id) WHERE ".
             "  meta_key = 'custom_permalink' AND ".
             "  meta_value != '' AND ".
@@ -187,7 +187,9 @@ function custom_permalinks_request($query) {
             " FIELD(post_type,'post','page'),".
             "$wpdb->posts.ID ASC  LIMIT 1",
     $request_noslash,
-    $request_noslash."/");
+    $request_noslash."/"); */
+  
+  $sql = $wpdb->prepare("SELECT p.ID as ID, pm.meta_value as meta_value, p.post_type as post_type, p.post_status as post_status FROM $wpdb->posts AS p, $wpdb->postmeta AS pm WHERE p.ID = pm.post_id AND pm.meta_key = 'custom_permalink' AND (pm.meta_value = '%s' OR pm.meta_value = '%s') AND p.post_status != 'trash' AND p.post_type != 'nav_menu_item' LIMIT 1", $request_noslash, $request_noslash."/");
 
   $posts = $wpdb->get_results($sql);
 
