@@ -5,7 +5,7 @@
  * Plugin URI: https://wordpress.org/plugins/custom-permalinks/
  * Donate link: https://www.paypal.me/yasglobal
  * Description: Set custom permalinks on a per-post basis
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Sami Ahmed Siddiqui
  * Author URI: https://www.yasglobal.com/web-design-development/wordpress/custom-permalinks/
  * Text Domain: custom-permalinks
@@ -174,7 +174,7 @@ function custom_permalinks_request($query) {
   $request = custom_permalinks_check_conflicts($request); 
   $request_noslash = preg_replace('@/+@','/', trim($request, '/'));
 
-  $sql = $wpdb->prepare("SELECT p.ID as ID, pm.meta_value as meta_value, p.post_type as post_type, p.post_status as post_status FROM $wpdb->posts AS p, $wpdb->postmeta AS pm WHERE p.ID = pm.post_id AND pm.meta_key = 'custom_permalink' AND ( LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) OR LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) ) AND p.post_status != 'trash' AND p.post_type != 'nav_menu_item' LIMIT 1", $request_noslash, $request_noslash."/");
+  $sql = $wpdb->prepare("SELECT p.ID as ID, pm.meta_value as meta_value, p.post_type as post_type, p.post_status as post_status FROM $wpdb->posts AS p, $wpdb->postmeta AS pm WHERE p.ID = pm.post_id AND pm.meta_key = 'custom_permalink' AND meta_value != '' AND ( LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) OR LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) ) AND p.post_status != 'trash' AND p.post_type != 'nav_menu_item' ORDER BY LENGTH(meta_value) DESC, p.ID LIMIT 1", $request_noslash, $request_noslash."/");
 
   $posts = $wpdb->get_results($sql);
 
