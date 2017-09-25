@@ -5,7 +5,7 @@ Donate link: https://www.paypal.me/yasglobal
 Tags: permalink, url, link, address, custom, redirect, custom post type
 Requires at least: 2.6
 Tested up to: 4.8
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,6 +26,19 @@ within that category.
 
 > If anyone wants the different Structure Tags for their Post types or use symbols in the URLs So, use the [Permalinks Customizer](https://wordpress.org/plugins/permalinks-customizer/) which is a fork of this plugin and contains the enhancement of this plugin. 
 
+== Filter ==
+
+If you want to exclude some Permalink to processed with the plugin so, just add the filter looks like this:
+`
+function check_xml_sitemap_url( $permalink ) {
+  if ( strpos( $permalink, 'sitemap.xml' ) !== false ) {
+    return '__true';
+  }
+  return;
+}
+add_filter( 'custom_permalinks_request_ignore', 'check_xml_sitemap_url' );
+`
+
 == Installation ==
 
 1. Unzip the package, and upload `custom-permalinks` to the `/wp-content/plugins/` directory
@@ -33,6 +46,16 @@ within that category.
 3. Edit any post, page, tag or category to set a custom permalink.
 
 == Changelog ==
+
+= 1.2 =
+
+  * Enhancements
+    * Added Filter to Exclude/Ignore URL to be processed
+    * Added Transaltion Capability
+    * Split the Code using OOPS Concept to improve performance and applied the filters according to the need
+    * Removed some unnecessary filters
+  * Bugs
+    * Fixed Vulnerability Issues
 
 = 1.1 =
   
