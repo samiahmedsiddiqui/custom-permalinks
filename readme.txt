@@ -5,7 +5,7 @@ Donate link: https://www.paypal.me/yasglobal
 Tags: permalink, url, link, address, custom, redirect, custom post type
 Requires at least: 2.6
 Tested up to: 4.8
-Stable tag: 1.2
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,6 +46,9 @@ add_filter( 'custom_permalinks_request_ignore', 'check_xml_sitemap_url' );
 3. Edit any post, page, tag or category to set a custom permalink.
 
 == Changelog ==
+
+= 1.2.1 =
+  * Fixed Class Typo
 
 = 1.2 =
 

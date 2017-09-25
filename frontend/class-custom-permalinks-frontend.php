@@ -48,9 +48,9 @@ class Custom_Permalinks_Frontend {
 		if ( $ignore === '__true' ) return $query;
 
 		if ( defined( 'POLYLANG_VERSION' ) ) {
-			require_once( CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-admin.php' );
-			$custom_permalinks_admin = new Custom_Permalinks_Admin();
-			$request = $custom_permalinks_admin->custom_permalinks_check_conflicts( $request );
+			require_once( CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-form.php' );
+			$custom_permalinks_form = new Custom_Permalinks_Form();
+			$request = $custom_permalinks_form->custom_permalinks_check_conflicts( $request );
 		}
 		$request_noslash = preg_replace( '@/+@','/', trim( $request, '/' ) );
 
@@ -170,9 +170,9 @@ class Custom_Permalinks_Frontend {
 		if ( ( $pos = strpos( $request, "?" ) ) ) $request = substr( $request, 0, $pos );
 
 		if ( defined( 'POLYLANG_VERSION' ) ) {
-			require_once( CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-admin.php' );
-			$custom_permalinks_admin = new Custom_Permalinks_Admin();
-			$request = $custom_permalinks_admin->custom_permalinks_check_conflicts( $request );
+			require_once( CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-form.php' );
+			$custom_permalinks_form = new Custom_Permalinks_Form();
+			$request = $custom_permalinks_form->custom_permalinks_check_conflicts( $request );
 		}
 
 		global $wp_query;
