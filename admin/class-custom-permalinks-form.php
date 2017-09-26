@@ -56,20 +56,19 @@ class Custom_Permalinks_Form {
 	 */
 	public function custom_permalinks_delete_permalink( $id ) {
 		global $wpdb;
-		$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->postmeta WHERE meta_key = 'custom_permalink' AND `post_id` = %d", $id ) );
+		$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->postmeta WHERE meta_key = 'custom_permalink' AND post_id = %d", $id ) );
 	}
 
 	/**
 	 * Per-post/page options (Wordpress > 2.9)
 	 */
-	public function custom_permalinks_get_sample_permalink_html( $html, $id, $new_title, $new_slug ) {
+	public function custom_permalinks_get_sample_permalink_html( $html, $id, $new_title, $new_slug ) {		
+		$permalink = get_post_meta( $id, 'custom_permalink', true );
+		$post      = get_post( $id );
+
 		if ( $post->post_type == 'attachment' || $post->ID == get_option( 'page_on_front' ) ) {
 			return $html;
 		}
-
-		$permalink = get_post_meta( $id, 'custom_permalink', true );
-		$post = get_post( $id );
-
 		ob_start();
 
 		require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php' );
@@ -244,8 +243,9 @@ class Custom_Permalinks_Form {
 
 		require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php' );
 		$custom_permalinks_frontend = new Custom_Permalinks_Frontend();
-		if ( $newPermalink == $custom_permalinks_frontend->custom_permalinks_original_tag_link( $id ) )
+		if ( $newPermalink == $custom_permalinks_frontend->custom_permalinks_original_tag_link( $id ) ) {
 			$newPermalink = '';
+		}
 
 		$term = get_term( $id, 'post_tag' );
 		$this->custom_permalinks_save_term( $term, str_replace( '%2F', '/', urlencode( $newPermalink ) ) );
@@ -263,8 +263,9 @@ class Custom_Permalinks_Form {
 
 		require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php' );
 		$custom_permalinks_frontend = new Custom_Permalinks_Frontend();
-		if ( $newPermalink == $custom_permalinks_frontend->custom_permalinks_original_category_link( $id ) )
+		if ( $newPermalink == $custom_permalinks_frontend->custom_permalinks_original_category_link( $id ) ) {
 			$newPermalink = '';
+		}
 
 		$term = get_term( $id, 'category' );
 		$this->custom_permalinks_save_term( $term, str_replace( '%2F', '/', urlencode( $newPermalink ) ) );
@@ -308,19 +309,23 @@ class Custom_Permalinks_Form {
 	 * Check Conflicts and resolve it (e.g: Polylang)
 	 */
 	public function custom_permalinks_check_conflicts( $requested_url = '' ) {
-		if ( $requested_url == '' ) return;
+		if ( $requested_url == '' ) {
+			return;
+		}
 
 		// Check if the Polylang Plugin is installed so, make changes in the URL
 		if ( defined( 'POLYLANG_VERSION' ) ) {
 			$polylang_config = get_option( 'polylang' );
 			if ( $polylang_config['force_lang'] == 1 ) {
 
-				if ( strpos( $requested_url, 'language/' ) !== false )
+				if ( strpos( $requested_url, 'language/' ) !== false ) {
 					$requested_url = str_replace( "language/", "", $requested_url );
+				}
 
 				$remove_lang = ltrim( strstr( $requested_url, '/' ), '/' );
-				if ( $remove_lang != '' )
+				if ( $remove_lang != '' ) {
 					return $remove_lang;
+				}
 			}
 		}
 		return $requested_url;

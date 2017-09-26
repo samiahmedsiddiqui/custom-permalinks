@@ -36,16 +36,20 @@ class Custom_Permalinks_Frontend {
 		$original_url = NULL;
 
 		// Get request URI, strip parameters and /'s
-		$url = parse_url( get_bloginfo( 'url' ) );
-		$url = isset( $url['path'] ) ? $url['path'] : '';
+		$url     = parse_url( get_bloginfo( 'url' ) );
+		$url     = isset( $url['path'] ) ? $url['path'] : '';
 		$request = ltrim( substr( $_SERVER['REQUEST_URI'], strlen( $url ) ), '/' );
 		$request = ( ( $pos = strpos( $request, '?' ) ) ? substr( $request, 0, $pos ) : $request );
 
-		if ( ! $request ) return $query;
+		if ( ! $request ) {
+			return $query;
+		}
 
 		$ignore = apply_filters( 'custom_permalinks_request_ignore', $request );
 
-		if ( $ignore === '__true' ) return $query;
+		if ( '__true' === $ignore ) {
+			return $query;
+		}
 
 		if ( defined( 'POLYLANG_VERSION' ) ) {
 			require_once( CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-form.php' );
@@ -71,8 +75,9 @@ class Custom_Permalinks_Frontend {
 			// A post matches our request
 
 			// Preserve this url for later if it's the same as the permalink (no extra stuff)
-			if ( $request_noslash == trim( $posts[0]->meta_value, '/' ) )
+			if ( $request_noslash == trim( $posts[0]->meta_value, '/' ) ) {
 				$_CPRegisteredURL = $request;
+			}
 
 			if ( $posts[0]->post_status == 'draft' ) {
 				if ( $posts[0]->post_type == 'page' ) {
@@ -99,7 +104,9 @@ class Custom_Permalinks_Frontend {
 		if ( $original_url === NULL ) {
 			// See if any terms have a matching permalink
 			$table = get_option( 'custom_permalink_table' );
-			if ( ! $table ) return $query;
+			if ( ! $table ) {
+				return $query;
+			}
 
 			foreach ( array_keys( $table ) as $permalink ) {
 				if ( $permalink == substr( $request_noslash, 0, strlen( $permalink ) )
@@ -107,8 +114,9 @@ class Custom_Permalinks_Frontend {
 					$term = $table[$permalink];
 
 					// Preserve this url for later if it's the same as the permalink (no extra stuff)
-					if ( $request_noslash == trim( $permalink, '/' ) )
+					if ( $request_noslash == trim( $permalink, '/' ) ) {
 						$_CPRegisteredURL = $request;
+					}
 
 					if ( $term['kind'] == 'category' ) {
 						$category_link = $this->custom_permalinks_original_category_link( $term['id'] );
@@ -136,10 +144,11 @@ class Custom_Permalinks_Frontend {
 			$_SERVER['QUERY_STRING'] = ( ( $pos = strpos( $original_url, '?' ) ) !== false ? substr( $original_url, $pos + 1 ) : '' );
 			parse_str( $_SERVER['QUERY_STRING'], $query_array );
 			$old_values = array();
-			if ( is_array( $query_array ) )
-			foreach ( $query_array as $key => $value ) {
-				$old_values[$key] = $_REQUEST[$key];
-				$_REQUEST[$key] = $_GET[$key] = $value;
+			if ( is_array( $query_array ) ) {
+				foreach ( $query_array as $key => $value ) {
+					$old_values[$key] = $_REQUEST[$key];
+					$_REQUEST[$key]   = $_GET[$key] = $value;
+				}
 			}
 
 			// Re-run the filter, now with original environment in place
@@ -164,10 +173,13 @@ class Custom_Permalinks_Frontend {
 	 */
 	public function custom_permalinks_redirect() {
 		// Get request URI, strip parameters
-		$url = parse_url( get_bloginfo( 'url' ) );
-		$url = isset( $url['path'] ) ? $url['path'] : '';
+		$url     = parse_url( get_bloginfo( 'url' ) );
+		$url     = isset( $url['path'] ) ? $url['path'] : '';
 		$request = ltrim( substr( $_SERVER['REQUEST_URI'], strlen( $url ) ), '/' );
-		if ( ( $pos = strpos( $request, "?" ) ) ) $request = substr( $request, 0, $pos );
+		$pos     = strpos( $request, "?" );
+		if ( $pos ) {
+			$request = substr( $request, 0, $pos );
+		}
 
 		if ( defined( 'POLYLANG_VERSION' ) ) {
 			require_once( CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-form.php' );
@@ -259,7 +271,9 @@ class Custom_Permalinks_Frontend {
 	 */
 	public function custom_permalinks_term_link( $permalink, $term ) {
 		$table = get_option( 'custom_permalink_table' );
-		if ( is_object( $term ) ) $term = $term->term_id;
+		if ( is_object( $term ) ) {
+			$term = $term->term_id;
+		}
 
 		$custom_permalink = $this->custom_permalinks_permalink_for_term( $term );
 		if ( $custom_permalink ) {
@@ -346,7 +360,9 @@ class Custom_Permalinks_Frontend {
 		$request = ltrim( isset( $url['path'] ) ? substr( $string, strlen( $url['path'] ) ) : $string, '/' );
 		add_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
 
-		if ( ! trim( $request ) ) return $string;
+		if ( ! trim( $request ) ) {
+			return $string;
+		}
 
 		if ( trim( $_CPRegisteredURL, '/' ) == trim( $request, '/' ) ) {
 			if ( isset( $url['path'] ) ) {
@@ -364,10 +380,11 @@ class Custom_Permalinks_Frontend {
 	 */
 	public function custom_permalinks_permalink_for_term( $id ) {
 		$table = get_option( 'custom_permalink_table' );
-		if ( $table )
-		foreach ( $table as $link => $info ) {
-			if ( $info['id'] == $id ) {
-				return $link;
+		if ( $table ) {
+			foreach ( $table as $link => $info ) {
+				if ( $info['id'] == $id ) {
+					return $link;
+				}
 			}
 		}
 		return false;

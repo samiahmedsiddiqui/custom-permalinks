@@ -5,7 +5,7 @@ Donate link: https://www.paypal.me/yasglobal
 Tags: permalink, url, link, address, custom, redirect, custom post type
 Requires at least: 2.6
 Tested up to: 4.8
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,7 +31,7 @@ within that category.
 If you want to exclude some Permalink to processed with the plugin so, just add the filter looks like this:
 `
 function check_xml_sitemap_url( $permalink ) {
-  if ( strpos( $permalink, 'sitemap.xml' ) !== false ) {
+  if ( false !== strpos( $permalink, 'sitemap.xml' )) {
     return '__true';
   }
   return;
@@ -46,6 +46,10 @@ add_filter( 'custom_permalinks_request_ignore', 'check_xml_sitemap_url' );
 3. Edit any post, page, tag or category to set a custom permalink.
 
 == Changelog ==
+
+= 1.2.3 =
+
+  * Fixed PHP Notice on Edit Post Page
 
 = 1.2.2 =
 
