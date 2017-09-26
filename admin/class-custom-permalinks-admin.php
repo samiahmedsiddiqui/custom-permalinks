@@ -26,15 +26,15 @@ class Custom_Permalinks_Admin {
 	 */
 	public function custom_permalinks_post_permalinks() {
 		global $wpdb;
-		$filter_options = '';
+		$filter_options   = '';
 		$search_permalink = '';
-		$html = '';
-		$error = '';
+		$html             = '';
+		$error            = '';
 
 		// Handle Bulk Operations
 		if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'delete' )
 			|| ( isset( $_POST['action2'] ) && $_POST['action2'] == 'delete' )
-			&& isset( $_POST['permalink'] ) && !empty( $_POST['permalink'] ) ) {
+			&& isset( $_POST['permalink'] ) && ! empty( $_POST['permalink'] ) ) {
 			$post_ids = implode( ',', $_POST['permalink'] );
 			if ( preg_match( '/^\d+(?:,\d+)*$/', $post_ids ) ) {
 				$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE post_id IN ($post_ids) AND meta_key = 'custom_permalink'" );
@@ -50,8 +50,8 @@ class Custom_Permalinks_Admin {
 		if ( isset( $_GET['s'] ) && ! empty( $_GET['s'] ) ) {
 			$filter_permalink = 'AND pm.meta_value LIKE "%' . $_GET['s'] . '%"';
 			$search_permalink = '&s=' . $_GET['s'] . '';
-			$search_value = ltrim( htmlspecialchars( $_GET['s'] ), '/' );
-			$html .= '<span class="subtitle">Search results for "' . $search_value . '"</span>';
+			$search_value     = ltrim( htmlspecialchars( $_GET['s'] ), '/' );
+			$html            .= '<span class="subtitle">Search results for "' . $search_value . '"</span>';
 		}
 		$page_limit = 'LIMIT 0, 20';
 		if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] ) && $_GET['paged'] > 1 ) {
@@ -64,14 +64,14 @@ class Custom_Permalinks_Admin {
 		if ( isset( $_GET['orderby'] ) && $_GET['orderby'] == 'title' ) {
 			$filter_options .= '<input type="hidden" name="orderby" value="title" />';
 			if ( isset( $_GET['order'] ) && $_GET['order'] == 'desc' ) {
-				$sorting_by = 'ORDER By p.post_title DESC';
-				$order_by = 'asc';
-				$order_by_class = 'desc';
+				$sorting_by      = 'ORDER By p.post_title DESC';
+				$order_by        = 'asc';
+				$order_by_class  = 'desc';
 				$filter_options .= '<input type="hidden" name="order" value="desc" />';
 			} else {
-				$sorting_by = 'ORDER By p.post_title';
-				$order_by = 'desc';
-				$order_by_class = 'asc';
+				$sorting_by      = 'ORDER By p.post_title';
+				$order_by        = 'desc';
+				$order_by_class  = 'asc';
 				$filter_options .= '<input type="hidden" name="order" value="asc" />';
 			}
 		}
@@ -176,7 +176,7 @@ class Custom_Permalinks_Admin {
 	public function custom_permalinks_category_permalinks() {
 
 		$search_permalink = '';
-		$html = '';
+		$html             = '';
 
 		// Handle Bulk Operations
 		if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'delete' )
@@ -204,11 +204,11 @@ class Custom_Permalinks_Admin {
 		$search_value = '';
 		if ( isset( $_GET['s'] ) && ! empty( $_GET['s'] ) ) {
 			$search_permalink = '&s=' . $_GET['s'] . '';
-			$search_value = ltrim( htmlspecialchars( $_GET['s'] ), '/' );
-			$html .= '<span class="subtitle">Search results for "' . $search_value . '"</span>';
+			$search_value     = ltrim( htmlspecialchars( $_GET['s'] ), '/' );
+			$html            .= '<span class="subtitle">Search results for "' . $search_value . '"</span>';
 		}
 		$pager_offset = '0';
-		$page_limit = 20;
+		$page_limit   = 20;
 		if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] ) && $_GET['paged'] > 1 ) {
 			$pager_offset = 20 * ( $_GET['paged'] - 1 );
 			$page_limit = $pager_offset + 20;
@@ -231,8 +231,8 @@ class Custom_Permalinks_Admin {
 										<input type="submit" id="doaction" class="button action" value="Apply">
 							</div>';
 
-		$posts = 0;
-		$table = get_option( 'custom_permalink_table' );
+		$posts      = 0;
+		$table      = get_option( 'custom_permalink_table' );
 		$count_tags = count( $table );
 		if ( isset( $table ) && is_array( $table ) && $count_tags > 0 ) {
 
@@ -282,11 +282,11 @@ class Custom_Permalinks_Admin {
 				if ( $i >= $page_limit )
 					break;
 
-				$type = $info['kind'] == 'tag' ? 'post_tag' : 'category';
-				$term = get_term( $info['id'], $type );
-				$html .= '<tr valign="top">';
-				$html .= '<th scope="row" class="check-column"><input type="checkbox" name="permalink[]" value="' . $info['id'] . '" /></th>';
-				$html .= '<td><strong><a class="row-title" href="edit-tags.php?action=edit&taxonomy=' . $type . '&tag_ID=' . $info['id'] . ' ">' . $term->name . '</a></strong></td>';
+				$type  =  $info['kind'] == 'tag' ? 'post_tag' : 'category';
+				$term  =  get_term( $info['id'], $type );
+				$html .=  '<tr valign="top">';
+				$html .=  '<th scope="row" class="check-column"><input type="checkbox" name="permalink[]" value="' . $info['id'] . '" /></th>';
+				$html .=  '<td><strong><a class="row-title" href="edit-tags.php?action=edit&taxonomy=' . $type . '&tag_ID=' . $info['id'] . ' ">' . $term->name . '</a></strong></td>';
 				$html .=  '<td>' . ucwords( $info['kind'] ) . '</td>';        
 				$html .=  '<td><a href="/' . $permalink . '" target="_blank" title="' . __( "Visit " . $term->name, "custom-permalinks" ) . '">/' . $permalink . '</a></td></tr>';
 			}

@@ -71,7 +71,7 @@ class Custom_Permalinks_Frontend {
 			// A post matches our request
 
 			// Preserve this url for later if it's the same as the permalink (no extra stuff)
-			if ( $request_noslash == trim( $posts[0]->meta_value, '/') )
+			if ( $request_noslash == trim( $posts[0]->meta_value, '/' ) )
 				$_CPRegisteredURL = $request;
 
 			if ( $posts[0]->post_status == 'draft' ) {
@@ -98,7 +98,7 @@ class Custom_Permalinks_Frontend {
 
 		if ( $original_url === NULL ) {
 			// See if any terms have a matching permalink
-			$table = get_option('custom_permalink_table');
+			$table = get_option( 'custom_permalink_table' );
 			if ( ! $table ) return $query;
 
 			foreach ( array_keys( $table ) as $permalink ) {
@@ -110,7 +110,7 @@ class Custom_Permalinks_Frontend {
 					if ( $request_noslash == trim( $permalink, '/' ) )
 						$_CPRegisteredURL = $request;
 
-					if ( $term['kind'] == 'category') {
+					if ( $term['kind'] == 'category' ) {
 						$category_link = $this->custom_permalinks_original_category_link( $term['id'] );
 						$original_url = str_replace( trim( $permalink, '/' ), $category_link, trim( $request, '/' ) );
 					} else {
@@ -126,14 +126,14 @@ class Custom_Permalinks_Frontend {
 
 			if ( ( $pos = strpos( $_SERVER['REQUEST_URI'], '?' ) ) !== false ) {
 				$query_vars = substr( $_SERVER['REQUEST_URI'], $pos + 1);
-				$original_url .= ( strpos( $original_url, '?' ) === false ? '?' : '&') . $query_vars;
+				$original_url .= ( strpos( $original_url, '?' ) === false ? '?' : '&' ) . $query_vars;
 			}
 
 			// Now we have the original URL, run this back through WP->parse_request, in order to
 			// parse parameters properly.  We set $_SERVER variables to fool the function.
 			$old_request_uri = $_SERVER['REQUEST_URI']; $old_query_string = $_SERVER['QUERY_STRING'];
-			$_SERVER['REQUEST_URI'] = '/' . ltrim( $original_url, '/');
-			$_SERVER['QUERY_STRING'] = ( ( $pos = strpos( $original_url, '?' ) ) !== false ? substr( $original_url, $pos + 1 ) : '');
+			$_SERVER['REQUEST_URI'] = '/' . ltrim( $original_url, '/' );
+			$_SERVER['QUERY_STRING'] = ( ( $pos = strpos( $original_url, '?' ) ) !== false ? substr( $original_url, $pos + 1 ) : '' );
 			parse_str( $_SERVER['QUERY_STRING'], $query_array );
 			$old_values = array();
 			if ( is_array( $query_array ) )
@@ -143,11 +143,11 @@ class Custom_Permalinks_Frontend {
 			}
 
 			// Re-run the filter, now with original environment in place
-			remove_filter( 'request', array( $this, 'custom_permalinks_request'), 10, 1 );
+			remove_filter( 'request', array( $this, 'custom_permalinks_request' ), 10, 1 );
 			global $wp;
 			$wp->parse_request();
 			$query = $wp->query_vars;
-			add_filter( 'request', array( $this, 'custom_permalinks_request'), 10, 1 );
+			add_filter( 'request', array( $this, 'custom_permalinks_request' ), 10, 1 );
 
 			// Restore values
 			$_SERVER['REQUEST_URI'] = $old_request_uri; $_SERVER['QUERY_STRING'] = $old_query_string;
@@ -189,7 +189,7 @@ class Custom_Permalinks_Frontend {
 			} else {
 				$original_permalink = $this->custom_permalinks_original_post_link( $post->ID );
 			}
-		} else if ( is_tag() || is_category() ) {
+		} elseif ( is_tag() || is_category() ) {
 			$theTerm = $wp_query->get_queried_object();
 			$custom_permalink = $this->custom_permalinks_permalink_for_term( $theTerm->term_id );
 			if ( is_tag() ) {
@@ -200,7 +200,7 @@ class Custom_Permalinks_Frontend {
 		}
 
 		if ( $custom_permalink
-			&& ( substr($request, 0, strlen( $custom_permalink ) ) != $custom_permalink
+			&& ( substr( $request, 0, strlen( $custom_permalink ) ) != $custom_permalink
 			|| $request == $custom_permalink . "/" ) ) {
 
 			// Request doesn't match permalink - redirect
@@ -258,9 +258,9 @@ class Custom_Permalinks_Frontend {
 	 * Filter to replace the term permalink with the custom one
 	 */
 	public function custom_permalinks_term_link( $permalink, $term ) {
-		$table = get_option('custom_permalink_table');
-		if ( is_object($term) ) $term = $term->term_id;
-		
+		$table = get_option( 'custom_permalink_table' );
+		if ( is_object( $term ) ) $term = $term->term_id;
+
 		$custom_permalink = $this->custom_permalinks_permalink_for_term( $term );
 		if ( $custom_permalink ) {
 			$taxonomy = get_term( $term );
@@ -343,14 +343,14 @@ class Custom_Permalinks_Frontend {
 
 		remove_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
 		$url = parse_url( get_bloginfo( 'url' ) );
-		$request = ltrim( isset( $url['path'] ) ? substr( $string, strlen( $url['path'] ) ) : $string, '/');
+		$request = ltrim( isset( $url['path'] ) ? substr( $string, strlen( $url['path'] ) ) : $string, '/' );
 		add_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
 
 		if ( ! trim( $request ) ) return $string;
 
 		if ( trim( $_CPRegisteredURL, '/' ) == trim( $request, '/' ) ) {
 			if ( isset( $url['path'] ) ) {
-				return ( $string{0} == '/' ? '/' : '') . trailingslashit( $url['path'] ) . $_CPRegisteredURL;
+				return ( $string{0} == '/' ? '/' : '' ) . trailingslashit( $url['path'] ) . $_CPRegisteredURL;
 			} else {
 				return ( $string{0} == '/' ? '/' : '' ) . $_CPRegisteredURL;
 			}

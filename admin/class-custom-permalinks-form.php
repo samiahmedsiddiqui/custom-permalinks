@@ -99,7 +99,7 @@ class Custom_Permalinks_Form {
 			}
 		}
 
-		return '<strong>' . __('Permalink:', 'custom-permalinks') . "</strong>\n" . $content .
+		return '<strong>' . __( 'Permalink:', 'custom-permalinks' ) . "</strong>\n" . $content .
 				 ( isset( $view_post ) ? "<span id='view-post-btn'><a href='$permalink' class='button button-small' target='_blank'>$view_post</a></span>\n" : "" );
 	}
 
@@ -121,7 +121,7 @@ class Custom_Permalinks_Form {
 					<?php
 						require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php' );
 						$custom_permalinks_frontend = new Custom_Permalinks_Frontend();
-						$custom_permalinks_frontend->custom_permalinks_get_form( $permalink, $this->custom_permalinks_original_post_link( $post_id ) ); 
+						$custom_permalinks_frontend->custom_permalinks_get_form( $permalink, $custom_permalinks_frontend->custom_permalinks_original_post_link( $post_id ) ); 
 					?>
 				</div>
 		</div>
@@ -160,11 +160,11 @@ class Custom_Permalinks_Form {
 	 */
 	public function custom_permalinks_term_options( $object ) {
 		if ( is_object( $object ) && isset( $object->term_id ) ) {
-			$permalink = $this->custom_permalinks_permalink_for_term( $object->term_id );
+			require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php' );
+			$custom_permalinks_frontend = new Custom_Permalinks_Frontend();
+			$permalink = $custom_permalinks_frontend->custom_permalinks_permalink_for_term( $object->term_id );
 
-			if ( $object->term_id ) {
-				require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php' );
-				$custom_permalinks_frontend = new Custom_Permalinks_Frontend();
+			if ( $object->term_id ) {				
 				if ( $object->taxonomy == 'post_tag' ) {
 					$originalPermalink = $custom_permalinks_frontend->custom_permalinks_original_tag_link( $object->term_id );
 				} else {
@@ -318,7 +318,7 @@ class Custom_Permalinks_Form {
 				if ( strpos( $requested_url, 'language/' ) !== false )
 					$requested_url = str_replace( "language/", "", $requested_url );
 
-				$remove_lang = ltrim( strstr( $requested_url, '/' ), '/');
+				$remove_lang = ltrim( strstr( $requested_url, '/' ), '/' );
 				if ( $remove_lang != '' )
 					return $remove_lang;
 			}

@@ -4,7 +4,7 @@
  * Plugin Name: Custom Permalinks
  * Plugin URI: https://wordpress.org/plugins/custom-permalinks/
  * Description: Set custom permalinks on a per-post basis
- * Version: 1.2.1
+ * Version: 1.2.2
  * Author: Sami Ahmed Siddiqui
  * Author URI: https://www.yasglobal.com/web-design-development/wordpress/custom-permalinks/
  * Donate link: https://www.paypal.me/yasglobal

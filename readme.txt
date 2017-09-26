@@ -5,7 +5,7 @@ Donate link: https://www.paypal.me/yasglobal
 Tags: permalink, url, link, address, custom, redirect, custom post type
 Requires at least: 2.6
 Tested up to: 4.8
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,6 +47,10 @@ add_filter( 'custom_permalinks_request_ignore', 'check_xml_sitemap_url' );
 
 == Changelog ==
 
+= 1.2.2 =
+
+  * Fixed Typo of Class Object for term on Admin Page
+
 = 1.2.1 =
   * Fixed Class Typo
 
@@ -54,7 +58,7 @@ add_filter( 'custom_permalinks_request_ignore', 'check_xml_sitemap_url' );
 
   * Enhancements
     * Added Filter to Exclude/Ignore URL to be processed
-    * Added Transaltion Capability
+    * Added Translation Capability
     * Split the Code using OOPS Concept to improve performance and applied the filters according to the need
     * Removed some unnecessary filters
   * Bugs
