@@ -15,7 +15,7 @@ if ( ! function_exists( "add_action" ) || ! function_exists( "add_filter" ) ) {
 	exit();
 }
 
-define( 'CUSTOM_PERMALINKS_PLUGIN_VERSION', '1.2.3' );
+define( 'CUSTOM_PERMALINKS_PLUGIN_VERSION', '1.2.4' );
 
 if ( ! defined( 'CUSTOM_PERMALINKS_PATH' ) ) {
 	define( 'CUSTOM_PERMALINKS_PATH', plugin_dir_path( __FILE__ ) );
@@ -25,7 +25,7 @@ require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-fronten
 $custom_permalinks_frontend = new Custom_Permalinks_Frontend();
 $custom_permalinks_frontend->init();
 
-require_once( CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-form.php' );
+require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-form.php' );
 $custom_permalinks_form = new Custom_Permalinks_Form();
 $custom_permalinks_form->init();
 

@@ -75,10 +75,10 @@ class Custom_Permalinks_Form {
 		$custom_permalinks_frontend = new Custom_Permalinks_Frontend();
 		if ( $post->post_type == "page" ) {
 			$original_page_url = $custom_permalinks_frontend->custom_permalinks_original_page_link( $id );
-			$this->custom_permalinks_get_form( $permalink, $original_page_url, false );
+			$this->custom_permalinks_get_form( $permalink, $original_page_url, false, $post->post_name );
 		} else {
 			$original_post_url = $custom_permalinks_frontend->custom_permalinks_original_post_link( $id );
-			$this->custom_permalinks_get_form( $permalink, $original_post_url, false );
+			$this->custom_permalinks_get_form( $permalink, $original_post_url, false, $post->post_name );
 		}
 
 		$content = ob_get_contents();
@@ -191,31 +191,36 @@ class Custom_Permalinks_Form {
 	/**
 	 * Helper function to render form
 	 */
-	private function custom_permalinks_get_form( $permalink, $original = "", $renderContainers = true ) {
+	private function custom_permalinks_get_form( $permalink, $original = "", $renderContainers = true, $postname = "" ) {
 		?>
 		<input value="true" type="hidden" name="custom_permalinks_edit" />
+		<input value="<?php echo home_url(); ?>" type="hidden" name="custom_permalinks_home_url" id="custom_permalinks_home_url" />
 		<input value="<?php echo htmlspecialchars( urldecode( $permalink ) ); ?>" type="hidden" name="custom_permalink" id="custom_permalink" />
 
-		<?php if ( $renderContainers ) : ?>
+		<?php 
+		if ( $renderContainers ) :
+		?>
 		<table class="form-table" id="custom_permalink_form">
 		<tr>
 				<th scope="row"><?php _e( 'Custom Permalink', 'custom-permalinks' ); ?></th>
 				<td>
-		<?php endif; ?>
-
-		<?php
-			if ( $permalink == '' ) {
-				$original = $this->custom_permalinks_check_conflicts( $original );
-			}
-		?>
-
-		<?php echo home_url() ?>/
-		<span id="editable-post-name" title="Click to edit this part of the permalink">
-		<?php
+		<?php 
+		endif;
+		if ( $permalink == '' ) {
+			$original = $this->custom_permalinks_check_conflicts( $original );
+		}
 		$post_slug = htmlspecialchars( $permalink ? urldecode( $permalink ) : urldecode( $original ) );
 		$original_encoded_url = htmlspecialchars( urldecode( $original ) );
+		wp_enqueue_script( 'custom-permalinks-form', plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true );
+		$postname_html = '';
+		if ( isset( $postname ) && $postname != "" ) {
+			$postname_html = '<input type="hidden" id="new-post-slug" class="text" value="' . $postname . '" />';
+		}
+		
+		echo home_url() . '/<span id="editable-post-name" title="Click to edit this part of the permalink">' . $postname_html;
+
 		?>
-		<input type="text" id="new-post-slug" class="text" value="<?php echo $post_slug; ?>"
+		<input type="text" id="custom-permalinks-post-slug" class="text" value="<?php echo $post_slug; ?>"
 		style="width: 250px; <?php if ( !$permalink ) echo 'color: #ddd'; ?>"
 		onfocus="if ( this.style.color = '#ddd' ) { this.style.color = '#000'; }"
 		onblur="document.getElementById('custom_permalink').value = this.value; if ( this.value == '' || this.value == '<?php echo $original_encoded_url;  ?>' ) { this.value = '<?php echo $original_encoded_url; ?>'; this.style.color = '#ddd'; }" />

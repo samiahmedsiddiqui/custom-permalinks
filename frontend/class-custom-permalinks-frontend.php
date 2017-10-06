@@ -52,7 +52,7 @@ class Custom_Permalinks_Frontend {
 		}
 
 		if ( defined( 'POLYLANG_VERSION' ) ) {
-			require_once( CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-form.php' );
+			require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-form.php' );
 			$custom_permalinks_form = new Custom_Permalinks_Form();
 			$request = $custom_permalinks_form->custom_permalinks_check_conflicts( $request );
 		}
@@ -182,7 +182,7 @@ class Custom_Permalinks_Frontend {
 		}
 
 		if ( defined( 'POLYLANG_VERSION' ) ) {
-			require_once( CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-form.php' );
+			require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-form.php' );
 			$custom_permalinks_form = new Custom_Permalinks_Form();
 			$request = $custom_permalinks_form->custom_permalinks_check_conflicts( $request );
 		}

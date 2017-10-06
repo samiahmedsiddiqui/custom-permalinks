@@ -27,6 +27,7 @@ class Custom_Permalinks_Admin {
 	public function custom_permalinks_post_permalinks() {
 		global $wpdb;
 		$filter_options   = '';
+		$filter_permalink = '';
 		$search_permalink = '';
 		$html             = '';
 		$error            = '';
