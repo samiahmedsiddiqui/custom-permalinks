@@ -249,7 +249,7 @@ class Custom_Permalinks_Form {
 		require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php' );
 		$custom_permalinks_frontend = new Custom_Permalinks_Frontend();
 		if ( $newPermalink == $custom_permalinks_frontend->custom_permalinks_original_tag_link( $id ) ) {
-			$newPermalink = '';
+			return;
 		}
 
 		$term = get_term( $id, 'post_tag' );
@@ -269,7 +269,7 @@ class Custom_Permalinks_Form {
 		require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php' );
 		$custom_permalinks_frontend = new Custom_Permalinks_Frontend();
 		if ( $newPermalink == $custom_permalinks_frontend->custom_permalinks_original_category_link( $id ) ) {
-			$newPermalink = '';
+			return;
 		}
 
 		$term = get_term( $id, 'category' );

@@ -47,6 +47,10 @@ add_filter( 'custom_permalinks_request_ignore', 'check_xml_sitemap_url' );
 
 == Changelog ==
 
+= 1.2.5 =
+  
+  * Fixed Category/Tag Update Issue + Typo on Admin Page
+
 = 1.2.4 =
 
   * Fixed Slug issue with Yoast SEO

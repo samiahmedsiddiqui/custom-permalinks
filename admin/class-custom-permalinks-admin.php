@@ -232,9 +232,9 @@ class Custom_Permalinks_Admin {
 										<input type="submit" id="doaction" class="button action" value="Apply">
 							</div>';
 
-		$posts      = 0;
-		$table      = get_option( 'custom_permalink_table' );
-		$count_tags = count( $table );
+		$posts           = 0;
+		$table           = get_option( 'custom_permalink_table' );
+		$count_tags      = count( $table );
 		$pagination_html = '';
 		if ( isset( $table ) && is_array( $table ) && $count_tags > 0 ) {
 
@@ -252,7 +252,7 @@ class Custom_Permalinks_Admin {
 			$html .= '<h2 class="screen-reader-text">Custom Permalink navigation</h2>';
 
 			$total_pages = ceil( $count_tags / 20 );
-			if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] ) && $_GET['paged'] > 0) {
+			if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] ) && $_GET['paged'] > 0 ) {
 				$pagination_html = $this->custom_permalinks_pager( $count_tags, $_GET['paged'], $total_pages);
 				if ( $_GET['paged'] > $total_pages ) {
 					$redirect_uri = explode( '&paged=' . $_GET['paged'] . '', $_SERVER['REQUEST_URI'] );
