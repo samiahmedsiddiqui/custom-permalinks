@@ -69,7 +69,14 @@ class Custom_Permalinks_Form {
 		if ( $post->post_type == 'attachment' || $post->ID == get_option( 'page_on_front' ) ) {
 			return $html;
 		}
-		ob_start();
+
+    $exclude_post_types = $post->post_type;
+    $excluded = apply_filters( 'custom_permalinks_exclude_post_type', $exclude_post_types );
+    if ( '__true' === $excluded ) {
+			return $html;
+		}
+
+    ob_start();
 
 		require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php' );
 		$custom_permalinks_frontend = new Custom_Permalinks_Frontend();

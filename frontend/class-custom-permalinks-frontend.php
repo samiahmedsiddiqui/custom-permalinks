@@ -39,7 +39,10 @@ class Custom_Permalinks_Frontend {
 		$url     = parse_url( get_bloginfo( 'url' ) );
 		$url     = isset( $url['path'] ) ? $url['path'] : '';
 		$request = ltrim( substr( $_SERVER['REQUEST_URI'], strlen( $url ) ), '/' );
-		$request = ( ( $pos = strpos( $request, '?' ) ) ? substr( $request, 0, $pos ) : $request );
+		$pos     = strpos( $request, '?' );
+		if ( $pos ) {
+			$request = substr( $request, 0, $pos );
+		}
 
 		if ( ! $request ) {
 			return $query;
@@ -58,18 +61,29 @@ class Custom_Permalinks_Frontend {
 		}
 		$request_noslash = preg_replace( '@/+@','/', trim( $request, '/' ) );
 
-		$sql = $wpdb->prepare( "SELECT $wpdb->posts.ID, $wpdb->postmeta.meta_value, $wpdb->posts.post_type, $wpdb->posts.post_status FROM $wpdb->posts " .
-							" LEFT JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id) WHERE " .
+		$sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status " .
+						" FROM $wpdb->posts AS p INNER JOIN $wpdb->postmeta AS pm ON (pm.post_id = p.ID) " .
+						" WHERE pm.meta_key = 'custom_permalink' " .
+						" AND (pm.meta_value = '%s' OR pm.meta_value = '%s') " .
+						" AND p.post_status != 'trash' AND p.post_type != 'nav_menu_item' " .
+						" LIMIT 1", $request_noslash, $request_noslash . "/" );
+
+		$posts = $wpdb->get_results( $sql );
+
+		if ( ! $posts ) {
+			$sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
+							" LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
 							" meta_key = 'custom_permalink' AND meta_value != '' AND " .
 							" ( LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) OR " .
 							"   LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) ) " .
 							"  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
 							" ORDER BY LENGTH(meta_value) DESC, " .
 							" FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
-							" FIELD(post_type,'post','page'), $wpdb->posts.ID ASC LIMIT 1",
-						$request_noslash, $request_noslash . "/" );
+							" FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
+							$request_noslash, $request_noslash . "/" );
 
-		$posts = $wpdb->get_results( $sql );
+			$posts = $wpdb->get_results( $sql );
+		}
 
 		if ( $posts ) {
 			// A post matches our request
@@ -81,9 +95,9 @@ class Custom_Permalinks_Frontend {
 
 			if ( $posts[0]->post_status == 'draft' ) {
 				if ( $posts[0]->post_type == 'page' ) {
-					$original_url = "?page_id=" . $posts[0]->ID;
+					$original_url = '?page_id=' . $posts[0]->ID;
 				} else {
-					$original_url = "?post_type=".$posts[0]->post_type."&p=" . $posts[0]->ID;
+					$original_url = '?post_type=' . $posts[0]->post_type . '&p=' . $posts[0]->ID;
 				}
 			} else {
 				$post_meta = trim( strtolower( $posts[0]->meta_value ), '/' );
@@ -110,7 +124,7 @@ class Custom_Permalinks_Frontend {
 
 			foreach ( array_keys( $table ) as $permalink ) {
 				if ( $permalink == substr( $request_noslash, 0, strlen( $permalink ) )
-					|| $permalink == substr( $request_noslash . "/", 0, strlen( $permalink ) ) ) {
+					|| $permalink == substr( $request_noslash . '/', 0, strlen( $permalink ) ) ) {
 					$term = $table[$permalink];
 
 					// Preserve this url for later if it's the same as the permalink (no extra stuff)
@@ -172,11 +186,17 @@ class Custom_Permalinks_Frontend {
 	 * Action to redirect to the custom permalink
 	 */
 	public function custom_permalinks_redirect() {
+
+		global $wpdb;		
+
+		$custom_permalink = '';
+		$original_permalink = '';
+
 		// Get request URI, strip parameters
 		$url     = parse_url( get_bloginfo( 'url' ) );
 		$url     = isset( $url['path'] ) ? $url['path'] : '';
 		$request = ltrim( substr( $_SERVER['REQUEST_URI'], strlen( $url ) ), '/' );
-		$pos     = strpos( $request, "?" );
+		$pos     = strpos( $request, '?' );
 		if ( $pos ) {
 			$request = substr( $request, 0, $pos );
 		}
@@ -186,34 +206,66 @@ class Custom_Permalinks_Frontend {
 			$custom_permalinks_form = new Custom_Permalinks_Form();
 			$request = $custom_permalinks_form->custom_permalinks_check_conflicts( $request );
 		}
+		$request_noslash = preg_replace( '@/+@','/', trim( $request, '/' ) );
 
-		global $wp_query;
 
-		$custom_permalink = '';
-		$original_permalink = '';
+		$sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status " .
+						" FROM $wpdb->posts AS p INNER JOIN $wpdb->postmeta AS pm ON (pm.post_id = p.ID) " .
+						" WHERE pm.meta_key = 'custom_permalink' " .
+						" AND (pm.meta_value = '%s' OR pm.meta_value = '%s') " .
+						" AND p.post_status != 'trash' AND p.post_type != 'nav_menu_item' " .
+						" LIMIT 1", $request_noslash, $request_noslash . "/" );
+		$posts = $wpdb->get_results( $sql );
 
-		// If the post/tag/category we're on has a custom permalink, get it and check against the request
-		if ( ( is_single() || is_page() ) && ! empty( $wp_query->post ) ) {
-			$post = $wp_query->post;
-			$custom_permalink = get_post_meta( $post->ID, 'custom_permalink', true );
-			if ( $post->post_type == 'page' ) {
-				$original_permalink = $this->custom_permalinks_original_page_link( $post->ID );
-			} else {
-				$original_permalink = $this->custom_permalinks_original_post_link( $post->ID );
+		if ( ! $posts ) {
+			$sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
+							" LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
+							" meta_key = 'custom_permalink' AND meta_value != '' AND " .
+							" ( LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) OR " .
+							"   LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) ) " .
+							"  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
+							" ORDER BY LENGTH(meta_value) DESC, " .
+							" FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
+							" FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
+							$request_noslash, $request_noslash . "/" );
+
+			$posts = $wpdb->get_results( $sql );
+		}
+
+		if ( ! isset( $posts[0]->ID ) || ! isset( $posts[0]->meta_value )
+				&& empty( ($posts[0]->meta_value)) ) {
+			global $wp_query;
+
+			// If the post/tag/category we're on has a custom permalink, get it and check against the request
+			if ( ( is_single() || is_page() ) && ! empty( $wp_query->post ) ) {
+				$post = $wp_query->post;
+				$custom_permalink = get_post_meta( $post->ID, 'custom_permalink', true );
+				if ( $post->post_type == 'page' ) {
+					$original_permalink = $this->custom_permalinks_original_page_link( $post->ID );
+				} else {
+					$original_permalink = $this->custom_permalinks_original_post_link( $post->ID );
+				}
+			} elseif ( is_tag() || is_category() ) {
+				$theTerm = $wp_query->get_queried_object();
+				$custom_permalink = $this->custom_permalinks_permalink_for_term( $theTerm->term_id );
+				if ( is_tag() ) {
+					$original_permalink = $this->custom_permalinks_original_tag_link( $theTerm->term_id );
+				} else {
+					$original_permalink = $this->custom_permalinks_original_category_link( $theTerm->term_id );
+				}
 			}
-		} elseif ( is_tag() || is_category() ) {
-			$theTerm = $wp_query->get_queried_object();
-			$custom_permalink = $this->custom_permalinks_permalink_for_term( $theTerm->term_id );
-			if ( is_tag() ) {
-				$original_permalink = $this->custom_permalinks_original_tag_link( $theTerm->term_id );
+		} else {
+			$custom_permalink = $posts[0]->meta_value;
+			if ( $posts[0]->post_type == 'page' ) {
+				$original_permalink = $this->custom_permalinks_original_page_link( $posts[0]->ID );
 			} else {
-				$original_permalink = $this->custom_permalinks_original_category_link( $theTerm->term_id );
+				$original_permalink = $this->custom_permalinks_original_post_link( $posts[0]->ID );
 			}
 		}
 
 		if ( $custom_permalink
 			&& ( substr( $request, 0, strlen( $custom_permalink ) ) != $custom_permalink
-			|| $request == $custom_permalink . "/" ) ) {
+			|| $request == $custom_permalink . '/' ) ) {
 
 			// Request doesn't match permalink - redirect
 			$url = $custom_permalink;
@@ -226,9 +278,9 @@ class Custom_Permalinks_Frontend {
 			}
 
 			// Append any query compenent
-			$url .= strstr( $_SERVER['REQUEST_URI'], "?" );
+			$url .= strstr( $_SERVER['REQUEST_URI'], '?' );
 
-			wp_redirect( home_url() . "/" . $url, 301 );
+			wp_redirect( home_url() . '/' . $url, 301 );
 			exit();
 		}
 	}
@@ -242,9 +294,9 @@ class Custom_Permalinks_Frontend {
 			$post_type = isset( $post->post_type ) ? $post->post_type : 'post';
 			$language_code = apply_filters( 'wpml_element_language_code', null, array( 'element_id' => $post->ID, 'element_type' => $post_type ) );
 			if ( $language_code )
-				return apply_filters( 'wpml_permalink', home_url() . "/" . $custom_permalink, $language_code );
+				return apply_filters( 'wpml_permalink', home_url() . '/' . $custom_permalink, $language_code );
 			else
-				return apply_filters( 'wpml_permalink', home_url() . "/" . $custom_permalink );
+				return apply_filters( 'wpml_permalink', home_url() . '/' . $custom_permalink );
 		}
 
 		return $permalink;
@@ -258,9 +310,9 @@ class Custom_Permalinks_Frontend {
 		if ( $custom_permalink ) {
 			$language_code = apply_filters( 'wpml_element_language_code', null, array( 'element_id' => $page, 'element_type' => 'page' ) );
 			if ( $language_code )
-				return apply_filters( 'wpml_permalink', home_url() . "/" . $custom_permalink, $language_code );
+				return apply_filters( 'wpml_permalink', home_url() . '/' . $custom_permalink, $language_code );
 			else
-				return apply_filters( 'wpml_permalink', home_url() . "/" . $custom_permalink );
+				return apply_filters( 'wpml_permalink', home_url() . '/' . $custom_permalink );
 		}
 
 		return $permalink;
@@ -281,9 +333,9 @@ class Custom_Permalinks_Frontend {
 			if ( isset( $taxonomy ) && isset( $taxonomy->term_taxonomy_id ) ) {
 				$term_type = isset( $taxonomy->taxonomy ) ? $taxonomy->taxonomy : 'category';
 				$language_code = apply_filters( 'wpml_element_language_code', null, array( 'element_id' => $taxonomy->term_taxonomy_id, 'element_type' => $term_type ) );
-				return apply_filters( 'wpml_permalink', home_url() . "/" . $custom_permalink, $language_code );
+				return apply_filters( 'wpml_permalink', home_url() . '/' . $custom_permalink, $language_code );
 			} else {
-				return apply_filters( 'wpml_permalink', home_url() . "/" . $custom_permalink );
+				return apply_filters( 'wpml_permalink', home_url() . '/' . $custom_permalink );
 			}
 		}
 
