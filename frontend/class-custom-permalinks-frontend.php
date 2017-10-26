@@ -233,7 +233,7 @@ class Custom_Permalinks_Frontend {
 		}
 
 		if ( ! isset( $posts[0]->ID ) || ! isset( $posts[0]->meta_value )
-				&& empty( ($posts[0]->meta_value)) ) {
+				|| empty( $posts[0]->meta_value ) ) {
 			global $wp_query;
 
 			// If the post/tag/category we're on has a custom permalink, get it and check against the request
