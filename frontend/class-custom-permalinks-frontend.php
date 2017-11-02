@@ -66,7 +66,8 @@ class Custom_Permalinks_Frontend {
 						" WHERE pm.meta_key = 'custom_permalink' " .
 						" AND (pm.meta_value = '%s' OR pm.meta_value = '%s') " .
 						" AND p.post_status != 'trash' AND p.post_type != 'nav_menu_item' " .
-						" LIMIT 1", $request_noslash, $request_noslash . "/" );
+            " ORDER BY FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
+						" FIELD(post_type,'post','page') LIMIT 1", $request_noslash, $request_noslash . "/" );
 
 		$posts = $wpdb->get_results( $sql );
 
@@ -186,7 +187,6 @@ class Custom_Permalinks_Frontend {
 	 * Action to redirect to the custom permalink
 	 */
 	public function custom_permalinks_redirect() {
-
 		global $wpdb;		
 
 		$custom_permalink = '';
@@ -208,13 +208,13 @@ class Custom_Permalinks_Frontend {
 		}
 		$request_noslash = preg_replace( '@/+@','/', trim( $request, '/' ) );
 
-
 		$sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status " .
 						" FROM $wpdb->posts AS p INNER JOIN $wpdb->postmeta AS pm ON (pm.post_id = p.ID) " .
 						" WHERE pm.meta_key = 'custom_permalink' " .
 						" AND (pm.meta_value = '%s' OR pm.meta_value = '%s') " .
 						" AND p.post_status != 'trash' AND p.post_type != 'nav_menu_item' " .
-						" LIMIT 1", $request_noslash, $request_noslash . "/" );
+            " ORDER BY FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
+						" FIELD(post_type,'post','page') LIMIT 1", $request_noslash, $request_noslash . "/" );
 		$posts = $wpdb->get_results( $sql );
 
 		if ( ! $posts ) {
