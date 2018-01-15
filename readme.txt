@@ -5,7 +5,7 @@ Donate link: https://www.paypal.me/yasglobal
 Tags: permalink, url, link, address, custom, redirect, custom post type
 Requires at least: 2.6
 Tested up to: 4.9
-Stable tag: 1.2.8
+Stable tag: 1.2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,7 +28,9 @@ within that category.
 
 == Filters ==
 
-If you want to exclude some Permalink to processed with the plugin so, just add the filter looks like this:
+Plugin provides some filter which maybe used according to your needs.
+
+To exclude any Permalink to processed with the plugin so, just add the filter looks like this:
 `
 function check_xml_sitemap_url( $permalink ) {
   if ( false !== strpos( $permalink, 'sitemap.xml' )) {
@@ -39,9 +41,7 @@ function check_xml_sitemap_url( $permalink ) {
 add_filter( 'custom_permalinks_request_ignore', 'check_xml_sitemap_url' );
 `
 
-If you want to exclude permalink from any post type so, use `custom_permalinks_exclude_post_type` filter.
-
-custom_permalinks_exclude_post_type filter looks like this:
+To exclude permalink from any post type so, just add the filter looks like this:
 `
 function yasglobal_exclude_post_types( $post_type ) {
   if ( $post_type == 'custompost' ) {
@@ -51,7 +51,15 @@ function yasglobal_exclude_post_types( $post_type ) {
 }
 add_filter( 'custom_permalinks_exclude_post_type', 'yasglobal_exclude_post_types');
 `
+
 Note: custom_permalinks_exclude_post_type doesn't work on the posts permalink which has been created previously.
+
+To make the like query works as it was before so, just add this line in your theme's functions.php:
+`
+add_filter( 'custom_permalinks_like_query', '__return_true');
+`
+
+Note: Use `custom_permalinks_like_query` filter if the URLs doesn't works for you after upgrading to v1.2.9
 
 == Thanks for the Support! ==
 
@@ -66,6 +74,15 @@ The support from the users that love Custom Permalinks is huge. You can support 
 3. Edit any post, page, tag or category to set a custom permalink.
 
 == Changelog ==
+
+= 1.2.9 =
+
+  * Enhancements
+    * Added Filter to enable the like query
+  * Bugs
+    * PHP error displayed on all pages using custom permalinks
+    * Removed LIKE Query in default. It only works if the site uses PolyLang,
+      AMP Plugins or separately enabled using the provided filter.
 
 = 1.2.8 =
 

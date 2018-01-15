@@ -9,13 +9,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! function_exists( "add_action" ) || ! function_exists( "add_filter" ) ) {
+if ( ! function_exists( 'add_action' ) || ! function_exists( 'add_filter' ) ) {
 	header( 'Status: 403 Forbidden' );
 	header( 'HTTP/1.1 403 Forbidden' );
 	exit();
 }
 
-define( 'CUSTOM_PERMALINKS_PLUGIN_VERSION', '1.2.8' );
+define( 'CUSTOM_PERMALINKS_PLUGIN_VERSION', '1.2.9' );
 
 if ( ! defined( 'CUSTOM_PERMALINKS_PATH' ) ) {
 	define( 'CUSTOM_PERMALINKS_PATH', plugin_dir_path( __FILE__ ) );

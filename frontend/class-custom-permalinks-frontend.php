@@ -48,16 +48,19 @@ class Custom_Permalinks_Frontend {
 			return $query;
 		}
 
-		$ignore = apply_filters( 'custom_permalinks_request_ignore', $request );
+		$ignore    = apply_filters( 'custom_permalinks_request_ignore', $request );
+		$def_query = apply_filters( 'custom_permalinks_like_query', '__false' );
 
 		if ( '__true' === $ignore ) {
 			return $query;
 		}
 
 		if ( defined( 'POLYLANG_VERSION' ) ) {
-			require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-form.php' );
-			$custom_permalinks_form = new Custom_Permalinks_Form();
-			$request = $custom_permalinks_form->custom_permalinks_check_conflicts( $request );
+			require_once(
+				CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-form.php'
+			);
+			$cp_form = new Custom_Permalinks_Form();
+			$request = $cp_form->custom_permalinks_check_conflicts( $request );
 		}
 		$request_noslash = preg_replace( '@/+@','/', trim( $request, '/' ) );
 
@@ -71,7 +74,8 @@ class Custom_Permalinks_Frontend {
 
 		$posts = $wpdb->get_results( $sql );
 
-		if ( ! $posts ) {
+		if ( ! $posts && ( defined( 'POLYLANG_VERSION' )
+			|| defined( 'AMP__VERSION' ) || '__true' === $def_query ) ) {
 			$sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
 							" LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
 							" meta_key = 'custom_permalink' AND meta_value != '' AND " .
@@ -135,11 +139,13 @@ class Custom_Permalinks_Frontend {
 
 					if ( $term['kind'] == 'category' ) {
 						$category_link = $this->custom_permalinks_original_category_link( $term['id'] );
-						$original_url = str_replace( trim( $permalink, '/' ), $category_link, trim( $request, '/' ) );
 					} else {
 						$category_link = $this->custom_permalinks_original_tag_link( $term['id'] );
-						$original_url = str_replace( trim( $permalink, '/' ), $category_link, trim( $request, '/' ) );
 					}
+
+					$original_url = str_replace(
+						trim( $permalink, '/' ), $category_link, trim( $request, '/' )
+					);
 				}
 			}
 		}
@@ -148,14 +154,18 @@ class Custom_Permalinks_Frontend {
 			$original_url = str_replace( '//', '/', $original_url );
 
 			if ( ( $pos = strpos( $_SERVER['REQUEST_URI'], '?' ) ) !== false ) {
-				$query_vars = substr( $_SERVER['REQUEST_URI'], $pos + 1);
+				$query_vars    = substr( $_SERVER['REQUEST_URI'], $pos + 1);
 				$original_url .= ( strpos( $original_url, '?' ) === false ? '?' : '&' ) . $query_vars;
 			}
 
 			// Now we have the original URL, run this back through WP->parse_request, in order to
 			// parse parameters properly.  We set $_SERVER variables to fool the function.
-			$old_request_uri = $_SERVER['REQUEST_URI']; $old_query_string = $_SERVER['QUERY_STRING'];
-			$_SERVER['REQUEST_URI'] = '/' . ltrim( $original_url, '/' );
+			$old_request_uri  = $_SERVER['REQUEST_URI'];
+			$old_query_string = '';
+			if ( isset( $_SERVER['QUERY_STRING'] ) ) {
+				$old_query_string = $_SERVER['QUERY_STRING'];
+			}
+			$_SERVER['REQUEST_URI']  = '/' . ltrim( $original_url, '/' );
 			$_SERVER['QUERY_STRING'] = ( ( $pos = strpos( $original_url, '?' ) ) !== false ? substr( $original_url, $pos + 1 ) : '' );
 			parse_str( $_SERVER['QUERY_STRING'], $query_array );
 			$old_values = array();
@@ -174,7 +184,8 @@ class Custom_Permalinks_Frontend {
 			add_filter( 'request', array( $this, 'custom_permalinks_request' ), 10, 1 );
 
 			// Restore values
-			$_SERVER['REQUEST_URI'] = $old_request_uri; $_SERVER['QUERY_STRING'] = $old_query_string;
+			$_SERVER['REQUEST_URI']  = $old_request_uri;
+			$_SERVER['QUERY_STRING'] = $old_query_string;
 			foreach ( $old_values as $key => $value ) {
 				$_REQUEST[$key] = $value;
 			}
@@ -203,8 +214,8 @@ class Custom_Permalinks_Frontend {
 
 		if ( defined( 'POLYLANG_VERSION' ) ) {
 			require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-form.php' );
-			$custom_permalinks_form = new Custom_Permalinks_Form();
-			$request = $custom_permalinks_form->custom_permalinks_check_conflicts( $request );
+			$cp_form = new Custom_Permalinks_Form();
+			$request = $cp_form->custom_permalinks_check_conflicts( $request );
 		}
 		$request_noslash = preg_replace( '@/+@','/', trim( $request, '/' ) );
 
