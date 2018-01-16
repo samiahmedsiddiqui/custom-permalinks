@@ -48,8 +48,7 @@ class Custom_Permalinks_Frontend {
 			return $query;
 		}
 
-		$ignore    = apply_filters( 'custom_permalinks_request_ignore', $request );
-		$def_query = apply_filters( 'custom_permalinks_like_query', '__false' );
+		$ignore = apply_filters( 'custom_permalinks_request_ignore', $request );
 
 		if ( '__true' === $ignore ) {
 			return $query;
@@ -74,20 +73,23 @@ class Custom_Permalinks_Frontend {
 
 		$posts = $wpdb->get_results( $sql );
 
-		if ( ! $posts && ( defined( 'POLYLANG_VERSION' )
-			|| defined( 'AMP__VERSION' ) || '__false' !== $def_query ) ) {
-			$sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
-							" LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
-							" meta_key = 'custom_permalink' AND meta_value != '' AND " .
-							" ( LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) OR " .
-							"   LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) ) " .
-							"  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
-							" ORDER BY LENGTH(meta_value) DESC, " .
-							" FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
-							" FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
-							$request_noslash, $request_noslash . "/" );
+		if ( ! $posts ) {
+			$def_query = apply_filters( 'custom_permalinks_like_query', '__false' );
+			if ( defined( 'POLYLANG_VERSION' ) || defined( 'AMP__VERSION' )
+				|| '__false' !== $def_query ) ) {
+				$sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
+								" LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
+								" meta_key = 'custom_permalink' AND meta_value != '' AND " .
+								" ( LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) OR " .
+								"   LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) ) " .
+								"  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
+								" ORDER BY LENGTH(meta_value) DESC, " .
+								" FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
+								" FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
+								$request_noslash, $request_noslash . "/" );
 
-			$posts = $wpdb->get_results( $sql );
+				$posts = $wpdb->get_results( $sql );
+			}
 		}
 
 		if ( $posts ) {
@@ -229,18 +231,22 @@ class Custom_Permalinks_Frontend {
 		$posts = $wpdb->get_results( $sql );
 
 		if ( ! $posts ) {
-			$sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
-							" LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
-							" meta_key = 'custom_permalink' AND meta_value != '' AND " .
-							" ( LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) OR " .
-							"   LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) ) " .
-							"  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
-							" ORDER BY LENGTH(meta_value) DESC, " .
-							" FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
-							" FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
-							$request_noslash, $request_noslash . "/" );
+			$def_query = apply_filters( 'custom_permalinks_like_query', '__false' );
+			if ( defined( 'POLYLANG_VERSION' ) || defined( 'AMP__VERSION' )
+				|| '__false' !== $def_query ) ) {				
+				$sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
+								" LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
+								" meta_key = 'custom_permalink' AND meta_value != '' AND " .
+								" ( LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) OR " .
+								"   LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) ) " .
+								"  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
+								" ORDER BY LENGTH(meta_value) DESC, " .
+								" FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
+								" FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
+								$request_noslash, $request_noslash . "/" );
 
-			$posts = $wpdb->get_results( $sql );
+				$posts = $wpdb->get_results( $sql );
+			}
 		}
 
 		if ( ! isset( $posts[0]->ID ) || ! isset( $posts[0]->meta_value )

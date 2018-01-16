@@ -5,7 +5,7 @@ Donate link: https://www.paypal.me/yasglobal
 Tags: permalink, url, link, address, custom, redirect, custom post type
 Requires at least: 2.6
 Tested up to: 4.9
-Stable tag: 1.2.9
+Stable tag: 1.2.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,6 +74,10 @@ The support from the users that love Custom Permalinks is huge. You can support 
 3. Edit any post, page, tag or category to set a custom permalink.
 
 == Changelog ==
+
+= 1.2.10 =
+
+  * Fixed Redirect Issue of Child Pages
 
 = 1.2.9 =
 
