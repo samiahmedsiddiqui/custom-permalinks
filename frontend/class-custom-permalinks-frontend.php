@@ -74,21 +74,42 @@ class Custom_Permalinks_Frontend {
 		$posts = $wpdb->get_results( $sql );
 
 		if ( ! $posts ) {
-			$def_query = apply_filters( 'custom_permalinks_like_query', '__false' );
-			if ( defined( 'POLYLANG_VERSION' ) || defined( 'AMP__VERSION' )
-				|| '__false' !== $def_query ) {
-				$sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
-								" LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
-								" meta_key = 'custom_permalink' AND meta_value != '' AND " .
-								" ( LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) OR " .
-								"   LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) ) " .
-								"  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
-								" ORDER BY LENGTH(meta_value) DESC, " .
-								" FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
-								" FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
-								$request_noslash, $request_noslash . "/" );
+			if ( false !== strpos( $request_noslash, '/page/' ) ) {
+				$check_pager  = explode( '/', $request_noslash );
+				$get_pager_no = count( $check_pager ) - 1;
+				if ( is_numeric( $check_pager[$get_pager_no] ) ) {
 
-				$posts = $wpdb->get_results( $sql );
+					$remove_pager = '/page/' . $check_pager[$get_pager_no];
+					$request_noslash = str_replace( $remove_pager, '', $request_noslash );
+
+					$sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status " .
+									" FROM $wpdb->posts AS p INNER JOIN $wpdb->postmeta AS pm ON (pm.post_id = p.ID) " .
+									" WHERE pm.meta_key = 'custom_permalink' " .
+									" AND (pm.meta_value = '%s' OR pm.meta_value = '%s') " .
+									" AND p.post_status != 'trash' AND p.post_type != 'nav_menu_item' " .
+									" ORDER BY FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
+									" FIELD(post_type,'post','page') LIMIT 1", $request_noslash, $request_noslash . "/" );
+
+					$posts = $wpdb->get_results( $sql );
+				}
+			}
+			if ( ! $posts ) {
+				$def_query = apply_filters( 'custom_permalinks_like_query', '__false' );
+				if ( defined( 'POLYLANG_VERSION' ) || defined( 'AMP__VERSION' )
+					|| '__false' !== $def_query ) {
+					$sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
+									" LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
+									" meta_key = 'custom_permalink' AND meta_value != '' AND " .
+									" ( LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) OR " .
+									"   LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) ) " .
+									"  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
+									" ORDER BY LENGTH(meta_value) DESC, " .
+									" FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
+									" FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
+									$request_noslash, $request_noslash . "/" );
+
+					$posts = $wpdb->get_results( $sql );
+				}
 			}
 		}
 
@@ -231,21 +252,42 @@ class Custom_Permalinks_Frontend {
 		$posts = $wpdb->get_results( $sql );
 
 		if ( ! $posts ) {
-			$def_query = apply_filters( 'custom_permalinks_like_query', '__false' );
-			if ( defined( 'POLYLANG_VERSION' ) || defined( 'AMP__VERSION' )
-				|| '__false' !== $def_query ) {
-				$sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
-								" LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
-								" meta_key = 'custom_permalink' AND meta_value != '' AND " .
-								" ( LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) OR " .
-								"   LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) ) " .
-								"  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
-								" ORDER BY LENGTH(meta_value) DESC, " .
-								" FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
-								" FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
-								$request_noslash, $request_noslash . "/" );
+			if ( false !== strpos( $request_noslash, '/page/' ) ) {
+				$check_pager  = explode( '/', $request_noslash );
+				$get_pager_no = count( $check_pager ) - 1;
+				if ( is_numeric( $check_pager[$get_pager_no] ) ) {
 
-				$posts = $wpdb->get_results( $sql );
+					$remove_pager = '/page/' . $check_pager[$get_pager_no];
+					$request_noslash = str_replace( $remove_pager, '', $request_noslash );
+
+					$sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status " .
+									" FROM $wpdb->posts AS p INNER JOIN $wpdb->postmeta AS pm ON (pm.post_id = p.ID) " .
+									" WHERE pm.meta_key = 'custom_permalink' " .
+									" AND (pm.meta_value = '%s' OR pm.meta_value = '%s') " .
+									" AND p.post_status != 'trash' AND p.post_type != 'nav_menu_item' " .
+									" ORDER BY FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
+									" FIELD(post_type,'post','page') LIMIT 1", $request_noslash, $request_noslash . "/" );
+
+					$posts = $wpdb->get_results( $sql );
+				}
+			}
+			if ( ! $posts ) {
+				$def_query = apply_filters( 'custom_permalinks_like_query', '__false' );
+				if ( defined( 'POLYLANG_VERSION' ) || defined( 'AMP__VERSION' )
+					|| '__false' !== $def_query ) {
+					$sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
+									" LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
+									" meta_key = 'custom_permalink' AND meta_value != '' AND " .
+									" ( LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) OR " .
+									"   LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) ) " .
+									"  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
+									" ORDER BY LENGTH(meta_value) DESC, " .
+									" FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
+									" FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
+									$request_noslash, $request_noslash . "/" );
+
+					$posts = $wpdb->get_results( $sql );
+				}
 			}
 		}
 

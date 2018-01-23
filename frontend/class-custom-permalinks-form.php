@@ -1,6 +1,6 @@
 <?php
 /**
- * @package CustomPermalinks\Admin\Form
+ * @package CustomPermalinks\Frontend\Form
  */
 
 class Custom_Permalinks_Form {  
@@ -36,7 +36,7 @@ class Custom_Permalinks_Form {
 		}
 
 		delete_post_meta( $id, 'custom_permalink' );
-		
+
 		require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php' );
 		$custom_permalinks_frontend = new Custom_Permalinks_Frontend();
 		$original_link = $custom_permalinks_frontend->custom_permalinks_original_post_link( $id );
@@ -78,7 +78,9 @@ class Custom_Permalinks_Form {
 
     ob_start();
 
-		require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php' );
+		require_once(
+			CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php'
+		);
 		$custom_permalinks_frontend = new Custom_Permalinks_Frontend();
 		if ( $post->post_type == "page" ) {
 			$original_page_url = $custom_permalinks_frontend->custom_permalinks_original_page_link( $id );
@@ -125,7 +127,9 @@ class Custom_Permalinks_Form {
 				<h3><?php _e( 'Custom Permalink', 'custom-permalinks' ) ?></h3>
 				<div class="inside">
 					<?php
-						require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php' );
+						require_once(
+							CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php'
+						);
 						$custom_permalinks_frontend = new Custom_Permalinks_Frontend();
 						$custom_permalinks_frontend->custom_permalinks_get_form( $permalink, $custom_permalinks_frontend->custom_permalinks_original_post_link( $post_id ) ); 
 					?>
@@ -145,13 +149,14 @@ class Custom_Permalinks_Form {
 		}
 
 		$permalink = get_post_meta( $post_id, 'custom_permalink', true );
-
 		?>
 		<div class="postbox closed">
 				<h3><?php _e( 'Custom Permalink', 'custom-permalinks' ); ?></h3>
 				<div class="inside">
 				<?php
-					require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php' );
+					require_once(
+						CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php'
+					);
 					$custom_permalinks_frontend = new Custom_Permalinks_Frontend();
 					$page_permalink = $custom_permalinks_frontend->custom_permalinks_original_page_link( $post_id );
 					$this->custom_permalinks_get_form( $permalink, $page_permalink );
@@ -166,11 +171,13 @@ class Custom_Permalinks_Form {
 	 */
 	public function custom_permalinks_term_options( $object ) {
 		if ( is_object( $object ) && isset( $object->term_id ) ) {
-			require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php' );
+			require_once(
+				CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php'
+			);
 			$custom_permalinks_frontend = new Custom_Permalinks_Frontend();
 			$permalink = $custom_permalinks_frontend->custom_permalinks_permalink_for_term( $object->term_id );
 
-			if ( $object->term_id ) {				
+			if ( $object->term_id ) {
 				if ( $object->taxonomy == 'post_tag' ) {
 					$originalPermalink = $custom_permalinks_frontend->custom_permalinks_original_tag_link( $object->term_id );
 				} else {
@@ -198,19 +205,19 @@ class Custom_Permalinks_Form {
 	/**
 	 * Helper function to render form
 	 */
-	private function custom_permalinks_get_form( $permalink, $original = "", $renderContainers = true, $postname = "" ) {
+	private function custom_permalinks_get_form( $permalink, $original = '', $renderContainers = true, $postname = '' ) {
 		?>
 		<input value="true" type="hidden" name="custom_permalinks_edit" />
 		<input value="<?php echo home_url(); ?>" type="hidden" name="custom_permalinks_home_url" id="custom_permalinks_home_url" />
 		<input value="<?php echo htmlspecialchars( urldecode( $permalink ) ); ?>" type="hidden" name="custom_permalink" id="custom_permalink" />
 
-		<?php 
+		<?php
 		if ( $renderContainers ) :
 		?>
 		<table class="form-table" id="custom_permalink_form">
 		<tr>
-				<th scope="row"><?php _e( 'Custom Permalink', 'custom-permalinks' ); ?></th>
-				<td>
+			<th scope="row"><?php _e( 'Custom Permalink', 'custom-permalinks' ); ?></th>
+			<td>
 		<?php 
 		endif;
 		if ( $permalink == '' ) {
@@ -220,10 +227,10 @@ class Custom_Permalinks_Form {
 		$original_encoded_url = htmlspecialchars( urldecode( $original ) );
 		wp_enqueue_script( 'custom-permalinks-form', plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true );
 		$postname_html = '';
-		if ( isset( $postname ) && $postname != "" ) {
+		if ( isset( $postname ) && $postname != '' ) {
 			$postname_html = '<input type="hidden" id="new-post-slug" class="text" value="' . $postname . '" />';
 		}
-		
+
 		echo home_url() . '/<span id="editable-post-name" title="Click to edit this part of the permalink">' . $postname_html;
 
 		?>
@@ -251,9 +258,11 @@ class Custom_Permalinks_Form {
 			|| isset( $_REQUEST['post_ID'] ) ) {
 			return;
 		}
-		$newPermalink = ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), "/" );
+		$newPermalink = ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), '/' );
 
-		require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php' );
+		require_once(
+			CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php'
+		);
 		$custom_permalinks_frontend = new Custom_Permalinks_Frontend();
 		if ( $newPermalink == $custom_permalinks_frontend->custom_permalinks_original_tag_link( $id ) ) {
 			return;
@@ -271,16 +280,20 @@ class Custom_Permalinks_Form {
 			|| isset( $_REQUEST['post_ID'] ) ) {
 			return;
 		}
-		$newPermalink = ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), "/" );
+		$newPermalink = ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), '/' );
 
-		require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php' );
+		require_once(
+			CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php'
+		);
 		$custom_permalinks_frontend = new Custom_Permalinks_Frontend();
 		if ( $newPermalink == $custom_permalinks_frontend->custom_permalinks_original_category_link( $id ) ) {
 			return;
 		}
 
 		$term = get_term( $id, 'category' );
-		$this->custom_permalinks_save_term( $term, str_replace( '%2F', '/', urlencode( $newPermalink ) ) );
+		$this->custom_permalinks_save_term(
+			$term, str_replace( '%2F', '/', urlencode( $newPermalink ) )
+		);
 	}
 
 	/**

@@ -48,12 +48,26 @@ Note: Use `custom_permalinks_like_query` filter if the URLs doesn't works for yo
 
 ## Thanks for the Support!
 
-The support from the users that love Custom Permalinks is huge. You can support Custom Permalinks's future development and help to make it even better by donating or even giving a 5 star rating with a nice message to me :)
+I does not always provide active support for the Custom Permalinks plugin on the WordPress.org forums, as i have prioritize the email support. 
+One-on-one email support is available to people who bought [Custom Permalinks Premium](https://www.custompermalinks.com/#pricing-section) only.
 
-[Donate to Custom Permalinks](https://www.paypal.me/yasglobal)
+## Bug reports
 
-## Installation
+Bug reports for Custom Permalinks are [welcomed on GitHub](https://github.com/yasglobal/custom-permalinks). Please note GitHub is not a support forum, and issues that aren't properly qualified as bugs will be closed.
 
-1. Unzip the package, and upload `custom-permalinks` to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Edit any post, page, tag or category to set a custom permalink.
+== Installation ==
+
+This process defines you the steps to follow either you are installing through WordPress or Manually from FTP.
+
+## From within WordPress
+
+1. Visit 'Plugins > Add New'
+2. Search for Custom Permalinks
+3. Activate Custom Permalinks from your Plugins page.
+4. Go to "after activation" below.
+
+## Manually
+
+1. Upload the `custom-permalinks` folder to the `/wp-content/plugins/` directory
+2. Activate Custom Permalinks through the 'Plugins' menu in WordPress
+3. Go to "after activation" below.
