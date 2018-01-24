@@ -1,0 +1,95 @@
+# Translation of Plugins - Custom Permalinks - Stable (latest release) in Japanese
+# This file is distributed under the same license as the Plugins - Custom Permalinks - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2017-10-22 08:28:41+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/2.4.0-alpha\n"
+"Language: ja_JP\n"
+"Project-Id-Version: Plugins - Custom Permalinks - Stable (latest release)\n"
+
+#. Author URI of the plugin/theme
+msgid "https://www.yasglobal.com/web-design-development/wordpress/custom-permalinks/"
+msgstr "https://www.yasglobal.com/web-design-development/wordpress/custom-permalinks/"
+
+#. Author of the plugin/theme
+msgid "Sami Ahmed Siddiqui"
+msgstr "Sami Ahmed Siddiqui"
+
+#. Description of the plugin/theme
+msgid "Set custom permalinks on a per-post basis"
+msgstr "投稿ごとにカスタムパーマリンクを設定します"
+
+#. Plugin URI of the plugin/theme
+msgid "https://wordpress.org/plugins/custom-permalinks/"
+msgstr "https://ja.wordpress.org/plugins/custom-permalinks/"
+
+#. Plugin Name of the plugin/theme
+msgid "Custom Permalinks"
+msgstr "Custom Permalinks"
+
+#: frontend/class-custom-permalinks-form.php:238
+msgid "Leave blank to disable"
+msgstr "空白のままにして無効にする"
+
+#: frontend/class-custom-permalinks-form.php:125
+#: frontend/class-custom-permalinks-form.php:151
+#: frontend/class-custom-permalinks-form.php:212
+msgid "Custom Permalink"
+msgstr "カスタムパーマリンク"
+
+#: frontend/class-custom-permalinks-form.php:108
+msgid "Permalink:"
+msgstr "パーマリンク:"
+
+#: frontend/class-custom-permalinks-form.php:95
+msgid "View Post"
+msgstr "投稿を表示"
+
+#: frontend/class-custom-permalinks-form.php:95
+msgid "View Page"
+msgstr "固定ページを表示"
+
+#: admin/class-custom-permalinks-admin.php:203
+msgid "Category/Tags Permalinks"
+msgstr "カテゴリー /タグ・パーマリンク"
+
+#: admin/class-custom-permalinks-admin.php:169
+#: admin/class-custom-permalinks-admin.php:332
+msgid "Permalink"
+msgstr "パーマリンク"
+
+#: admin/class-custom-permalinks-admin.php:168
+#: admin/class-custom-permalinks-admin.php:331
+msgid "Type"
+msgstr "タイプ"
+
+#: admin/class-custom-permalinks-admin.php:167
+#: admin/class-custom-permalinks-admin.php:330
+msgid "Title"
+msgstr "タイトル"
+
+#: admin/class-custom-permalinks-admin.php:96
+#: admin/class-custom-permalinks-admin.php:150
+#: admin/class-custom-permalinks-admin.php:230
+#: admin/class-custom-permalinks-admin.php:306
+msgid "Delete Permalinks"
+msgstr "パーマリンクを削除"
+
+#: admin/class-custom-permalinks-admin.php:95
+#: admin/class-custom-permalinks-admin.php:149
+#: admin/class-custom-permalinks-admin.php:229
+#: admin/class-custom-permalinks-admin.php:305
+msgid "Bulk Actions"
+msgstr "一括操作"
+
+#: admin/class-custom-permalinks-admin.php:47
+msgid "PostTypes Permalinks"
+msgstr "投稿タイプのパーマリンク"
+
+#: admin/class-custom-permalinks-admin.php:43
+msgid "There is some error to proceed your request. Please retry with your request or contact to the plugin author."
+msgstr "リクエストに何らかのエラーがあります。リクエストを再試行するか、プラグイン作者にエラー内容を連絡してください。"

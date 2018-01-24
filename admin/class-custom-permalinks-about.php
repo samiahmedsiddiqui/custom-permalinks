@@ -49,7 +49,7 @@ class Custom_Permalinks_About {
 			<div class="float">
 				<h1><?php echo $plugin_name . ' ' . CUSTOM_PERMALINKS_PLUGIN_VERSION; ?></h1>
 				<div class="tagline">
-					<p><?php _e('Thank you for choosing Custom Permalinks! We hope that your experience with our plugin for adding HTTP Authentication on your site is quick and easy.', 'custom-permalinks' ); ?></p>
+					<p><?php _e('Thank you for choosing Custom Permalinks! We hope that your experience with our plugin for updating permalinks is quick and easy. We are trying to make it more feasible for you and provide capabilities in it.', 'custom-permalinks' ); ?></p>
 					<p><?php printf( __( 'To support future development and help to make it even better just leaving us a <a href="%s" title="Custom Permalinks Rating" target="_blank">%s</a> rating with a nice message to me :)', 'custom-permalinks' ), 'https://wordpress.org/support/plugin/custom-permalinks/reviews/?rate=5#new-post', $five_star ); ?></p>
 				</div>
 			</div>

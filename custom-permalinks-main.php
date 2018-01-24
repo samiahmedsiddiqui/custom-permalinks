@@ -15,7 +15,7 @@ if ( ! function_exists( 'add_action' ) || ! function_exists( 'add_filter' ) ) {
 	exit();
 }
 
-define( 'CUSTOM_PERMALINKS_PLUGIN_VERSION', '1.2.11' );
+define( 'CUSTOM_PERMALINKS_PLUGIN_VERSION', '1.2.12' );
 
 if ( ! defined( 'CUSTOM_PERMALINKS_PATH' ) ) {
 	define( 'CUSTOM_PERMALINKS_PATH', plugin_dir_path( CUSTOM_PERMALINKS_FILE ) );
@@ -43,7 +43,7 @@ if ( is_admin() ) {
  */
 function custom_permalinks_translation_capability() {
 	load_plugin_textdomain( 'custom-permalinks', FALSE,
-		CUSTOM_PERMALINKS_BASENAME . '/languages/'
+		basename( dirname( CUSTOM_PERMALINKS_FILE ) ) . '/languages/'
 	);
 }
 add_action( 'plugins_loaded', 'custom_permalinks_translation_capability' );

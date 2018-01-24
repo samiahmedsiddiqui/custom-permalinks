@@ -73,6 +73,7 @@ class Custom_Permalinks_Frontend {
 
 		$posts = $wpdb->get_results( $sql );
 
+		$remove_pager = '';
 		if ( ! $posts ) {
 			if ( false !== strpos( $request_noslash, '/page/' ) ) {
 				$check_pager  = explode( '/', $request_noslash );
@@ -139,6 +140,9 @@ class Custom_Permalinks_Frontend {
 					$original_url = preg_replace( '@/+@', '/',
 						str_replace( $post_meta, $get_original_url, strtolower( $request_noslash ) )
 					);
+				}
+				if ( $remove_pager !== '' ) {
+					$original_url = $original_url . $remove_pager;
 				}
 			}
 		}
