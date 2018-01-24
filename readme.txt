@@ -319,7 +319,7 @@ This process defines you the steps to follow either you are installing through W
 
 = 0.7.1 =
 
- * Compatiblity fix for last update
+ * Compatibility fix for last update
 
 = 0.7 =
 
@@ -348,11 +348,11 @@ This process defines you the steps to follow either you are installing through W
 
 = 0.5 =
 
- * Support for Wordpress sites in subdirectories (i.e., not located at the webroot)
+ * Support for WordPress sites in subdirectories (i.e., not located at the webroot)
 
 = 0.4.1 =
 
- * WP 2.7 compatability fixes; fix for bug encountered when publishing a draft, or reverting to draft status, and fix for placeholder permalink value for pages
+ * WP 2.7 compatibility fixes; fix for bug encountered when publishing a draft, or reverting to draft status, and fix for placeholder permalink value for pages
 
 = 0.4 =
 
