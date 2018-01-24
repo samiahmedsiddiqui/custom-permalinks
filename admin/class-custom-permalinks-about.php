@@ -60,7 +60,7 @@ class Custom_Permalinks_About {
 
 			<div class="product">
 				<h2><?php _e( 'More from YAS Global', 'custom-permalinks' ); ?></h2>
-				<span><?php _e('Our List of Plugins provides the services which helps you to manage your site URLs(Permalinks), Prevent your site from XSS Attacks, Brute force attacks, increase your site visitors by adding Strucutred JSON Markup and so on.', 'custom-permalinks' ); ?></span>
+				<span><?php _e('Our List of Plugins provides the services which helps you to manage your site URLs(Permalinks), Prevent your site from XSS Attacks, Brute force attacks, increase your site visitors by adding Structured JSON Markup and so on.', 'custom-permalinks' ); ?></span>
 				<div class="box recommended">
 					<div class="img">
 						<img src= "<?php echo $img_src; ?>/prevent-xss-vulnerability.png" style="transform:scale(1.5)" />
@@ -107,7 +107,7 @@ class Custom_Permalinks_About {
 					</div>
 
 					<h3><?php _e( 'Make Paths Relative', 'custom-permalinks' ); ?></h3>
-					<p><?php _e( 'Convert the paths(URLs) to relative instead of absolute. You can make <strong>Post</strong>, <strong>Category</strong>, <strong>Archive</strong>, <strong>Image</strong> URLs and <strong>Script</strong> and <strong>Style</strong> src as per your requirement. You can choose which you want to be relative from the setttings Page.', 'custom-permalinks' ); ?></p>
+					<p><?php _e( 'Convert the paths(URLs) to relative instead of absolute. You can make <strong>Post</strong>, <strong>Category</strong>, <strong>Archive</strong>, <strong>Image</strong> URLs and <strong>Script</strong> and <strong>Style</strong> src as per your requirement. You can choose which you want to be relative from the settings Page.', 'custom-permalinks' ); ?></p>
 					<a href="https://wordpress.org/plugins/make-paths-relative/" class="checkout-button" target="_blank"><?php echo $button_text; ?></a>
 				</div>
 
