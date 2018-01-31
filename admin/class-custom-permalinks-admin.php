@@ -379,7 +379,7 @@ class Custom_Permalinks_Admin {
 	/**
 	 * Sort the terms array in desc order using term id
 	 */
-	private static function sort_array( $a, $b ) {
+	private function sort_array( $a, $b ) {
 		return $b['id'] - $a['id'];
 	}
 

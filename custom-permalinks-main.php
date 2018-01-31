@@ -15,7 +15,7 @@ if ( ! function_exists( 'add_action' ) || ! function_exists( 'add_filter' ) ) {
 	exit();
 }
 
-define( 'CUSTOM_PERMALINKS_PLUGIN_VERSION', '1.2.12' );
+define( 'CUSTOM_PERMALINKS_PLUGIN_VERSION', '1.2.13' );
 
 if ( ! defined( 'CUSTOM_PERMALINKS_PATH' ) ) {
 	define( 'CUSTOM_PERMALINKS_PATH', plugin_dir_path( CUSTOM_PERMALINKS_FILE ) );

@@ -59,7 +59,7 @@ class Custom_Permalinks_About {
 			</div>
 
 			<div class="product">
-				<h2><?php _e( 'More from YAS Global', 'custom-permalinks' ); ?></h2>
+				<h2><?php _e( 'More from Sami Ahmed Siddiqui', 'custom-permalinks' ); ?></h2>
 				<span><?php _e('Our List of Plugins provides the services which helps you to manage your site URLs(Permalinks), Prevent your site from XSS Attacks, Brute force attacks, increase your site visitors by adding Structured JSON Markup and so on.', 'custom-permalinks' ); ?></span>
 				<div class="box recommended">
 					<div class="img">

@@ -2,6 +2,65 @@
 
 This file contains only old changelog. See readme.txt for newer versions.
 
+= 1.2.5 =
+  
+  * Fixed Category/Tag Update Issue + Typo on Admin Page
+
+= 1.2.4 =
+
+  * Fixed Slug issue with Yoast SEO
+
+= 1.2.3 =
+
+  * Fixed PHP Notice on Edit Post Page
+
+= 1.2.2 =
+
+  * Fixed Typo of Class Object for term on Admin Page
+
+= 1.2.1 =
+
+  * Fixed Class Typo
+
+= 1.2 =
+
+  * Enhancements
+    * Added Filter to Exclude/Ignore URL to be processed
+    * Added Translation Capability
+    * Split the Code using OOPS Concept to improve performance and applied the filters according to the need
+    * Removed some unnecessary filters
+  * Bugs
+    * Fixed Vulnerability Issues
+
+= 1.1 =
+  
+  * Enhancements
+    * Added PostTypes Permalinks Page
+      * View all the PostTypes permalinks
+      * Search Permalinks
+      * Sort by Title
+      * Pagination
+    * Added Categories Permalinks Page
+      * View all the Category/Tags permalinks
+      * Search Permalinks
+      * Pagination
+
+  * Bug Fixes
+     * 404 Issues
+     * Child pages bug
+    
+= 1.0.2 =
+  
+  * Fixed Notice and some URL Issues
+
+= 1.0.1 =
+  
+  * Fixed issue with AMP Pages
+
+= 1.0 =
+  
+  * Updated Query on the `custom_permalinks_request` Function
+
 = 0.9.3 =
 
  * Fixed PolyLang Conflicts
