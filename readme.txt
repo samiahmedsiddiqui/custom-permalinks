@@ -4,7 +4,7 @@ Donate link: https://www.paypal.me/yasglobal
 Tags: permalink, url, link, address, custom, redirect, custom post type
 Requires at least: 2.6
 Tested up to: 4.9
-Stable tag: 1.2.14
+Stable tag: 1.2.15
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -60,6 +60,11 @@ add_filter( 'custom_permalinks_like_query', '__return_true');
 
 Note: Use `custom_permalinks_like_query` filter if the URLs doesn't works for you after upgrading to v1.2.9
 
+To add `PATH_INFO` in `$_SERVER` Variable just add this line in your theme's functions.php:
+`
+add_filter( 'custom_permalinks_path_info', '__return_true');
+`
+
 === Thanks for the Support ===
 
 I does not always provide active support for the Custom Permalinks plugin on the WordPress.org forums, as i have prioritize the email support. 
@@ -87,6 +92,10 @@ This process defines you the steps to follow either you are installing through W
 3. Go to "after activation" below.
 
 == Changelog ==
+
+= 1.2.15 =
+
+  * Added filter which can be used to add PATH_INFO in $_SERVER Variable
 
 = 1.2.14 =
 
