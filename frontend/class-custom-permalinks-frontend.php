@@ -9,24 +9,24 @@ class Custom_Permalinks_Frontend {
 	 * Initialize WordPress Hooks
 	 */
 	public function init() {
-		add_filter( 'request', array( $this, 'cp_request' ), 10, 1 );
+		add_filter( 'request', array( $this, 'custom_permalinks_request' ), 10, 1 );
 
-		add_action( 'template_redirect', array( $this, 'cp_redirect' ), 5 );
+		add_action( 'template_redirect', array( $this, 'custom_permalinks_redirect' ), 5 );
 
-		add_filter( 'post_link', array( $this, 'cp_post_link' ), 10, 2 );
-		add_filter( 'post_type_link', array( $this, 'cp_post_link' ), 10, 2 );
-		add_filter( 'page_link', array( $this, 'cp_page_link' ), 10, 2 );
+		add_filter( 'post_link', array( $this, 'custom_permalinks_post_link' ), 10, 2 );
+		add_filter( 'post_type_link', array( $this, 'custom_permalinks_post_link' ), 10, 2 );
+		add_filter( 'page_link', array( $this, 'custom_permalinks_page_link' ), 10, 2 );
 
-		add_filter( 'tag_link', array( $this, 'cp_term_link' ), 10, 2 );
-		add_filter( 'category_link', array( $this, 'cp_term_link' ), 10, 2 );
+		add_filter( 'tag_link', array( $this, 'custom_permalinks_term_link' ), 10, 2 );
+		add_filter( 'category_link', array( $this, 'custom_permalinks_term_link' ), 10, 2 );
 
-		add_filter( 'user_trailingslashit', array( $this, 'cp_trailingslash' ), 10, 2 );
+		add_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
 	}
 
 	/**
 	 * Filter to rewrite the query if we have a matching post
 	 */
-	public function cp_request( $query ) {
+	public function custom_permalinks_request( $query ) {
 		global $wpdb;
 		global $_CPRegisteredURL;
 
@@ -48,7 +48,7 @@ class Custom_Permalinks_Frontend {
 			return $query;
 		}
 
-		$ignore = apply_filters( 'cp_request_ignore', $request );
+		$ignore = apply_filters( 'custom_permalinks_request_ignore', $request );
 
 		if ( '__true' === $ignore ) {
 			return $query;
@@ -59,7 +59,7 @@ class Custom_Permalinks_Frontend {
 				CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-form.php'
 			);
 			$cp_form = new Custom_Permalinks_Form();
-			$request = $cp_form->cp_check_conflicts( $request );
+			$request = $cp_form->custom_permalinks_check_conflicts( $request );
 		}
 		$request_noslash = preg_replace( '@/+@','/', trim( $request, '/' ) );
 
@@ -131,12 +131,12 @@ class Custom_Permalinks_Frontend {
 			} else {
 				$post_meta = trim( strtolower( $posts[0]->meta_value ), '/' );
 				if ( $posts[0]->post_type == 'page' ) {
-					$get_original_url = $this->original_page_link( $posts[0]->ID );
+					$get_original_url = $this->custom_permalinks_original_page_link( $posts[0]->ID );
 					$original_url = preg_replace( '@/+@', '/',
 						str_replace( $post_meta, $get_original_url, strtolower( $request_noslash ) )
 					);
 				} else {
-					$get_original_url = $this->original_post_link( $posts[0]->ID );
+					$get_original_url = $this->custom_permalinks_original_post_link( $posts[0]->ID );
 					$original_url = preg_replace( '@/+@', '/',
 						str_replace( $post_meta, $get_original_url, strtolower( $request_noslash ) )
 					);
@@ -165,9 +165,9 @@ class Custom_Permalinks_Frontend {
 					}
 
 					if ( $term['kind'] == 'category' ) {
-						$category_link = $this->original_category_link( $term['id'] );
+						$category_link = $this->custom_permalinks_original_category_link( $term['id'] );
 					} else {
-						$category_link = $this->original_tag_link( $term['id'] );
+						$category_link = $this->custom_permalinks_original_tag_link( $term['id'] );
 					}
 
 					$original_url = str_replace(
@@ -204,11 +204,11 @@ class Custom_Permalinks_Frontend {
 			}
 
 			// Re-run the filter, now with original environment in place
-			remove_filter( 'request', array( $this, 'cp_request' ), 10, 1 );
+			remove_filter( 'request', array( $this, 'custom_permalinks_request' ), 10, 1 );
 			global $wp;
 			$wp->parse_request();
 			$query = $wp->query_vars;
-			add_filter( 'request', array( $this, 'cp_request' ), 10, 1 );
+			add_filter( 'request', array( $this, 'custom_permalinks_request' ), 10, 1 );
 
 			// Restore values
 			$_SERVER['REQUEST_URI']  = $old_request_uri;
@@ -224,7 +224,7 @@ class Custom_Permalinks_Frontend {
 	/**
 	 * Action to redirect to the custom permalink
 	 */
-	public function cp_redirect() {
+	public function custom_permalinks_redirect() {
 		global $wpdb;		
 
 		$custom_permalink = '';
@@ -242,7 +242,7 @@ class Custom_Permalinks_Frontend {
 		if ( defined( 'POLYLANG_VERSION' ) ) {
 			require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-form.php' );
 			$cp_form = new Custom_Permalinks_Form();
-			$request = $cp_form->cp_check_conflicts( $request );
+			$request = $cp_form->custom_permalinks_check_conflicts( $request );
 		}
 		$request_noslash = preg_replace( '@/+@','/', trim( $request, '/' ) );
 
@@ -304,25 +304,25 @@ class Custom_Permalinks_Frontend {
 				$post = $wp_query->post;
 				$custom_permalink = get_post_meta( $post->ID, 'custom_permalink', true );
 				if ( $post->post_type == 'page' ) {
-					$original_permalink = $this->original_page_link( $post->ID );
+					$original_permalink = $this->custom_permalinks_original_page_link( $post->ID );
 				} else {
-					$original_permalink = $this->original_post_link( $post->ID );
+					$original_permalink = $this->custom_permalinks_original_post_link( $post->ID );
 				}
 			} elseif ( is_tag() || is_category() ) {
 				$theTerm = $wp_query->get_queried_object();
-				$custom_permalink = $this->cp_permalink_for_term( $theTerm->term_id );
+				$custom_permalink = $this->custom_permalinks_permalink_for_term( $theTerm->term_id );
 				if ( is_tag() ) {
-					$original_permalink = $this->original_tag_link( $theTerm->term_id );
+					$original_permalink = $this->custom_permalinks_original_tag_link( $theTerm->term_id );
 				} else {
-					$original_permalink = $this->original_category_link( $theTerm->term_id );
+					$original_permalink = $this->custom_permalinks_original_category_link( $theTerm->term_id );
 				}
 			}
 		} else {
 			$custom_permalink = $posts[0]->meta_value;
 			if ( $posts[0]->post_type == 'page' ) {
-				$original_permalink = $this->original_page_link( $posts[0]->ID );
+				$original_permalink = $this->custom_permalinks_original_page_link( $posts[0]->ID );
 			} else {
-				$original_permalink = $this->original_post_link( $posts[0]->ID );
+				$original_permalink = $this->custom_permalinks_original_post_link( $posts[0]->ID );
 			}
 		}
 
@@ -351,7 +351,7 @@ class Custom_Permalinks_Frontend {
 	/**
 	 * Filter to replace the post permalink with the custom one
 	 */
-	public function cp_post_link( $permalink, $post ) {
+	public function custom_permalinks_post_link( $permalink, $post ) {
 		$custom_permalink = get_post_meta( $post->ID, 'custom_permalink', true );
 		if ( $custom_permalink ) {
 			$post_type = isset( $post->post_type ) ? $post->post_type : 'post';
@@ -368,7 +368,7 @@ class Custom_Permalinks_Frontend {
 	/**
 	 * Filter to replace the page permalink with the custom one
 	 */
-	public function cp_page_link( $permalink, $page ) {
+	public function custom_permalinks_page_link( $permalink, $page ) {
 		$custom_permalink = get_post_meta( $page, 'custom_permalink', true );
 		if ( $custom_permalink ) {
 			$language_code = apply_filters( 'wpml_element_language_code', null, array( 'element_id' => $page, 'element_type' => 'page' ) );
@@ -384,13 +384,13 @@ class Custom_Permalinks_Frontend {
 	/**
 	 * Filter to replace the term permalink with the custom one
 	 */
-	public function cp_term_link( $permalink, $term ) {
+	public function custom_permalinks_term_link( $permalink, $term ) {
 		$table = get_option( 'custom_permalink_table' );
 		if ( is_object( $term ) ) {
 			$term = $term->term_id;
 		}
 
-		$custom_permalink = $this->cp_permalink_for_term( $term );
+		$custom_permalink = $this->custom_permalinks_permalink_for_term( $term );
 		if ( $custom_permalink ) {
 			$taxonomy = get_term( $term );
 			if ( isset( $taxonomy ) && isset( $taxonomy->term_taxonomy_id ) ) {
@@ -408,17 +408,17 @@ class Custom_Permalinks_Frontend {
 	/**
 	 * Get original permalink for post
 	 */
-	public function original_post_link( $post_id ) {
-		remove_filter( 'post_link', array( $this, 'cp_post_link' ), 10, 3 );
-		remove_filter( 'post_type_link', array( $this, 'cp_post_link' ), 10, 2 );
+	public function custom_permalinks_original_post_link( $post_id ) {
+		remove_filter( 'post_link', array( $this, 'custom_permalinks_post_link' ), 10, 3 );
+		remove_filter( 'post_type_link', array( $this, 'custom_permalinks_post_link' ), 10, 2 );
 
 		require_once ABSPATH . '/wp-admin/includes/post.php';
 		list( $permalink, $post_name ) = get_sample_permalink( $post_id );
 		$permalink = str_replace( array( '%pagename%','%postname%' ), $post_name, $permalink );
 		$permalink = ltrim( str_replace( home_url(), '', $permalink ), '/' );
 
-		add_filter( 'post_link', array( $this, 'cp_post_link' ), 10, 3 );
-		add_filter( 'post_type_link', array( $this, 'cp_post_link' ), 10, 2 );
+		add_filter( 'post_link', array( $this, 'custom_permalinks_post_link' ), 10, 3 );
+		add_filter( 'post_type_link', array( $this, 'custom_permalinks_post_link' ), 10, 2 );
 
 		return $permalink;
 	}
@@ -426,54 +426,54 @@ class Custom_Permalinks_Frontend {
 		/**
 	 * Get original permalink for page
 	 */
-	public function original_page_link( $post_id ) {
-		remove_filter( 'page_link', array( $this, 'cp_page_link' ), 10, 2 );
-		remove_filter( 'user_trailingslashit', array( $this, 'cp_trailingslash' ), 10, 2 );
+	public function custom_permalinks_original_page_link( $post_id ) {
+		remove_filter( 'page_link', array( $this, 'custom_permalinks_page_link' ), 10, 2 );
+		remove_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
 
 		require_once ABSPATH . '/wp-admin/includes/post.php';
 		list( $permalink, $post_name ) = get_sample_permalink( $post_id );
 		$permalink = str_replace( array( '%pagename%','%postname%' ), $post_name, $permalink );
 		$permalink = ltrim( str_replace( home_url(), '', $permalink ), '/' );
 
-		add_filter( 'user_trailingslashit', array( $this, 'cp_trailingslash' ), 10, 2 );
-		add_filter( 'page_link', array( $this, 'cp_page_link' ), 10, 2 );
+		add_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
+		add_filter( 'page_link', array( $this, 'custom_permalinks_page_link' ), 10, 2 );
 		return $permalink;
 	}
 
 	/**
 	 * Get original permalink for tag
 	 */
-	public function original_tag_link( $tag_id ) {
-		remove_filter( 'tag_link', array( $this, 'cp_term_link' ), 10, 2 );
-		remove_filter( 'user_trailingslashit', array( $this, 'cp_trailingslash' ), 10, 2 );
+	public function custom_permalinks_original_tag_link( $tag_id ) {
+		remove_filter( 'tag_link', array( $this, 'custom_permalinks_term_link' ), 10, 2 );
+		remove_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
 		$originalPermalink = ltrim( str_replace( home_url(), '', get_tag_link( $tag_id ) ), '/' );
-		add_filter( 'user_trailingslashit', array( $this, 'cp_trailingslash' ), 10, 2 );
-		add_filter( 'tag_link', array( $this, 'cp_term_link' ), 10, 2 );
+		add_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
+		add_filter( 'tag_link', array( $this, 'custom_permalinks_term_link' ), 10, 2 );
 		return $originalPermalink;
 	}
 
 	/**
 	 * Get original permalink for category
 	 */
-	public function original_category_link( $category_id ) {
-		remove_filter( 'category_link', array( $this, 'cp_term_link' ), 10, 2 );
-		remove_filter( 'user_trailingslashit', array( $this, 'cp_trailingslash' ), 10, 2 );
+	public function custom_permalinks_original_category_link( $category_id ) {
+		remove_filter( 'category_link', array( $this, 'custom_permalinks_term_link' ), 10, 2 );
+		remove_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
 		$originalPermalink = ltrim( str_replace( home_url(), '', get_category_link( $category_id ) ), '/' );
-		add_filter( 'user_trailingslashit', array( $this, 'cp_trailingslash' ), 10, 2 );
-		add_filter( 'category_link', array( $this, 'cp_term_link' ), 10, 2 );
+		add_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
+		add_filter( 'category_link', array( $this, 'custom_permalinks_term_link' ), 10, 2 );
 		return $originalPermalink;
 	}
 
 	/**
 	 * Filter to handle trailing slashes correctly
 	 */
-	public function cp_trailingslash( $string, $type ) {
+	public function custom_permalinks_trailingslash( $string, $type ) {
 		global $_CPRegisteredURL;
 
-		remove_filter( 'user_trailingslashit', array( $this, 'cp_trailingslash' ), 10, 2 );
+		remove_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
 		$url = parse_url( get_bloginfo( 'url' ) );
 		$request = ltrim( isset( $url['path'] ) ? substr( $string, strlen( $url['path'] ) ) : $string, '/' );
-		add_filter( 'user_trailingslashit', array( $this, 'cp_trailingslash' ), 10, 2 );
+		add_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
 
 		if ( ! trim( $request ) ) {
 			return $string;
@@ -493,7 +493,7 @@ class Custom_Permalinks_Frontend {
 	/**
 	 * Get permalink for term
 	 */
-	public function cp_permalink_for_term( $id ) {
+	public function custom_permalinks_permalink_for_term( $id ) {
 		$table = get_option( 'custom_permalink_table' );
 		if ( $table ) {
 			foreach ( $table as $link => $info ) {
