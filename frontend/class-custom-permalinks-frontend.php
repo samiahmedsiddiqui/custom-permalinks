@@ -193,6 +193,7 @@ class Custom_Permalinks_Frontend {
 				$old_query_string = $_SERVER['QUERY_STRING'];
 			}
 			$_SERVER['REQUEST_URI']  = '/' . ltrim( $original_url, '/' );
+			$_SERVER['PATH_INFO']    = '/' . ltrim( $original_url, '/' );
 			$_SERVER['QUERY_STRING'] = ( ( $pos = strpos( $original_url, '?' ) ) !== false ? substr( $original_url, $pos + 1 ) : '' );
 			parse_str( $_SERVER['QUERY_STRING'], $query_array );
 			$old_values = array();

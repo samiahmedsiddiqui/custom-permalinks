@@ -55,7 +55,7 @@ One-on-one email support is available to people who bought [Custom Permalinks Pr
 
 Bug reports for Custom Permalinks are [welcomed on GitHub](https://github.com/yasglobal/custom-permalinks). Please note GitHub is not a support forum, and issues that aren't properly qualified as bugs will be closed.
 
-== Installation ==
+## Installation
 
 This process defines you the steps to follow either you are installing through WordPress or Manually from FTP.
 

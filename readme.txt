@@ -4,7 +4,7 @@ Donate link: https://www.paypal.me/yasglobal
 Tags: permalink, url, link, address, custom, redirect, custom post type
 Requires at least: 2.6
 Tested up to: 4.9
-Stable tag: 1.2.13
+Stable tag: 1.2.14
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -88,9 +88,13 @@ This process defines you the steps to follow either you are installing through W
 
 == Changelog ==
 
-= 1.2.13 =
+= 1.2.14 =
 
-  * $this variable issue on static method
+  * Enhancement
+    * Added PATH_INFO in $_SERVER Variable
+
+  * Bugs
+    * $this variable issue on static method
 
 = 1.2.12 =
 
