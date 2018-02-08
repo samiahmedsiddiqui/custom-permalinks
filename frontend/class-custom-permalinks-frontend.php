@@ -97,7 +97,7 @@ class Custom_Permalinks_Frontend {
 			if ( ! $posts ) {
 				$def_query = apply_filters( 'custom_permalinks_like_query', '__false' );
 				if ( defined( 'POLYLANG_VERSION' ) || defined( 'AMP__VERSION' )
-					|| '__false' !== $def_query ) {
+					|| defined( 'TASTY_RECIPES_PLUGIN_VERSION' ) || '__false' !== $def_query ) {
 					$sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
 									" LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
 									" meta_key = 'custom_permalink' AND meta_value != '' AND " .
