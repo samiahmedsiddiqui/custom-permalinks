@@ -4,7 +4,7 @@ Donate link: https://www.paypal.me/yasglobal
 Tags: permalink, url, link, address, custom, redirect, custom post type
 Requires at least: 2.6
 Tested up to: 4.9
-Stable tag: 1.2.16
+Stable tag: 1.2.17
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -19,11 +19,11 @@ over your site structure.
 Be warned: *This plugin is not a replacement for WordPress's built-in permalink system*. Check your WordPress
 administration's "Permalinks" settings page first, to make sure that this doesn't already meet your needs.
 
-This plugin is only useful for assigning custom permalinks for *individual* posts, pages, tags or categories. 
-It will not apply whole permalink structures, or automatically apply a category's custom permalink to the posts 
+This plugin is only useful for assigning custom permalinks for *individual* posts, pages, tags or categories.
+It will not apply whole permalink structures, or automatically apply a category's custom permalink to the posts
 within that category.
 
-> If anyone wants the different Structure Tags for their Post types or use symbols in the URLs So, use the [Permalinks Customizer](https://wordpress.org/plugins/permalinks-customizer/) which is a fork of this plugin and contains the enhancement of this plugin. 
+> If anyone wants the different Structure Tags for their Post types or use symbols in the URLs So, use the [Permalinks Customizer](https://wordpress.org/plugins/permalinks-customizer/) which is a fork of this plugin and contains the enhancement of this plugin.
 
 == Filters ==
 
@@ -67,7 +67,7 @@ add_filter( 'custom_permalinks_path_info', '__return_true');
 
 === Thanks for the Support ===
 
-I does not always provide active support for the Custom Permalinks plugin on the WordPress.org forums, as i have prioritize the email support. 
+I does not always provide active support for the Custom Permalinks plugin on the WordPress.org forums, as i have prioritize the email support.
 One-on-one email support is available to people who bought [Custom Permalinks Premium](https://www.custompermalinks.com/#pricing-section) only.
 
 === Bug reports ===
@@ -92,6 +92,12 @@ This process defines you the steps to follow either you are installing through W
 3. Go to "after activation" below.
 
 == Changelog ==
+
+= 1.2.17 =
+
+  * Fixed Pagination Issue on Comments
+  * Optimize Post Pager Query
+
 
 = 1.2.16 =
 

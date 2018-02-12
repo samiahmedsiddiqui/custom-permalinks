@@ -58,12 +58,12 @@ class Custom_Permalinks_Admin {
 				$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE post_id IN ($post_ids) AND meta_key = 'custom_permalink'" );
 			} else {
 				$error = '<div id="message" class="error">
-										<p>' . __( 'There is some error to proceed your request. Please retry with your request or contact to the plugin author.', 'custom-permalinks' ) . '</p>
-									</div>';
+							<p>' . __( 'There is some error to proceed your request. Please retry with your request or contact to the plugin author.', 'custom-permalinks' ) . '</p>
+						</div>';
 			}
 		}
 		$html .= '<div class="wrap">
-								<h1 class="wp-heading-inline">' . __( 'PostTypes Permalinks', 'custom-permalinks' ) . '</h1>';
+					<h1 class="wp-heading-inline">' . __( 'PostTypes Permalinks', 'custom-permalinks' ) . '</h1>';
 		$html .= $error;
 
 		$search_value = '';
@@ -110,13 +110,13 @@ class Custom_Permalinks_Admin {
 		$html .= '<form action="' . $_SERVER["REQUEST_URI"] . '" method="post">';
 		$html .= '<div class="tablenav top">';
 		$html .= '<div class="alignleft actions bulkactions">
-								<label for="bulk-action-selector-top" class="screen-reader-text">Select bulk action</label>
-									<select name="action" id="bulk-action-selector-top">
-										<option value="-1">' . __( "Bulk Actions", "custom-permalinks" ) . '</option>
-										<option value="delete">' . __( "Delete Permalinks", "custom-permalinks" ) . '</option>
-									</select>
-									<input type="submit" id="doaction" class="button action" value="Apply">
-							</div>';
+					<label for="bulk-action-selector-top" class="screen-reader-text">Select bulk action</label>
+					<select name="action" id="bulk-action-selector-top">
+						<option value="-1">' . __( "Bulk Actions", "custom-permalinks" ) . '</option>
+						<option value="delete">' . __( "Delete Permalinks", "custom-permalinks" ) . '</option>
+					</select>
+					<input type="submit" id="doaction" class="button action" value="Apply">
+				 </div>';
 
 		$posts = 0;
 		if ( isset( $count_posts->total_permalinks )
@@ -155,45 +155,44 @@ class Custom_Permalinks_Admin {
 
 		$html .= '</div>';
 		$html .= '<table class="wp-list-table widefat fixed striped posts">
-								<thead>' . $table_navigation . '</thead>
-								<tbody>';
+					<thead>' . $table_navigation . '</thead>
+					<tbody>';
 		if ( $posts != 0 && ! empty( $posts ) ) {
 			foreach ( $posts as $post ) {
 				$html .= '<tr valign="top">';
 				$html .= '<th scope="row" class="check-column">
-										<input type="checkbox" name="permalink[]" value="' . $post->ID . '" />
-									</th>';
+							<input type="checkbox" name="permalink[]" value="' . $post->ID . '" />
+						</th>';
 				$html .= '<td><strong>
-										<a class="row-title" href="post.php?action=edit&post=' . $post->ID . '">' . $post->post_title . '</a>
-									</strong></td>';
+							<a class="row-title" href="post.php?action=edit&post=' . $post->ID . '">' . $post->post_title . '</a>
+						</strong></td>';
 				$html .= '<td>' . ucwords( $post->post_type ) . '</td>';
 				$html .= '<td>
-										<a href="/' . $post->meta_value . '" target="_blank" title="' . __( "Visit " . $post->post_title, "custom-permalinks" ) . '">/' . urldecode( $post->meta_value ) . '</a>
-									</td>';
+							<a href="/' . $post->meta_value . '" target="_blank" title="' . __( "Visit " . $post->post_title, "custom-permalinks" ) . '">/' . urldecode( $post->meta_value ) . '</a>
+						</td>';
 				$html .= '</tr>';
 			}
 		} else {
 			$html .= '<tr class="no-items">
-									<td class="colspanchange" colspan="10">No permalinks found.</td>
-								</tr>';
+						<td class="colspanchange" colspan="10">No permalinks found.</td>
+					 </tr>';
 		}
 		$html .= '</tbody>
-							<tfoot>' . $table_navigation . '</tfoot>
-							</table>';
+				  <tfoot>' . $table_navigation . '</tfoot>
+				  </table>';
 
 		$html .= '<div class="tablenav bottom">
-								<div class="alignleft actions bulkactions">
-									<label for="bulk-action-selector-bottom" class="screen-reader-text">Select bulk action</label>
-									<select name="action2" id="bulk-action-selector-bottom">
-										<option value="-1">' . __( "Bulk Actions", "custom-permalinks" ) . '</option>
-										<option value="delete">' . __( "Delete Permalinks", "custom-permalinks" ) . '</option>
-									</select>
-									<input type="submit" id="doaction2" class="button action" value="Apply">
-								</div>
-								' . $pagination_html . '
-							</div>';
-		$html .= '</form>
-							</div>';
+					<div class="alignleft actions bulkactions">
+						<label for="bulk-action-selector-bottom" class="screen-reader-text">Select bulk action</label>
+						<select name="action2" id="bulk-action-selector-bottom">
+							<option value="-1">' . __( "Bulk Actions", "custom-permalinks" ) . '</option>
+							<option value="delete">' . __( "Delete Permalinks", "custom-permalinks" ) . '</option>
+						</select>
+						<input type="submit" id="doaction2" class="button action" value="Apply">
+					</div>
+					' . $pagination_html . '
+				 </div>';
+		$html .= '</form></div>';
 		echo $html;
 
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
@@ -204,16 +203,16 @@ class Custom_Permalinks_Admin {
 	 */
 	private function tablenav_posts( $order_by_class, $order_by, $search_permalink ) {
 		$nav = '<tr>
-							<td id="cb" class="manage-column column-cb check-column">
-								<label class="screen-reader-text" for="cb-select-all-1">Select All</label>
-								<input id="cb-select-all-1" type="checkbox">
-							</td>
-							<th scope="col" id="title" class="manage-column column-title column-primary sortable ' . $order_by_class . '">
-								<a href="/wp-admin/admin.php?page=cp-post-permalinks&amp;orderby=title&amp;order=' . $order_by . $search_permalink . '"><span>' . __( "Title", "custom-permalinks" ) . '</span><span class="sorting-indicator"></span></a>
-							</th>
-							<th scope="col">' . __( "Type", "custom-permalinks" ) . '</th>
-							<th scope="col">' . __( "Permalink", "custom-permalinks" ) . '</th>
-					 </tr>';
+					<td id="cb" class="manage-column column-cb check-column">
+						<label class="screen-reader-text" for="cb-select-all-1">Select All</label>
+						<input id="cb-select-all-1" type="checkbox">
+					</td>
+					<th scope="col" id="title" class="manage-column column-title column-primary sortable ' . $order_by_class . '">
+						<a href="/wp-admin/admin.php?page=cp-post-permalinks&amp;orderby=title&amp;order=' . $order_by . $search_permalink . '"><span>' . __( "Title", "custom-permalinks" ) . '</span><span class="sorting-indicator"></span></a>
+					</th>
+					<th scope="col">' . __( "Type", "custom-permalinks" ) . '</th>
+					<th scope="col">' . __( "Permalink", "custom-permalinks" ) . '</th>
+				</tr>';
 		return $nav;
 	}
 
@@ -246,7 +245,7 @@ class Custom_Permalinks_Admin {
 			 update_option( 'custom_permalink_table', $data );
 		}
 		$html .= '<div class="wrap">
-								<h1 class="wp-heading-inline">' . __( 'Category/Tags Permalinks', 'custom-permalinks' ) . '</h1>';
+					<h1 class="wp-heading-inline">' . __( 'Category/Tags Permalinks', 'custom-permalinks' ) . '</h1>';
 
 		$search_value = '';
 		if ( isset( $_GET['s'] ) && ! empty( $_GET['s'] ) ) {
@@ -270,13 +269,13 @@ class Custom_Permalinks_Admin {
 		$html .= '<form action="' . $_SERVER["REQUEST_URI"] . '" method="post">';
 		$html .= '<div class="tablenav top">';
 		$html .= '<div class="alignleft actions bulkactions">
-								<label for="bulk-action-selector-top" class="screen-reader-text">Select bulk action</label>
-								<select name="action" id="bulk-action-selector-top">
-									<option value="-1">' . __( "Bulk Actions", "custom-permalinks" ) . '</option>
-									<option value="delete">' . __( "Delete Permalinks", "custom-permalinks" ) . '</option>
-								</select>
-								<input type="submit" id="doaction" class="button action" value="Apply">
-							</div>';
+					<label for="bulk-action-selector-top" class="screen-reader-text">Select bulk action</label>
+					<select name="action" id="bulk-action-selector-top">
+						<option value="-1">' . __( "Bulk Actions", "custom-permalinks" ) . '</option>
+						<option value="delete">' . __( "Delete Permalinks", "custom-permalinks" ) . '</option>
+					</select>
+					<input type="submit" id="doaction" class="button action" value="Apply">
+				 </div>';
 
 		$posts           = 0;
 		$table           = get_option( 'custom_permalink_table' );
@@ -320,8 +319,8 @@ class Custom_Permalinks_Admin {
 
 		$html .= '</div>';
 		$html .= '<table class="wp-list-table widefat fixed striped posts">
-								<thead>' . $table_navigation . '</thead>
-								<tbody>';
+					<thead>' . $table_navigation . '</thead>
+					<tbody>';
 
 		if ( $table && is_array( $table ) && $count_tags > 0 ) {
 			uasort( $table, array( 'Custom_Permalinks_Admin', 'sort_array' ) );
@@ -338,39 +337,38 @@ class Custom_Permalinks_Admin {
 				$term  = get_term( $info['id'], $type );
 				$html .= '<tr valign="top">';
 				$html .= '<th scope="row" class="check-column">
-										<input type="checkbox" name="permalink[]" value="' . $info['id'] . '" />
-									</th>';
+							<input type="checkbox" name="permalink[]" value="' . $info['id'] . '" />
+						 </th>';
 				$html .= '<td><strong>
-										<a class="row-title" href="edit-tags.php?action=edit&taxonomy=' . $type . '&tag_ID=' . $info['id'] . ' ">' . $term->name . '</a>
-									</strong></td>';
-				$html .= '<td>' . ucwords( $info['kind'] ) . '</td>';        
+							<a class="row-title" href="edit-tags.php?action=edit&taxonomy=' . $type . '&tag_ID=' . $info['id'] . ' ">' . $term->name . '</a>
+						 </strong></td>';
+				$html .= '<td>' . ucwords( $info['kind'] ) . '</td>';
 				$html .= '<td>
-										<a href="/' . $permalink . '" target="_blank" title="' . __( "Visit " . $term->name, "custom-permalinks" ) . '">/' . $permalink . '</a>
-									</td>';
+							<a href="/' . $permalink . '" target="_blank" title="' . __( "Visit " . $term->name, "custom-permalinks" ) . '">/' . $permalink . '</a>
+						 </td>';
 				$html .= '</tr>';
 			}
 		} else {
 			$html .= '<tr class="no-items">
-									<td class="colspanchange" colspan="10">No permalinks found.</td>
-								</tr>';
+						<td class="colspanchange" colspan="10">No permalinks found.</td>
+					 </tr>';
 		}
 		$html .= '</tbody>
-							<tfoot>' . $table_navigation . '</tfoot>
-							</table>';
+					<tfoot>' . $table_navigation . '</tfoot>
+				 </table>';
 
 		$html .= '<div class="tablenav bottom">
-								<div class="alignleft actions bulkactions">
-									<label for="bulk-action-selector-bottom" class="screen-reader-text">Select bulk action</label>
-									<select name="action2" id="bulk-action-selector-bottom">
-										<option value="-1">' . __( "Bulk Actions", "custom-permalinks" ) . '</option>
-										<option value="delete">' . __( "Delete Permalinks", "custom-permalinks" ) . '</option>
-									</select>
-									<input type="submit" id="doaction2" class="button action" value="Apply">
-								</div>
-								' . $pagination_html . '
-							</div>';
-		$html .= '</form>
-							</div>';
+					<div class="alignleft actions bulkactions">
+						<label for="bulk-action-selector-bottom" class="screen-reader-text">Select bulk action</label>
+						<select name="action2" id="bulk-action-selector-bottom">
+							<option value="-1">' . __( "Bulk Actions", "custom-permalinks" ) . '</option>
+							<option value="delete">' . __( "Delete Permalinks", "custom-permalinks" ) . '</option>
+						</select>
+						<input type="submit" id="doaction2" class="button action" value="Apply">
+					</div>
+					' . $pagination_html . '
+				 </div>';
+		$html .= '</form></div>';
 		echo $html;
 
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
@@ -388,13 +386,14 @@ class Custom_Permalinks_Admin {
 	 */
 	private function tablenav_category( $search_permalink ) {
 		$nav = '<tr>
-							<td id="cb" class="manage-column column-cb check-column">
-								<label class="screen-reader-text" for="cb-select-all-1">Select All</label><input id="cb-select-all-1" type="checkbox">
-							</td>
-							<th scope="col" id="title" class="manage-column column-title column-primary">' . __( "Title", "custom-permalinks" ) . '</th>
-							<th scope="col">' . __( "Type", "custom-permalinks" ) . '</th>
-							<th scope="col">' . __( "Permalink", "custom-permalinks" )  . '</th>
-					 </tr>';
+					<td id="cb" class="manage-column column-cb check-column">
+						<label class="screen-reader-text" for="cb-select-all-1">Select All</label>
+						<input id="cb-select-all-1" type="checkbox">
+					</td>
+					<th scope="col" id="title" class="manage-column column-title column-primary">' . __( "Title", "custom-permalinks" ) . '</th>
+					<th scope="col">' . __( "Type", "custom-permalinks" ) . '</th>
+					<th scope="col">' . __( "Permalink", "custom-permalinks" )  . '</th>
+				</tr>';
 		return $nav;
 	}
 
@@ -407,8 +406,8 @@ class Custom_Permalinks_Admin {
 
 		if ( $total_pager == 1 ) {
 			$pagination_html = '<div class="tablenav-pages one-page">
-														<span class="displaying-num">' . $total_permalinks . ' items</span>
-													</div>';
+									<span class="displaying-num">' . $total_permalinks . ' items</span>
+								</div>';
 			return $pagination_html;
 		}
 
@@ -416,50 +415,50 @@ class Custom_Permalinks_Admin {
 			'&paged=' . $current_pager_value . '', $_SERVER['REQUEST_URI']
 		);
 		$pagination_html = '<div class="tablenav-pages">
-													<span class="displaying-num">' . $total_permalinks . ' items</span>
-													<span class="pagination-links">';
+								<span class="displaying-num">' . $total_permalinks . ' items</span>
+								<span class="pagination-links">';
 
 		if ( $current_pager_value == 1 ) {
 			$pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&laquo; </span>
-													 <span class="tablenav-pages-navspan" aria-hidden="true">&lsaquo; </span>';
+								<span class="tablenav-pages-navspan" aria-hidden="true">&lsaquo; </span>';
 		} else {
 			$prev_page = $current_pager_value - 1;
 			if ( $prev_page == 1 ) {
 				$pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&laquo;</span>';
 			} else {
 				$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=1" title="First page" class="first-page">
-																<span class="screen-reader-text">First page</span>
-																<span aria-hidden="true">&laquo;</span>
-														 </a> ';
+										<span class="screen-reader-text">First page</span>
+										<span aria-hidden="true">&laquo;</span>
+								 	</a> ';
 			}
 			$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $prev_page . '" title="Previous page" class="prev-page">
-															<span class="screen-reader-text">Previous page</span>
-															<span aria-hidden="true">&lsaquo;</span>
-													 </a> ';
+										<span class="screen-reader-text">Previous page</span>
+										<span aria-hidden="true">&lsaquo;</span>
+								</a> ';
 		}
 
-		$pagination_html .=  '<span class="paging-input">
-														<label for="current-page-selector" class="screen-reader-text">Current Page</label>
-														<input class="current-page" id="current-page-selector" type="text" name="paged" value="' . $current_pager_value . '" size="1" aria-describedby="table-paging" />
-														<span class="tablenav-paging-text"> of <span class="total-pages">' . $total_pager . ' </span> </span>
-													</span>';
+		$pagination_html .= '<span class="paging-input">
+								<label for="current-page-selector" class="screen-reader-text">Current Page</label>
+								<input class="current-page" id="current-page-selector" type="text" name="paged" value="' . $current_pager_value . '" size="1" aria-describedby="table-paging" />
+								<span class="tablenav-paging-text"> of <span class="total-pages">' . $total_pager . ' </span> </span>
+							</span>';
 
 		if ( $current_pager_value == $total_pager ) {
 			$pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&rsaquo; </span>
-													 <span class="tablenav-pages-navspan" aria-hidden="true">&raquo; </span>';
+								<span class="tablenav-pages-navspan" aria-hidden="true">&raquo; </span>';
 		} else {
 			$next_page = $current_pager_value + 1;
 			$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $next_page . '" title="Next page" class="next-page">
-															<span class="screen-reader-text">Next page</span>
-															<span aria-hidden="true">&rsaquo;</span>
-														</a> ';
+									<span class="screen-reader-text">Next page</span>
+									<span aria-hidden="true">&rsaquo;</span>
+								</a> ';
 			if ( $total_pager == $next_page) {
 				$pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&raquo;</span>';
 			} else {
 				$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $total_pager . '" title="Last page" class="last-page">
-																<span class="screen-reader-text">Last page</span>
-																<span aria-hidden="true">&raquo;</span>
-														 </a> ';
+											<span class="screen-reader-text">Last page</span>
+											<span aria-hidden="true">&raquo;</span>
+									</a> ';
 			}
 		}
 		$pagination_html .= '</span></div>';

@@ -22,27 +22,27 @@ class Custom_Permalinks_About {
 		$plugin_name = __( 'Custom Permalinks', 'custom-permalinks' );
 		$button_text = __( 'Check it out', 'custom-permalinks' );
 		$five_star = '<span class="star">
-										<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 53.867 53.867" width="15" height="15">
-										<polygon points="26.934,1.318 35.256,18.182 53.867,20.887 40.4,34.013 43.579,52.549 26.934,43.798 
-												10.288,52.549 13.467,34.013 0,20.887 18.611,18.182 "/>
-										</svg>
-										<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 53.867 53.867" width="15" height="15">
-										<polygon points="26.934,1.318 35.256,18.182 53.867,20.887 40.4,34.013 43.579,52.549 26.934,43.798 
-												10.288,52.549 13.467,34.013 0,20.887 18.611,18.182 "/>
-										</svg>
-										<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 53.867 53.867" width="15" height="15">
-										<polygon points="26.934,1.318 35.256,18.182 53.867,20.887 40.4,34.013 43.579,52.549 26.934,43.798 
-												10.288,52.549 13.467,34.013 0,20.887 18.611,18.182 "/>
-										</svg>
-										<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 53.867 53.867" width="15" height="15">
-										<polygon points="26.934,1.318 35.256,18.182 53.867,20.887 40.4,34.013 43.579,52.549 26.934,43.798 
-												10.288,52.549 13.467,34.013 0,20.887 18.611,18.182 "/>
-										</svg>
-										<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 53.867 53.867" width="15" height="15">
-										<polygon points="26.934,1.318 35.256,18.182 53.867,20.887 40.4,34.013 43.579,52.549 26.934,43.798 
-												10.288,52.549 13.467,34.013 0,20.887 18.611,18.182 "/>
-										</svg>
-									</span>';
+						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 53.867 53.867" width="15" height="15">
+						<polygon points="26.934,1.318 35.256,18.182 53.867,20.887 40.4,34.013 43.579,52.549 26.934,43.798
+								10.288,52.549 13.467,34.013 0,20.887 18.611,18.182 "/>
+						</svg>
+						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 53.867 53.867" width="15" height="15">
+						<polygon points="26.934,1.318 35.256,18.182 53.867,20.887 40.4,34.013 43.579,52.549 26.934,43.798
+								10.288,52.549 13.467,34.013 0,20.887 18.611,18.182 "/>
+						</svg>
+						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 53.867 53.867" width="15" height="15">
+						<polygon points="26.934,1.318 35.256,18.182 53.867,20.887 40.4,34.013 43.579,52.549 26.934,43.798
+								10.288,52.549 13.467,34.013 0,20.887 18.611,18.182 "/>
+						</svg>
+						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 53.867 53.867" width="15" height="15">
+						<polygon points="26.934,1.318 35.256,18.182 53.867,20.887 40.4,34.013 43.579,52.549 26.934,43.798
+								10.288,52.549 13.467,34.013 0,20.887 18.611,18.182 "/>
+						</svg>
+						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 53.867 53.867" width="15" height="15">
+						<polygon points="26.934,1.318 35.256,18.182 53.867,20.887 40.4,34.013 43.579,52.549 26.934,43.798
+								10.288,52.549 13.467,34.013 0,20.887 18.611,18.182 "/>
+						</svg>
+					</span>';
 		?>
 
 		<div class="wrap">
@@ -55,7 +55,7 @@ class Custom_Permalinks_About {
 			</div>
 
 			<div class="float">
-        <object type="image/svg+xml" data="<?php echo $img_src;?>/custom-permalinks.svg" width="128" height="128"></object>
+        		<object type="image/svg+xml" data="<?php echo $img_src;?>/custom-permalinks.svg" width="128" height="128"></object>
 			</div>
 
 			<div class="product">

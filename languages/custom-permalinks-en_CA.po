@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Custom Permalinks - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-01-24 19:31:48+0000\n"
+"PO-Revision-Date: 2018-02-07 17:59:18+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -10,6 +10,14 @@ msgstr ""
 "X-Generator: GlotPress/2.4.0-alpha\n"
 "Language: en_CA\n"
 "Project-Id-Version: Plugins - Custom Permalinks - Stable (latest release)\n"
+
+#: admin/class-custom-permalinks-about.php:62
+msgid "More from Sami Ahmed Siddiqui"
+msgstr "More from Sami Ahmed Siddiqui"
+
+#: admin/class-custom-permalinks-about.php:52
+msgid "Thank you for choosing Custom Permalinks! We hope that your experience with our plugin for updating permalinks is quick and easy. We are trying to make it more feasible for you and provide capabilities in it."
+msgstr "Thank you for choosing Custom Permalinks! We hope that your experience with our plugin for updating permalinks is quick and easy. We are trying to make it more feasible for you and provide capabilities in it."
 
 #: admin/class-custom-permalinks-admin.php:504
 msgid "<a href=\"%s\" title=\"Premium Support\" target=\"_blank\">Premium Support</a>"
@@ -48,7 +56,7 @@ msgid "JSON Structuring Markup"
 msgstr "JSON Structuring Markup"
 
 #: admin/class-custom-permalinks-about.php:110
-msgid "Convert the paths(URLs) to relative instead of absolute. You can make <strong>Post</strong>, <strong>Category</strong>, <strong>Archive</strong>, <strong>Image</strong> URLs and <strong>Script</strong> and <strong>Style</strong> src as per your requirement. You can choose which you want to be relative from the setttings Page."
+msgid "Convert the paths(URLs) to relative instead of absolute. You can make <strong>Post</strong>, <strong>Category</strong>, <strong>Archive</strong>, <strong>Image</strong> URLs and <strong>Script</strong> and <strong>Style</strong> src as per your requirement. You can choose which you want to be relative from the settings Page."
 msgstr "Convert the paths(URLs) to relative instead of absolute. You can make <strong>Post</strong>, <strong>Category</strong>, <strong>Archive</strong>, <strong>Image</strong> URLs and <strong>Script</strong> and <strong>Style</strong> src as per your requirement. You can choose which you want to be relative from the settings Page."
 
 #: admin/class-custom-permalinks-about.php:109
@@ -88,28 +96,20 @@ msgid "Prevent XSS Vulnerability"
 msgstr "Prevent XSS Vulnerability"
 
 #: admin/class-custom-permalinks-about.php:63
-msgid "Our List of Plugins provides the services which helps you to manage your site URLs(Permalinks), Prevent your site from XSS Attacks, Brute force attacks, increase your site visitors by adding Strucutred JSON Markup and so on."
+msgid "Our List of Plugins provides the services which helps you to manage your site URLs(Permalinks), Prevent your site from XSS Attacks, Brute force attacks, increase your site visitors by adding Structured JSON Markup and so on."
 msgstr "Our List of Plugins provides the services which helps you to manage your site URLs(Permalinks), Prevent your site from XSS Attacks, Brute force attacks, increase your site visitors by adding Structured JSON Markup and so on."
-
-#: admin/class-custom-permalinks-about.php:62
-msgid "More from YAS Global"
-msgstr "More from YAS Global"
 
 #: admin/class-custom-permalinks-about.php:53
 msgid "To support future development and help to make it even better just leaving us a <a href=\"%s\" title=\"Custom Permalinks Rating\" target=\"_blank\">%s</a> rating with a nice message to me :)"
 msgstr "To support future development and help to make it even better just leaving us a <a href=\"%s\" title=\"Custom Permalinks Rating\" target=\"_blank\">%s</a> rating with a nice message to me :)"
-
-#: admin/class-custom-permalinks-about.php:52
-msgid "Thank you for choosing Custom Permalinks! We hope that your experience with our plugin for adding HTTP Authentication on your site is quick and easy."
-msgstr "Thank you for choosing Custom Permalinks! We hope that your experience with our plugin for adding HTTP Authentication on your site is quick and easy."
 
 #: admin/class-custom-permalinks-about.php:23
 msgid "Check it out"
 msgstr "Check it out"
 
 #. Author URI of the plugin/theme
-msgid "https://www.custompermalinks.com"
-msgstr "https://www.custompermalinks.com"
+msgid "https://www.custompermalinks.com/"
+msgstr "https://www.custompermalinks.com/"
 
 #. Author of the plugin/theme
 msgid "Sami Ahmed Siddiqui"
@@ -123,7 +123,7 @@ msgstr "Set custom permalinks on a per-post basis"
 msgid "https://wordpress.org/plugins/custom-permalinks/"
 msgstr "https://en-ca.wordpress.org/plugins/custom-permalinks/"
 
-#. #-#-#-#-#  custom-permalinks-code.pot (Custom Permalinks 1.2.11)  #-#-#-#-#
+#. #-#-#-#-#  custom-permalinks-code.pot (Custom Permalinks 1.2.16)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: admin/class-custom-permalinks-about.php:22
 msgid "Custom Permalinks"

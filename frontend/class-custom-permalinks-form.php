@@ -3,28 +3,52 @@
  * @package CustomPermalinks\Frontend\Form
  */
 
-class Custom_Permalinks_Form {  
+class Custom_Permalinks_Form {
 
 	/**
 	 * Initialize WordPress Hooks
 	 */
 	public function init() {
 
-		add_filter( 'get_sample_permalink_html', array( $this, 'custom_permalinks_get_sample_permalink_html' ), 10, 4 );
+		add_filter( 'get_sample_permalink_html',
+			array( $this, 'custom_permalinks_get_sample_permalink_html' ), 10, 4
+		);
 
-		add_action( 'save_post', array( $this, 'custom_permalinks_save_post' ), 10, 3 );
-		add_action( 'delete_post', array( $this, 'custom_permalinks_delete_permalink' ), 10 );
+		add_action( 'save_post',
+			array( $this, 'custom_permalinks_save_post' ), 10, 3
+		);
+		add_action( 'delete_post',
+			array( $this, 'custom_permalinks_delete_permalink' ), 10
+		);
 
-		add_action( 'edit_tag_form', array( $this, 'custom_permalinks_term_options' ) );
-		add_action( 'add_tag_form', array( $this, 'custom_permalinks_term_options' ) );
-		add_action( 'edit_category_form', array( $this, 'custom_permalinks_term_options' ) );
+		add_action( 'edit_tag_form',
+			array( $this, 'custom_permalinks_term_options' )
+		);
+		add_action( 'add_tag_form',
+			array( $this, 'custom_permalinks_term_options' )
+		);
+		add_action( 'edit_category_form',
+			array( $this, 'custom_permalinks_term_options' )
+		);
 
-		add_action( 'edited_post_tag', array( $this, 'custom_permalinks_save_tag' ) );
-		add_action( 'edited_category', array( $this, 'custom_permalinks_save_category' ) );
-		add_action( 'create_post_tag', array( $this, 'custom_permalinks_save_tag' ) );
-		add_action( 'create_category', array( $this, 'custom_permalinks_save_category' ) );
-		add_action( 'delete_post_tag', array( $this, 'custom_permalinks_delete_term' ) );
-		add_action( 'delete_post_category', array( $this, 'custom_permalinks_delete_term' ) );
+		add_action( 'edited_post_tag',
+			array( $this, 'custom_permalinks_save_tag' )
+		);
+		add_action( 'edited_category',
+			array( $this, 'custom_permalinks_save_category' )
+		);
+		add_action( 'create_post_tag',
+			array( $this, 'custom_permalinks_save_tag' )
+		);
+		add_action( 'create_category',
+			array( $this, 'custom_permalinks_save_category' )
+		);
+		add_action( 'delete_post_tag',
+			array( $this, 'custom_permalinks_delete_term' )
+		);
+		add_action( 'delete_post_category',
+			array( $this, 'custom_permalinks_delete_term' )
+		);
 	}
 
 	/**
@@ -37,7 +61,9 @@ class Custom_Permalinks_Form {
 
 		delete_post_meta( $id, 'custom_permalink' );
 
-		require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php' );
+		require_once(
+			CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php'
+		);
 		$custom_permalinks_frontend = new Custom_Permalinks_Frontend();
 		$original_link = $custom_permalinks_frontend->custom_permalinks_original_post_link( $id );
 		$permalink_structure = get_option( 'permalink_structure' );
@@ -62,7 +88,7 @@ class Custom_Permalinks_Form {
 	/**
 	 * Per-post/page options (Wordpress > 2.9)
 	 */
-	public function custom_permalinks_get_sample_permalink_html( $html, $id, $new_title, $new_slug ) {		
+	public function custom_permalinks_get_sample_permalink_html( $html, $id, $new_title, $new_slug ) {
 		$permalink = get_post_meta( $id, 'custom_permalink', true );
 		$post      = get_post( $id );
 
@@ -70,13 +96,13 @@ class Custom_Permalinks_Form {
 			return $html;
 		}
 
-    $exclude_post_types = $post->post_type;
-    $excluded = apply_filters( 'custom_permalinks_exclude_post_type', $exclude_post_types );
-    if ( '__true' === $excluded ) {
+    	$exclude_post_types = $post->post_type;
+    	$excluded = apply_filters( 'custom_permalinks_exclude_post_type', $exclude_post_types );
+    	if ( '__true' === $excluded ) {
 			return $html;
 		}
 
-    ob_start();
+		ob_start();
 
 		require_once(
 			CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php'
@@ -124,16 +150,16 @@ class Custom_Permalinks_Form {
 		$permalink = get_post_meta( $post_id, 'custom_permalink', true );
 		?>
 		<div class="postbox closed">
-				<h3><?php _e( 'Custom Permalink', 'custom-permalinks' ) ?></h3>
-				<div class="inside">
-					<?php
-						require_once(
-							CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php'
-						);
-						$custom_permalinks_frontend = new Custom_Permalinks_Frontend();
-						$custom_permalinks_frontend->custom_permalinks_get_form( $permalink, $custom_permalinks_frontend->custom_permalinks_original_post_link( $post_id ) ); 
-					?>
-				</div>
+			<h3><?php _e( 'Custom Permalink', 'custom-permalinks' ) ?></h3>
+			<div class="inside">
+				<?php
+					require_once(
+						CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php'
+					);
+					$custom_permalinks_frontend = new Custom_Permalinks_Frontend();
+					$custom_permalinks_frontend->custom_permalinks_get_form( $permalink, $custom_permalinks_frontend->custom_permalinks_original_post_link( $post_id ) );
+				?>
+			</div>
 		</div>
 		<?php
 	}
@@ -151,17 +177,17 @@ class Custom_Permalinks_Form {
 		$permalink = get_post_meta( $post_id, 'custom_permalink', true );
 		?>
 		<div class="postbox closed">
-				<h3><?php _e( 'Custom Permalink', 'custom-permalinks' ); ?></h3>
-				<div class="inside">
-				<?php
-					require_once(
-						CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php'
-					);
-					$custom_permalinks_frontend = new Custom_Permalinks_Frontend();
-					$page_permalink = $custom_permalinks_frontend->custom_permalinks_original_page_link( $post_id );
-					$this->custom_permalinks_get_form( $permalink, $page_permalink );
-				?>
-				</div>
+			<h3><?php _e( 'Custom Permalink', 'custom-permalinks' ); ?></h3>
+			<div class="inside">
+			<?php
+				require_once(
+					CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php'
+				);
+				$custom_permalinks_frontend = new Custom_Permalinks_Frontend();
+				$page_permalink = $custom_permalinks_frontend->custom_permalinks_original_page_link( $post_id );
+				$this->custom_permalinks_get_form( $permalink, $page_permalink );
+			?>
+			</div>
 		</div>
 		<?php
 	}
@@ -195,8 +221,8 @@ class Custom_Permalinks_Form {
 		?>
 		<script type="text/javascript">
 		jQuery(document).ready(function() {
-				var button = jQuery('#custom_permalink_form').parent().find('.submit');
-				button.remove().insertAfter(jQuery('#custom_permalink_form'));
+			var button = jQuery('#custom_permalink_form').parent().find('.submit');
+			button.remove().insertAfter(jQuery('#custom_permalink_form'));
 		});
 		</script>
 		<?php
@@ -218,7 +244,7 @@ class Custom_Permalinks_Form {
 		<tr>
 			<th scope="row"><?php _e( 'Custom Permalink', 'custom-permalinks' ); ?></th>
 			<td>
-		<?php 
+		<?php
 		endif;
 		if ( $permalink == '' ) {
 			$original = $this->custom_permalinks_check_conflicts( $original );
@@ -344,7 +370,7 @@ class Custom_Permalinks_Form {
 			if ( $polylang_config['force_lang'] == 1 ) {
 
 				if ( strpos( $requested_url, 'language/' ) !== false ) {
-					$requested_url = str_replace( "language/", "", $requested_url );
+					$requested_url = str_replace( 'language/', '', $requested_url );
 				}
 
 				$remove_lang = ltrim( strstr( $requested_url, '/' ), '/' );
@@ -355,5 +381,4 @@ class Custom_Permalinks_Form {
 		}
 		return $requested_url;
 	}
-
 }
