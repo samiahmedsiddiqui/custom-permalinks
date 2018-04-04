@@ -93,21 +93,21 @@ This process defines you the steps to follow either you are installing through W
 
 == Changelog ==
 
-= 1.2.17 =
+= 1.2.17 - Feb 13, 2018 =
 
   * Fixed Pagination Issue on Comments
   * Optimize Post Pager Query
 
 
-= 1.2.16 =
+= 1.2.16 - Feb 09, 2018 =
 
   * Added compatibility with Tasty Recipes Plugin
 
-= 1.2.15 =
+= 1.2.15 - Feb 08, 2018 =
 
   * Added filter which can be used to add PATH_INFO in $_SERVER Variable
 
-= 1.2.14 =
+= 1.2.14 - Feb 07, 2018 =
 
   * Enhancement
     * Added PATH_INFO in $_SERVER Variable
@@ -115,19 +115,19 @@ This process defines you the steps to follow either you are installing through W
   * Bugs
     * $this variable issue on static method
 
-= 1.2.12 =
+= 1.2.12 - Jan 25, 2018 =
 
   * Fixed translation path and pager content issue
 
-= 1.2.11 =
+= 1.2.11 - Jan 24, 2018 =
 
   * Fixed pager issue
 
-= 1.2.10 =
+= 1.2.10 - Jan 17, 2018 =
 
   * Fixed Redirect Issue of Child Pages
 
-= 1.2.9 =
+= 1.2.9 - Jan 16, 2018 =
 
   * Enhancements
     * Added Filter to enable the like query
@@ -136,15 +136,15 @@ This process defines you the steps to follow either you are installing through W
     * Removed LIKE Query in default. It only works if the site uses PolyLang,
       AMP Plugins or separately enabled using the provided filter.
 
-= 1.2.8 =
+= 1.2.8 - Nov 03, 2017 =
 
   * Add Order by in request query
 
-= 1.2.7 =
+= 1.2.7 - Oct 27, 2017 =
 
   * Fixed Parse Error
 
-= 1.2.6 =
+= 1.2.6 - Oct 27, 2017 =
 
   * Enhancements
     * Added Filter to Exclude Post types
