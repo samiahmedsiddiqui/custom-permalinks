@@ -4,7 +4,7 @@ Donate link: https://www.paypal.me/yasglobal
 Tags: permalink, url, link, address, custom, redirect, custom post type
 Requires at least: 2.6
 Tested up to: 4.9
-Stable tag: 1.2.17
+Stable tag: 1.2.18
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -93,11 +93,20 @@ This process defines you the steps to follow either you are installing through W
 
 == Changelog ==
 
+= 1.2.18 - April 05, 2018 =
+
+  * Enhancement
+    * Merged custom-permalinks-main.php with custom-permalinks.php
+    * Added uninstall.php
+
+  * Bugs
+    * Added feed redirect of default permalink
+    * Provide proper feed of custom permalink
+
 = 1.2.17 - Feb 13, 2018 =
 
   * Fixed Pagination Issue on Comments
   * Optimize Post Pager Query
-
 
 = 1.2.16 - Feb 09, 2018 =
 
