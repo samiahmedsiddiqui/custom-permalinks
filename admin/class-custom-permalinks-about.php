@@ -3,7 +3,7 @@
  * @package CustomPermalinks\Admin
  */
 
-class Custom_Permalinks_About {
+final class Custom_Permalinks_About {
 
   /**
    * Class constructor.
@@ -13,7 +13,11 @@ class Custom_Permalinks_About {
   }
 
   /**
-   * More Plugins HTML
+   * Print HTML for Custom Permalinks ABout Page
+   *
+   * @access private
+   * @since 1.2.11
+   * @return void
    */
   private function more_plugins() {
     $plugin_url = plugins_url( '/admin', CUSTOM_PERMALINKS_FILE );

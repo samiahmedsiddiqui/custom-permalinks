@@ -3,7 +3,7 @@
  * @package CustomPermalinks\Admin
  */
 
-class Custom_Permalinks_Admin {
+final class Custom_Permalinks_Admin {
 
   /**
    * Initializes WordPress hooks
@@ -17,6 +17,10 @@ class Custom_Permalinks_Admin {
 
   /**
    * Added Pages in Menu for Settings
+   *
+   * @access public
+   * @since 1.2
+   * @return void
    */
   public function admin_menu() {
     add_menu_page( 'Custom Permalinks', 'Custom Permalinks', 'administrator',
@@ -40,6 +44,10 @@ class Custom_Permalinks_Admin {
   /**
    * Shows all the Permalinks created by using this Plugin with Pager and
    * Search Functionality of Posts/Pages.
+   *
+   * @access public
+   * @since 1.2
+   * @return void
    */
   public function posttype_permalinks() {
     global $wpdb;
@@ -200,6 +208,10 @@ class Custom_Permalinks_Admin {
 
   /**
    * Return the Navigation row HTML same as Default Posts page for PostTypes
+   *
+   * @access private
+   * @since 1.2
+   * @return string
    */
   private function tablenav_posts( $order_by_class, $order_by, $search_permalink ) {
     $nav = '<tr>
@@ -217,7 +229,12 @@ class Custom_Permalinks_Admin {
   }
 
   /**
-   * Shows all the Permalinks created by using this Plugin with Pager and Search Functionality of Category/Tags
+   * Shows all the Permalinks created by using this Plugin with Pager and
+   * Search Functionality of Category/Tags
+   *
+   * @access public
+   * @since 1.2
+   * @return void
    */
   public function category_permalinks() {
 
@@ -337,15 +354,15 @@ class Custom_Permalinks_Admin {
         $term  = get_term( $info['id'], $type );
         $html .= '<tr valign="top">';
         $html .= '<th scope="row" class="check-column">
-              <input type="checkbox" name="permalink[]" value="' . $info['id'] . '" />
-             </th>';
+                    <input type="checkbox" name="permalink[]" value="' . $info['id'] . '" />
+                  </th>';
         $html .= '<td><strong>
-              <a class="row-title" href="edit-tags.php?action=edit&taxonomy=' . $type . '&tag_ID=' . $info['id'] . ' ">' . $term->name . '</a>
-             </strong></td>';
+                    <a class="row-title" href="edit-tags.php?action=edit&taxonomy=' . $type . '&tag_ID=' . $info['id'] . ' ">' . $term->name . '</a>
+                 </strong></td>';
         $html .= '<td>' . ucwords( $info['kind'] ) . '</td>';
         $html .= '<td>
-              <a href="/' . $permalink . '" target="_blank" title="' . __( "Visit " . $term->name, "custom-permalinks" ) . '">/' . $permalink . '</a>
-             </td>';
+                    <a href="/' . $permalink . '" target="_blank" title="' . __( "Visit " . $term->name, "custom-permalinks" ) . '">/' . $permalink . '</a>
+                 </td>';
         $html .= '</tr>';
       }
     } else {
@@ -376,6 +393,10 @@ class Custom_Permalinks_Admin {
 
   /**
    * Sort the terms array in desc order using term id
+   *
+   * @access private
+   * @since 1.2
+   * @return integer
    */
   private function sort_array( $a, $b ) {
     return $b['id'] - $a['id'];
@@ -383,6 +404,10 @@ class Custom_Permalinks_Admin {
 
   /**
    * Return the Navigation row HTML same as Default Posts page for Category
+   *
+   * @access private
+   * @since 1.2
+   * @return string
    */
   private function tablenav_category( $search_permalink ) {
     $nav = '<tr>
@@ -399,6 +424,10 @@ class Custom_Permalinks_Admin {
 
   /**
    * Return the Pager HTML
+   *
+   * @access private
+   * @since 1.2
+   * @return string
    */
   private function cp_pager( $total_permalinks, $current_pager_value = 1, $total_pager = 0 ) {
 
@@ -468,6 +497,10 @@ class Custom_Permalinks_Admin {
 
   /**
    * Add About Plugins Page
+   *
+   * @access public
+   * @since 1.2.11
+   * @return void
    */
   public function about_plugin() {
     require_once(
@@ -479,6 +512,10 @@ class Custom_Permalinks_Admin {
 
   /**
    * Add Plugin Support and Follow Message in the footer of Admin Pages
+   *
+   * @access public
+   * @since 1.2.11
+   * @return string
    */
   public function admin_footer_text() {
     $footer_text = sprintf(
@@ -493,6 +530,10 @@ class Custom_Permalinks_Admin {
   /**
    * Add About and Premium Settings Page Link on the Plugin Page
    * under the Plugin Name.
+   *
+   * @access public
+   * @since 1.2.11
+   * @return array
    */
   public function settings_link( $links ) {
     $about = sprintf(

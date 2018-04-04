@@ -3,11 +3,15 @@
  * @package CustomPermalinks\Frontend
  */
 
-class Custom_Permalinks_Frontend {
+final class Custom_Permalinks_Frontend {
 
-	/**
-	 * Initialize WordPress Hooks
-	 */
+  /**
+   * Initialize WordPress Hooks
+   *
+   * @access public
+   * @since 1.2
+   * @return void
+   */
 	public function init() {
 		add_filter( 'request', array( $this, 'parse_request' ), 10, 1 );
 
@@ -23,9 +27,12 @@ class Custom_Permalinks_Frontend {
 		add_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
 	}
 
-	/**
-	 * Filter to rewrite the query if we have a matching post
-	 */
+  /**
+   * Filter to rewrite the query if we have a matching post
+   *
+   * @access public
+   * @return void
+   */
 	public function parse_request( $query ) {
 		global $wpdb;
 		global $_CPRegisteredURL;
@@ -237,9 +244,12 @@ class Custom_Permalinks_Frontend {
     return $query;
   }
 
-	/**
-	 * Action to redirect to the custom permalink
-	 */
+  /**
+   * Action to redirect to the custom permalink
+   *
+   * @access public
+   * @return void
+   */
   public function make_redirect() {
     global $wpdb;
 
@@ -369,6 +379,9 @@ class Custom_Permalinks_Frontend {
 
   /**
    * Filter to replace the post permalink with the custom one
+   *
+   * @access public
+   * @return string
    */
   public function custom_permalinks_post_link( $permalink, $post ) {
     $custom_permalink = get_post_meta( $post->ID, 'custom_permalink', true );
@@ -386,6 +399,9 @@ class Custom_Permalinks_Frontend {
 
   /**
    * Filter to replace the page permalink with the custom one
+   *
+   * @access public
+   * @return string
    */
   public function custom_permalinks_page_link( $permalink, $page ) {
     $custom_permalink = get_post_meta( $page, 'custom_permalink', true );
@@ -402,6 +418,9 @@ class Custom_Permalinks_Frontend {
 
   /**
    * Filter to replace the term permalink with the custom one
+   *
+   * @access public
+   * @return string
    */
   public function custom_permalinks_term_link( $permalink, $term ) {
     $table = get_option( 'custom_permalink_table' );
@@ -429,6 +448,9 @@ class Custom_Permalinks_Frontend {
 
   /**
    * Get original permalink for post
+   *
+   * @access public
+   * @return string
    */
   public function custom_permalinks_original_post_link( $post_id ) {
     remove_filter( 'post_link', array( $this, 'custom_permalinks_post_link' ), 10, 3 );
@@ -447,6 +469,9 @@ class Custom_Permalinks_Frontend {
 
   /**
    * Get original permalink for page
+   *
+   * @access public
+   * @return string
    */
   public function custom_permalinks_original_page_link( $post_id ) {
     remove_filter( 'page_link', array( $this, 'custom_permalinks_page_link' ), 10, 2 );
@@ -464,6 +489,9 @@ class Custom_Permalinks_Frontend {
 
   /**
    * Get original permalink for tag
+   *
+   * @access public
+   * @return string
    */
   public function custom_permalinks_original_tag_link( $tag_id ) {
     remove_filter( 'tag_link', array( $this, 'custom_permalinks_term_link' ), 10, 2 );
@@ -476,6 +504,9 @@ class Custom_Permalinks_Frontend {
 
   /**
    * Get original permalink for category
+   *
+   * @access public
+   * @return string
    */
   public function custom_permalinks_original_category_link( $category_id ) {
     remove_filter( 'category_link', array( $this, 'custom_permalinks_term_link' ), 10, 2 );
@@ -488,6 +519,9 @@ class Custom_Permalinks_Frontend {
 
   /**
    * Filter to handle trailing slashes correctly
+   *
+   * @access public
+   * @return string
    */
   public function custom_permalinks_trailingslash( $string, $type ) {
     global $_CPRegisteredURL;
@@ -513,6 +547,9 @@ class Custom_Permalinks_Frontend {
 
   /**
    * Get permalink for term
+   *
+   * @access public
+   * @return boolean
    */
   public function custom_permalinks_permalink_for_term( $id ) {
     $table = get_option( 'custom_permalink_table' );

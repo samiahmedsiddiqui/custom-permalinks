@@ -3,10 +3,14 @@
  * @package CustomPermalinks\Frontend\Form
  */
 
-class Custom_Permalinks_Form {
+final class Custom_Permalinks_Form {
 
   /**
    * Initialize WordPress Hooks
+   *
+   * @access public
+   * @since 1.2
+   * @return void
    */
   public function init() {
 
@@ -53,6 +57,9 @@ class Custom_Permalinks_Form {
 
   /**
    * Save per-post options
+   *
+   * @access public
+   * @return void
    */
   public function custom_permalinks_save_post( $id ) {
     if ( ! isset( $_REQUEST['custom_permalinks_edit'] ) ) {
@@ -75,7 +82,10 @@ class Custom_Permalinks_Form {
   }
 
   /**
-   * Delete post
+   * Delete Post Permalink
+   *
+   * @access public
+   * @return void
    */
   public function custom_permalinks_delete_permalink( $id ) {
     global $wpdb;
@@ -84,6 +94,9 @@ class Custom_Permalinks_Form {
 
   /**
    * Per-post/page options (Wordpress > 2.9)
+   *
+   * @access public
+   * @return string
    */
   public function custom_permalinks_get_sample_permalink_html( $html, $id, $new_title, $new_slug ) {
     $permalink = get_post_meta( $id, 'custom_permalink', true );
@@ -133,6 +146,9 @@ class Custom_Permalinks_Form {
 
   /**
    * Per-post options (Wordpress < 2.9)
+   *
+   * @access public
+   * @return void
    */
   public function custom_permalinks_post_options() {
     global $post;
@@ -157,6 +173,9 @@ class Custom_Permalinks_Form {
 
   /**
    * Per-page options (Wordpress < 2.9)
+   *
+   * @access public
+   * @return void
    */
   public function custom_permalinks_page_options() {
     global $post;
@@ -182,6 +201,9 @@ class Custom_Permalinks_Form {
 
   /**
    * Per-category/tag options
+   *
+   * @access public
+   * @return void
    */
   public function custom_permalinks_term_options( $object ) {
     if ( is_object( $object ) && isset( $object->term_id ) ) {
@@ -215,6 +237,9 @@ class Custom_Permalinks_Form {
 
   /**
    * Helper function to render form
+   *
+   * @access private
+   * @return void
    */
   private function custom_permalinks_get_form( $permalink, $original = '', $renderContainers = true, $postname = '' ) {
     ?>
@@ -263,6 +288,9 @@ class Custom_Permalinks_Form {
 
   /**
    * Save per-tag options
+   *
+   * @access public
+   * @return void
    */
   public function custom_permalinks_save_tag( $id ) {
     if ( ! isset( $_REQUEST['custom_permalinks_edit'] )
@@ -282,6 +310,9 @@ class Custom_Permalinks_Form {
 
   /**
    * Save per-category options
+   *
+   * @access public
+   * @return void
    */
   public function custom_permalinks_save_category( $id ) {
     if ( ! isset( $_REQUEST['custom_permalinks_edit'] )
@@ -303,6 +334,9 @@ class Custom_Permalinks_Form {
 
   /**
    * Save term (common to tags and categories)
+   *
+   * @access public
+   * @return void
    */
   public function custom_permalinks_save_term( $term, $permalink ) {
 
@@ -321,6 +355,9 @@ class Custom_Permalinks_Form {
 
   /**
    * Delete term
+   *
+   * @access public
+   * @return void
    */
   public function custom_permalinks_delete_term( $id ) {
     $table = get_option( 'custom_permalink_table' );
@@ -337,6 +374,10 @@ class Custom_Permalinks_Form {
 
   /**
    * Check Conflicts and resolve it (e.g: Polylang)
+   *
+   * @access public
+   * @since 1.2
+   * @return string
    */
   public function custom_permalinks_check_conflicts( $requested_url = '' ) {
     if ( '' == $requested_url ) {

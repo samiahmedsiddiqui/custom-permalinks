@@ -39,8 +39,83 @@ if ( ! defined( 'ABSPATH' ) ) {
   exit;
 }
 
-if ( ! defined( 'CUSTOM_PERMALINKS_FILE' ) ) {
-  define( 'CUSTOM_PERMALINKS_FILE', __FILE__ );
+final class Custom_Permalinks {
+
+  /**
+   * Class constructor.
+   */
+  public function __construct() {
+    $this->setup_constants();
+    $this->includes();
+
+    add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
+  }
+
+  /**
+   * Setup plugin constants
+   *
+   * @access private
+   * @since 1.2.18
+   * @return void
+   */
+  private function setup_constants() {
+    if ( ! defined( 'CUSTOM_PERMALINKS_FILE' ) ) {
+      define( 'CUSTOM_PERMALINKS_FILE', __FILE__ );
+    }
+
+    if ( ! defined( 'CUSTOM_PERMALINKS_PLUGIN_VERSION' ) ) {
+      define( 'CUSTOM_PERMALINKS_PLUGIN_VERSION', '1.2.17' );
+    }
+
+    if ( ! defined( 'CUSTOM_PERMALINKS_PATH' ) ) {
+      define( 'CUSTOM_PERMALINKS_PATH', plugin_dir_path( CUSTOM_PERMALINKS_FILE ) );
+    }
+
+    if ( ! defined( 'CUSTOM_PERMALINKS_BASENAME' ) ) {
+      define( 'CUSTOM_PERMALINKS_BASENAME', plugin_basename( CUSTOM_PERMALINKS_FILE ) );
+    }
+  }
+
+  /**
+   * Include required files
+   *
+   * @access private
+   * @since 1.2.18
+   * @return void
+   */
+  private function includes() {
+    require_once(
+      CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php'
+    );
+    $cp_frontend = new Custom_Permalinks_Frontend();
+    $cp_frontend->init();
+
+    require_once(
+      CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-form.php'
+    );
+    $cp_form = new Custom_Permalinks_Form();
+    $cp_form->init();
+
+    if ( is_admin() ) {
+      require_once(
+        CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-admin.php'
+      );
+      new Custom_Permalinks_Admin();
+    }
+  }
+
+  /**
+   * Loads the plugin language files
+   *
+   * @access public
+   * @since 1.2.18
+   * @return void
+   */
+  public function load_textdomain() {
+    load_plugin_textdomain( 'custom-permalinks', FALSE,
+      basename( dirname( CUSTOM_PERMALINKS_FILE ) ) . '/languages/'
+    );
+  }
 }
 
-require_once( dirname( CUSTOM_PERMALINKS_FILE ) . '/custom-permalinks-main.php' );
+new Custom_Permalinks();
