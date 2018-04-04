@@ -482,8 +482,8 @@ class Custom_Permalinks_Admin {
    */
   public function admin_footer_text() {
     $footer_text = sprintf(
-      __( 'Custom Permalinks version %s by <a href="%s" title="Sami Ahmed Siddiqui Website" target="_blank">Sami Ahmed Siddiqui</a> - <a href="%s" title="Support forums" target="_blank">Support forums</a> - Follow on Twitter: <a href="%s" title="Follow Sami Ahmed Siddiqui on Twitter" target="_blank">Sami Ahmed Siddiqui</a>', 'custom-permalinks' ),
-      CUSTOM_PERMALINKS_PLUGIN_VERSION, 'https://www.yasglobal.com',
+      __( 'Custom Permalinks version %s by <a href="%s" title="Sami Ahmed Siddiqui Company Website" target="_blank">Sami Ahmed Siddiqui</a> - <a href="%s" title="Support forums" target="_blank">Support forums</a> - Follow on Twitter: <a href="%s" title="Follow Sami Ahmed Siddiqui on Twitter" target="_blank">Sami Ahmed Siddiqui</a>', 'custom-permalinks' ),
+      CUSTOM_PERMALINKS_PLUGIN_VERSION, 'https://www.yasglobal.com/',
       'https://wordpress.org/support/plugin/custom-permalinks',
       'https://twitter.com/samisiddiqui91'
     );
@@ -503,6 +503,11 @@ class Custom_Permalinks_Admin {
       __( '<a href="%s" title="Premium Support" target="_blank">Premium Support</a>', 'custom-permalinks' ),
       'https://www.custompermalinks.com/#pricing-section'
     );
+    $contact = sprintf(
+      __( '<a href="%s" title="Contact" target="_blank">Contact</a>', 'custom-permalinks' ),
+      'https://www.custompermalinks.com/contact-us/'
+    );
+    array_unshift( $links, $contact );
     array_unshift( $links, $premium_support );
     array_unshift( $links, $about );
 
