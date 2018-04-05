@@ -126,7 +126,8 @@ final class Custom_Permalinks_Admin {
                 <input type="submit" id="doaction" class="button action" value="Apply">
                </div>';
 
-    $posts = 0;
+    $posts           = 0;
+    $pagination_html = '';
     if ( isset( $count_posts->total_permalinks )
       && $count_posts->total_permalinks > 0 ) {
 
@@ -135,7 +136,6 @@ final class Custom_Permalinks_Admin {
       $query = "SELECT p.ID, p.post_title, p.post_type, pm.meta_value FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != '' " . $filter_permalink . " " . $sorting_by . " " . $page_limit . "";
       $posts = $wpdb->get_results( $query );
 
-      $pagination_html = '';
       $total_pages     = ceil( $count_posts->total_permalinks / 20 );
       if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] )
         && $_GET['paged'] > 0 ) {
