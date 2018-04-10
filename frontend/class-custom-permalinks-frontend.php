@@ -13,18 +13,30 @@ final class Custom_Permalinks_Frontend {
    * @return void
    */
 	public function init() {
-		add_filter( 'request', array( $this, 'parse_request' ), 10, 1 );
+    add_filter( 'request', array( $this, 'parse_request' ), 10, 1 );
 
-		add_action( 'template_redirect', array( $this, 'make_redirect' ), 5 );
+    add_action( 'template_redirect', array( $this, 'make_redirect' ), 5 );
 
-		add_filter( 'post_link', array( $this, 'custom_permalinks_post_link' ), 10, 2 );
-		add_filter( 'post_type_link', array( $this, 'custom_permalinks_post_link' ), 10, 2 );
-		add_filter( 'page_link', array( $this, 'custom_permalinks_page_link' ), 10, 2 );
+    add_filter( 'post_link',
+      array( $this, 'custom_permalinks_post_link' ), 10, 2
+    );
+    add_filter( 'post_type_link',
+      array( $this, 'custom_permalinks_post_link' ), 10, 2
+    );
+    add_filter( 'page_link',
+      array( $this, 'custom_permalinks_page_link' ), 10, 2
+    );
 
-		add_filter( 'tag_link', array( $this, 'custom_permalinks_term_link' ), 10, 2 );
-		add_filter( 'category_link', array( $this, 'custom_permalinks_term_link' ), 10, 2 );
+    add_filter(
+      'tag_link', array( $this, 'custom_permalinks_term_link' ), 10, 2
+    );
+    add_filter( 'category_link',
+      array( $this, 'custom_permalinks_term_link' ), 10, 2
+    );
 
-		add_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
+    add_filter( 'user_trailingslashit',
+      array( $this, 'custom_permalinks_trailingslash' ), 10, 2
+    );
 	}
 
   /**
@@ -105,23 +117,20 @@ final class Custom_Permalinks_Frontend {
 
 		$posts = $wpdb->get_results( $sql );
 
-		if ( ! $posts ) {
-      $def_query = apply_filters( 'custom_permalinks_like_query', '__false' );
-      if ( defined( 'POLYLANG_VERSION' ) || defined( 'AMP__VERSION' )
-        || defined( 'TASTY_RECIPES_PLUGIN_VERSION' ) || '__false' !== $def_query ) {
-        $sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
-                " LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
-                " meta_key = 'custom_permalink' AND meta_value != '' AND " .
-                " ( LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) OR " .
-                "   LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) ) " .
-                "  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
-                " ORDER BY LENGTH(meta_value) DESC, " .
-                " FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
-                " FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
-                $request_noslash, $request_noslash . "/" );
+    $remove_like_query = apply_filters( 'cp_remove_like_query', '__true' );
+		if ( ! $posts && '__false' !== $remove_like_query ) {
+      $sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
+              " LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
+              " meta_key = 'custom_permalink' AND meta_value != '' AND " .
+              " ( LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) OR " .
+              "   LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) ) " .
+              "  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
+              " ORDER BY LENGTH(meta_value) DESC, " .
+              " FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
+              " FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
+              $request_noslash, $request_noslash . "/" );
 
-          $posts = $wpdb->get_results( $sql );
-      }
+      $posts = $wpdb->get_results( $sql );
 		}
 
     if ( $posts ) {
@@ -198,8 +207,9 @@ final class Custom_Permalinks_Frontend {
         $original_url .= ( strpos( $original_url, '?' ) === false ? '?' : '&' ) . $query_vars;
       }
 
-      // Now we have the original URL, run this back through WP->parse_request, in order to
-      // parse parameters properly.  We set $_SERVER variables to fool the function.
+      // Now we have the original URL, run this back through WP->parse_request,
+      // in order to parse parameters properly.
+      // We set $_SERVER variables to fool the function.
       $old_request_uri  = $_SERVER['REQUEST_URI'];
       $old_query_string = '';
       if ( isset( $_SERVER['QUERY_STRING'] ) ) {
@@ -266,7 +276,9 @@ final class Custom_Permalinks_Frontend {
     }
 
     if ( defined( 'POLYLANG_VERSION' ) ) {
-      require_once( CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-form.php' );
+      require_once(
+        CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-form.php'
+      );
       $cp_form = new Custom_Permalinks_Form();
       $request = $cp_form->custom_permalinks_check_conflicts( $request );
     }
@@ -305,30 +317,28 @@ final class Custom_Permalinks_Frontend {
 
     $posts = $wpdb->get_results( $sql );
 
-    if ( ! $posts ) {
-      $def_query = apply_filters( 'custom_permalinks_like_query', '__false' );
-      if ( defined( 'POLYLANG_VERSION' ) || defined( 'AMP__VERSION' )
-        || defined( 'TASTY_RECIPES_PLUGIN_VERSION' ) || '__false' !== $def_query ) {
-        $sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
-                " LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
-                " meta_key = 'custom_permalink' AND meta_value != '' AND " .
-                " ( LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) OR " .
-                "   LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) ) " .
-                "  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
-                " ORDER BY LENGTH(meta_value) DESC, " .
-                " FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
-                " FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
-                $request_noslash, $request_noslash . "/" );
+    $remove_like_query = apply_filters( 'cp_remove_like_query', '__true' );
+    if ( ! $posts && '__false' !== $remove_like_query ) {
+      $sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
+              " LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
+              " meta_key = 'custom_permalink' AND meta_value != '' AND " .
+              " ( LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) OR " .
+              "   LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) ) " .
+              "  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
+              " ORDER BY LENGTH(meta_value) DESC, " .
+              " FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
+              " FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
+              $request_noslash, $request_noslash . "/" );
 
-        $posts = $wpdb->get_results( $sql );
-      }
+      $posts = $wpdb->get_results( $sql );
     }
 
     if ( ! isset( $posts[0]->ID ) || ! isset( $posts[0]->meta_value )
       || empty( $posts[0]->meta_value ) ) {
       global $wp_query;
 
-      // If the post/tag/category we're on has a custom permalink, get it and check against the request
+      // If the post/tag/category we're on has a custom permalink, get it and
+      // check against the request
       if ( ( is_single() || is_page() ) && ! empty( $wp_query->post ) ) {
         $post = $wp_query->post;
         $custom_permalink = get_post_meta( $post->ID, 'custom_permalink', true );
