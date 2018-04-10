@@ -19,13 +19,13 @@ within that category.
 
 To exclude any Permalink to processed with the plugin so, just add the filter looks like this:
 ```
-function check_xml_sitemap_url( $permalink ) {
+function yasglobal_xml_sitemap_url( $permalink ) {
   if ( false !== strpos( $permalink, 'sitemap.xml' )) {
     return '__true';
   }
   return;
 }
-add_filter( 'custom_permalinks_request_ignore', 'check_xml_sitemap_url' );
+add_filter( 'custom_permalinks_request_ignore', 'yasglobal_xml_sitemap_url' );
 ```
 
 To exclude permalink from any post type so, just add the filter looks like this:
@@ -40,9 +40,9 @@ add_filter( 'custom_permalinks_exclude_post_type', 'yasglobal_exclude_post_types
 ```
 Note: `custom_permalinks_exclude_post_type` doesn't work on the posts permalink which has been created previously.
 
-To make the like query works as it was before so, just add this line in your theme's functions.php:
+To remove the like query to being work just add this line in your theme's functions.php:
 ```
-add_filter( 'custom_permalinks_like_query', '__return_true');
+add_filter( 'cp_remove_like_query', '__return_false');
 ```
 Note: Use `custom_permalinks_like_query` filter if the URLs doesn't works for you after upgrading to v1.2.9
 
