@@ -80,32 +80,7 @@ final class Custom_Permalinks_Frontend {
 			$cp_form = new Custom_Permalinks_Form();
 			$request = $cp_form->custom_permalinks_check_conflicts( $request );
 		}
-		$request_noslash = preg_replace( '@/+@','/', trim( $request, '/' ) );
-
-    $remove_pager = '';
-		if ( false !== strpos( $request_noslash, '/page/' ) ) {
-      $check_pager  = explode( '/', $request_noslash );
-      $get_pager_no = count( $check_pager ) - 1;
-      if ( is_numeric( $check_pager[$get_pager_no] ) ) {
-        $remove_pager = '/page/' . $check_pager[$get_pager_no];
-        $request_noslash = str_replace( $remove_pager, '', $request_noslash );
-      }
-    }
-
-    if ( false !== strpos( $request_noslash, '/comment-page-' ) ) {
-      $check_pager  = explode( '/comment-page-', $request_noslash );
-      $get_pager_no = count( $check_pager ) - 1;
-      if ( is_numeric( $check_pager[$get_pager_no] ) ) {
-        $remove_pager = '/comment-page-' . $check_pager[$get_pager_no];
-        $request_noslash = str_replace( $remove_pager, '', $request_noslash );
-      }
-    }
-
-    $post_feed = 0;
-    if ( false !== strpos( $request_noslash, '/feed' ) ) {
-      $request_noslash = str_replace( '/feed', '', $request_noslash );
-      $post_feed = 1;
-    }
+    $request_noslash = preg_replace( '@/+@','/', trim( $request, '/' ) );
 
 		$sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status " .
             " FROM $wpdb->posts AS p INNER JOIN $wpdb->postmeta AS pm ON (pm.post_id = p.ID) " .
@@ -158,12 +133,6 @@ final class Custom_Permalinks_Frontend {
           $original_url = preg_replace( '@/+@', '/',
             str_replace( $post_meta, $get_original_url, strtolower( $request_noslash ) )
           );
-        }
-        if ( 1 == $post_feed ) {
-          $original_url = $original_url . '/feed';
-        }
-        if ( '' !== $remove_pager ) {
-          $original_url = $original_url . $remove_pager;
         }
       }
     }
@@ -283,29 +252,6 @@ final class Custom_Permalinks_Frontend {
       $request = $cp_form->custom_permalinks_check_conflicts( $request );
     }
     $request_noslash = preg_replace( '@/+@','/', trim( $request, '/' ) );
-
-    $remove_pager = '';
-    if ( false !== strpos( $request_noslash, '/page/' ) ) {
-      $check_pager  = explode( '/', $request_noslash );
-      $get_pager_no = count( $check_pager ) - 1;
-      if ( is_numeric( $check_pager[$get_pager_no] ) ) {
-        $remove_pager    = '/page/' . $check_pager[$get_pager_no];
-        $request_noslash = str_replace( $remove_pager, '', $request_noslash );
-      }
-    }
-
-    if ( false !== strpos( $request_noslash, '/comment-page-' ) ) {
-      $check_pager  = explode( '/comment-page-', $request_noslash );
-      $get_pager_no = count( $check_pager ) - 1;
-      if ( is_numeric( $check_pager[$get_pager_no] ) ) {
-        $remove_pager    = '/comment-page-' . $check_pager[$get_pager_no];
-        $request_noslash = str_replace( $remove_pager, '', $request_noslash );
-      }
-    }
-
-    if ( false !== strpos( $request_noslash, '/feed' ) ) {
-      $request_noslash = str_replace( '/feed', '', $request_noslash );
-    }
 
     $sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status " .
             " FROM $wpdb->posts AS p INNER JOIN $wpdb->postmeta AS pm ON (pm.post_id = p.ID) " .
