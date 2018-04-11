@@ -4,7 +4,7 @@ Donate link: https://www.paypal.me/yasglobal
 Tags: permalink, url, link, address, custom, redirect, custom post type
 Requires at least: 2.6
 Tested up to: 4.9
-Stable tag: 1.2.19
+Stable tag: 1.2.20
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -92,6 +92,13 @@ This process defines you the steps to follow either you are installing through W
 3. Go to "after activation" below.
 
 == Changelog ==
+
+= 1.2.20 - April 11, 2018 =
+
+  * Bug
+    * Removed extra code which was written for the equal query.
+      For further details:
+      https://wordpress.org/support/topic/page-not-found-404-errors-after-latest-update/
 
 = 1.2.19 - April 10, 2018 =
 

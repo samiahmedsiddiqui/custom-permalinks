@@ -3,7 +3,7 @@
  * Plugin Name: Custom Permalinks
  * Plugin URI: https://wordpress.org/plugins/custom-permalinks/
  * Description: Set custom permalinks on a per-post basis
- * Version: 1.2.19
+ * Version: 1.2.20
  * Author: Sami Ahmed Siddiqui
  * Author URI: https://www.custompermalinks.com/
  * Donate link: https://www.paypal.me/yasglobal
@@ -64,7 +64,7 @@ final class Custom_Permalinks {
     }
 
     if ( ! defined( 'CUSTOM_PERMALINKS_PLUGIN_VERSION' ) ) {
-      define( 'CUSTOM_PERMALINKS_PLUGIN_VERSION', '1.2.19' );
+      define( 'CUSTOM_PERMALINKS_PLUGIN_VERSION', '1.2.20' );
     }
 
     if ( ! defined( 'CUSTOM_PERMALINKS_PATH' ) ) {
