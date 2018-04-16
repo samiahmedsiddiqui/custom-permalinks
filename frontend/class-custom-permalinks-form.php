@@ -3,7 +3,7 @@
  * @package CustomPermalinks\Frontend\Form
  */
 
-final class Custom_Permalinks_Form {
+class Custom_Permalinks_Form {
 
   /**
    * Initialize WordPress Hooks

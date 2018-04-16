@@ -3,7 +3,7 @@
  * @package CustomPermalinks\Admin
  */
 
-final class Custom_Permalinks_Admin {
+class Custom_Permalinks_Admin {
 
   /**
    * Initializes WordPress hooks

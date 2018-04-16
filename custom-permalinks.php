@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
   exit;
 }
 
-final class Custom_Permalinks {
+class Custom_Permalinks {
 
   /**
    * Class constructor.

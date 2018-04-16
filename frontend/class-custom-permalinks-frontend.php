@@ -3,7 +3,7 @@
  * @package CustomPermalinks\Frontend
  */
 
-final class Custom_Permalinks_Frontend {
+class Custom_Permalinks_Frontend {
 
   /**
    * Initialize WordPress Hooks
@@ -12,7 +12,7 @@ final class Custom_Permalinks_Frontend {
    * @since 1.2
    * @return void
    */
-	public function init() {
+  public function init() {
     add_filter( 'request', array( $this, 'parse_request' ), 10, 1 );
 
     add_action( 'template_redirect', array( $this, 'make_redirect' ), 5 );
@@ -37,52 +37,53 @@ final class Custom_Permalinks_Frontend {
     add_filter( 'user_trailingslashit',
       array( $this, 'custom_permalinks_trailingslash' ), 10, 2
     );
-	}
+  }
 
   /**
    * Filter to rewrite the query if we have a matching post
    *
    * @access public
+   * @since 0.1
    * @return void
    */
-	public function parse_request( $query ) {
-		global $wpdb;
-		global $_CPRegisteredURL;
+  public function parse_request( $query ) {
+    global $wpdb;
+    global $_CPRegisteredURL;
 
-		// First, search for a matching custom permalink,
-		// and if found, generate the corresponding original URL
+    // First, search for a matching custom permalink,
+    // and if found, generate the corresponding original URL
 
-		$original_url = NULL;
+    $original_url = NULL;
 
-		// Get request URI, strip parameters and /'s
-		$url     = parse_url( get_bloginfo( 'url' ) );
-		$url     = isset( $url['path'] ) ? $url['path'] : '';
-		$request = ltrim( substr( $_SERVER['REQUEST_URI'], strlen( $url ) ), '/' );
-		$pos     = strpos( $request, '?' );
-		if ( $pos ) {
-			$request = substr( $request, 0, $pos );
-		}
+    // Get request URI, strip parameters and /'s
+    $url     = parse_url( get_bloginfo( 'url' ) );
+    $url     = isset( $url['path'] ) ? $url['path'] : '';
+    $request = ltrim( substr( $_SERVER['REQUEST_URI'], strlen( $url ) ), '/' );
+    $pos     = strpos( $request, '?' );
+    if ( $pos ) {
+      $request = substr( $request, 0, $pos );
+    }
 
-		if ( ! $request ) {
-			return $query;
-		}
+    if ( ! $request ) {
+      return $query;
+    }
 
-		$ignore = apply_filters( 'custom_permalinks_request_ignore', $request );
+    $ignore = apply_filters( 'custom_permalinks_request_ignore', $request );
 
-		if ( '__true' === $ignore ) {
-			return $query;
-		}
+    if ( '__true' === $ignore ) {
+      return $query;
+    }
 
-		if ( defined( 'POLYLANG_VERSION' ) ) {
-			require_once(
-				CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-form.php'
-			);
-			$cp_form = new Custom_Permalinks_Form();
-			$request = $cp_form->custom_permalinks_check_conflicts( $request );
-		}
+    if ( defined( 'POLYLANG_VERSION' ) ) {
+      require_once(
+        CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-form.php'
+      );
+      $cp_form = new Custom_Permalinks_Form();
+      $request = $cp_form->custom_permalinks_check_conflicts( $request );
+    }
     $request_noslash = preg_replace( '@/+@','/', trim( $request, '/' ) );
 
-		$sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status " .
+    $sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status " .
             " FROM $wpdb->posts AS p INNER JOIN $wpdb->postmeta AS pm ON (pm.post_id = p.ID) " .
             " WHERE pm.meta_key = 'custom_permalink' " .
             " AND (pm.meta_value = '%s' OR pm.meta_value = '%s') " .
@@ -90,10 +91,10 @@ final class Custom_Permalinks_Frontend {
             " ORDER BY FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
             " FIELD(post_type,'post','page') LIMIT 1", $request_noslash, $request_noslash . "/" );
 
-		$posts = $wpdb->get_results( $sql );
+    $posts = $wpdb->get_results( $sql );
 
     $remove_like_query = apply_filters( 'cp_remove_like_query', '__true' );
-		if ( ! $posts && '__false' !== $remove_like_query ) {
+    if ( ! $posts && '__false' !== $remove_like_query ) {
       $sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
               " LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
               " meta_key = 'custom_permalink' AND meta_value != '' AND " .
@@ -106,7 +107,7 @@ final class Custom_Permalinks_Frontend {
               $request_noslash, $request_noslash . "/" );
 
       $posts = $wpdb->get_results( $sql );
-		}
+    }
 
     if ( $posts ) {
       // A post matches our request
@@ -227,6 +228,7 @@ final class Custom_Permalinks_Frontend {
    * Action to redirect to the custom permalink
    *
    * @access public
+   * @since 0.1
    * @return void
    */
   public function make_redirect() {
