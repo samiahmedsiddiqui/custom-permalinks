@@ -127,6 +127,11 @@ class Custom_Permalinks {
    * @return void
    */
   public function load_textdomain() {
+    $current_version = get_option( 'custom_permalinks_plugin_version', -1 );
+    if ( -1 === $current_version || CUSTOM_PERMALINKS_PLUGIN_VERSION < $current_version ) {
+      Custom_Permalinks::plugin_activate();
+      update_option( 'custom_permalinks_plugin_version', CUSTOM_PERMALINKS_PLUGIN_VERSION );
+    }
     load_plugin_textdomain( 'custom-permalinks', FALSE,
       basename( dirname( CUSTOM_PERMALINKS_FILE ) ) . '/languages/'
     );
