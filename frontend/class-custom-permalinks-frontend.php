@@ -94,7 +94,7 @@ class Custom_Permalinks_Frontend {
     $posts = $wpdb->get_results( $sql );
 
     $remove_like_query = apply_filters( 'cp_remove_like_query', '__true' );
-    if ( ! $posts && '__false' !== $remove_like_query ) {
+    if ( ! $posts && '__true' === $remove_like_query ) {
       $sql = $wpdb->prepare( "SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
               " LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
               " meta_key = 'custom_permalink' AND meta_value != '' AND " .
