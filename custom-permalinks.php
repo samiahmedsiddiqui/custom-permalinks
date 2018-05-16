@@ -101,7 +101,22 @@ class Custom_Permalinks {
         CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-admin.php'
       );
       new Custom_Permalinks_Admin();
+
+      register_activation_hook( CUSTOM_PERMALINKS_FILE, array( 'Custom_Permalinks', 'plugin_activate' ) );
     }
+  }
+
+  /**
+   * Loads the plugin language files
+   *
+   * @access public
+   * @since 1.2.22
+   * @return void
+   */
+  public static function plugin_activate() {
+    $role = get_role( 'administrator' );
+    $role->add_cap( 'cp_view_post_permalinks' );
+    $role->add_cap( 'cp_view_category_permalinks' );
   }
 
   /**

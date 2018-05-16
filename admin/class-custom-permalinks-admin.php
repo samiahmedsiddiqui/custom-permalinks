@@ -23,20 +23,20 @@ class Custom_Permalinks_Admin {
    * @return void
    */
   public function admin_menu() {
-    add_menu_page( 'Custom Permalinks', 'Custom Permalinks', 'administrator',
+    add_menu_page( 'Custom Permalinks', 'Custom Permalinks', 'cp_view_post_permalinks',
       'cp-post-permalinks', array( $this,'posttype_permalinks' ),
       'dashicons-admin-links'
     );
     add_submenu_page( 'cp-post-permalinks', 'PostTypes Permalinks',
-      'PostTypes Permalinks', 'administrator', 'cp-post-permalinks',
+      'PostTypes Permalinks', 'cp_view_post_permalinks', 'cp-post-permalinks',
       array( $this, 'posttype_permalinks' )
     );
     add_submenu_page( 'cp-post-permalinks', 'Category Permalinks',
-      'Category Permalinks', 'administrator', 'cp-category-permalinks',
+      'Category Permalinks', 'cp_view_category_permalinks', 'cp-category-permalinks',
       array( $this, 'category_permalinks' )
     );
     add_submenu_page( 'cp-post-permalinks', 'About Custom Permalinks',
-      'About CP', 'administrator', 'cp-about-plugins',
+      'About CP', 'install_plugins', 'cp-about-plugins',
       array( $this, 'about_plugin' )
     );
   }
