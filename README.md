@@ -15,6 +15,12 @@ within that category.
 
 > If anyone wants the different Structure Tags for their Post types or use symbols in the URLs So, use the [Permalinks Customizer](https://wordpress.org/plugins/permalinks-customizer/) which is a fork of this plugin and contains the enhancement of this plugin. 
 
+## Privacy Policy
+
+This plugin doesn't collects/store any user related information.
+
+To have any kind of further query please feel free to [contact us](https://www.custompermalinks.com/contact-us/).
+
 ## Filters
 
 To exclude any Permalink to processed with the plugin so, just add the filter looks like this:

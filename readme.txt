@@ -1,10 +1,10 @@
 === Custom Permalinks ===
 Contributors: sasiddiqui, michaeltyson
 Donate link: https://www.paypal.me/yasglobal
-Tags: permalink, url, link, address, custom, redirect, custom post type
+Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Requires at least: 2.6
 Tested up to: 4.9
-Stable tag: 1.2.22
+Stable tag: 1.2.23
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -24,6 +24,12 @@ It will not apply whole permalink structures, or automatically apply a category'
 within that category.
 
 > If anyone wants the different Structure Tags for their Post types or use symbols in the URLs So, use the [Permalinks Customizer](https://wordpress.org/plugins/permalinks-customizer/) which is a fork of this plugin and contains the enhancement of this plugin.
+
+== Privacy Policy ==
+
+This plugin doesn't collects/store any user related information.
+
+To have any kind of further query please feel free to [contact us](https://www.custompermalinks.com/contact-us/).
 
 == Filters ==
 
@@ -91,6 +97,11 @@ This process defines you the steps to follow either you are installing through W
 
 == Changelog ==
 
+= 1.2.23 - May 22, 2018 =
+
+  * Enhancement
+    * Added Privacy Policy Content for WordPress 4.9.6 and higher.
+
 = 1.2.22 - May 16, 2018 =
 
   * Enhancement
@@ -113,80 +124,6 @@ This process defines you the steps to follow either you are installing through W
     * Removed extra code which was written for the equal query.
       For further details:
       https://wordpress.org/support/topic/page-not-found-404-errors-after-latest-update/
-
-= 1.2.19 - April 10, 2018 =
-
-  * Bugs
-    * Fixed undefined variable issue on PostTypes Permalinks page
-    * Fixed LIKE Query Issue
-
-= 1.2.18 - April 05, 2018 =
-
-  * Enhancement
-    * Merged custom-permalinks-main.php with custom-permalinks.php
-    * Added uninstall.php
-
-  * Bugs
-    * Added feed redirect of default permalink
-    * Provide proper feed of custom permalink
-
-= 1.2.17 - Feb 13, 2018 =
-
-  * Fixed Pagination Issue on Comments
-  * Optimize Post Pager Query
-
-= 1.2.16 - Feb 09, 2018 =
-
-  * Added compatibility with Tasty Recipes Plugin
-
-= 1.2.15 - Feb 08, 2018 =
-
-  * Added filter which can be used to add PATH_INFO in $_SERVER Variable
-
-= 1.2.14 - Feb 07, 2018 =
-
-  * Enhancement
-    * Added PATH_INFO in $_SERVER Variable
-
-  * Bugs
-    * $this variable issue on static method
-
-= 1.2.12 - Jan 25, 2018 =
-
-  * Fixed translation path and pager content issue
-
-= 1.2.11 - Jan 24, 2018 =
-
-  * Fixed pager issue
-
-= 1.2.10 - Jan 17, 2018 =
-
-  * Fixed Redirect Issue of Child Pages
-
-= 1.2.9 - Jan 16, 2018 =
-
-  * Enhancements
-    * Added Filter to enable the like query
-  * Bugs
-    * PHP error displayed on all pages using custom permalinks
-    * Removed LIKE Query in default. It only works if the site uses PolyLang,
-      AMP Plugins or separately enabled using the provided filter.
-
-= 1.2.8 - Nov 03, 2017 =
-
-  * Add Order by in request query
-
-= 1.2.7 - Oct 27, 2017 =
-
-  * Fixed Parse Error
-
-= 1.2.6 - Oct 27, 2017 =
-
-  * Enhancements
-    * Added Filter to Exclude Post types
-  * Bugs
-    * Fixed Query Issue on parse_request
-    * Resolving Issues with Cornerstone
 
 = Earlier versions =
 
