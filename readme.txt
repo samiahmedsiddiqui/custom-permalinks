@@ -4,7 +4,7 @@ Donate link: https://www.paypal.me/yasglobal
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Requires at least: 2.6
 Tested up to: 4.9
-Stable tag: 1.2.23
+Stable tag: 1.2.24
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -96,6 +96,11 @@ This process defines you the steps to follow either you are installing through W
 2. Activate Custom Permalinks through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 1.2.24 - May 31, 2018 =
+
+  * Bug
+    * [FATAL ERROR when the administrator role not found](https://wordpress.org/support/topic/fatal-error-on-update-15/)
 
 = 1.2.23 - May 22, 2018 =
 

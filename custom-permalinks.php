@@ -3,7 +3,7 @@
  * Plugin Name: Custom Permalinks
  * Plugin URI: https://wordpress.org/plugins/custom-permalinks/
  * Description: Set custom permalinks on a per-post basis
- * Version: 1.2.23
+ * Version: 1.2.24
  * Author: Sami Ahmed Siddiqui
  * Author URI: https://www.custompermalinks.com/
  * Donate link: https://www.paypal.me/yasglobal
@@ -16,7 +16,7 @@
  */
 
 /**
- *  Custom Permalinks - Update Permalinks of Post/Pages
+ *  Custom Permalinks - Update Permalinks of Post/Pages and Categories
  *  Copyright 2008-2018 Sami Ahmed Siddiqui <sami.siddiqui@yasglobal.com>
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -64,7 +64,7 @@ class Custom_Permalinks {
     }
 
     if ( ! defined( 'CUSTOM_PERMALINKS_PLUGIN_VERSION' ) ) {
-      define( 'CUSTOM_PERMALINKS_PLUGIN_VERSION', '1.2.23' );
+      define( 'CUSTOM_PERMALINKS_PLUGIN_VERSION', '1.2.24' );
     }
 
     if ( ! defined( 'CUSTOM_PERMALINKS_PATH' ) ) {
@@ -115,8 +115,19 @@ class Custom_Permalinks {
    */
   public static function plugin_activate() {
     $role = get_role( 'administrator' );
-    $role->add_cap( 'cp_view_post_permalinks' );
-    $role->add_cap( 'cp_view_category_permalinks' );
+    if ( ! empty( $role ) ) {
+      $role->add_cap( 'cp_view_post_permalinks' );
+      $role->add_cap( 'cp_view_category_permalinks' );
+    }
+
+    add_role(
+      'custom_permalinks_manager',
+      __( 'Custom Permalinks Manager' ),
+      array(
+        'cp_view_post_permalinks'     => true,
+        'cp_view_category_permalinks' => true
+      )
+    );
   }
 
   /**
