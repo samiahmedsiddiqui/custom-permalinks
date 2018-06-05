@@ -364,11 +364,10 @@ class Custom_Permalinks_Frontend {
   public function custom_permalinks_page_link( $permalink, $page ) {
     $custom_permalink = get_post_meta( $page, 'custom_permalink', true );
     if ( $custom_permalink ) {
+      $permalink = trailingslashit( home_url() )  . $custom_permalink;
       $language_code = apply_filters( 'wpml_element_language_code', null, array( 'element_id' => $page, 'element_type' => 'page' ) );
       if ( $language_code )
-        return apply_filters( 'wpml_permalink', home_url() . '/' . $custom_permalink, $language_code );
-      else
-        return apply_filters( 'wpml_permalink', home_url() . '/' . $custom_permalink );
+        return apply_filters( 'wpml_permalink', $permalink, $language_code );
     }
 
     return $permalink;
