@@ -366,9 +366,9 @@ class Custom_Permalinks_Frontend {
     if ( $custom_permalink ) {
       $language_code = apply_filters( 'wpml_element_language_code', null, array( 'element_id' => $page, 'element_type' => 'page' ) );
       if ( $language_code )
-        return apply_filters( 'wpml_permalink', home_url() . '/' . $custom_permalink, $language_code );
+        return apply_filters( 'wpml_permalink', trailingslashit( home_url() )  . $custom_permalink, $language_code );
       else
-        return apply_filters( 'wpml_permalink', home_url() . '/' . $custom_permalink );
+        return apply_filters( 'wpml_permalink', trailingslashit( home_url() )  . $custom_permalink );
     }
 
     return $permalink;
