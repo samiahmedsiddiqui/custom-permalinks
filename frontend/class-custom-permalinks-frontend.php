@@ -347,9 +347,9 @@ class Custom_Permalinks_Frontend {
       $post_type = isset( $post->post_type ) ? $post->post_type : 'post';
       $language_code = apply_filters( 'wpml_element_language_code', null, array( 'element_id' => $post->ID, 'element_type' => $post_type ) );
       if ( $language_code )
-        return apply_filters( 'wpml_permalink', home_url() . '/' . $custom_permalink, $language_code );
+        return apply_filters( 'wpml_permalink', trailingslashit( home_url() ) . $custom_permalink, $language_code );
       else
-        return apply_filters( 'wpml_permalink', home_url() . '/' . $custom_permalink );
+        return apply_filters( 'wpml_permalink', trailingslashit( home_url() ) . $custom_permalink );
     }
 
     return $permalink;
@@ -366,9 +366,9 @@ class Custom_Permalinks_Frontend {
     if ( $custom_permalink ) {
       $language_code = apply_filters( 'wpml_element_language_code', null, array( 'element_id' => $page, 'element_type' => 'page' ) );
       if ( $language_code )
-        return apply_filters( 'wpml_permalink', trailingslashit( home_url() )  . $custom_permalink, $language_code );
+        return apply_filters( 'wpml_permalink', trailingslashit( home_url() ) . $custom_permalink, $language_code );
       else
-        return apply_filters( 'wpml_permalink', trailingslashit( home_url() )  . $custom_permalink );
+        return apply_filters( 'wpml_permalink', trailingslashit( home_url() ) . $custom_permalink );
     }
 
     return $permalink;
@@ -395,9 +395,9 @@ class Custom_Permalinks_Frontend {
           $term_type =  $taxonomy->taxonomy;
         }
         $language_code = apply_filters( 'wpml_element_language_code', null, array( 'element_id' => $taxonomy->term_taxonomy_id, 'element_type' => $term_type ) );
-        return apply_filters( 'wpml_permalink', home_url() . '/' . $custom_permalink, $language_code );
+        return apply_filters( 'wpml_permalink', trailingslashit( home_url() ) . $custom_permalink, $language_code );
       } else {
-        return apply_filters( 'wpml_permalink', home_url() . '/' . $custom_permalink );
+        return apply_filters( 'wpml_permalink', trailingslashit( home_url() ) . $custom_permalink );
       }
     }
 
