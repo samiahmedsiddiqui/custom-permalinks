@@ -368,7 +368,7 @@ class Custom_Permalinks_Frontend {
       if ( $language_code )
         return apply_filters( 'wpml_permalink', trailingslashit( home_url() )  . $custom_permalink, $language_code );
       else
-        return trailingslashit( home_url() )  . $custom_permalink;
+        return apply_filters( 'wpml_permalink', trailingslashit( home_url() )  . $custom_permalink );
     }
 
     return $permalink;
