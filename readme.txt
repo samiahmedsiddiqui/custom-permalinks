@@ -100,7 +100,7 @@ This process defines you the steps to follow either you are installing through W
 = 1.3.0 - June 07, 2018 =
 
   * Enhancement
-    * (Conflict with WPML)[https://wordpress.org/support/topic/conflict-with-wpml-17/]
+    * [Conflict with WPML]https://wordpress.org/support/topic/conflict-with-wpml-17/)
     * Avoid appending slashes and use trailingslashit instead
 
 = 1.2.24 - May 31, 2018 =
