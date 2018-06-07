@@ -4,7 +4,7 @@ Donate link: https://www.paypal.me/yasglobal
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Requires at least: 2.6
 Tested up to: 4.9
-Stable tag: 1.2.24
+Stable tag: 1.3.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -97,6 +97,12 @@ This process defines you the steps to follow either you are installing through W
 
 == Changelog ==
 
+= 1.3.0 - June 07, 2018 =
+
+  * Enhancement
+    * (Conflict with WPML)[https://wordpress.org/support/topic/conflict-with-wpml-17/]
+    * Avoid appending slashes and use trailingslashit instead
+
 = 1.2.24 - May 31, 2018 =
 
   * Bug
@@ -106,29 +112,6 @@ This process defines you the steps to follow either you are installing through W
 
   * Enhancement
     * Added Privacy Policy Content for WordPress 4.9.6 and higher.
-
-= 1.2.22 - May 16, 2018 =
-
-  * Enhancement
-    * Added Capabilities to view the Permalinks Page
-
-  * Bug
-    * Fixed cp_remove_like_query Filter issue
-
-= 1.2.21 - April 17, 2018 =
-
-  * Bug
-    * Removed final keyword with the classes.
-      For further details:
-      https://wordpress.org/support/topic/page-not-found-404-errors-after-latest-update/
-      https://wordpress.org/support/topic/throws-404-here-and-there/
-
-= 1.2.20 - April 11, 2018 =
-
-  * Bug
-    * Removed extra code which was written for the equal query.
-      For further details:
-      https://wordpress.org/support/topic/page-not-found-404-errors-after-latest-update/
 
 = Earlier versions =
 

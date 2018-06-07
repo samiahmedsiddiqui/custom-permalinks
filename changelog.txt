@@ -2,6 +2,29 @@
 
 This file contains only old changelog. See readme.txt for newer versions.
 
+= 1.2.22 - May 16, 2018 =
+
+  * Enhancement
+    * Added Capabilities to view the Permalinks Page
+
+  * Bug
+    * Fixed cp_remove_like_query Filter issue
+
+= 1.2.21 - April 17, 2018 =
+
+  * Bug
+    * Removed final keyword with the classes.
+      For further details:
+      https://wordpress.org/support/topic/page-not-found-404-errors-after-latest-update/
+      https://wordpress.org/support/topic/throws-404-here-and-there/
+
+= 1.2.20 - April 11, 2018 =
+
+  * Bug
+    * Removed extra code which was written for the equal query.
+      For further details:
+      https://wordpress.org/support/topic/page-not-found-404-errors-after-latest-update/
+  
 = 1.2.19 - April 10, 2018 =
 
   * Bugs
