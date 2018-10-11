@@ -234,6 +234,10 @@ class Custom_Permalinks_Frontend {
   public function make_redirect() {
     global $wpdb;
 
+    if ( is_preview() ) {
+      return;
+    }
+
     $custom_permalink   = '';
     $original_permalink = '';
 
@@ -341,6 +345,11 @@ class Custom_Permalinks_Frontend {
    * @return string
    */
   public function custom_permalinks_post_link( $permalink, $post ) {
+    parse_str( parse_url( $permalink, PHP_URL_QUERY ), $query_string );
+    if ( ! empty( $query_string['p'] ) ) {
+      return $permalink;
+    }
+
     $custom_permalink = get_post_meta( $post->ID, 'custom_permalink', true );
     if ( $custom_permalink ) {
       $post_type = isset( $post->post_type ) ? $post->post_type : 'post';
@@ -361,6 +370,11 @@ class Custom_Permalinks_Frontend {
    * @return string
    */
   public function custom_permalinks_page_link( $permalink, $page ) {
+    parse_str( parse_url( $permalink, PHP_URL_QUERY ), $query_string );
+    if ( ! empty( $query_string['page_id'] ) ) {
+      return $permalink;
+    }
+
     $custom_permalink = get_post_meta( $page, 'custom_permalink', true );
     if ( $custom_permalink ) {
       $language_code = apply_filters( 'wpml_element_language_code', null, array( 'element_id' => $page, 'element_type' => 'page' ) );
