@@ -88,7 +88,7 @@ class Custom_Permalinks_Frontend {
             " WHERE pm.meta_key = 'custom_permalink' " .
             " AND (pm.meta_value = '%s' OR pm.meta_value = '%s') " .
             " AND p.post_status != 'trash' AND p.post_type != 'nav_menu_item' " .
-            " ORDER BY FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
+            " ORDER BY FIELD(post_status,'publish','private','pending','draft','auto-draft','inherit')," .
             " FIELD(post_type,'post','page') LIMIT 1", $request_noslash, $request_noslash . "/" );
 
     $posts = $wpdb->get_results( $sql );
@@ -102,7 +102,7 @@ class Custom_Permalinks_Frontend {
               "   LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) ) " .
               "  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
               " ORDER BY LENGTH(meta_value) DESC, " .
-              " FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
+              " FIELD(post_status,'publish','private','pending','draft','auto-draft','inherit')," .
               " FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
               $request_noslash, $request_noslash . "/" );
 
