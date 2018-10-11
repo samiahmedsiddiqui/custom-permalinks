@@ -527,11 +527,11 @@ class Custom_Permalinks_Frontend {
    * @return string
    */
   public function ordered_statuses() {
-  global $wp_post_statuses;
+    global $wp_post_statuses;
 
-  $post_statuses = new WP_List_Util( $wp_post_statuses );
-  $post_statuses->sort( 'public', 'DESC' );
+    $post_statuses = new WP_List_Util( $wp_post_statuses );
+    $post_statuses->sort( 'public', 'DESC' );
 
-  return "'" . implode( "','", $post_statuses->pluck( 'name' ) ) . "'";
+    return "'" . implode( "','", $post_statuses->pluck( 'name' ) ) . "'";
   }
 }
