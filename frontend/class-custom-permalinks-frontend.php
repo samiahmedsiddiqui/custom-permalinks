@@ -88,8 +88,8 @@ class Custom_Permalinks_Frontend {
             " WHERE pm.meta_key = 'custom_permalink' " .
             " AND (pm.meta_value = '%s' OR pm.meta_value = '%s') " .
             " AND p.post_status != 'trash' AND p.post_type != 'nav_menu_item' " .
-            " ORDER BY FIELD(post_status,'publish','private','pending','draft','auto-draft','inherit')," .
-            " FIELD(post_type,'post','page') LIMIT 1", $request_noslash, $request_noslash . "/" );
+            " ORDER BY FIELD(post_status,%s)," .
+            " FIELD(post_type,'post','page') LIMIT 1", $request_noslash, $request_noslash . "/", $this->ordered_statuses() );
 
     $posts = $wpdb->get_results( $sql );
 
@@ -102,9 +102,9 @@ class Custom_Permalinks_Frontend {
               "   LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) ) " .
               "  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
               " ORDER BY LENGTH(meta_value) DESC, " .
-              " FIELD(post_status,'publish','private','pending','draft','auto-draft','inherit')," .
+              " FIELD(post_status,%s)," .
               " FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
-              $request_noslash, $request_noslash . "/" );
+              $request_noslash, $request_noslash . "/", $this->ordered_statuses() );
 
       $posts = $wpdb->get_results( $sql );
     }
@@ -260,9 +260,8 @@ class Custom_Permalinks_Frontend {
             " WHERE pm.meta_key = 'custom_permalink' " .
             " AND (pm.meta_value = '%s' OR pm.meta_value = '%s') " .
             " AND p.post_status != 'trash' AND p.post_type != 'nav_menu_item' " .
-            " ORDER BY FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
-            " FIELD(post_type,'post','page') LIMIT 1", $request_noslash, $request_noslash . "/" );
-
+            " ORDER BY FIELD(post_status,%s)," .
+            " FIELD(post_type,'post','page') LIMIT 1", $request_noslash, $request_noslash . "/", $this->ordered_statuses() );
     $posts = $wpdb->get_results( $sql );
 
     $remove_like_query = apply_filters( 'cp_remove_like_query', '__true' );
@@ -274,9 +273,9 @@ class Custom_Permalinks_Frontend {
               "   LOWER(meta_value) = LEFT(LOWER('%s'), LENGTH(meta_value)) ) " .
               "  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
               " ORDER BY LENGTH(meta_value) DESC, " .
-              " FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
+              " FIELD(post_status,%s)," .
               " FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
-              $request_noslash, $request_noslash . "/" );
+              $request_noslash, $request_noslash . "/", $this->ordered_statuses() );
 
       $posts = $wpdb->get_results( $sql );
     }
@@ -519,5 +518,20 @@ class Custom_Permalinks_Frontend {
       }
     }
     return false;
+  }
+
+  /**
+   * Return a comma-separated list of names of all registered post statuses with public statuses ordered first.
+   *
+   * @access public
+   * @return string
+   */
+  public function ordered_statuses() {
+  global $wp_post_statuses;
+
+  $post_statuses = new WP_List_Util( $wp_post_statuses );
+  $post_statuses->sort( 'public', 'DESC' );
+
+  return "'" . implode( "','", $post_statuses->pluck( 'name' ) ) . "'";
   }
 }
