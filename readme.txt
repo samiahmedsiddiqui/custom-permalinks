@@ -97,6 +97,12 @@ This process defines you the steps to follow either you are installing through W
 
 == Changelog ==
 
+= 1.4.0 - Oct 29, 2018 =
+
+  * Enhancement
+    * Added Support for Gutenberg
+    * Set meta_keys to be protected to stop duplication in Custom Fields
+
 = 1.3.0 - June 07, 2018 =
 
   * Enhancement

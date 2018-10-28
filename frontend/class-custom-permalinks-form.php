@@ -5,6 +5,8 @@
 
 class Custom_Permalinks_Form {
 
+  private $permalink_metabox = 0;
+
   /**
    * Initialize WordPress Hooks
    *
@@ -16,6 +18,14 @@ class Custom_Permalinks_Form {
 
     add_filter( 'get_sample_permalink_html',
       array( $this, 'custom_permalinks_get_sample_permalink_html' ), 10, 4
+    );
+
+    add_action( 'add_meta_boxes',
+      array( $this, 'permalink_edit_box' )
+    );
+
+    add_filter( 'is_protected_meta',
+      array( $this, 'make_meta_protected' ), 10, 3
     );
 
     add_action( 'save_post',
@@ -53,6 +63,47 @@ class Custom_Permalinks_Form {
     add_action( 'delete_post_category',
       array( $this, 'custom_permalinks_delete_term' )
     );
+  }
+
+  /**
+   * Register meta box(es).
+   *
+   * @access public
+   * @since 1.4.0
+   *
+   * @return void
+   */
+  public function permalink_edit_box() {
+    add_meta_box( 'custom-permalinks-edit-box',
+      __( 'Permalink', 'custom-permalinks' ),
+      array( $this, 'meta_edit_form' ), null, 'normal', 'high',
+      array(
+        '__back_compat_meta_box' => false,
+      )
+    );
+  }
+
+  /**
+   * Set the meta_keys to protected which is created by the plugin.
+   *
+   * @access public
+   * @since 1.4.0
+   *
+   * @param boolean $protected
+   *   Whether the key is protected or not
+   * @param string $meta_key
+   *   Meta key
+   * @param string $meta_type
+   *   Meta type
+   *
+   * @return boolean
+   *   return `true` for the custom_permalink key
+   */
+  public function make_meta_protected( $protected, $meta_key, $meta_type ) {
+    if ( 'custom_permalink' === $meta_key ) {
+      $protected = true;
+    }
+    return $protected;
   }
 
   /**
@@ -99,8 +150,8 @@ class Custom_Permalinks_Form {
    * @return string
    */
   public function custom_permalinks_get_sample_permalink_html( $html, $id, $new_title, $new_slug ) {
-    $permalink = get_post_meta( $id, 'custom_permalink', true );
-    $post      = get_post( $id );
+    $post                    = get_post( $id );
+    $this->permalink_metabox = 1;
 
     if ( 'attachment' == $post->post_type || $post->ID == get_option( 'page_on_front' ) ) {
       return $html;
@@ -111,24 +162,22 @@ class Custom_Permalinks_Form {
     if ( '__true' === $excluded ) {
       return $html;
     }
+    $permalink = get_post_meta( $id, 'custom_permalink', true );
 
     ob_start();
 
     $cp_frontend = new Custom_Permalinks_Frontend();
     if ( 'page' == $post->post_type ) {
-      $original_page_url = $cp_frontend->custom_permalinks_original_page_link( $id );
-      $this->custom_permalinks_get_form( $permalink, $original_page_url, false, $post->post_name );
+      $original_permalink = $cp_frontend->custom_permalinks_original_page_link( $id );
+      $view_post          = __( 'View Page', 'custom-permalinks' );
     } else {
-      $original_post_url = $cp_frontend->custom_permalinks_original_post_link( $id );
-      $this->custom_permalinks_get_form( $permalink, $original_post_url, false, $post->post_name );
+      $original_permalink = $cp_frontend->custom_permalinks_original_post_link( $id );
+      $view_post          = __( 'View ' . ucfirst( $post->post_type ), 'custom-permalinks' );
     }
+    $this->custom_permalinks_get_form( $permalink, $original_permalink, false, $post->post_name );
 
     $content = ob_get_contents();
     ob_end_clean();
-
-    if ( 'publish' == $post->post_status ) {
-      $view_post = 'page' == $post->post_type ? __( 'View Page', 'custom-permalinks' ) : __( 'View Post', 'custom-permalinks' );
-    }
 
     if ( preg_match( "@view-post-btn.*?href='([^']+)'@s", $html, $matches ) ) {
       $permalink = $matches[1];
@@ -142,6 +191,78 @@ class Custom_Permalinks_Form {
 
     return '<strong>' . __( 'Permalink:', 'custom-permalinks' ) . "</strong>\n" . $content .
          ( isset( $view_post ) ? "<span id='view-post-btn'><a href='$permalink' class='button button-small' target='_blank'>$view_post</a></span>\n" : "" );
+  }
+
+  /**
+   * Per-post/page options (Wordpress > 2.9)
+   *
+   * @access public
+   * @return string
+   */
+  public function meta_edit_form( $post ) {
+    if ( isset( $this->permalink_metabox ) && 1 === $this->permalink_metabox ) {
+      wp_enqueue_script( 'custom-permalinks-form',
+        plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
+      );
+      return;
+    }
+
+    $screen = get_current_screen();
+    if ( 'add' === $screen->action ) {
+      wp_enqueue_script( 'custom-permalinks-form',
+        plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
+      );
+      return;
+    }
+
+    if ( 'attachment' == $post->post_type || $post->ID == get_option( 'page_on_front' ) ) {
+      return;
+    }
+
+    $exclude_post_types = $post->post_type;
+    $excluded = apply_filters( 'custom_permalinks_exclude_post_type', $exclude_post_types );
+    if ( '__true' === $excluded ) {
+      wp_enqueue_script( 'custom-permalinks-form',
+        plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
+      );
+      return;
+    }
+    $permalink = get_post_meta( $post->ID, 'custom_permalink', true );
+
+    ob_start();
+
+    $cp_frontend = new Custom_Permalinks_Frontend();
+    if ( 'page' == $post->post_type ) {
+      $original_permalink = $cp_frontend->custom_permalinks_original_page_link( $post->ID );
+      $view_post = __( 'View Page', 'custom-permalinks' );
+    } else {
+      $original_permalink = $cp_frontend->custom_permalinks_original_post_link( $post->ID );
+      $view_post = __( 'View ' . ucfirst( $post->post_type ), 'custom-permalinks' );
+    }
+    $this->custom_permalinks_get_form( $permalink, $original_permalink, false, $post->post_name );
+
+    $content = ob_get_contents();
+    ob_end_clean();
+
+    if ( 'trash' != $post->post_status ) {
+      wp_enqueue_script( 'custom-permalinks-form',
+        plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
+      );
+      if ( isset( $permalink ) && ! empty( $permalink ) ) {
+        if ( false !== strpos( $permalink, '%postname%' )
+          || false !== strpos( $permalink, '%pagename%' ) ) {
+          $permalink = str_replace( array( '%pagename%','%postname%' ), $post_name, $permalink );
+        }
+        $content .= ' <span id="view-post-btn">' .
+                    '<a href="/' . $permalink . '" class="button button-small" target="_blank">' . $view_post . '</a>' .
+                    '</span><br>';
+      } else {
+        $content .= ' <span id="view-post-btn">' .
+                    '<a href="/' . $original_permalink . '" class="button button-small" target="_blank">' . $view_post .' </a>' .
+                    '</span><br>';
+      }
+    }
+    echo $content;
   }
 
   /**
