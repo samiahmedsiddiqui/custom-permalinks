@@ -3,8 +3,8 @@ Contributors: sasiddiqui, michaeltyson
 Donate link: https://www.paypal.me/yasglobal
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Requires at least: 2.6
-Tested up to: 4.9
-Stable tag: 1.3.0
+Tested up to: 5.0
+Stable tag: 1.4.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -97,7 +97,7 @@ This process defines you the steps to follow either you are installing through W
 
 == Changelog ==
 
-= 1.4.0 - Oct 29, 2018 =
+= 1.4.0 - Nov 08, 2018 =
 
   * Enhancement
     * Added Support for Gutenberg
