@@ -3,8 +3,8 @@ Contributors: sasiddiqui, michaeltyson
 Donate link: https://www.paypal.me/yasglobal
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Requires at least: 2.6
-Tested up to: 5.0
-Stable tag: 1.4.0
+Tested up to: 5.2
+Stable tag: 1.5.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -13,7 +13,7 @@ Set custom permalinks on a per-post, per-tag or per-category basis.
 == Description ==
 
 Lay out your site the way *you* want it. Set the URL of any post, page, tag or category to anything you want.
-Old permalinks will redirect properly to the new address.  Custom Permalinks gives you ultimate control
+Old permalinks will redirect properly to the new address. Custom Permalinks gives you ultimate control
 over your site structure.
 
 Be warned: *This plugin is not a replacement for WordPress's built-in permalink system*. Check your WordPress
@@ -97,6 +97,12 @@ This process defines you the steps to follow either you are installing through W
 
 == Changelog ==
 
+= 1.5.0 - Jun 04, 2019 =
+
+  * Bugs
+    * [Issue with Polylang Setting Hide Default Language](https://wordpress.org/support/topic/issue-with-polylang-setting-hide-default-language/)
+    * Change deprecated actions with appropriate actions
+
 = 1.4.0 - Nov 08, 2018 =
 
   * Enhancement
@@ -106,7 +112,7 @@ This process defines you the steps to follow either you are installing through W
 = 1.3.0 - June 07, 2018 =
 
   * Enhancement
-    * [Conflict with WPML]https://wordpress.org/support/topic/conflict-with-wpml-17/)
+    * [Conflict with WPML](https://wordpress.org/support/topic/conflict-with-wpml-17/)
     * Avoid appending slashes and use trailingslashit instead
 
 = 1.2.24 - May 31, 2018 =

@@ -3,7 +3,7 @@
  * Plugin Name: Custom Permalinks
  * Plugin URI: https://wordpress.org/plugins/custom-permalinks/
  * Description: Set custom permalinks on a per-post basis
- * Version: 1.4.0
+ * Version: 1.5.0
  * Author: Sami Ahmed Siddiqui
  * Author URI: https://www.custompermalinks.com/
  * Donate link: https://www.paypal.me/yasglobal
@@ -17,7 +17,7 @@
 
 /**
  *  Custom Permalinks - Update Permalinks of Post/Pages and Categories
- *  Copyright 2008-2018 Sami Ahmed Siddiqui <sami.siddiqui@yasglobal.com>
+ *  Copyright 2008-2019 Sami Ahmed Siddiqui <sami.siddiqui@yasglobal.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ class Custom_Permalinks {
     }
 
     if ( ! defined( 'CUSTOM_PERMALINKS_PLUGIN_VERSION' ) ) {
-      define( 'CUSTOM_PERMALINKS_PLUGIN_VERSION', '1.4.0' );
+      define( 'CUSTOM_PERMALINKS_PLUGIN_VERSION', '1.5.0' );
     }
 
     if ( ! defined( 'CUSTOM_PERMALINKS_PATH' ) ) {
@@ -81,6 +81,7 @@ class Custom_Permalinks {
    *
    * @access private
    * @since 1.2.18
+   *
    * @return void
    */
   private function includes() {
@@ -111,6 +112,7 @@ class Custom_Permalinks {
    *
    * @access public
    * @since 1.2.22
+   *
    * @return void
    */
   public static function plugin_activate() {
@@ -135,6 +137,7 @@ class Custom_Permalinks {
    *
    * @access public
    * @since 1.2.18
+   *
    * @return void
    */
   public function load_textdomain() {
