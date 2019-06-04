@@ -179,18 +179,10 @@ class Custom_Permalinks_Form {
     $content = ob_get_contents();
     ob_end_clean();
 
-    if ( preg_match( "@view-post-btn.*?href='([^']+)'@s", $html, $matches ) ) {
-      $permalink = $matches[1];
-    } else {
-      list( $permalink, $post_name ) = get_sample_permalink( $post->ID, $new_title, $new_slug );
-      if ( false !== strpos( $permalink, '%postname%' )
-        || false !== strpos( $permalink, '%pagename%' ) ) {
-        $permalink = str_replace( array( '%pagename%','%postname%' ), $post_name, $permalink );
-      }
-    }
+    $view_post_link = get_permalink( $post );
 
     return '<strong>' . __( 'Permalink:', 'custom-permalinks' ) . "</strong>\n" . $content .
-         ( isset( $view_post ) ? "<span id='view-post-btn'><a href='$permalink' class='button button-small' target='_blank'>$view_post</a></span>\n" : "" );
+         ( isset( $view_post ) ? "<span id='view-post-btn'><a href='$view_post_link' class='button button-small' target='_blank'>$view_post</a></span>\n" : "" );
   }
 
   /**
@@ -249,19 +241,11 @@ class Custom_Permalinks_Form {
       wp_enqueue_script( 'custom-permalinks-form',
         plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
       );
-      if ( isset( $permalink ) && ! empty( $permalink ) ) {
-        if ( false !== strpos( $permalink, '%postname%' )
-          || false !== strpos( $permalink, '%pagename%' ) ) {
-          $permalink = str_replace( array( '%pagename%','%postname%' ), $post_name, $permalink );
-        }
-        $content .= ' <span id="view-post-btn">' .
-                    '<a href="/' . $permalink . '" class="button button-small" target="_blank">' . $view_post . '</a>' .
-                    '</span><br>';
-      } else {
-        $content .= ' <span id="view-post-btn">' .
-                    '<a href="/' . $original_permalink . '" class="button button-small" target="_blank">' . $view_post .' </a>' .
-                    '</span><br>';
-      }
+      $view_post_link = get_permalink( $post );
+
+      $content .= ' <span id="view-post-btn">' .
+                    '<a href="' . $view_post_link . '" class="button button-small" target="_blank">' . $view_post . '</a>' .
+                  '</span><br>';
     }
     echo $content;
   }
@@ -496,9 +480,12 @@ class Custom_Permalinks_Form {
 
   /**
    * Check Conflicts and resolve it (e.g: Polylang)
+   * UPDATED for Polylang hide_default setting
    *
    * @access public
    * @since 1.2
+   * @updated 1.5.0
+   *
    * @return string
    */
   public function custom_permalinks_check_conflicts( $requested_url = '' ) {
@@ -515,9 +502,28 @@ class Custom_Permalinks_Form {
           $requested_url = str_replace( 'language/', '', $requested_url );
         }
 
-        $remove_lang = ltrim( strstr( $requested_url, '/' ), '/' );
-        if ( '' != $remove_lang ) {
-          return $remove_lang;
+        /**
+         * Check if hide_default is true and the current language is not the default.
+         * If true the remove the  lang code from the url.
+         */
+        if ( 1 == $polylang_config['hide_default'] ) {
+          // get current language
+          $current_language = pll_current_language();
+
+          // get defualt language
+          $default_language = pll_default_language();
+
+          if ( $current_language !== $default_language ) {
+            $remove_lang = ltrim( strstr( $requested_url, '/' ), '/' );
+            if ( '' != $remove_lang ) {
+              return $remove_lang;
+            }
+          }
+        } else {
+          $remove_lang = ltrim( strstr( $requested_url, '/' ), '/' );
+          if ( '' != $remove_lang ) {
+            return $remove_lang;
+          }
         }
       }
     }
