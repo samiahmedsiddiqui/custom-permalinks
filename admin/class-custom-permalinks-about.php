@@ -64,14 +64,14 @@ class Custom_Permalinks_About {
 
       <div class="product">
         <h2><?php _e( 'More from Sami Ahmed Siddiqui', 'custom-permalinks' ); ?></h2>
-        <span><?php _e('Our List of Plugins provides the services which helps you to manage your site URLs(Permalinks), Prevent your site from XSS Attacks, Brute force attacks, increase your site visitors by adding Structured JSON Markup and so on.', 'custom-permalinks' ); ?></span>
+        <span><?php _e('Our List of Plugins provides the services which help you to manage your site URLs(Permalinks), Prevent your site from XSS Attacks, Brute force attacks, increase your site visitors by adding Structured JSON Markup and so on.', 'custom-permalinks' ); ?></span>
         <div class="box recommended">
           <div class="img">
             <img src= "<?php echo $img_src; ?>/prevent-xss-vulnerability.png" style="transform:scale(1.5)" />
           </div>
 
           <h3><?php _e( 'Prevent XSS Vulnerability', 'custom-permalinks' ); ?></h3>
-          <p><?php _e( 'Secure your site from the <strong>XSS Attacks</strong> so, your users won\'t lose any kind of information or not redirected to any other site by visiting to your site with the <strong>malicious code</strong> in the URL or so. In this way, users can open your site URLs without any hesitation.', 'custom-permalinks' ); ?></p>
+          <p><?php _e( 'Secure your site from the <strong>XSS Attacks</strong> so, your users won\'t lose any kind of information or not redirected to any other site by visiting your site with the <strong>malicious code</strong> in the URL or so. In this way, users can open their site URLs without any hesitation.', 'custom-permalinks' ); ?></p>
           <a href="https://wordpress.org/plugins/prevent-xss-vulnerability/" class="checkout-button" target="_blank"><?php echo $button_text; ?></a>
         </div>
 
@@ -81,7 +81,7 @@ class Custom_Permalinks_About {
           </div>
 
           <h3><?php _e( 'Permalinks Customizer', 'custom-permalinks' ); ?></h3>
-          <p><?php _e( 'Allows you to either define different Permalink Structure or define same Permalink Structure for default and Custom PostTypes, Taxonomies. Plugin automatically creates the user-friendly URLs as per your defined structured that can be edited from the single post/page.', 'custom-permalinks' ); ?></p>
+          <p><?php _e( 'Allows you to either define different Permalink Structure or define same Permalink Structure for default and Custom PostTypes, Taxonomies. The plugin automatically creates the user-friendly URLs as per your defined structure that can be edited from the single post/page.', 'custom-permalinks' ); ?></p>
           <a href="https://wordpress.org/plugins/permalinks-customizer/" class="checkout-button" target="_blank"><?php echo $button_text; ?></a>
         </div>
 
@@ -91,7 +91,7 @@ class Custom_Permalinks_About {
           </div>
 
           <h3><?php _e( 'Http Auth', 'schema-for-article' ); ?></h3>
-          <p><?php _e( 'Allows you apply <strong>HTTP Auth</strong> on your site. You can apply Http Authentication all over the site or only the admin pages. It helps to stop cralwing on your site while on development or persist the <strong>Brute Attacks</strong> by locking the Admin Pages.', 'schema-for-article' ); ?></p>
+          <p><?php _e( 'Allows you apply <strong>HTTP Auth</strong> on your site. You can apply Http Authentication all over the site or only the admin pages. It helps to stop crawling on your site while on development or persist the <strong>Brute Attacks</strong> by locking the Admin Pages.', 'schema-for-article' ); ?></p>
           <a href="https://wordpress.org/plugins/http-auth/" class="checkout-button" target="_blank"><?php echo $button_text; ?></a>
         </div>
 
@@ -141,7 +141,7 @@ class Custom_Permalinks_About {
           </div>
 
           <h3><?php _e( 'Media Post Permalink', 'custom-permalinks' ); ?></h3>
-          <p><?php _e( 'On uploading  any image,  let\'s say services.png, WordPress creates the <strong>attachment post</strong> with the permalink of <strong>/services/</strong> and doesn\'t allow you to use that permalink to point your page. In this case, we comes up with this great solution.', 'custom-permalinks' ); ?></p>
+          <p><?php _e( 'On uploading  any image,  let\'s say services.png, WordPress creates the <strong>attachment post</strong> with the permalink of <strong>/services/</strong> and doesn\'t allow you to use that permalink to point your page. In this case, we come up with this great solution.', 'custom-permalinks' ); ?></p>
           <a href="https://wordpress.org/plugins/media-post-permalink/" class="checkout-button" target="_blank"><?php echo $button_text; ?></a>
         </div>
       </div>

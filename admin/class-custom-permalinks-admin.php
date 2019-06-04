@@ -569,7 +569,7 @@ class Custom_Permalinks_Admin {
     }
 
     $content = sprintf(
-      __( 'This plugin doesn\'t collects/store any user related information.
+      __( 'This plugin doesn\'t collect/store any user related information.
 
       To have any kind of further query please feel free to
       <a href="%s" target="_blank">contact us</a>.',

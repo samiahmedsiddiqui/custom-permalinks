@@ -24,7 +24,7 @@ This file contains only old changelog. See readme.txt for newer versions.
     * Removed extra code which was written for the equal query.
       For further details:
       https://wordpress.org/support/topic/page-not-found-404-errors-after-latest-update/
-  
+
 = 1.2.19 - April 10, 2018 =
 
   * Bugs
@@ -60,7 +60,7 @@ This file contains only old changelog. See readme.txt for newer versions.
     * Added PATH_INFO in $_SERVER Variable
 
   * Bugs
-    * $this variable issue on static method
+    * `$this` variable issue on a static method
 
 = 1.2.12 - Jan 25, 2018 =
 
@@ -100,7 +100,7 @@ This file contains only old changelog. See readme.txt for newer versions.
     * Resolving Issues with Cornerstone
 
 = 1.2.5 - Oct 17, 2017 =
-  
+
   * Fixed Category/Tag Update Issue + Typo on Admin Page
 
 = 1.2.4 - Oct 07, 2017 =
@@ -113,7 +113,7 @@ This file contains only old changelog. See readme.txt for newer versions.
 
 = 1.2.2 - Sept 26, 2017 =
 
-  * Fixed Typo of Class Object for term on Admin Page
+  * Fixed Typo of Class Object for the term on Admin Page
 
 = 1.2.1 - Sept 25, 2017 =
 
@@ -130,7 +130,7 @@ This file contains only old changelog. See readme.txt for newer versions.
     * Fixed Vulnerability Issues
 
 = 1.1 - Sept 25, 2017 =
-  
+
   * Enhancements
     * Added PostTypes Permalinks Page
       * View all the PostTypes permalinks
@@ -145,17 +145,17 @@ This file contains only old changelog. See readme.txt for newer versions.
   * Bug Fixes
      * 404 Issues
      * Child pages bug
-    
+
 = 1.0.2 - Aug 15, 2017 =
-  
+
   * Fixed Notice and some URL Issues
 
 = 1.0.1 - Aug 12, 2017 =
-  
+
   * Fixed issue with AMP Pages
 
 = 1.0 - Aug 11, 2017 =
-  
+
   * Updated Query on the `custom_permalinks_request` Function
 
 = 0.9.3 - July 21, 2017 =
@@ -201,7 +201,7 @@ This file contains only old changelog. See readme.txt for newer versions.
 = 0.7.23 =
 
   * Fixed a problem with permalinks with "/" components
-  
+
 = 0.7.22 =
 
   * Fixed PHP warning
@@ -257,7 +257,7 @@ This file contains only old changelog. See readme.txt for newer versions.
 
 = 0.7.10 =
 
- * Fix for 404 error on static front page with custom permalink set, by Eric TF Bat
+ * Fix for 404 error on the static front page with custom permalink set, by Eric TF Bat
 
 = 0.7.9 =
 
@@ -297,7 +297,7 @@ This file contains only old changelog. See readme.txt for newer versions.
 
 = 0.7.1 =
 
- * Compatibility fix for last update
+ * Compatibility fix for the last update
 
 = 0.7 =
 
@@ -310,7 +310,7 @@ This file contains only old changelog. See readme.txt for newer versions.
 = 0.6 =
 
  * Fix infinite redirect for permalinks ending in a / (critical fix)
- * Moved post/page permalinks settings to top of edit form, replacing prior permalink display
+ * Moved post/page permalinks settings to top of the edit form, replacing prior permalink display
 
 = 0.5.3 =
 

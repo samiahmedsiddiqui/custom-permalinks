@@ -9,15 +9,15 @@ over your site structure.
 Be warned: *This plugin is not a replacement for WordPress's built-in permalink system*. Check your WordPress
 administration's "Permalinks" settings page first, to make sure that this doesn't already meet your needs.
 
-This plugin is only useful for assigning custom permalinks for *individual* posts, pages, tags or categories. 
-It will not apply whole permalink structures, or automatically apply a category's custom permalink to the posts 
+This plugin is only useful for assigning custom permalinks for *individual* posts, pages, tags or categories.
+It will not apply whole permalink structures or automatically apply a category's custom permalink to the posts
 within that category.
 
-> If anyone wants the different Structure Tags for their Post types or use symbols in the URLs So, use the [Permalinks Customizer](https://wordpress.org/plugins/permalinks-customizer/) which is a fork of this plugin and contains the enhancement of this plugin. 
+> If anyone wants the different Structure Tags for their Post types or use symbols in the URLs So, use the [Permalinks Customizer](https://wordpress.org/plugins/permalinks-customizer/) which is a fork of this plugin and contains the enhancement of this plugin.
 
 ## Privacy Policy
 
-This plugin doesn't collects/store any user related information.
+This plugin doesn't collect/store any user related information.
 
 To have any kind of further query please feel free to [contact us](https://www.custompermalinks.com/contact-us/).
 
@@ -54,7 +54,7 @@ Note: Use `custom_permalinks_like_query` filter if the URLs doesn't works for yo
 
 ## Thanks for the Support!
 
-I does not always provide active support for the Custom Permalinks plugin on the WordPress.org forums, as i have prioritize the email support. 
+I do not always provide active support for the Custom Permalinks plugin on the WordPress.org forums, as I have prioritized the email support.
 One-on-one email support is available to people who bought [Custom Permalinks Premium](https://www.custompermalinks.com/#pricing-section) only.
 
 ## Bug reports

@@ -194,7 +194,8 @@ class Custom_Permalinks_Form {
   }
 
   /**
-   * Per-post/page options (Wordpress > 2.9)
+   * Per-post/page options (Wordpress >= 5.0)
+   * WHERE Gutenberg Editor is running
    *
    * @access public
    * @return string
