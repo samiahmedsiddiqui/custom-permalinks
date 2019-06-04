@@ -12,6 +12,8 @@ class Custom_Permalinks_Form {
    *
    * @access public
    * @since 1.2
+   * @updated 1.5.0
+   *
    * @return void
    */
   public function init() {
@@ -35,13 +37,16 @@ class Custom_Permalinks_Form {
       array( $this, 'custom_permalinks_delete_permalink' ), 10
     );
 
-    add_action( 'edit_tag_form',
+    add_action( 'category_add_form',
       array( $this, 'custom_permalinks_term_options' )
     );
-    add_action( 'add_tag_form',
+    add_action( 'category_edit_form',
       array( $this, 'custom_permalinks_term_options' )
     );
-    add_action( 'edit_category_form',
+    add_action( 'post_tag_add_form',
+      array( $this, 'custom_permalinks_term_options' )
+    );
+    add_action( 'post_tag_edit_form',
       array( $this, 'custom_permalinks_term_options' )
     );
 
