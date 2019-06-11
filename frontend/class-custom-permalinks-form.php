@@ -512,11 +512,14 @@ class Custom_Permalinks_Form {
          * If true the remove the  lang code from the url.
          */
         if ( 1 == $polylang_config['hide_default'] ) {
-          // get current language
-          $current_language = pll_current_language();
+          $current_language = '';
+          if ( function_exists( 'pll_current_language' ) ) {
+            // get current language
+            $current_language = pll_current_language();
+          }
 
           // get defualt language
-          $default_language = pll_default_language();
+          $default_language = $polylang_config['default_lang'];
 
           if ( $current_language !== $default_language ) {
             $remove_lang = ltrim( strstr( $requested_url, '/' ), '/' );
