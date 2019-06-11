@@ -4,7 +4,7 @@ Donate link: https://www.paypal.me/yasglobal
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Requires at least: 2.6
 Tested up to: 5.2
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -96,6 +96,11 @@ This process defines you the steps to follow either you are installing through W
 2. Activate Custom Permalinks through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 1.5.1 - Jun 11, 2019 =
+
+  * Bugs
+    * Added additional check for [Call to undefined function pll_current_language](https://wordpress.org/support/topic/call-to-undefined-function-pll_current_language/)
 
 = 1.5.0 - Jun 04, 2019 =
 

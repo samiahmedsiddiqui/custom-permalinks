@@ -489,7 +489,7 @@ class Custom_Permalinks_Form {
    *
    * @access public
    * @since 1.2
-   * @updated 1.5.0
+   * @updated 1.5.1
    *
    * @return string
    */
