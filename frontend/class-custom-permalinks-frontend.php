@@ -201,14 +201,20 @@ class Custom_Permalinks_Frontend {
       $old_values = array();
       if ( is_array( $query_array ) ) {
         foreach ( $query_array as $key => $value ) {
-          $old_values[$key] = $_REQUEST[$key];
-          $_REQUEST[$key]   = $_GET[$key] = $value;
+          $old_values[$key] = '';
+          if ( isset( $_REQUEST[$key] ) ) {
+            $old_values[$key] = $_REQUEST[$key];
+          }
+          $_REQUEST[$key] = $_GET[$key] = $value;
         }
       }
 
       // Re-run the filter, now with original environment in place
       remove_filter( 'request', array( $this, 'parse_request' ), 10, 1 );
       global $wp;
+      if ( isset( $wp->matched_rule ) ) {
+        $wp->matched_rule = NULL;
+      }
       $wp->parse_request();
       $query = $wp->query_vars;
       add_filter( 'request', array( $this, 'parse_request' ), 10, 1 );
