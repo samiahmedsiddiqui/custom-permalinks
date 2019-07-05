@@ -1,12 +1,12 @@
 <?php
 /**
- * @package CustomPermalinks\Admin
+ * @package CustomPermalinks
  */
 
 class Custom_Permalinks_Admin {
 
   /**
-   * Initializes WordPress hooks
+   * Initializes WordPress hooks.
    */
   function __construct() {
     add_action( 'admin_menu', array( $this, 'admin_menu' ) );
@@ -17,11 +17,10 @@ class Custom_Permalinks_Admin {
   }
 
   /**
-   * Added Pages in Menu for Settings
+   * Added Pages in Menu for Settings.
    *
+   * @since 1.2.0
    * @access public
-   * @since 1.2
-   * @return void
    */
   public function admin_menu() {
     add_menu_page( 'Custom Permalinks', 'Custom Permalinks', 'cp_view_post_permalinks',
@@ -46,9 +45,8 @@ class Custom_Permalinks_Admin {
    * Shows all the Permalinks created by using this Plugin with Pager and
    * Search Functionality of Posts/Pages.
    *
+   * @since 1.2.0
    * @access public
-   * @since 1.2
-   * @return void
    */
   public function posttype_permalinks() {
     global $wpdb;
@@ -208,11 +206,17 @@ class Custom_Permalinks_Admin {
   }
 
   /**
-   * Return the Navigation row HTML same as Default Posts page for PostTypes
+   * Return the Navigation row HTML same as Default Posts page for PostTypes.
    *
+   * @since 1.2.0
    * @access private
-   * @since 1.2
-   * @return string
+   *
+   * @param string $order_by_class Class either asc or desc.
+   * @param string $order_by set orderby for sorting.
+   * @param string $search_permalink Permalink which has been searched or an empty string.
+   * @param string $page_url Page Slug set by the Plugin.
+   *
+   * @return string table row according to the provided params.
    */
   private function tablenav_posts( $order_by_class, $order_by, $search_permalink ) {
     $nav = '<tr>
@@ -226,16 +230,16 @@ class Custom_Permalinks_Admin {
               <th scope="col">' . __( "Type", "custom-permalinks" ) . '</th>
               <th scope="col">' . __( "Permalink", "custom-permalinks" ) . '</th>
             </tr>';
+
     return $nav;
   }
 
   /**
    * Shows all the Permalinks created by using this Plugin with Pager and
-   * Search Functionality of Category/Tags
+   * Search Functionality of Category/Tags.
    *
+   * @since 1.2.0
    * @access public
-   * @since 1.2
-   * @return void
    */
   public function category_permalinks() {
 
@@ -393,22 +397,24 @@ class Custom_Permalinks_Admin {
   }
 
   /**
-   * Sort the terms array in desc order using term id
+   * Sort the terms array in desc order using term id.
    *
+   * @since 1.2.0
    * @access private
-   * @since 1.2
-   * @return integer
+   *
+   * @return int
    */
   private function sort_array( $a, $b ) {
     return $b['id'] - $a['id'];
   }
 
   /**
-   * Return the Navigation row HTML same as Default Posts page for Category
+   * Return the Navigation row HTML same as Default Posts page for Category.
    *
+   * @since 1.2.0
    * @access private
-   * @since 1.2
-   * @return string
+   *
+   * @return string table row according to the provided params.
    */
   private function tablenav_category( $search_permalink ) {
     $nav = '<tr>
@@ -420,15 +426,17 @@ class Custom_Permalinks_Admin {
               <th scope="col">' . __( "Type", "custom-permalinks" ) . '</th>
               <th scope="col">' . __( "Permalink", "custom-permalinks" )  . '</th>
             </tr>';
+
     return $nav;
   }
 
   /**
-   * Return the Pager HTML
+   * Return the Pager HTML.
    *
+   * @since 1.2.0
    * @access private
-   * @since 1.2
-   * @return string
+   *
+    * @return string Pagination HTML if pager exist.
    */
   private function cp_pager( $total_permalinks, $current_pager_value = 1, $total_pager = 0 ) {
 
@@ -497,11 +505,10 @@ class Custom_Permalinks_Admin {
   }
 
   /**
-   * Add About Plugins Page
+   * Add About Plugins Page.
    *
-   * @access public
    * @since 1.2.11
-   * @return void
+   * @access public
    */
   public function about_plugin() {
     require_once(
@@ -512,11 +519,12 @@ class Custom_Permalinks_Admin {
   }
 
   /**
-   * Add Plugin Support and Follow Message in the footer of Admin Pages
+   * Add Plugin Support and Follow Message in the footer of Admin Pages.
    *
-   * @access public
    * @since 1.2.11
-   * @return string
+   * @access public
+   *
+   * @return string Shows version, website link and twitter.
    */
   public function admin_footer_text() {
     $footer_text = sprintf(
@@ -525,6 +533,7 @@ class Custom_Permalinks_Admin {
       'https://wordpress.org/support/plugin/custom-permalinks',
       'https://twitter.com/samisiddiqui91'
     );
+
     return $footer_text;
   }
 
@@ -532,9 +541,13 @@ class Custom_Permalinks_Admin {
    * Add About and Premium Settings Page Link on the Plugin Page
    * under the Plugin Name.
    *
-   * @access public
    * @since 1.2.11
-   * @return array
+   * @access public
+   *
+   * @param array $links Contains the Plugin Basic Link (Activate/Deactivate/Delete).
+   *
+   * @return array Plugin Basic Links and added some custome link for Settings,
+   *   Contact, and About.
    */
   public function settings_link( $links ) {
     $about = sprintf(
@@ -559,9 +572,8 @@ class Custom_Permalinks_Admin {
   /**
    * Add Privacy Policy about the Plugin.
    *
-   * @access public
    * @since 1.2.23
-   * @return void
+   * @access public
    */
   public function cp_privacy_policy() {
     if ( ! function_exists( 'wp_add_privacy_policy_content' ) ) {

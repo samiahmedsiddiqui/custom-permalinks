@@ -1,6 +1,6 @@
 <?php
 /**
- * @package CustomPermalinks\Admin
+ * @package CustomPermalinks
  */
 
 class Custom_Permalinks_About {
@@ -13,11 +13,10 @@ class Custom_Permalinks_About {
   }
 
   /**
-   * Print HTML for Custom Permalinks ABout Page
+   * Print HTML for Custom Permalinks About Page.
    *
-   * @access private
    * @since 1.2.11
-   * @return void
+   * @access private
    */
   private function more_plugins() {
     $plugin_url = plugins_url( '/admin', CUSTOM_PERMALINKS_FILE );

@@ -52,11 +52,10 @@ class Custom_Permalinks {
   }
 
   /**
-   * Setup plugin constants
+   * Setup plugin constants.
    *
-   * @access private
    * @since 1.2.18
-   * @return void
+   * @access private
    */
   private function setup_constants() {
     if ( ! defined( 'CUSTOM_PERMALINKS_FILE' ) ) {
@@ -77,12 +76,10 @@ class Custom_Permalinks {
   }
 
   /**
-   * Include required files
+   * Include required files.
    *
-   * @access private
    * @since 1.2.18
-   *
-   * @return void
+   * @access private
    */
   private function includes() {
     require_once(
@@ -108,12 +105,10 @@ class Custom_Permalinks {
   }
 
   /**
-   * Loads the plugin language files
+   * Loads the plugin language files.
    *
-   * @access public
    * @since 1.2.22
-   *
-   * @return void
+   * @access public
    */
   public static function plugin_activate() {
     $role = get_role( 'administrator' );
@@ -133,12 +128,10 @@ class Custom_Permalinks {
   }
 
   /**
-   * Loads the plugin language files
+   * Loads the plugin language files.
    *
-   * @access public
    * @since 1.2.18
-   *
-   * @return void
+   * @access public
    */
   public function load_textdomain() {
     $current_version = get_option( 'custom_permalinks_plugin_version', -1 );
