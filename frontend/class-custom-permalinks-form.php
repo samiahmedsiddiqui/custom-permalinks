@@ -63,7 +63,50 @@ class Custom_Permalinks_Form {
     add_action( 'delete_post_category',
       array( $this, 'custom_permalinks_delete_term' )
     );
+
+    $taxonomies = $this -> get_unique_taxonomies();
+
+    foreach ($taxonomies as $taxonomy) {
+      add_action($taxonomy.'_add_form',
+        array($this, 'custom_permalinks_term_options')
+      );
+      add_action($taxonomy.'_edit_form',
+        array($this, 'custom_permalinks_term_options')
+      );
+      add_action('edited_'.$taxonomy,
+        array($this, 'custom_permalinks_save_unique_taxonomies')
+      );
+      add_action('create_'.$taxonomy,
+        array($this, 'custom_permalinks_save_unique_taxonomies')
+      );
+      add_action('delete_'.$taxonomy,
+        array($this, 'custom_permalinks_delete_term')
+      );
+    }
+
   }
+
+  /**
+   * Get taxonomires defined uniquely
+   *
+   * @access
+   *
+   * @return array
+   */
+  public function get_unique_taxonomies(){
+    global $wpdb;
+    $taxonomy_data = $wpdb->get_results("SELECT taxonomy FROM $wpdb->term_taxonomy");
+    $taxonomies_list = [];
+    foreach ($taxonomy_data as $value) {
+      $taxonomy = $value->taxonomy;
+      if($taxonomy!=="category" && $taxonomy!=="post_tag" && $taxonomy!=="nav_menu"){
+        array_push($taxonomies_list, $taxonomy);
+      }
+    }
+    $taxonomies = array_values(array_unique($taxonomies_list));
+    return $taxonomies;
+  }
+
 
   /**
    * Register meta box(es).
@@ -334,8 +377,10 @@ class Custom_Permalinks_Form {
       if ( $object->term_id ) {
         if ( $object->taxonomy == 'post_tag' ) {
           $originalPermalink = $cp_frontend->custom_permalinks_original_tag_link( $object->term_id );
-        } else {
+        } elseif ($object->taxonomy == 'category') {
           $originalPermalink = $cp_frontend->custom_permalinks_original_category_link( $object->term_id );
+        } else {
+          $originalPermalink = $cp_frontend->custom_permalinks_original_taxonomy_link( $object->term_id );
         }
       }
 
@@ -355,6 +400,8 @@ class Custom_Permalinks_Form {
     </script>
     <?php
   }
+
+
 
   /**
    * Helper function to render form
@@ -454,6 +501,31 @@ class Custom_Permalinks_Form {
   }
 
   /**
+   * Save per-taxonomy options
+   *
+   * @access public
+   * @return void
+   */
+  public function custom_permalinks_save_unique_taxonomies( $id ) {
+    //  $var_dump($id);
+    if ( ! isset( $_REQUEST['custom_permalinks_edit'] )
+      || isset( $_REQUEST['post_ID'] ) ) {
+      return;
+    }
+    $new_permalink = ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), '/' );
+
+    $cp_frontend = new Custom_Permalinks_Frontend();
+    if ( $new_permalink == $cp_frontend->custom_permalinks_original_taxonomy_link( $id ) ) {
+      return;
+    }
+
+    $term = get_term( $id );
+    $this->custom_permalinks_save_term(
+      $term, str_replace( '%2F', '/', urlencode( $new_permalink ) )
+    );
+  }
+
+  /**
    * Save term (common to tags and categories)
    *
    * @access public
@@ -466,7 +538,7 @@ class Custom_Permalinks_Form {
     if ( $permalink ) {
       $table[$permalink] = array(
         'id' => $term->term_id,
-        'kind' => ( $term->taxonomy == 'category' ? 'category' : 'tag' ),
+        'kind' => ( $term->taxonomy == 'category' ? 'category' : $term->taxonomy == 'tag' ? 'tag':'' ),
         'slug' => $term->slug
       );
     }

@@ -26,11 +26,13 @@ class Custom_Permalinks_Frontend {
     add_filter( 'page_link',
       array( $this, 'custom_permalinks_page_link' ), 10, 2
     );
-
-    add_filter(
-      'tag_link', array( $this, 'custom_permalinks_term_link' ), 10, 2
+    add_filter( 'tag_link',
+      array( $this, 'custom_permalinks_term_link' ), 10, 2
     );
     add_filter( 'category_link',
+      array( $this, 'custom_permalinks_term_link' ), 10, 2
+    );
+    add_filter( 'term_link',
       array( $this, 'custom_permalinks_term_link' ), 10, 2
     );
 
@@ -157,8 +159,10 @@ class Custom_Permalinks_Frontend {
 
           if ( 'category' == $term['kind'] ) {
             $category_link = $this->custom_permalinks_original_category_link( $term['id'] );
-          } else {
+          } elseif ( 'tag' == $term['kind'] ) {
             $category_link = $this->custom_permalinks_original_tag_link( $term['id'] );
+          } else {
+            $category_link = $this->custom_permalinks_original_taxonomy_link($term['id']);
           }
 
           $original_url = str_replace(
@@ -295,13 +299,15 @@ class Custom_Permalinks_Frontend {
         } else {
           $original_permalink = $this->custom_permalinks_original_post_link( $post->ID );
         }
-      } elseif ( is_tag() || is_category() ) {
+      } elseif ( is_tag() || is_category() || is_tax() ) {
         $theTerm = $wp_query->get_queried_object();
         $custom_permalink = $this->custom_permalinks_permalink_for_term( $theTerm->term_id );
         if ( is_tag() ) {
           $original_permalink = $this->custom_permalinks_original_tag_link( $theTerm->term_id );
-        } else {
+        } elseif ( is_category() ){
           $original_permalink = $this->custom_permalinks_original_category_link( $theTerm->term_id );
+        } else {
+          $original_permalink = $this->custom_permalinks_original_taxonomy_link( $theTerm->term_id );
         }
       }
     } else {
@@ -472,6 +478,22 @@ class Custom_Permalinks_Frontend {
     $originalPermalink = ltrim( str_replace( home_url(), '', get_category_link( $category_id ) ), '/' );
     add_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
     add_filter( 'category_link', array( $this, 'custom_permalinks_term_link' ), 10, 2 );
+    return $originalPermalink;
+  }
+
+  /**
+   * Get original permalink for taxonomy
+   *
+   * @access public
+   * @return string
+   */
+  public function custom_permalinks_original_taxonomy_link( $taxonomy_id ) {
+    remove_filter( 'term_link', array( $this, 'custom_permalinks_term_link' ), 10, 2 );
+    remove_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
+    $originalPermalink = ltrim( str_replace( home_url(), '', get_term_link( (int)$taxonomy_id ) ), '/' );
+    add_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
+    add_filter( 'term_link', array( $this, 'custom_permalinks_term_link' ), 10, 2 );
+
     return $originalPermalink;
   }
 
