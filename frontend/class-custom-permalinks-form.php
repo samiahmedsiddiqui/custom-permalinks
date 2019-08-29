@@ -1,6 +1,6 @@
 <?php
 /**
- * @package CustomPermalinks\Frontend\Form
+ * @package CustomPermalinks
  */
 
 class Custom_Permalinks_Form {
@@ -8,11 +8,10 @@ class Custom_Permalinks_Form {
   private $permalink_metabox = 0;
 
   /**
-   * Initialize WordPress Hooks
+   * Initialize WordPress Hooks.
    *
+   * @since 1.2.0
    * @access public
-   * @since 1.2
-   * @return void
    */
   public function init() {
 
@@ -35,13 +34,16 @@ class Custom_Permalinks_Form {
       array( $this, 'custom_permalinks_delete_permalink' ), 10
     );
 
-    add_action( 'edit_tag_form',
+    add_action( 'category_add_form',
       array( $this, 'custom_permalinks_term_options' )
     );
-    add_action( 'add_tag_form',
+    add_action( 'category_edit_form',
       array( $this, 'custom_permalinks_term_options' )
     );
-    add_action( 'edit_category_form',
+    add_action( 'post_tag_add_form',
+      array( $this, 'custom_permalinks_term_options' )
+    );
+    add_action( 'post_tag_edit_form',
       array( $this, 'custom_permalinks_term_options' )
     );
 
@@ -111,10 +113,8 @@ class Custom_Permalinks_Form {
   /**
    * Register meta box(es).
    *
-   * @access public
    * @since 1.4.0
-   *
-   * @return void
+   * @access public
    */
   public function permalink_edit_box() {
     add_meta_box( 'custom-permalinks-edit-box',
@@ -129,18 +129,14 @@ class Custom_Permalinks_Form {
   /**
    * Set the meta_keys to protected which is created by the plugin.
    *
-   * @access public
    * @since 1.4.0
+   * @access public
    *
-   * @param boolean $protected
-   *   Whether the key is protected or not
-   * @param string $meta_key
-   *   Meta key
-   * @param string $meta_type
-   *   Meta type
+   * @param bool $protected Whether the key is protected or not.
+   * @param string $meta_key Meta key.
+   * @param string $meta_type Meta type.
    *
-   * @return boolean
-   *   return `true` for the custom_permalink key
+   * @return bool `true` for the custom_permalink key.
    */
   public function make_meta_protected( $protected, $meta_key, $meta_type ) {
     if ( 'custom_permalink' === $meta_key ) {
@@ -150,10 +146,11 @@ class Custom_Permalinks_Form {
   }
 
   /**
-   * Save per-post options
+   * Save per-post options.
    *
    * @access public
-   * @return void
+   *
+   * @param int $id Post ID.
    */
   public function custom_permalinks_save_post( $id ) {
     if ( ! isset( $_REQUEST['custom_permalinks_edit'] ) ) {
@@ -176,10 +173,11 @@ class Custom_Permalinks_Form {
   }
 
   /**
-   * Delete Post Permalink
+   * Delete Post Permalink.
    *
    * @access public
-   * @return void
+   *
+   * @param int $id Post ID.
    */
   public function custom_permalinks_delete_permalink( $id ) {
     global $wpdb;
@@ -187,10 +185,16 @@ class Custom_Permalinks_Form {
   }
 
   /**
-   * Per-post/page options (Wordpress > 2.9)
+   * Per-post/page options (Wordpress > 2.9).
    *
    * @access public
-   * @return string
+   *
+   * @param string $html WP Post Permalink HTML.
+   * @param int $id Post ID.
+   * @param string $new_title Post Title.
+   * @param string $new_slug Post Slug.
+   *
+   * @return string Edit Form string.
    */
   public function custom_permalinks_get_sample_permalink_html( $html, $id, $new_title, $new_slug ) {
     $post                    = get_post( $id );
@@ -222,25 +226,19 @@ class Custom_Permalinks_Form {
     $content = ob_get_contents();
     ob_end_clean();
 
-    if ( preg_match( "@view-post-btn.*?href='([^']+)'@s", $html, $matches ) ) {
-      $permalink = $matches[1];
-    } else {
-      list( $permalink, $post_name ) = get_sample_permalink( $post->ID, $new_title, $new_slug );
-      if ( false !== strpos( $permalink, '%postname%' )
-        || false !== strpos( $permalink, '%pagename%' ) ) {
-        $permalink = str_replace( array( '%pagename%','%postname%' ), $post_name, $permalink );
-      }
-    }
+    $view_post_link = get_permalink( $post );
 
     return '<strong>' . __( 'Permalink:', 'custom-permalinks' ) . "</strong>\n" . $content .
-         ( isset( $view_post ) ? "<span id='view-post-btn'><a href='$permalink' class='button button-small' target='_blank'>$view_post</a></span>\n" : "" );
+         ( isset( $view_post ) ? "<span id='view-post-btn'><a href='$view_post_link' class='button button-small' target='_blank'>$view_post</a></span>\n" : "" );
   }
 
   /**
-   * Per-post/page options (Wordpress > 2.9)
+   * Adds the Permalink Edit Meta box for the user with validating the PostTypes
+   * to make compatibility with Gutenberg.
    *
    * @access public
-   * @return string
+   *
+   * @param object $post WP Post Object.
    */
   public function meta_edit_form( $post ) {
     if ( isset( $this->permalink_metabox ) && 1 === $this->permalink_metabox ) {
@@ -291,28 +289,19 @@ class Custom_Permalinks_Form {
       wp_enqueue_script( 'custom-permalinks-form',
         plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
       );
-      if ( isset( $permalink ) && ! empty( $permalink ) ) {
-        if ( false !== strpos( $permalink, '%postname%' )
-          || false !== strpos( $permalink, '%pagename%' ) ) {
-          $permalink = str_replace( array( '%pagename%','%postname%' ), $post_name, $permalink );
-        }
-        $content .= ' <span id="view-post-btn">' .
-                    '<a href="/' . $permalink . '" class="button button-small" target="_blank">' . $view_post . '</a>' .
-                    '</span><br>';
-      } else {
-        $content .= ' <span id="view-post-btn">' .
-                    '<a href="/' . $original_permalink . '" class="button button-small" target="_blank">' . $view_post .' </a>' .
-                    '</span><br>';
-      }
+      $view_post_link = get_permalink( $post );
+
+      $content .= ' <span id="view-post-btn">' .
+                    '<a href="' . $view_post_link . '" class="button button-small" target="_blank">' . $view_post . '</a>' .
+                  '</span><br>';
     }
     echo $content;
   }
 
   /**
-   * Per-post options (Wordpress < 2.9)
+   * Per-post options (Wordpress < 2.9).
    *
    * @access public
-   * @return void
    */
   public function custom_permalinks_post_options() {
     global $post;
@@ -336,10 +325,9 @@ class Custom_Permalinks_Form {
   }
 
   /**
-   * Per-page options (Wordpress < 2.9)
+   * Per-page options (Wordpress < 2.9).
    *
    * @access public
-   * @return void
    */
   public function custom_permalinks_page_options() {
     global $post;
@@ -364,10 +352,11 @@ class Custom_Permalinks_Form {
   }
 
   /**
-   * Per-category/tag options
+   * Per-category/tag options.
    *
    * @access public
-   * @return void
+   *
+   * @param object $object Term Object.
    */
   public function custom_permalinks_term_options( $object ) {
     if ( is_object( $object ) && isset( $object->term_id ) ) {
@@ -401,13 +390,15 @@ class Custom_Permalinks_Form {
     <?php
   }
 
-
-
   /**
-   * Helper function to render form
+   * Helper function to render form.
    *
    * @access private
-   * @return void
+   *
+   * @param string $permalink Permalink which is created by the plugin.
+   * @param string $original Permalink which set by WordPress.
+   * @param bool $renderContainers Shows Post/Term Edit.
+   * @param string $postname Post Name.
    */
   private function custom_permalinks_get_form( $permalink, $original = '', $renderContainers = true, $postname = '' ) {
     ?>
@@ -455,10 +446,11 @@ class Custom_Permalinks_Form {
   }
 
   /**
-   * Save per-tag options
+   * Save per-tag options.
    *
    * @access public
-   * @return void
+   *
+   * @param int $id Term ID.
    */
   public function custom_permalinks_save_tag( $id ) {
     if ( ! isset( $_REQUEST['custom_permalinks_edit'] )
@@ -477,10 +469,11 @@ class Custom_Permalinks_Form {
   }
 
   /**
-   * Save per-category options
+   * Save per-category options.
    *
    * @access public
-   * @return void
+   *
+   * @param int $id Term ID.
    */
   public function custom_permalinks_save_category( $id ) {
     if ( ! isset( $_REQUEST['custom_permalinks_edit'] )
@@ -526,10 +519,12 @@ class Custom_Permalinks_Form {
   }
 
   /**
-   * Save term (common to tags and categories)
+   * Save term (common to tags and categories).
    *
    * @access public
-   * @return void
+   *
+   * @param object $term Term Object.
+   * @param string $permalink New permalink which needs to be saved.
    */
   public function custom_permalinks_save_term( $term, $permalink ) {
 
@@ -547,10 +542,11 @@ class Custom_Permalinks_Form {
   }
 
   /**
-   * Delete term
+   * Delete term.
    *
    * @access public
-   * @return void
+   *
+   * @param int $id Term ID.
    */
   public function custom_permalinks_delete_term( $id ) {
     $table = get_option( 'custom_permalink_table' );
@@ -566,11 +562,13 @@ class Custom_Permalinks_Form {
   }
 
   /**
-   * Check Conflicts and resolve it (e.g: Polylang)
+   * Check Conflicts and resolve it (e.g: Polylang) UPDATED for Polylang
+   * hide_default setting.
    *
+   * @since 1.2.0
    * @access public
-   * @since 1.2
-   * @return string
+   *
+   * @return string requested URL by removing the language/ from it if exist.
    */
   public function custom_permalinks_check_conflicts( $requested_url = '' ) {
     if ( '' == $requested_url ) {
@@ -586,9 +584,30 @@ class Custom_Permalinks_Form {
           $requested_url = str_replace( 'language/', '', $requested_url );
         }
 
-        $remove_lang = ltrim( strstr( $requested_url, '/' ), '/' );
-        if ( '' != $remove_lang ) {
-          return $remove_lang;
+        /*
+         * Check if hide_default is true and the current language is not the
+         * default. If true the remove the  lang code from the url.
+         */
+        if ( 1 == $polylang_config['hide_default'] ) {
+          $current_language = '';
+          if ( function_exists( 'pll_current_language' ) ) {
+            // get current language
+            $current_language = pll_current_language();
+          }
+
+          // get default language
+          $default_language = $polylang_config['default_lang'];
+          if ( $current_language !== $default_language ) {
+            $remove_lang = ltrim( strstr( $requested_url, '/' ), '/' );
+            if ( '' != $remove_lang ) {
+              return $remove_lang;
+            }
+          }
+        } else {
+          $remove_lang = ltrim( strstr( $requested_url, '/' ), '/' );
+          if ( '' != $remove_lang ) {
+            return $remove_lang;
+          }
         }
       }
     }

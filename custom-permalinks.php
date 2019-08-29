@@ -3,7 +3,7 @@
  * Plugin Name: Custom Permalinks
  * Plugin URI: https://wordpress.org/plugins/custom-permalinks/
  * Description: Set custom permalinks on a per-post basis
- * Version: 1.4.0
+ * Version: 1.5.1
  * Author: Sami Ahmed Siddiqui
  * Author URI: https://www.custompermalinks.com/
  * Donate link: https://www.paypal.me/yasglobal
@@ -17,7 +17,7 @@
 
 /**
  *  Custom Permalinks - Update Permalinks of Post/Pages and Categories
- *  Copyright 2008-2018 Sami Ahmed Siddiqui <sami.siddiqui@yasglobal.com>
+ *  Copyright 2008-2019 Sami Ahmed Siddiqui <sami.siddiqui@yasglobal.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -52,11 +52,10 @@ class Custom_Permalinks {
   }
 
   /**
-   * Setup plugin constants
+   * Setup plugin constants.
    *
-   * @access private
    * @since 1.2.18
-   * @return void
+   * @access private
    */
   private function setup_constants() {
     if ( ! defined( 'CUSTOM_PERMALINKS_FILE' ) ) {
@@ -64,7 +63,7 @@ class Custom_Permalinks {
     }
 
     if ( ! defined( 'CUSTOM_PERMALINKS_PLUGIN_VERSION' ) ) {
-      define( 'CUSTOM_PERMALINKS_PLUGIN_VERSION', '1.4.0' );
+      define( 'CUSTOM_PERMALINKS_PLUGIN_VERSION', '1.5.1' );
     }
 
     if ( ! defined( 'CUSTOM_PERMALINKS_PATH' ) ) {
@@ -77,11 +76,10 @@ class Custom_Permalinks {
   }
 
   /**
-   * Include required files
+   * Include required files.
    *
-   * @access private
    * @since 1.2.18
-   * @return void
+   * @access private
    */
   private function includes() {
     require_once(
@@ -107,11 +105,10 @@ class Custom_Permalinks {
   }
 
   /**
-   * Loads the plugin language files
+   * Loads the plugin language files.
    *
-   * @access public
    * @since 1.2.22
-   * @return void
+   * @access public
    */
   public static function plugin_activate() {
     $role = get_role( 'administrator' );
@@ -131,11 +128,10 @@ class Custom_Permalinks {
   }
 
   /**
-   * Loads the plugin language files
+   * Loads the plugin language files.
    *
-   * @access public
    * @since 1.2.18
-   * @return void
+   * @access public
    */
   public function load_textdomain() {
     $current_version = get_option( 'custom_permalinks_plugin_version', -1 );

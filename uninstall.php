@@ -4,7 +4,7 @@
  *
  * Deletes Option and Post Permalinks on uninstalling the Plugin.
  *
- * @package CustomPermalinks/Uninstaller
+ * @package CustomPermalinks
  * @since 1.2.18
  */
 
