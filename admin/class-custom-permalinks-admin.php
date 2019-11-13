@@ -159,7 +159,7 @@ class Custom_Permalinks_Admin {
             '&paged=' . $_GET['paged'] . '', $_SERVER['REQUEST_URI']
           );
           header( 'Location: ' . $redirect_uri[0], 301 );
-          exit();
+          exit(0);
         }
       } elseif ( ! isset( $_GET['paged'] ) ) {
         $pagination_html = $this->cp_pager(
@@ -348,7 +348,7 @@ class Custom_Permalinks_Admin {
             '&paged=' . $_GET['paged'] . '', $_SERVER['REQUEST_URI']
           );
           header( 'Location: ' . $redirect_uri[0], 301 );
-          exit();
+          exit(0);
         }
       } elseif ( ! isset( $_GET['paged'] ) ) {
         $pagination_html = $this->cp_pager( $count_tags, 1, $total_pages );

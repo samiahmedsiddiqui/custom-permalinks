@@ -345,7 +345,7 @@ class Custom_Permalinks_Frontend {
       $url .= strstr( $_SERVER['REQUEST_URI'], '?' );
 
       wp_redirect( home_url() . '/' . $url, 301 );
-      exit();
+      exit(0);
     }
   }
 
