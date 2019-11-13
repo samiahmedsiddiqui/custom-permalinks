@@ -260,9 +260,7 @@ class Custom_Permalinks_Admin {
    * @access public
    */
   public function category_permalinks() {
-
-    $search_permalink = '';
-    $html             = '';
+    $html = '';
 
     // Handle Bulk Operations
     if ( ( isset( $_POST['action'] ) && 'delete' === $_POST['action'] )
@@ -292,9 +290,8 @@ class Custom_Permalinks_Admin {
 
     $search_value = '';
     if ( isset( $_GET['s'] ) && ! empty( $_GET['s'] ) ) {
-      $search_permalink = '&s=' . $_GET['s'] . '';
-      $search_value     = ltrim( htmlspecialchars( $_GET['s'] ), '/' );
-      $html            .= '<span class="subtitle">Search results for "' . $search_value . '"</span>';
+      $search_value = ltrim( htmlspecialchars( $_GET['s'] ), '/' );
+      $html        .= '<span class="subtitle">Search results for "' . $search_value . '"</span>';
     }
     $pager_offset = '0';
     $page_limit   = 20;
@@ -322,7 +319,6 @@ class Custom_Permalinks_Admin {
                     '<input type="submit" id="doaction" class="button action" value="Apply">' .
                   '</div>';
 
-    $posts           = 0;
     $table           = get_option( 'custom_permalink_table' );
     $count_tags      = count( $table );
     $pagination_html = '';
@@ -360,7 +356,7 @@ class Custom_Permalinks_Admin {
 
       $html .= $pagination_html;
     }
-    $table_navigation = $this->tablenav_category( $search_permalink );
+    $table_navigation = $this->tablenav_category();
 
     $html .= '</div>' .
               '<table class="wp-list-table widefat fixed striped posts">' .
@@ -445,7 +441,7 @@ class Custom_Permalinks_Admin {
    *
    * @return string table row according to the provided params.
    */
-  private function tablenav_category( $search_permalink ) {
+  private function tablenav_category() {
     $nav = '<tr>' .
               '<td id="cb" class="manage-column column-cb check-column">' .
                 '<label class="screen-reader-text" for="cb-select-all-1">Select All</label>' .

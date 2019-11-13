@@ -16,7 +16,7 @@ class Custom_Permalinks_Form {
   public function init() {
 
     add_filter( 'get_sample_permalink_html',
-      array( $this, 'custom_permalinks_get_sample_permalink_html' ), 10, 4
+      array( $this, 'custom_permalinks_get_sample_permalink_html' ), 10, 3
     );
 
     add_action( 'add_meta_boxes',
@@ -24,7 +24,7 @@ class Custom_Permalinks_Form {
     );
 
     add_filter( 'is_protected_meta',
-      array( $this, 'make_meta_protected' ), 10, 3
+      array( $this, 'make_meta_protected' ), 10, 2
     );
 
     add_action( 'save_post',
@@ -91,11 +91,10 @@ class Custom_Permalinks_Form {
    *
    * @param bool $protected Whether the key is protected or not.
    * @param string $meta_key Meta key.
-   * @param string $meta_type Meta type.
    *
    * @return bool `true` for the custom_permalink key.
    */
-  public function make_meta_protected( $protected, $meta_key, $meta_type ) {
+  public function make_meta_protected( $protected, $meta_key ) {
     if ( 'custom_permalink' === $meta_key ) {
       $protected = true;
     }
@@ -118,8 +117,6 @@ class Custom_Permalinks_Form {
 
     $cp_frontend = new Custom_Permalinks_Frontend();
     $original_link = $cp_frontend->custom_permalinks_original_post_link( $id );
-    $permalink_structure = get_option( 'permalink_structure' );
-
     if ( $_REQUEST['custom_permalink'] && $_REQUEST['custom_permalink'] != $original_link ) {
       add_post_meta( $id, 'custom_permalink',
         str_replace( '%2F', '/',
@@ -149,11 +146,10 @@ class Custom_Permalinks_Form {
    * @param string $html WP Post Permalink HTML.
    * @param int $id Post ID.
    * @param string $new_title Post Title.
-   * @param string $new_slug Post Slug.
    *
    * @return string Edit Form string.
    */
-  public function custom_permalinks_get_sample_permalink_html( $html, $id, $new_title, $new_slug ) {
+  public function custom_permalinks_get_sample_permalink_html( $html, $id, $new_title ) {
     $post                    = get_post( $id );
     $this->permalink_metabox = 1;
 

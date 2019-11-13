@@ -34,7 +34,7 @@ class Custom_Permalinks_Frontend {
     );
 
     add_filter( 'user_trailingslashit',
-      array( $this, 'custom_permalinks_trailingslash' ), 10, 2
+      array( $this, 'custom_permalinks_trailingslash' ), 10, 1
     );
   }
 
@@ -407,7 +407,6 @@ class Custom_Permalinks_Frontend {
    * @return string customized Term Permalink.
    */
   public function custom_permalinks_term_link( $permalink, $term ) {
-    $table = get_option( 'custom_permalink_table' );
     if ( is_object( $term ) ) {
       $term = $term->term_id;
     }
@@ -465,14 +464,14 @@ class Custom_Permalinks_Frontend {
    */
   public function custom_permalinks_original_page_link( $post_id ) {
     remove_filter( 'page_link', array( $this, 'custom_permalinks_page_link' ), 10, 2 );
-    remove_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
+    remove_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 1 );
 
     require_once ABSPATH . '/wp-admin/includes/post.php';
     list( $permalink, $post_name ) = get_sample_permalink( $post_id );
     $permalink = str_replace( array( '%pagename%','%postname%' ), $post_name, $permalink );
     $permalink = ltrim( str_replace( home_url(), '', $permalink ), '/' );
 
-    add_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
+    add_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 1 );
     add_filter( 'page_link', array( $this, 'custom_permalinks_page_link' ), 10, 2 );
     return $permalink;
   }
@@ -488,9 +487,9 @@ class Custom_Permalinks_Frontend {
    */
   public function custom_permalinks_original_tag_link( $tag_id ) {
     remove_filter( 'tag_link', array( $this, 'custom_permalinks_term_link' ), 10, 2 );
-    remove_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
+    remove_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 1 );
     $originalPermalink = ltrim( str_replace( home_url(), '', get_tag_link( $tag_id ) ), '/' );
-    add_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
+    add_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 1 );
     add_filter( 'tag_link', array( $this, 'custom_permalinks_term_link' ), 10, 2 );
 
     return $originalPermalink;
@@ -507,9 +506,9 @@ class Custom_Permalinks_Frontend {
    */
   public function custom_permalinks_original_category_link( $category_id ) {
     remove_filter( 'category_link', array( $this, 'custom_permalinks_term_link' ), 10, 2 );
-    remove_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
+    remove_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 1 );
     $originalPermalink = ltrim( str_replace( home_url(), '', get_category_link( $category_id ) ), '/' );
-    add_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
+    add_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 1 );
     add_filter( 'category_link', array( $this, 'custom_permalinks_term_link' ), 10, 2 );
 
     return $originalPermalink;
@@ -521,17 +520,16 @@ class Custom_Permalinks_Frontend {
    * @access public
    *
    * @param string $string URL with or without a trailing slash.
-   * @param int $type The type of URL being considered (e.g. single, category, etc) for use in the filter.
    *
    * @return string Adds/removes a trailing slash based on the permalink structure.
    */
-  public function custom_permalinks_trailingslash( $string, $type ) {
+  public function custom_permalinks_trailingslash( $string ) {
     global $_CPRegisteredURL;
 
-    remove_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
+    remove_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 1 );
     $url = parse_url( get_bloginfo( 'url' ) );
     $request = ltrim( isset( $url['path'] ) ? substr( $string, strlen( $url['path'] ) ) : $string, '/' );
-    add_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 2 );
+    add_filter( 'user_trailingslashit', array( $this, 'custom_permalinks_trailingslash' ), 10, 1 );
 
     if ( ! trim( $request ) ) {
       return $string;
@@ -544,6 +542,7 @@ class Custom_Permalinks_Frontend {
         return ( $string{0} == '/' ? '/' : '' ) . $_CPRegisteredURL;
       }
     }
+
     return $string;
   }
 
@@ -563,6 +562,7 @@ class Custom_Permalinks_Frontend {
         }
       }
     }
+
     return false;
   }
 }
