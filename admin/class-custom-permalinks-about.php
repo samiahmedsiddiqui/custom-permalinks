@@ -3,13 +3,13 @@
  * @package CustomPermalinks
  */
 
-class Custom_Permalinks_About {
+class CustomPermalinksAbout {
 
   /**
    * Class constructor.
    */
   public function __construct() {
-    $this->more_plugins();
+    $this->morePlugins();
   }
 
   /**
@@ -18,7 +18,7 @@ class Custom_Permalinks_About {
    * @since 1.2.11
    * @access private
    */
-  private function more_plugins() {
+  private function morePlugins() {
     $plugin_url = plugins_url( '/admin', CUSTOM_PERMALINKS_FILE );
     $img_src    = $plugin_url . '/images';
     wp_enqueue_style( 'style', $plugin_url . '/css/about-plugins.min.css' );

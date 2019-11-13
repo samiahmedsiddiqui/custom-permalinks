@@ -39,25 +39,12 @@ if ( ! defined( 'ABSPATH' ) ) {
   exit;
 }
 
-class Custom_Permalinks {
+class CustomPermalinks {
 
   /**
    * Class constructor.
    */
   public function __construct() {
-    $this->setup_constants();
-    $this->includes();
-
-    add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
-  }
-
-  /**
-   * Setup plugin constants.
-   *
-   * @since 1.2.18
-   * @access private
-   */
-  private function setup_constants() {
     if ( ! defined( 'CUSTOM_PERMALINKS_FILE' ) ) {
       define( 'CUSTOM_PERMALINKS_FILE', __FILE__ );
     }
@@ -73,6 +60,10 @@ class Custom_Permalinks {
     if ( ! defined( 'CUSTOM_PERMALINKS_BASENAME' ) ) {
       define( 'CUSTOM_PERMALINKS_BASENAME', plugin_basename( CUSTOM_PERMALINKS_FILE ) );
     }
+
+    $this->includes();
+
+    add_action( 'plugins_loaded', array( $this, 'loadTextDomain' ) );
   }
 
   /**
@@ -85,22 +76,22 @@ class Custom_Permalinks {
     require_once(
       CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php'
     );
-    $cp_frontend = new Custom_Permalinks_Frontend();
+    $cp_frontend = new CustomPermalinksFrontend();
     $cp_frontend->init();
 
     require_once(
       CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-form.php'
     );
-    $cp_form = new Custom_Permalinks_Form();
+    $cp_form = new CustomPermalinksForm();
     $cp_form->init();
 
     if ( is_admin() ) {
       require_once(
         CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-admin.php'
       );
-      new Custom_Permalinks_Admin();
+      new CustomPermalinksAdmin();
 
-      register_activation_hook( CUSTOM_PERMALINKS_FILE, array( 'Custom_Permalinks', 'plugin_activate' ) );
+      register_activation_hook( CUSTOM_PERMALINKS_FILE, array( 'CustomPermalinks', 'pluginActivate' ) );
     }
   }
 
@@ -110,7 +101,7 @@ class Custom_Permalinks {
    * @since 1.2.22
    * @access public
    */
-  public static function plugin_activate() {
+  public static function pluginActivate() {
     $role = get_role( 'administrator' );
     if ( ! empty( $role ) ) {
       $role->add_cap( 'cp_view_post_permalinks' );
@@ -133,10 +124,10 @@ class Custom_Permalinks {
    * @since 1.2.18
    * @access public
    */
-  public function load_textdomain() {
+  public function loadTextDomain() {
     $current_version = get_option( 'custom_permalinks_plugin_version', -1 );
     if ( -1 === $current_version || CUSTOM_PERMALINKS_PLUGIN_VERSION < $current_version ) {
-      Custom_Permalinks::plugin_activate();
+      CustomPermalinks::pluginActivate();
       update_option( 'custom_permalinks_plugin_version', CUSTOM_PERMALINKS_PLUGIN_VERSION );
     }
     load_plugin_textdomain( 'custom-permalinks', FALSE,
@@ -145,4 +136,4 @@ class Custom_Permalinks {
   }
 }
 
-new Custom_Permalinks();
+new CustomPermalinks();

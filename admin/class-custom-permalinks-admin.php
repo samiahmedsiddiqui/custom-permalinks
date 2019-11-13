@@ -3,17 +3,17 @@
  * @package CustomPermalinks
  */
 
-class Custom_Permalinks_Admin {
+class CustomPermalinksAdmin {
 
   /**
    * Initializes WordPress hooks.
    */
   function __construct() {
-    add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+    add_action( 'admin_menu', array( $this, 'adminMenu' ) );
     add_filter( 'plugin_action_links_' . CUSTOM_PERMALINKS_BASENAME,
-      array( $this, 'settings_link' )
+      array( $this, 'settingsLink' )
     );
-    add_action( 'admin_init', array( $this, 'cp_privacy_policy' ) );
+    add_action( 'admin_init', array( $this, 'privacyPolicy' ) );
   }
 
   /**
@@ -22,22 +22,22 @@ class Custom_Permalinks_Admin {
    * @since 1.2.0
    * @access public
    */
-  public function admin_menu() {
+  public function adminMenu() {
     add_menu_page( 'Custom Permalinks', 'Custom Permalinks', 'cp_view_post_permalinks',
-      'cp-post-permalinks', array( $this,'posttype_permalinks' ),
+      'cp-post-permalinks', array( $this,'posttypePermalinks' ),
       'dashicons-admin-links'
     );
     add_submenu_page( 'cp-post-permalinks', 'PostTypes Permalinks',
       'PostTypes Permalinks', 'cp_view_post_permalinks', 'cp-post-permalinks',
-      array( $this, 'posttype_permalinks' )
+      array( $this, 'posttypePermalinks' )
     );
     add_submenu_page( 'cp-post-permalinks', 'Category Permalinks',
       'Category Permalinks', 'cp_view_category_permalinks', 'cp-category-permalinks',
-      array( $this, 'category_permalinks' )
+      array( $this, 'categoryPermalinks' )
     );
     add_submenu_page( 'cp-post-permalinks', 'About Custom Permalinks',
       'About CP', 'install_plugins', 'cp-about-plugins',
-      array( $this, 'about_plugin' )
+      array( $this, 'aboutPlugin' )
     );
   }
 
@@ -48,7 +48,7 @@ class Custom_Permalinks_Admin {
    * @since 1.2.0
    * @access public
    */
-  public function posttype_permalinks() {
+  public function posttypePermalinks() {
     global $wpdb;
     $filter_options   = '';
     $filter_permalink = '';
@@ -151,7 +151,7 @@ class Custom_Permalinks_Admin {
       if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] )
         && 0 < $_GET['paged']
       ) {
-        $pagination_html = $this->cp_pager(
+        $pagination_html = $this->customPager(
           $count_posts->total_permalinks, $_GET['paged'], $total_pages
         );
         if ( $_GET['paged'] > $total_pages ) {
@@ -162,14 +162,14 @@ class Custom_Permalinks_Admin {
           exit(0);
         }
       } elseif ( ! isset( $_GET['paged'] ) ) {
-        $pagination_html = $this->cp_pager(
+        $pagination_html = $this->customPager(
           $count_posts->total_permalinks, 1, $total_pages
         );
       }
 
       $html .= $pagination_html;
     }
-    $table_navigation = $this->tablenav_posts(
+    $table_navigation = $this->tableNavPosts(
       $order_by_class, $order_by, $search_permalink
     );
 
@@ -217,7 +217,7 @@ class Custom_Permalinks_Admin {
               '</form></div>';
     echo $html;
 
-    add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
+    add_filter( 'admin_footer_text', array( $this, 'adminFooterText' ), 1 );
   }
 
   /**
@@ -233,7 +233,7 @@ class Custom_Permalinks_Admin {
    *
    * @return string table row according to the provided params.
    */
-  private function tablenav_posts( $order_by_class, $order_by, $search_permalink ) {
+  private function tableNavPosts( $order_by_class, $order_by, $search_permalink ) {
     $nav = '<tr>' .
               '<td id="cb" class="manage-column column-cb check-column">' .
                 '<label class="screen-reader-text" for="cb-select-all-1">Select All</label>' .
@@ -259,7 +259,7 @@ class Custom_Permalinks_Admin {
    * @since 1.2.0
    * @access public
    */
-  public function category_permalinks() {
+  public function categoryPermalinks() {
     $html = '';
 
     // Handle Bulk Operations
@@ -340,7 +340,7 @@ class Custom_Permalinks_Admin {
       $total_pages = ceil( $count_tags / 20 );
       if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] )
         && 0 < $_GET['paged'] ) {
-        $pagination_html = $this->cp_pager(
+        $pagination_html = $this->customPager(
           $count_tags, $_GET['paged'], $total_pages
         );
         if ( $_GET['paged'] > $total_pages ) {
@@ -351,12 +351,12 @@ class Custom_Permalinks_Admin {
           exit(0);
         }
       } elseif ( ! isset( $_GET['paged'] ) ) {
-        $pagination_html = $this->cp_pager( $count_tags, 1, $total_pages );
+        $pagination_html = $this->customPager( $count_tags, 1, $total_pages );
       }
 
       $html .= $pagination_html;
     }
-    $table_navigation = $this->tablenav_category();
+    $table_navigation = $this->tableNavCategory();
 
     $html .= '</div>' .
               '<table class="wp-list-table widefat fixed striped posts">' .
@@ -418,7 +418,7 @@ class Custom_Permalinks_Admin {
               '</form></div>';
     echo $html;
 
-    add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
+    add_filter( 'admin_footer_text', array( $this, 'adminFooterText' ), 1 );
   }
 
   /**
@@ -441,7 +441,7 @@ class Custom_Permalinks_Admin {
    *
    * @return string table row according to the provided params.
    */
-  private function tablenav_category() {
+  private function tableNavCategory() {
     $nav = '<tr>' .
               '<td id="cb" class="manage-column column-cb check-column">' .
                 '<label class="screen-reader-text" for="cb-select-all-1">Select All</label>' .
@@ -461,22 +461,22 @@ class Custom_Permalinks_Admin {
    * @since 1.2.0
    * @access private
    *
-   * @param int $total_permalinks No. of total results found.
-   * @param int $current_pager_value Optional. Current Page. 1.
-   * @param int $total_pager Optional. Total no. of pages. 0.
+   * @param int $totalPermalinks No. of total results found.
+   * @param int $currentPagerValue Optional. Current Page. 1.
+   * @param int $totalPager Optional. Total no. of pages. 0.
    *
    * @return string Pagination HTML if pager exist.
    */
-  private function cp_pager( $total_permalinks, $current_pager_value = 1, $total_pager = 0 ) {
+  private function customPager( $totalPermalinks, $currentPagerValue = 1, $totalPager = 0 ) {
 
-    if ( 0 == $total_pager ) {
+    if ( 0 == $totalPager ) {
       return;
     }
 
-    if ( 1 == $total_pager ) {
+    if ( 1 == $totalPager ) {
       $pagination_html = '<div class="tablenav-pages one-page">' .
                             '<span class="displaying-num">' .
-                              $total_permalinks . ' items' .
+                              $totalPermalinks . ' items' .
                             '</span>' .
                           '</div>';
 
@@ -484,19 +484,19 @@ class Custom_Permalinks_Admin {
     }
 
     $remove_pager_uri = explode(
-      '&paged=' . $current_pager_value . '', $_SERVER['REQUEST_URI']
+      '&paged=' . $currentPagerValue . '', $_SERVER['REQUEST_URI']
     );
     $pagination_html = '<div class="tablenav-pages">' .
                           '<span class="displaying-num">' .
-                            $total_permalinks . ' items' .
+                            $totalPermalinks . ' items' .
                           '</span>' .
                           '<span class="pagination-links">';
 
-    if ( 1 == $current_pager_value ) {
+    if ( 1 == $currentPagerValue ) {
       $pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&laquo; </span>' .
                           '<span class="tablenav-pages-navspan" aria-hidden="true">&lsaquo; </span>';
     } else {
-      $prev_page = $current_pager_value - 1;
+      $prev_page = $currentPagerValue - 1;
       if ( 1 == $prev_page ) {
         $pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&laquo;</span>';
       } else {
@@ -513,23 +513,23 @@ class Custom_Permalinks_Admin {
 
     $pagination_html .= '<span class="paging-input">' .
                           '<label for="current-page-selector" class="screen-reader-text">Current Page</label>' .
-                          '<input class="current-page" id="current-page-selector" type="text" name="paged" value="' . $current_pager_value . '" size="1" aria-describedby="table-paging" />' .
-                          '<span class="tablenav-paging-text"> of <span class="total-pages">' . $total_pager . ' </span> </span>' .
+                          '<input class="current-page" id="current-page-selector" type="text" name="paged" value="' . $currentPagerValue . '" size="1" aria-describedby="table-paging" />' .
+                          '<span class="tablenav-paging-text"> of <span class="total-pages">' . $totalPager . ' </span> </span>' .
                         '</span>';
 
-    if ( $current_pager_value == $total_pager ) {
+    if ( $currentPagerValue == $totalPager ) {
       $pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&rsaquo; </span>' .
                           '<span class="tablenav-pages-navspan" aria-hidden="true">&raquo; </span>';
     } else {
-      $next_page = $current_pager_value + 1;
-      $pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $next_page . '" title="Next page" class="next-page">' .
+      $nextPage = $currentPagerValue + 1;
+      $pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $nextPage . '" title="Next page" class="next-page">' .
                             '<span class="screen-reader-text">Next page</span>' .
                             '<span aria-hidden="true">&rsaquo;</span>' .
                           '</a> ';
-      if ( $total_pager == $next_page) {
+      if ( $totalPager == $nextPage) {
         $pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&raquo;</span>';
       } else {
-        $pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $total_pager . '" title="Last page" class="last-page">' .
+        $pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $totalPager . '" title="Last page" class="last-page">' .
                               '<span class="screen-reader-text">Last page</span>' .
                               '<span aria-hidden="true">&raquo;</span>' .
                             '</a> ';
@@ -546,12 +546,12 @@ class Custom_Permalinks_Admin {
    * @since 1.2.11
    * @access public
    */
-  public function about_plugin() {
+  public function aboutPlugin() {
     require_once(
       CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-about.php'
     );
-    new Custom_Permalinks_About();
-    add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
+    new CustomPermalinksAbout();
+    add_filter( 'admin_footer_text', array( $this, 'adminFooterText' ), 1 );
   }
 
   /**
@@ -562,7 +562,7 @@ class Custom_Permalinks_Admin {
    *
    * @return string Shows version, website link and twitter.
    */
-  public function admin_footer_text() {
+  public function adminFooterText() {
     $footer_text = sprintf(
       __( 'Custom Permalinks version %s by <a href="%s" title="Sami Ahmed Siddiqui Company Website" target="_blank">Sami Ahmed Siddiqui</a> - <a href="%s" title="Support forums" target="_blank">Support forums</a> - Follow on Twitter: <a href="%s" title="Follow Sami Ahmed Siddiqui on Twitter" target="_blank">Sami Ahmed Siddiqui</a>', 'custom-permalinks' ),
       CUSTOM_PERMALINKS_PLUGIN_VERSION, 'https://www.yasglobal.com/',
@@ -585,7 +585,7 @@ class Custom_Permalinks_Admin {
    * @return array Plugin Basic Links and added some custome link for Settings,
    *   Contact, and About.
    */
-  public function settings_link( $links ) {
+  public function settingsLink( $links ) {
     $about = sprintf(
       __( '<a href="%s" title="About">About</a>', 'custom-permalinks' ),
       'admin.php?page=cp-about-plugins'
@@ -611,7 +611,7 @@ class Custom_Permalinks_Admin {
    * @since 1.2.23
    * @access public
    */
-  public function cp_privacy_policy() {
+  public function privacyPolicy() {
     if ( ! function_exists( 'wp_add_privacy_policy_content' ) ) {
       return;
     }
