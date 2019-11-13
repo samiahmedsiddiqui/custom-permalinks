@@ -14,12 +14,6 @@ class CustomPermalinksForm {
    * @access public
    */
   public function init() {
-
-    add_filter( 'get_sample_permalink_html',
-      array( $this, 'getSamplePermalinkHTML' ), 10, 2
-    );
-    add_filter( 'is_protected_meta', array( $this, 'protectMeta' ), 10, 2 );
-
     add_action( 'add_meta_boxes', array( $this, 'permalinkEditBox' ) );
     add_action( 'save_post', array( $this, 'savePost' ), 10, 3 );
     add_action( 'delete_post', array( $this, 'deletePermalink' ), 10 );
@@ -33,6 +27,11 @@ class CustomPermalinksForm {
     add_action( 'create_category', array( $this, 'saveCategory' ) );
     add_action( 'delete_post_tag', array( $this, 'deleteTerm' ) );
     add_action( 'delete_post_category', array( $this, 'deleteTerm' ) );
+
+    add_filter( 'get_sample_permalink_html',
+      array( $this, 'getSamplePermalinkHTML' ), 10, 2
+    );
+    add_filter( 'is_protected_meta', array( $this, 'protectMeta' ), 10, 2 );
   }
 
   /**
@@ -84,8 +83,8 @@ class CustomPermalinksForm {
     delete_post_meta( $id, 'custom_permalink' );
 
     $cpFrontend = new CustomPermalinksFrontend();
-    $original_link = $cpFrontend->originalPostLink( $id );
-    if ( $_REQUEST['custom_permalink'] && $_REQUEST['custom_permalink'] != $original_link ) {
+    $originalLink = $cpFrontend->originalPostLink( $id );
+    if ( $_REQUEST['custom_permalink'] && $_REQUEST['custom_permalink'] != $originalLink ) {
       add_post_meta( $id, 'custom_permalink',
         str_replace( '%2F', '/',
           urlencode( ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), "/" ) )
@@ -117,15 +116,15 @@ class CustomPermalinksForm {
    * @return string Edit Form string.
    */
   public function getSamplePermalinkHTML( $html, $id ) {
-    $post                    = get_post( $id );
+    $post                   = get_post( $id );
     $this->permalinkMetabox = 1;
 
     if ( 'attachment' == $post->post_type || $post->ID == get_option( 'page_on_front' ) ) {
       return $html;
     }
 
-    $exclude_post_types = $post->post_type;
-    $excluded = apply_filters( 'custom_permalinks_exclude_post_type', $exclude_post_types );
+    $excludePostTypes = $post->post_type;
+    $excluded = apply_filters( 'custom_permalinks_exclude_post_type', $excludePostTypes );
     if ( '__true' === $excluded ) {
       return $html;
     }
@@ -135,21 +134,21 @@ class CustomPermalinksForm {
 
     $cpFrontend = new CustomPermalinksFrontend();
     if ( 'page' == $post->post_type ) {
-      $original_permalink = $cpFrontend->originalPageLink( $id );
-      $view_post          = __( 'View Page', 'custom-permalinks' );
+      $originalPermalink = $cpFrontend->originalPageLink( $id );
+      $viewPost          = __( 'View Page', 'custom-permalinks' );
     } else {
-      $original_permalink = $cpFrontend->originalPostLink( $id );
-      $view_post          = __( 'View ' . ucfirst( $post->post_type ), 'custom-permalinks' );
+      $originalPermalink = $cpFrontend->originalPostLink( $id );
+      $viewPost          = __( 'View ' . ucfirst( $post->post_type ), 'custom-permalinks' );
     }
-    $this->getPermalinkForm( $permalink, $original_permalink, false, $post->post_name );
+    $this->getPermalinkForm( $permalink, $originalPermalink, false, $post->post_name );
 
     $content = ob_get_contents();
     ob_end_clean();
 
-    $view_post_link = get_permalink( $post );
+    $viewPostLink = get_permalink( $post );
 
     return '<strong>' . __( 'Permalink:', 'custom-permalinks' ) . "</strong>\n" . $content .
-         ( isset( $view_post ) ? "<span id='view-post-btn'><a href='$view_post_link' class='button button-small' target='_blank'>$view_post</a></span>\n" : "" );
+         ( isset( $viewPost ) ? "<span id='view-post-btn'><a href='$viewPostLink' class='button button-small' target='_blank'>$viewPost</a></span>\n" : "" );
   }
 
   /**
@@ -180,8 +179,8 @@ class CustomPermalinksForm {
       return;
     }
 
-    $exclude_post_types = $post->post_type;
-    $excluded = apply_filters( 'custom_permalinks_exclude_post_type', $exclude_post_types );
+    $excludePostTypes = $post->post_type;
+    $excluded = apply_filters( 'custom_permalinks_exclude_post_type', $excludePostTypes );
     if ( '__true' === $excluded ) {
       wp_enqueue_script( 'custom-permalinks-form',
         plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
@@ -194,13 +193,13 @@ class CustomPermalinksForm {
 
     $cpFrontend = new CustomPermalinksFrontend();
     if ( 'page' == $post->post_type ) {
-      $original_permalink = $cpFrontend->originalPageLink( $post->ID );
-      $view_post = __( 'View Page', 'custom-permalinks' );
+      $originalPermalink = $cpFrontend->originalPageLink( $post->ID );
+      $viewPost = __( 'View Page', 'custom-permalinks' );
     } else {
-      $original_permalink = $cpFrontend->originalPostLink( $post->ID );
-      $view_post = __( 'View ' . ucfirst( $post->post_type ), 'custom-permalinks' );
+      $originalPermalink = $cpFrontend->originalPostLink( $post->ID );
+      $viewPost = __( 'View ' . ucfirst( $post->post_type ), 'custom-permalinks' );
     }
-    $this->getPermalinkForm( $permalink, $original_permalink, false, $post->post_name );
+    $this->getPermalinkForm( $permalink, $originalPermalink, false, $post->post_name );
 
     $content = ob_get_contents();
     ob_end_clean();
@@ -209,10 +208,10 @@ class CustomPermalinksForm {
       wp_enqueue_script( 'custom-permalinks-form',
         plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
       );
-      $view_post_link = get_permalink( $post );
+      $viewPostLink = get_permalink( $post );
 
       $content .= ' <span id="view-post-btn">' .
-                    '<a href="' . $view_post_link . '" class="button button-small" target="_blank">' . $view_post . '</a>' .
+                    '<a href="' . $viewPostLink . '" class="button button-small" target="_blank">' . $viewPost . '</a>' .
                   '</span><br>';
     }
     echo $content;
@@ -225,19 +224,21 @@ class CustomPermalinksForm {
    */
   public function postOptions() {
     global $post;
-    $post_id = $post;
-    if ( is_object( $post_id ) ) {
-      $post_id = $post_id->ID;
+
+    if ( is_object( $post ) ) {
+      $postId = $post->ID;
+    } else {
+      $postId = $post;
     }
 
-    $permalink = get_post_meta( $post_id, 'custom_permalink', true );
+    $permalink = get_post_meta( $postId, 'custom_permalink', true );
     ?>
     <div class="postbox closed">
       <h3><?php _e( 'Custom Permalink', 'custom-permalinks' ) ?></h3>
       <div class="inside">
         <?php
           $cpFrontend = new CustomPermalinksFrontend();
-          $cpFrontend->getPermalinkForm( $permalink, $cpFrontend->originalPostLink( $post_id ) );
+          $cpFrontend->getPermalinkForm( $permalink, $cpFrontend->originalPostLink( $postId ) );
         ?>
       </div>
     </div>
@@ -251,20 +252,22 @@ class CustomPermalinksForm {
    */
   public function pageOptions() {
     global $post;
-    $post_id = $post;
-    if (is_object( $post_id ) ) {
-      $post_id = $post_id->ID;
+
+    if ( is_object( $post ) ) {
+      $postId = $post->ID;
+    } else {
+      $postId = $post;
     }
 
-    $permalink = get_post_meta( $post_id, 'custom_permalink', true );
+    $permalink = get_post_meta( $postId, 'custom_permalink', true );
     ?>
     <div class="postbox closed">
       <h3><?php _e( 'Custom Permalink', 'custom-permalinks' ); ?></h3>
       <div class="inside">
       <?php
         $cpFrontend = new CustomPermalinksFrontend();
-        $page_permalink = $cpFrontend->originalPageLink( $post_id );
-        $this->getPermalinkForm( $permalink, $page_permalink );
+        $pagePermalink = $cpFrontend->originalPageLink( $postId );
+        $this->getPermalinkForm( $permalink, $pagePermalink );
       ?>
       </div>
     </div>
@@ -336,21 +339,21 @@ class CustomPermalinksForm {
     if ( $permalink == '' ) {
       $original = $this->checkConflicts( $original );
     }
-    $post_slug = htmlspecialchars( $permalink ? urldecode( $permalink ) : urldecode( $original ) );
-    $original_encoded_url = htmlspecialchars( urldecode( $original ) );
+    $postSlug = htmlspecialchars( $permalink ? urldecode( $permalink ) : urldecode( $original ) );
+    $originalEncodedUrl = htmlspecialchars( urldecode( $original ) );
     wp_enqueue_script( 'custom-permalinks-form', plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true );
-    $postname_html = '';
+    $postnameHTML = '';
     if ( isset( $postname ) && $postname != '' ) {
-      $postname_html = '<input type="hidden" id="new-post-slug" class="text" value="' . $postname . '" />';
+      $postnameHTML = '<input type="hidden" id="new-post-slug" class="text" value="' . $postname . '" />';
     }
 
-    echo home_url() . '/<span id="editable-post-name" title="Click to edit this part of the permalink">' . $postname_html;
+    echo home_url() . '/<span id="editable-post-name" title="Click to edit this part of the permalink">' . $postnameHTML;
 
     ?>
-    <input type="text" id="custom-permalinks-post-slug" class="text" value="<?php echo $post_slug; ?>"
+    <input type="text" id="custom-permalinks-post-slug" class="text" value="<?php echo $postSlug; ?>"
     style="width: 250px; <?php if ( !$permalink ) echo 'color: #ddd'; ?>"
     onfocus="if ( this.style.color = '#ddd' ) { this.style.color = '#000'; }"
-    onblur="document.getElementById('custom_permalink').value = this.value; if ( this.value == '' || this.value == '<?php echo $original_encoded_url;  ?>' ) { this.value = '<?php echo $original_encoded_url; ?>'; this.style.color = '#ddd'; }" />
+    onblur="document.getElementById('custom_permalink').value = this.value; if ( this.value == '' || this.value == '<?php echo $originalEncodedUrl;  ?>' ) { this.value = '<?php echo $originalEncodedUrl; ?>'; this.style.color = '#ddd'; }" />
     </span>
 
     <?php if ( $renderContainers ) : ?>
@@ -375,15 +378,15 @@ class CustomPermalinksForm {
       || isset( $_REQUEST['post_ID'] ) ) {
       return;
     }
-    $new_permalink = ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), '/' );
+    $newPermalink = ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), '/' );
 
     $cpFrontend = new CustomPermalinksFrontend();
-    if ( $new_permalink == $cpFrontend->originalTagLink( $id ) ) {
+    if ( $newPermalink == $cpFrontend->originalTagLink( $id ) ) {
       return;
     }
 
     $term = get_term( $id, 'post_tag' );
-    $this->saveTerm( $term, str_replace( '%2F', '/', urlencode( $new_permalink ) ) );
+    $this->saveTerm( $term, str_replace( '%2F', '/', urlencode( $newPermalink ) ) );
   }
 
   /**
@@ -398,16 +401,16 @@ class CustomPermalinksForm {
       || isset( $_REQUEST['post_ID'] ) ) {
       return;
     }
-    $new_permalink = ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), '/' );
+    $newPermalink = ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), '/' );
 
     $cpFrontend = new CustomPermalinksFrontend();
-    if ( $new_permalink == $cpFrontend->originalCategoryLink( $id ) ) {
+    if ( $newPermalink == $cpFrontend->originalCategoryLink( $id ) ) {
       return;
     }
 
     $term = get_term( $id, 'category' );
     $this->saveTerm(
-      $term, str_replace( '%2F', '/', urlencode( $new_permalink ) )
+      $term, str_replace( '%2F', '/', urlencode( $newPermalink ) )
     );
   }
 
@@ -463,47 +466,48 @@ class CustomPermalinksForm {
    *
    * @return string requested URL by removing the language/ from it if exist.
    */
-  public function checkConflicts( $requested_url = '' ) {
-    if ( '' == $requested_url ) {
+  public function checkConflicts( $requestedUrl = '' ) {
+    if ( '' == $requestedUrl ) {
       return;
     }
 
     // Check if the Polylang Plugin is installed so, make changes in the URL
     if ( defined( 'POLYLANG_VERSION' ) ) {
-      $polylang_config = get_option( 'polylang' );
-      if ( $polylang_config['force_lang'] == 1 ) {
+      $polylangConfig = get_option( 'polylang' );
+      if ( $polylangConfig['force_lang'] == 1 ) {
 
-        if ( false !== strpos( $requested_url, 'language/' ) ) {
-          $requested_url = str_replace( 'language/', '', $requested_url );
+        if ( false !== strpos( $requestedUrl, 'language/' ) ) {
+          $requestedUrl = str_replace( 'language/', '', $requestedUrl );
         }
 
         /*
          * Check if hide_default is true and the current language is not the
          * default. If true the remove the  lang code from the url.
          */
-        if ( 1 == $polylang_config['hide_default'] ) {
-          $current_language = '';
+        if ( 1 == $polylangConfig['hide_default'] ) {
+          $currentLanguage = '';
           if ( function_exists( 'pll_current_language' ) ) {
             // get current language
-            $current_language = pll_current_language();
+            $currentLanguage = pll_current_language();
           }
 
           // get default language
-          $default_language = $polylang_config['default_lang'];
-          if ( $current_language !== $default_language ) {
-            $remove_lang = ltrim( strstr( $requested_url, '/' ), '/' );
-            if ( '' != $remove_lang ) {
-              return $remove_lang;
+          $defaultLanguage = $polylangConfig['default_lang'];
+          if ( $currentLanguage !== $defaultLanguage ) {
+            $removeLang = ltrim( strstr( $requestedUrl, '/' ), '/' );
+            if ( '' != $removeLang ) {
+              return $removeLang;
             }
           }
         } else {
-          $remove_lang = ltrim( strstr( $requested_url, '/' ), '/' );
-          if ( '' != $remove_lang ) {
-            return $remove_lang;
+          $removeLang = ltrim( strstr( $requestedUrl, '/' ), '/' );
+          if ( '' != $removeLang ) {
+            return $removeLang;
           }
         }
       }
     }
-    return $requested_url;
+
+    return $requestedUrl;
   }
 }

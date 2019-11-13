@@ -125,8 +125,8 @@ class CustomPermalinks {
    * @access public
    */
   public function loadTextDomain() {
-    $current_version = get_option( 'custom_permalinks_plugin_version', -1 );
-    if ( -1 === $current_version || CUSTOM_PERMALINKS_PLUGIN_VERSION < $current_version ) {
+    $currentVersion = get_option( 'custom_permalinks_plugin_version', -1 );
+    if ( -1 === $currentVersion || CUSTOM_PERMALINKS_PLUGIN_VERSION < $currentVersion ) {
       CustomPermalinks::pluginActivate();
       update_option( 'custom_permalinks_plugin_version', CUSTOM_PERMALINKS_PLUGIN_VERSION );
     }

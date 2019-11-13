@@ -50,20 +50,20 @@ class CustomPermalinksAdmin {
    */
   public function posttypePermalinks() {
     global $wpdb;
-    $filter_options   = '';
-    $filter_permalink = '';
-    $search_permalink = '';
-    $html             = '';
-    $error            = '';
+    $filterOptions   = '';
+    $filterPermalink = '';
+    $searchPermalink = '';
+    $html            = '';
+    $error           = '';
 
     // Handle Bulk Operations
     if ( ( isset( $_POST['action'] ) && 'delete' === $_POST['action'] )
       || ( isset( $_POST['action2'] ) && 'delete' === $_POST['action2'] )
     ) {
       if ( isset( $_POST['permalink'] ) && ! empty( $_POST['permalink'] ) ) {
-        $post_ids = implode( ',', $_POST['permalink'] );
-        if ( preg_match( '/^\d+(?:,\d+)*$/', $post_ids ) ) {
-          $wpdb->query( "DELETE FROM $wpdb->postmeta WHERE post_id IN ($post_ids) AND meta_key = 'custom_permalink'" );
+        $postIds = implode( ',', $_POST['permalink'] );
+        if ( preg_match( '/^\d+(?:,\d+)*$/', $postIds ) ) {
+          $wpdb->query( "DELETE FROM $wpdb->postmeta WHERE post_id IN ($postIds) AND meta_key = 'custom_permalink'" );
         } else {
           $error = '<div id="message" class="error">' .
                       '<p>' .
@@ -83,46 +83,46 @@ class CustomPermalinksAdmin {
                 '<h1 class="wp-heading-inline">' . __( 'PostTypes Permalinks', 'custom-permalinks' ) . '</h1>' .
                 $error;
 
-    $search_value = '';
+    $searchValue = '';
     if ( isset( $_GET['s'] ) && ! empty( $_GET['s'] ) ) {
-      $filter_permalink = 'AND pm.meta_value LIKE "%' . $_GET['s'] . '%"';
-      $search_permalink = '&s=' . $_GET['s'] . '';
-      $search_value     = ltrim( htmlspecialchars( $_GET['s'] ), '/' );
-      $html            .= '<span class="subtitle">Search results for "' . $search_value . '"</span>';
+      $filterPermalink = 'AND pm.meta_value LIKE "%' . $_GET['s'] . '%"';
+      $searchPermalink = '&s=' . $_GET['s'] . '';
+      $searchValue     = ltrim( htmlspecialchars( $_GET['s'] ), '/' );
+      $html           .= '<span class="subtitle">Search results for "' . $searchValue . '"</span>';
     }
-    $page_limit = 'LIMIT 0, 20';
+    $pageLimit = 'LIMIT 0, 20';
     if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] )
       && 1 < $_GET['paged']
     ) {
       $pager      = 20 * ( $_GET['paged'] - 1 );
-      $page_limit = 'LIMIT ' . $pager . ', 20';
+      $pageLimit = 'LIMIT ' . $pager . ', 20';
     }
-    $sorting_by     = 'ORDER By p.ID DESC';
-    $order_by       = 'asc';
-    $order_by_class = 'desc';
+    $sortingBy     = 'ORDER By p.ID DESC';
+    $orderBy       = 'asc';
+    $orderByClass = 'desc';
     if ( isset( $_GET['orderby'] ) && 'title' == $_GET['orderby'] ) {
-      $filter_options .= '<input type="hidden" name="orderby" value="title" />';
+      $filterOptions .= '<input type="hidden" name="orderby" value="title" />';
       if ( isset( $_GET['order'] ) && 'desc' == $_GET['order'] ) {
-        $sorting_by      = 'ORDER By p.post_title DESC';
-        $order_by        = 'asc';
-        $order_by_class  = 'desc';
-        $filter_options .= '<input type="hidden" name="order" value="desc" />';
+        $sortingBy      = 'ORDER By p.post_title DESC';
+        $orderBy        = 'asc';
+        $orderByClass  = 'desc';
+        $filterOptions .= '<input type="hidden" name="order" value="desc" />';
       } else {
-        $sorting_by      = 'ORDER By p.post_title';
-        $order_by        = 'desc';
-        $order_by_class  = 'asc';
-        $filter_options .= '<input type="hidden" name="order" value="asc" />';
+        $sortingBy      = 'ORDER By p.post_title';
+        $orderBy        = 'desc';
+        $orderByClass  = 'asc';
+        $filterOptions .= '<input type="hidden" name="order" value="asc" />';
       }
     }
-    $count_query = "SELECT COUNT(p.ID) AS total_permalinks FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != '' " . $filter_permalink . "";
-    $count_posts = $wpdb->get_row( $count_query );
+    $countQuery = "SELECT COUNT(p.ID) AS total_permalinks FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != '' " . $filterPermalink . "";
+    $countPosts = $wpdb->get_row( $countQuery );
 
     $html .= '<form action="' . $_SERVER["REQUEST_URI"] . '" method="get">' .
                 '<p class="search-box">' .
                 '<input type="hidden" name="page" value="cp-post-permalinks" />' .
-                $filter_options .
+                $filterOptions .
                 '<label class="screen-reader-text" for="custom-permalink-search-input">Search Custom Permalink:</label>' .
-                '<input type="search" id="custom-permalink-search-input" name="s" value="' . $search_value . '">' .
+                '<input type="search" id="custom-permalink-search-input" name="s" value="' . $searchValue . '">' .
                 '<input type="submit" id="search-submit" class="button" value="Search Permalink"></p>' .
               '</form>' .
               '<form action="' . $_SERVER["REQUEST_URI"] . '" method="post">';
@@ -136,46 +136,46 @@ class CustomPermalinksAdmin {
                     '<input type="submit" id="doaction" class="button action" value="Apply">' .
                   '</div>';
 
-    $posts           = 0;
-    $pagination_html = '';
-    if ( isset( $count_posts->total_permalinks )
-      && 0 < $count_posts->total_permalinks
+    $posts          = 0;
+    $paginationHTML = '';
+    if ( isset( $countPosts->total_permalinks )
+      && 0 < $countPosts->total_permalinks
     ) {
 
       $html .= '<h2 class="screen-reader-text">Custom Permalink navigation</h2>';
 
-      $query = "SELECT p.ID, p.post_title, p.post_type, pm.meta_value FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != '' " . $filter_permalink . " " . $sorting_by . " " . $page_limit . "";
+      $query = "SELECT p.ID, p.post_title, p.post_type, pm.meta_value FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != '' " . $filterPermalink . " " . $sortingBy . " " . $pageLimit . "";
       $posts = $wpdb->get_results( $query );
 
-      $total_pages = ceil( $count_posts->total_permalinks / 20 );
+      $totalPages = ceil( $countPosts->total_permalinks / 20 );
       if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] )
         && 0 < $_GET['paged']
       ) {
-        $pagination_html = $this->customPager(
-          $count_posts->total_permalinks, $_GET['paged'], $total_pages
+        $paginationHTML = $this->customPager(
+          $countPosts->total_permalinks, $_GET['paged'], $totalPages
         );
-        if ( $_GET['paged'] > $total_pages ) {
-          $redirect_uri = explode(
+        if ( $_GET['paged'] > $totalPages ) {
+          $redirectUri = explode(
             '&paged=' . $_GET['paged'] . '', $_SERVER['REQUEST_URI']
           );
-          header( 'Location: ' . $redirect_uri[0], 301 );
+          header( 'Location: ' . $redirectUri[0], 301 );
           exit(0);
         }
       } elseif ( ! isset( $_GET['paged'] ) ) {
-        $pagination_html = $this->customPager(
-          $count_posts->total_permalinks, 1, $total_pages
+        $paginationHTML = $this->customPager(
+          $countPosts->total_permalinks, 1, $totalPages
         );
       }
 
-      $html .= $pagination_html;
+      $html .= $paginationHTML;
     }
-    $table_navigation = $this->tableNavPosts(
-      $order_by_class, $order_by, $search_permalink
+    $tableNavigation = $this->tableNavPosts(
+      $orderByClass, $orderBy, $searchPermalink
     );
 
     $html .= '</div>';
     $html .= '<table class="wp-list-table widefat fixed striped posts">' .
-                '<thead>' . $table_navigation . '</thead>' .
+                '<thead>' . $tableNavigation . '</thead>' .
                 '<tbody>';
     if ( 0 != $posts && ! empty( $posts ) ) {
       foreach ( $posts as $post ) {
@@ -200,7 +200,7 @@ class CustomPermalinksAdmin {
                 '</tr>';
     }
     $html .= '</tbody>' .
-              '<tfoot>' . $table_navigation . '</tfoot>' .
+              '<tfoot>' . $tableNavigation . '</tfoot>' .
               '</table>';
 
     $html .= '<div class="tablenav bottom">' .
@@ -212,7 +212,7 @@ class CustomPermalinksAdmin {
                   '</select>' .
                   '<input type="submit" id="doaction2" class="button action" value="Apply">' .
                 '</div>' .
-                $pagination_html .
+                $paginationHTML .
               '</div>' .
               '</form></div>';
     echo $html;
@@ -226,21 +226,20 @@ class CustomPermalinksAdmin {
    * @since 1.2.0
    * @access private
    *
-   * @param string $order_by_class Class either asc or desc.
-   * @param string $order_by set orderby for sorting.
-   * @param string $search_permalink Permalink which has been searched or an empty string.
-   * @param string $page_url Page Slug set by the Plugin.
+   * @param string $orderByClass Class either asc or desc.
+   * @param string $orderBy set orderby for sorting.
+   * @param string $searchPermalink Permalink which has been searched or an empty string.
    *
    * @return string table row according to the provided params.
    */
-  private function tableNavPosts( $order_by_class, $order_by, $search_permalink ) {
+  private function tableNavPosts( $orderByClass, $orderBy, $searchPermalink ) {
     $nav = '<tr>' .
               '<td id="cb" class="manage-column column-cb check-column">' .
                 '<label class="screen-reader-text" for="cb-select-all-1">Select All</label>' .
                 '<input id="cb-select-all-1" type="checkbox">' .
               '</td>' .
-              '<th scope="col" id="title" class="manage-column column-title column-primary sortable ' . $order_by_class . '">' .
-                '<a href="/wp-admin/admin.php?page=cp-post-permalinks&amp;orderby=title&amp;order=' . $order_by . $search_permalink . '">' .
+              '<th scope="col" id="title" class="manage-column column-title column-primary sortable ' . $orderByClass . '">' .
+                '<a href="/wp-admin/admin.php?page=cp-post-permalinks&amp;orderby=title&amp;order=' . $orderBy . $searchPermalink . '">' .
                   '<span>' . __( "Title", "custom-permalinks" ) . '</span>' .
                   '<span class="sorting-indicator"></span>' .
                 '</a>' .
@@ -267,15 +266,15 @@ class CustomPermalinksAdmin {
       || ( isset( $_POST['action2'] ) && 'delete' === $_POST['action2'] )
     ) {
       if ( isset( $_POST['permalink'] ) && ! empty( $_POST['permalink'] ) ) {
-        $remove_perm = $_POST['permalink'];
+        $removePerm = $_POST['permalink'];
         $data = get_option( 'custom_permalink_table' );
         if ( isset( $data ) && is_array( $data ) ) {
           $i = 0;
           foreach ( $data as $link => $info ) {
-            if ( in_array( $info['id'], $remove_perm ) ) {
+            if ( in_array( $info['id'], $removePerm ) ) {
               unset( $data[$link] );
-              unset( $remove_perm[$i] );
-              if ( ! is_array( $remove_perm ) || empty( $remove_perm ) ) {
+              unset( $removePerm[$i] );
+              if ( ! is_array( $removePerm ) || empty( $removePerm ) ) {
                 break;
               }
             }
@@ -288,24 +287,24 @@ class CustomPermalinksAdmin {
     $html .= '<div class="wrap">' .
                 '<h1 class="wp-heading-inline">' . __( 'Category/Tags Permalinks', 'custom-permalinks' ) . '</h1>';
 
-    $search_value = '';
+    $searchValue = '';
     if ( isset( $_GET['s'] ) && ! empty( $_GET['s'] ) ) {
-      $search_value = ltrim( htmlspecialchars( $_GET['s'] ), '/' );
-      $html        .= '<span class="subtitle">Search results for "' . $search_value . '"</span>';
+      $searchValue = ltrim( htmlspecialchars( $_GET['s'] ), '/' );
+      $html        .= '<span class="subtitle">Search results for "' . $searchValue . '"</span>';
     }
-    $pager_offset = '0';
-    $page_limit   = 20;
+    $pagerOffset = '0';
+    $pageLimit   = 20;
     if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] )
       && 1 < $_GET['paged']
     ) {
-      $pager_offset = 20 * ( $_GET['paged'] - 1 );
-      $page_limit   = $pager_offset + 20;
+      $pagerOffset = 20 * ( $_GET['paged'] - 1 );
+      $pageLimit   = $pagerOffset + 20;
     }
     $html .= '<form action="' . $_SERVER["REQUEST_URI"] . '" method="get">' .
                 '<p class="search-box">' .
                 '<input type="hidden" name="page" value="cp-category-permalinks" />' .
                 '<label class="screen-reader-text" for="custom-permalink-search-input">Search Custom Permalink:</label>' .
-                '<input type="search" id="custom-permalink-search-input" name="s" value="' . $search_value . '">' .
+                '<input type="search" id="custom-permalink-search-input" name="s" value="' . $searchValue . '">' .
                 '<input type="submit" id="search-submit" class="button" value="Search Permalink"></p>' .
               '</form>' .
               '<form action="' . $_SERVER["REQUEST_URI"] . '" method="post">' .
@@ -319,60 +318,60 @@ class CustomPermalinksAdmin {
                     '<input type="submit" id="doaction" class="button action" value="Apply">' .
                   '</div>';
 
-    $table           = get_option( 'custom_permalink_table' );
-    $count_tags      = count( $table );
-    $pagination_html = '';
-    if ( isset( $table ) && is_array( $table ) && 0 < $count_tags ) {
+    $table          = get_option( 'custom_permalink_table' );
+    $countTags      = count( $table );
+    $paginationHTML = '';
+    if ( isset( $table ) && is_array( $table ) && 0 < $countTags ) {
 
       $filtered = array();
-      if ( '' != $search_value ) {
+      if ( '' != $searchValue ) {
         foreach ( $table as $key => $value ) {
-          if ( preg_match( '/' . $search_value . '/', $key) ) {
+          if ( preg_match( '/' . $searchValue . '/', $key) ) {
             $filtered[$key] = $value;
           }
         }
         $table = $filtered;
-        $count_tags = count( $table );
+        $countTags = count( $table );
       }
 
       $html .= '<h2 class="screen-reader-text">Custom Permalink navigation</h2>';
 
-      $total_pages = ceil( $count_tags / 20 );
+      $totalPages = ceil( $countTags / 20 );
       if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] )
         && 0 < $_GET['paged'] ) {
-        $pagination_html = $this->customPager(
-          $count_tags, $_GET['paged'], $total_pages
+        $paginationHTML = $this->customPager(
+          $countTags, $_GET['paged'], $totalPages
         );
-        if ( $_GET['paged'] > $total_pages ) {
-          $redirect_uri = explode(
+        if ( $_GET['paged'] > $totalPages ) {
+          $redirectUri = explode(
             '&paged=' . $_GET['paged'] . '', $_SERVER['REQUEST_URI']
           );
-          header( 'Location: ' . $redirect_uri[0], 301 );
+          header( 'Location: ' . $redirectUri[0], 301 );
           exit(0);
         }
       } elseif ( ! isset( $_GET['paged'] ) ) {
-        $pagination_html = $this->customPager( $count_tags, 1, $total_pages );
+        $paginationHTML = $this->customPager( $countTags, 1, $totalPages );
       }
 
-      $html .= $pagination_html;
+      $html .= $paginationHTML;
     }
-    $table_navigation = $this->tableNavCategory();
+    $tableNavigation = $this->tableNavCategory();
 
     $html .= '</div>' .
               '<table class="wp-list-table widefat fixed striped posts">' .
-              '<thead>' . $table_navigation . '</thead>' .
+              '<thead>' . $tableNavigation . '</thead>' .
               '<tbody>';
 
-    if ( $table && is_array( $table ) && 0 < $count_tags ) {
+    if ( $table && is_array( $table ) && 0 < $countTags ) {
       uasort( $table, array( 'Custom_Permalinks_Admin', 'sort_array' ) );
       $i = -1;
       foreach ( $table as $permalink => $info ) {
         $i++;
-        if ( $i < $pager_offset ) {
+        if ( $i < $pagerOffset ) {
           continue;
         }
 
-        if ( $i >= $page_limit ) {
+        if ( $i >= $pageLimit ) {
           break;
         }
 
@@ -401,7 +400,7 @@ class CustomPermalinksAdmin {
                 '</tr>';
     }
     $html .= '</tbody>' .
-              '<tfoot>' . $table_navigation . '</tfoot>' .
+              '<tfoot>' . $tableNavigation . '</tfoot>' .
               '</table>';
 
     $html .= '<div class="tablenav bottom">' .
@@ -413,7 +412,7 @@ class CustomPermalinksAdmin {
                   '</select>' .
                   '<input type="submit" id="doaction2" class="button action" value="Apply">' .
                 '</div>' .
-                $pagination_html .
+                $paginationHTML .
               '</div>' .
               '</form></div>';
     echo $html;
@@ -474,70 +473,70 @@ class CustomPermalinksAdmin {
     }
 
     if ( 1 == $totalPager ) {
-      $pagination_html = '<div class="tablenav-pages one-page">' .
-                            '<span class="displaying-num">' .
-                              $totalPermalinks . ' items' .
-                            '</span>' .
-                          '</div>';
+      $paginationHTML = '<div class="tablenav-pages one-page">' .
+                          '<span class="displaying-num">' .
+                            $totalPermalinks . ' items' .
+                          '</span>' .
+                        '</div>';
 
-      return $pagination_html;
+      return $paginationHTML;
     }
 
-    $remove_pager_uri = explode(
+    $removePagerUri = explode(
       '&paged=' . $currentPagerValue . '', $_SERVER['REQUEST_URI']
     );
-    $pagination_html = '<div class="tablenav-pages">' .
+    $paginationHTML = '<div class="tablenav-pages">' .
                           '<span class="displaying-num">' .
                             $totalPermalinks . ' items' .
                           '</span>' .
                           '<span class="pagination-links">';
 
     if ( 1 == $currentPagerValue ) {
-      $pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&laquo; </span>' .
+      $paginationHTML .= '<span class="tablenav-pages-navspan" aria-hidden="true">&laquo; </span>' .
                           '<span class="tablenav-pages-navspan" aria-hidden="true">&lsaquo; </span>';
     } else {
-      $prev_page = $currentPagerValue - 1;
-      if ( 1 == $prev_page ) {
-        $pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&laquo;</span>';
+      $prevPage = $currentPagerValue - 1;
+      if ( 1 == $prevPage ) {
+        $paginationHTML .= '<span class="tablenav-pages-navspan" aria-hidden="true">&laquo;</span>';
       } else {
-        $pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=1" title="First page" class="first-page">' .
-                              '<span class="screen-reader-text">First page</span>' .
-                              '<span aria-hidden="true">&laquo;</span>' .
-                            '</a> ';
+        $paginationHTML .= ' <a href="' . $removePagerUri[0] . '&paged=1" title="First page" class="first-page">' .
+                             '<span class="screen-reader-text">First page</span>' .
+                             '<span aria-hidden="true">&laquo;</span>' .
+                           '</a> ';
       }
-      $pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $prev_page . '" title="Previous page" class="prev-page">' .
+      $paginationHTML .= ' <a href="' . $removePagerUri[0] . '&paged=' . $prevPage . '" title="Previous page" class="prev-page">' .
                             '<span class="screen-reader-text">Previous page</span>' .
                             '<span aria-hidden="true">&lsaquo;</span>' .
-                          '</a> ';
+                         '</a> ';
     }
 
-    $pagination_html .= '<span class="paging-input">' .
+    $paginationHTML .= '<span class="paging-input">' .
                           '<label for="current-page-selector" class="screen-reader-text">Current Page</label>' .
                           '<input class="current-page" id="current-page-selector" type="text" name="paged" value="' . $currentPagerValue . '" size="1" aria-describedby="table-paging" />' .
                           '<span class="tablenav-paging-text"> of <span class="total-pages">' . $totalPager . ' </span> </span>' .
-                        '</span>';
+                       '</span>';
 
     if ( $currentPagerValue == $totalPager ) {
-      $pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&rsaquo; </span>' .
+      $paginationHTML .= '<span class="tablenav-pages-navspan" aria-hidden="true">&rsaquo; </span>' .
                           '<span class="tablenav-pages-navspan" aria-hidden="true">&raquo; </span>';
     } else {
       $nextPage = $currentPagerValue + 1;
-      $pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $nextPage . '" title="Next page" class="next-page">' .
+      $paginationHTML .= ' <a href="' . $removePagerUri[0] . '&paged=' . $nextPage . '" title="Next page" class="next-page">' .
                             '<span class="screen-reader-text">Next page</span>' .
                             '<span aria-hidden="true">&rsaquo;</span>' .
-                          '</a> ';
+                         '</a> ';
       if ( $totalPager == $nextPage) {
-        $pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&raquo;</span>';
+        $paginationHTML .= '<span class="tablenav-pages-navspan" aria-hidden="true">&raquo;</span>';
       } else {
-        $pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $totalPager . '" title="Last page" class="last-page">' .
+        $paginationHTML .= ' <a href="' . $removePagerUri[0] . '&paged=' . $totalPager . '" title="Last page" class="last-page">' .
                               '<span class="screen-reader-text">Last page</span>' .
                               '<span aria-hidden="true">&raquo;</span>' .
-                            '</a> ';
+                           '</a> ';
       }
     }
-    $pagination_html .= '</span></div>';
+    $paginationHTML .= '</span></div>';
 
-    return $pagination_html;
+    return $paginationHTML;
   }
 
   /**
@@ -563,14 +562,14 @@ class CustomPermalinksAdmin {
    * @return string Shows version, website link and twitter.
    */
   public function adminFooterText() {
-    $footer_text = sprintf(
+    $footerText = sprintf(
       __( 'Custom Permalinks version %s by <a href="%s" title="Sami Ahmed Siddiqui Company Website" target="_blank">Sami Ahmed Siddiqui</a> - <a href="%s" title="Support forums" target="_blank">Support forums</a> - Follow on Twitter: <a href="%s" title="Follow Sami Ahmed Siddiqui on Twitter" target="_blank">Sami Ahmed Siddiqui</a>', 'custom-permalinks' ),
       CUSTOM_PERMALINKS_PLUGIN_VERSION, 'https://www.yasglobal.com/',
       'https://wordpress.org/support/plugin/custom-permalinks',
       'https://twitter.com/samisiddiqui91'
     );
 
-    return $footer_text;
+    return $footerText;
   }
 
   /**
@@ -590,7 +589,7 @@ class CustomPermalinksAdmin {
       __( '<a href="%s" title="About">About</a>', 'custom-permalinks' ),
       'admin.php?page=cp-about-plugins'
     );
-    $premium_support = sprintf(
+    $premiumSupport = sprintf(
       __( '<a href="%s" title="Premium Support" target="_blank">Premium Support</a>', 'custom-permalinks' ),
       'https://www.custompermalinks.com/#pricing-section'
     );
@@ -599,7 +598,7 @@ class CustomPermalinksAdmin {
       'https://www.custompermalinks.com/contact-us/'
     );
     array_unshift( $links, $contact );
-    array_unshift( $links, $premium_support );
+    array_unshift( $links, $premiumSupport );
     array_unshift( $links, $about );
 
     return $links;
