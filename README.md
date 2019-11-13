@@ -24,7 +24,7 @@ To have any kind of further query please feel free to [contact us](https://www.c
 ## Filters
 
 To exclude any Permalink to processed with the plugin so, just add the filter looks like this:
-```
+```php
 function yasglobal_xml_sitemap_url( $permalink ) {
   if ( false !== strpos( $permalink, 'sitemap.xml' )) {
     return '__true';
@@ -35,7 +35,7 @@ add_filter( 'custom_permalinks_request_ignore', 'yasglobal_xml_sitemap_url' );
 ```
 
 To exclude permalink from any post type so, just add the filter looks like this:
-```
+```php
 function yasglobal_exclude_post_types( $post_type ) {
   if ( $post_type == 'custompost' ) {
     return '__true';
@@ -47,12 +47,12 @@ add_filter( 'custom_permalinks_exclude_post_type', 'yasglobal_exclude_post_types
 Note: `custom_permalinks_exclude_post_type` doesn't work on the posts permalink which has been created previously.
 
 To remove the like query to being work just add this line in your theme's functions.php:
-```
+```php
 add_filter( 'cp_remove_like_query', '__return_false');
 ```
 Note: Use `custom_permalinks_like_query` filter if the URLs doesn't works for you after upgrading to v1.2.9
 
-## Thanks for the Support!
+## Thanks for the Support
 
 I do not always provide active support for the Custom Permalinks plugin on the WordPress.org forums, as I have prioritized the email support.
 One-on-one email support is available to people who bought [Custom Permalinks Premium](https://www.custompermalinks.com/#pricing-section) only.
@@ -67,11 +67,11 @@ This process defines you the steps to follow either you are installing through W
 
 ## From within WordPress
 
-1. Visit 'Plugins > Add New'
-2. Search for Custom Permalinks
-3. Activate Custom Permalinks from your Plugins page.
+  1. Visit 'Plugins > Add New'
+  2. Search for Custom Permalinks
+  3. Activate Custom Permalinks from your Plugins page.
 
 ## Manually
 
-1. Upload the `custom-permalinks` folder to the `/wp-content/plugins/` directory
-2. Activate Custom Permalinks through the 'Plugins' menu in WordPress
+  1. Upload the `custom-permalinks` folder to the `/wp-content/plugins/` directory
+  2. Activate Custom Permalinks through the 'Plugins' menu in WordPress
