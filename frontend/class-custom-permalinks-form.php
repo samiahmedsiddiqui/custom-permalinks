@@ -16,7 +16,7 @@ class Custom_Permalinks_Form {
   public function init() {
 
     add_filter( 'get_sample_permalink_html',
-      array( $this, 'custom_permalinks_get_sample_permalink_html' ), 10, 3
+      array( $this, 'custom_permalinks_get_sample_permalink_html' ), 10, 2
     );
 
     add_action( 'add_meta_boxes',
@@ -145,11 +145,10 @@ class Custom_Permalinks_Form {
    *
    * @param string $html WP Post Permalink HTML.
    * @param int $id Post ID.
-   * @param string $new_title Post Title.
    *
    * @return string Edit Form string.
    */
-  public function custom_permalinks_get_sample_permalink_html( $html, $id, $new_title ) {
+  public function custom_permalinks_get_sample_permalink_html( $html, $id ) {
     $post                    = get_post( $id );
     $this->permalink_metabox = 1;
 
