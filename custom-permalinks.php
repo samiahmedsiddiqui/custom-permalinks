@@ -137,3 +137,4 @@ class CustomPermalinks {
 }
 
 new CustomPermalinks();
+

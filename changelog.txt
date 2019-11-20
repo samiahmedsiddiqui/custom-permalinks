@@ -1,3 +1,4 @@
+
 == Changelog ==
 
 This file contains only old changelog. See readme.txt for newer versions.
@@ -261,7 +262,7 @@ This file contains only old changelog. See readme.txt for newer versions.
 
 = 0.7.9 =
 
- * Support for custom post types, by Balázs Németh
+ * Support for custom post types, by BalÂ·zs NÃˆmeth
 
 = 0.7.8 =
 

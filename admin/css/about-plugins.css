@@ -24,7 +24,7 @@ p a {
     text-decoration: none;
 }
 #footer-left a {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 a .star svg polygon {
     fill: #f9d539;
@@ -89,14 +89,14 @@ a .star svg:hover polygon {
     margin: 1em 0 2em;
 }
 @media(min-width:746px) {
-	.product p {
-		min-height: 185px;
-		max-height: 135px;
-		overflow: hidden;
-	}
-	.product .box:hover p {
-		max-height: 300px
-	}
+  .product p {
+    min-height: 185px;
+    max-height: 135px;
+    overflow: hidden;
+  }
+  .product .box:hover p {
+    max-height: 300px
+  }
 }
 .box.recommended {
     position: relative;
@@ -160,54 +160,54 @@ a .star svg:hover polygon {
     font-size: 22px;
 }
 @media(max-width:991px) {
-	.wrap {
-		max-width: 725px;
-	}
+  .wrap {
+    max-width: 725px;
+  }
 }
 @media(max-width:767px) {
-	.wrap {
-		max-width: 640px;
-	}
-	.product .box {
-		width: 258px;
-		min-height: 410px;
-	}
+  .wrap {
+    max-width: 640px;
+  }
+  .product .box {
+    width: 258px;
+    min-height: 410px;
+  }
 }
 @media(max-width:650px){
-	.wrap {
-		max-width: 460px;
-	}
-	.product .box {
-		width: 400px;
-		max-width: 90%;
-		min-height: inherit;
-		margin-left: 0;
-		margin-right: 0;
-		box-sizing: border-box;
-	}
-	.wrap .float {
-		width: 100%;
-	}
-	.wrap .float:nth-child(2) {
-		margin: 40px 0 70px 50px;
-		position: absolute;
-		right: 20px;
-	}
-	.wrap h1 {
-		margin: 70px 0 30px;
-		width: 300px;
-		line-height: 1.2em;
-	}
+  .wrap {
+    max-width: 460px;
+  }
+  .product .box {
+    width: 400px;
+    max-width: 90%;
+    min-height: inherit;
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+  }
+  .wrap .float {
+    width: 100%;
+  }
+  .wrap .float:nth-child(2) {
+    margin: 40px 0 70px 50px;
+    position: absolute;
+    right: 20px;
+  }
+  .wrap h1 {
+    margin: 70px 0 30px;
+    width: 300px;
+    line-height: 1.2em;
+  }
 }
 @media(max-width:450px) {
-	.wrap h1 {
-		margin: 0px 0 150px;
-		font-size: 2em;
-		width: 300px;
-	}
-	.wrap .float:nth-child(2) {
-		right: inherit;
-		margin: 80px auto 0;
-		text-align: center;
-	}
+  .wrap h1 {
+    margin: 0px 0 150px;
+    font-size: 2em;
+    width: 300px;
+  }
+  .wrap .float:nth-child(2) {
+    right: inherit;
+    margin: 80px auto 0;
+    text-align: center;
+  }
 }

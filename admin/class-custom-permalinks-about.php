@@ -148,3 +148,4 @@ class CustomPermalinksAbout {
     <?php
   }
 }
+

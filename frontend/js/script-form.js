@@ -81,3 +81,4 @@ if (checkYoastSEO) {
 if (document.querySelector("#custom-permalinks-edit-box .inside").innerHTML.trim() === "") {
   document.getElementById("custom-permalinks-edit-box").style.display = "none";
 }
+
