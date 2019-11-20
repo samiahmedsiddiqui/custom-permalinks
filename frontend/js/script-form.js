@@ -7,6 +7,7 @@ function changeSEOLinkOnBlur() {
 
   var snippetCiteBase = document.getElementById("snippet_citeBase");
   var funcAllowed = true;
+
   if (!snippetCiteBase) {
     funcAllowed = false;
   } else if (!getHomeURL || getHomeURL.value === "") {
@@ -19,11 +20,11 @@ function changeSEOLinkOnBlur() {
     return;
   }
 
-  var i = 0;
+  var loopCount = 0;
   var urlChanged = setInterval(function () {
-    i += 1;
+    loopCount += 1;
     snippetCiteBase.innerHTML = getHomeURL.value + "/" + getPermalink.value;
-    if (i === 5) {
+    if (loopCount === 5) {
       clearInterval(urlChanged);
     }
   }, 1000);
@@ -34,6 +35,7 @@ function changeSEOLink() {
 
   var snippetCiteBase = document.getElementById("snippet_citeBase");
   var funcAllowed = true;
+
   if (!snippetCiteBase) {
     funcAllowed = false;
   } else if (!getHomeURL || getHomeURL.value === "") {
@@ -46,11 +48,11 @@ function changeSEOLink() {
     return;
   }
 
-  var i = 0;
+  var loopCount = 0;
   var urlChanged = setInterval(function () {
-    i += 1;
+    loopCount += 1;
     snippetCiteBase.innerHTML = getHomeURL.value + "/" + getPermalink.value;
-    if (i === 5) {
+    if (loopCount === 5) {
       clearInterval(urlChanged);
     }
   }, 1000);
@@ -58,6 +60,7 @@ function changeSEOLink() {
   var snippetEditorSlug = document.getElementById("snippet-editor-slug");
   var snippetEditorDesc = document.getElementById("snippet-editor-meta-description");
   var snippetCite = document.getElementById("snippet_cite");
+
   if (snippetEditorTitle) {
     snippetEditorTitle.addEventListener("blur", changeSEOLinkOnBlur);
   }

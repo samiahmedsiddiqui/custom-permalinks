@@ -76,8 +76,8 @@ class CustomPermalinks {
     require_once(
       CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php'
     );
-    $cp_frontend = new CustomPermalinksFrontend();
-    $cp_frontend->init();
+    $cpFrontend = new CustomPermalinksFrontend();
+    $cpFrontend->init();
 
     require_once(
       CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-form.php'

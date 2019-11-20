@@ -269,16 +269,16 @@ class CustomPermalinksAdmin {
         $removePerm = $_POST['permalink'];
         $data = get_option( 'custom_permalink_table' );
         if ( isset( $data ) && is_array( $data ) ) {
-          $i = 0;
+          $loopCount = 0;
           foreach ( $data as $link => $info ) {
             if ( in_array( $info['id'], $removePerm ) ) {
               unset( $data[$link] );
-              unset( $removePerm[$i] );
+              unset( $removePerm[$loopCount] );
               if ( ! is_array( $removePerm ) || empty( $removePerm ) ) {
                 break;
               }
             }
-            $i++;
+            $loopCount++;
           }
         }
         update_option( 'custom_permalink_table', $data );
@@ -364,14 +364,14 @@ class CustomPermalinksAdmin {
 
     if ( $table && is_array( $table ) && 0 < $countTags ) {
       uasort( $table, array( 'Custom_Permalinks_Admin', 'sort_array' ) );
-      $i = -1;
+      $loopCount = -1;
       foreach ( $table as $permalink => $info ) {
-        $i++;
-        if ( $i < $pagerOffset ) {
+        $loopCount++;
+        if ( $loopCount < $pagerOffset ) {
           continue;
         }
 
-        if ( $i >= $pageLimit ) {
+        if ( $loopCount >= $pageLimit ) {
           break;
         }
 
