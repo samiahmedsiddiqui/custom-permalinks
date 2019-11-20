@@ -73,19 +73,19 @@ class CustomPermalinksForm {
    *
    * @access public
    *
-   * @param int $id Post ID.
+   * @param int $postId Post ID.
    */
-  public function savePost( $id ) {
+  public function savePost( $postId ) {
     if ( ! isset( $_REQUEST['custom_permalinks_edit'] ) ) {
       return;
     }
 
-    delete_post_meta( $id, 'custom_permalink' );
+    delete_post_meta( $postId, 'custom_permalink' );
 
     $cpFrontend = new CustomPermalinksFrontend();
-    $originalLink = $cpFrontend->originalPostLink( $id );
+    $originalLink = $cpFrontend->originalPostLink( $postId );
     if ( $_REQUEST['custom_permalink'] && $_REQUEST['custom_permalink'] != $originalLink ) {
-      add_post_meta( $id, 'custom_permalink',
+      add_post_meta( $postId, 'custom_permalink',
         str_replace( '%2F', '/',
           urlencode( ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), "/" ) )
         )
@@ -98,11 +98,11 @@ class CustomPermalinksForm {
    *
    * @access public
    *
-   * @param int $id Post ID.
+   * @param int $postId Post ID.
    */
-  public function deletePermalink( $id ) {
+  public function deletePermalink( $postId ) {
     global $wpdb;
-    $wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->postmeta WHERE meta_key = 'custom_permalink' AND post_id = %d", $id ) );
+    $wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->postmeta WHERE meta_key = 'custom_permalink' AND post_id = %d", $postId ) );
   }
 
   /**
@@ -111,12 +111,12 @@ class CustomPermalinksForm {
    * @access public
    *
    * @param string $html WP Post Permalink HTML.
-   * @param int $id Post ID.
+   * @param int $postId Post ID.
    *
    * @return string Edit Form string.
    */
-  public function getSamplePermalinkHTML( $html, $id ) {
-    $post                   = get_post( $id );
+  public function getSamplePermalinkHTML( $html, $postId ) {
+    $post                   = get_post( $postId );
     $this->permalinkMetabox = 1;
 
     if ( 'attachment' == $post->post_type || $post->ID == get_option( 'page_on_front' ) ) {
@@ -128,16 +128,16 @@ class CustomPermalinksForm {
     if ( '__true' === $excluded ) {
       return $html;
     }
-    $permalink = get_post_meta( $id, 'custom_permalink', true );
+    $permalink = get_post_meta( $postId, 'custom_permalink', true );
 
     ob_start();
 
     $cpFrontend = new CustomPermalinksFrontend();
     if ( 'page' == $post->post_type ) {
-      $originalPermalink = $cpFrontend->originalPageLink( $id );
+      $originalPermalink = $cpFrontend->originalPageLink( $postId );
       $viewPost          = __( 'View Page', 'custom-permalinks' );
     } else {
-      $originalPermalink = $cpFrontend->originalPostLink( $id );
+      $originalPermalink = $cpFrontend->originalPostLink( $postId );
       $viewPost          = __( 'View ' . ucfirst( $post->post_type ), 'custom-permalinks' );
     }
     $this->getPermalinkForm( $permalink, $originalPermalink, false, $post->post_name );
@@ -371,9 +371,9 @@ class CustomPermalinksForm {
    *
    * @access public
    *
-   * @param int $id Term ID.
+   * @param int $termId Term ID.
    */
-  public function saveTag( $id ) {
+  public function saveTag( $termId ) {
     if ( ! isset( $_REQUEST['custom_permalinks_edit'] )
       || isset( $_REQUEST['post_ID'] ) ) {
       return;
@@ -381,11 +381,11 @@ class CustomPermalinksForm {
     $newPermalink = ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), '/' );
 
     $cpFrontend = new CustomPermalinksFrontend();
-    if ( $newPermalink == $cpFrontend->originalTagLink( $id ) ) {
+    if ( $newPermalink == $cpFrontend->originalTagLink( $termId ) ) {
       return;
     }
 
-    $term = get_term( $id, 'post_tag' );
+    $term = get_term( $termId, 'post_tag' );
     $this->saveTerm( $term, str_replace( '%2F', '/', urlencode( $newPermalink ) ) );
   }
 
@@ -394,9 +394,9 @@ class CustomPermalinksForm {
    *
    * @access public
    *
-   * @param int $id Term ID.
+   * @param int $termId Term ID.
    */
-  public function saveCategory( $id ) {
+  public function saveCategory( $termId ) {
     if ( ! isset( $_REQUEST['custom_permalinks_edit'] )
       || isset( $_REQUEST['post_ID'] ) ) {
       return;
@@ -404,11 +404,11 @@ class CustomPermalinksForm {
     $newPermalink = ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), '/' );
 
     $cpFrontend = new CustomPermalinksFrontend();
-    if ( $newPermalink == $cpFrontend->originalCategoryLink( $id ) ) {
+    if ( $newPermalink == $cpFrontend->originalCategoryLink( $termId ) ) {
       return;
     }
 
-    $term = get_term( $id, 'category' );
+    $term = get_term( $termId, 'category' );
     $this->saveTerm(
       $term, str_replace( '%2F', '/', urlencode( $newPermalink ) )
     );
@@ -442,13 +442,13 @@ class CustomPermalinksForm {
    *
    * @access public
    *
-   * @param int $id Term ID.
+   * @param int $termId Term ID.
    */
-  public function deleteTerm( $id ) {
+  public function deleteTerm( $termId ) {
     $table = get_option( 'custom_permalink_table' );
     if ( $table ) {
       foreach ( $table as $link => $info ) {
-        if ( $info['id'] == $id ) {
+        if ( $info['id'] == $termId ) {
           unset( $table[$link] );
           break;
         }

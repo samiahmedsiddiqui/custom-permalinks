@@ -538,11 +538,11 @@ class CustomPermalinksFrontend {
    *
    * @return bool Term link.
    */
-  public function termPermalink( $id ) {
+  public function termPermalink( $termId ) {
     $table = get_option( 'custom_permalink_table' );
     if ( $table ) {
       foreach ( $table as $link => $info ) {
-        if ( $info['id'] == $id ) {
+        if ( $info['id'] == $termId ) {
           return $link;
         }
       }

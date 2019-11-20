@@ -82,8 +82,8 @@ class CustomPermalinks {
     require_once(
       CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-form.php'
     );
-    $cp_form = new CustomPermalinksForm();
-    $cp_form->init();
+    $cpForm = new CustomPermalinksForm();
+    $cpForm->init();
 
     if ( is_admin() ) {
       require_once(
