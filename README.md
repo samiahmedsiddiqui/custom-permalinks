@@ -67,4 +67,3 @@ This process defines you the steps to follow either you are installing through W
 
 1. Upload the `custom-permalinks` folder to the `/wp-content/plugins/` directory
 2. Activate Custom Permalinks through the 'Plugins' menu in WordPress
-
