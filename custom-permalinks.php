@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
   exit;
 }
 
-class CustomPermalinks {
+class Custom_Permalinks {
 
   /**
    * Class constructor.
@@ -63,7 +63,7 @@ class CustomPermalinks {
 
     $this->includes();
 
-    add_action( 'plugins_loaded', array( $this, 'loadTextDomain' ) );
+    add_action( 'plugins_loaded', array( $this, 'load_text_domain' ) );
   }
 
   /**
@@ -76,22 +76,22 @@ class CustomPermalinks {
     require_once(
       CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php'
     );
-    $cpFrontend = new CustomPermalinksFrontend();
-    $cpFrontend->init();
+    $cp_frontend = new Custom_Permalinks_Frontend();
+    $cp_frontend->init();
 
     require_once(
       CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-form.php'
     );
-    $cpForm = new CustomPermalinksForm();
-    $cpForm->init();
+    $cp_form = new Custom_Permalinks_Form();
+    $cp_form->init();
 
     if ( is_admin() ) {
       require_once(
         CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-admin.php'
       );
-      new CustomPermalinksAdmin();
+      new Custom_Permalinks_Admin();
 
-      register_activation_hook( CUSTOM_PERMALINKS_FILE, array( 'CustomPermalinks', 'pluginActivate' ) );
+      register_activation_hook( CUSTOM_PERMALINKS_FILE, array( 'Custom_Permalinks', 'plugin_activate' ) );
     }
   }
 
@@ -101,7 +101,7 @@ class CustomPermalinks {
    * @since 1.2.22
    * @access public
    */
-  public static function pluginActivate() {
+  public static function plugin_activate() {
     $role = get_role( 'administrator' );
     if ( ! empty( $role ) ) {
       $role->add_cap( 'cp_view_post_permalinks' );
@@ -124,10 +124,10 @@ class CustomPermalinks {
    * @since 1.2.18
    * @access public
    */
-  public function loadTextDomain() {
-    $currentVersion = get_option( 'custom_permalinks_plugin_version', -1 );
-    if ( -1 === $currentVersion || CUSTOM_PERMALINKS_PLUGIN_VERSION < $currentVersion ) {
-      CustomPermalinks::pluginActivate();
+  public function load_text_domain() {
+    $current_version = get_option( 'custom_permalinks_plugin_version', -1 );
+    if ( -1 === $current_version || CUSTOM_PERMALINKS_PLUGIN_VERSION < $current_version ) {
+      Custom_Permalinks::plugin_activate();
       update_option( 'custom_permalinks_plugin_version', CUSTOM_PERMALINKS_PLUGIN_VERSION );
     }
     load_plugin_textdomain( 'custom-permalinks', FALSE,
@@ -136,5 +136,5 @@ class CustomPermalinks {
   }
 }
 
-new CustomPermalinks();
+new Custom_Permalinks();
 

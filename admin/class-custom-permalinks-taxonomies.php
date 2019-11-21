@@ -3,13 +3,13 @@
  * @package CustomPermalinks
  */
 
-class CustomPermalinksTaxonomies {
+class Custom_Permalinks_Taxonomies {
 
   /**
   * Call Taxonomy Permalinks Function.
   */
   function __construct() {
-    $this->taxonomiesPermalinks();
+    $this->taxonomies_permalinks();
   }
 
   /**
@@ -20,18 +20,18 @@ class CustomPermalinksTaxonomies {
    *
    * @return string table row according to the provided params.
    */
-  private function TaxonomyNav() {
-    $taxNav = '<tr>' .
-                '<td id="cb" class="manage-column column-cb check-column">' .
-                  '<label class="screen-reader-text" for="cb-select-all-1">Select All</label>' .
-                  '<input id="cb-select-all-1" type="checkbox">' .
-                '</td>' .
-                '<th scope="col" id="title" class="manage-column column-title column-primary">' . __( "Title", "custom-permalinks" ) . '</th>' .
-                '<th scope="col">' . __( "Type", "custom-permalinks" ) . '</th>' .
-                '<th scope="col">' . __( "Permalink", "custom-permalinks" )  . '</th>' .
-              '</tr>';
+  private function taxonomy_nav() {
+    $navigation = '<tr>' .
+                    '<td id="cb" class="manage-column column-cb check-column">' .
+                      '<label class="screen-reader-text" for="cb-select-all-1">Select All</label>' .
+                      '<input id="cb-select-all-1" type="checkbox">' .
+                    '</td>' .
+                    '<th scope="col" id="title" class="manage-column column-title column-primary">' . __( "Title", "custom-permalinks" ) . '</th>' .
+                    '<th scope="col">' . __( "Type", "custom-permalinks" ) . '</th>' .
+                    '<th scope="col">' . __( "Permalink", "custom-permalinks" )  . '</th>' .
+                  '</tr>';
 
-    return $taxNav;
+    return $navigation;
   }
 
   /**
@@ -53,8 +53,8 @@ class CustomPermalinksTaxonomies {
    * @since 1.2.0
    * @access private
    */
-  private function taxonomiesPermalinks() {
-    $taxHTML = '';
+  private function taxonomies_permalinks() {
+    $page_html = '';
 
     // Handle Bulk Operations
     if ( ( isset( $_POST['action'] ) && 'delete' === $_POST['action'] )
@@ -79,101 +79,101 @@ class CustomPermalinksTaxonomies {
         update_option( 'custom_permalink_table', $data );
       }
     }
-    $taxHTML .= '<div class="wrap">' .
-                  '<h1 class="wp-heading-inline">' . __( 'Taxonomies Permalinks', 'custom-permalinks' ) . '</h1>';
+    $page_html .= '<div class="wrap">' .
+                    '<h1 class="wp-heading-inline">' . __( 'Taxonomies Permalinks', 'custom-permalinks' ) . '</h1>';
 
-    $searchValue = '';
+    $search_value = '';
     if ( isset( $_GET['s'] ) && ! empty( $_GET['s'] ) ) {
-      $searchValue  = ltrim( htmlspecialchars( $_GET['s'] ), '/' );
-      $taxHTML     .= '<span class="subtitle">Search results for "' . $searchValue . '"</span>';
+      $search_value = ltrim( htmlspecialchars( $_GET['s'] ), '/' );
+      $page_html   .= '<span class="subtitle">Search results for "' . $search_value . '"</span>';
     }
-    $pagerOffset = '0';
-    $pageLimit   = 20;
+    $pager_offset = '0';
+    $page_limit   = 20;
     if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] )
       && 1 < $_GET['paged']
     ) {
-      $pagerOffset = 20 * ( $_GET['paged'] - 1 );
-      $pageLimit   = $pagerOffset + 20;
+      $pager_offset = 20 * ( $_GET['paged'] - 1 );
+      $page_limit   = $pager_offset + 20;
     }
-    $taxHTML .= '<form action="' . $_SERVER["REQUEST_URI"] . '" method="get">' .
-                  '<p class="search-box">' .
-                  '<input type="hidden" name="page" value="cp-category-permalinks" />' .
-                  '<label class="screen-reader-text" for="custom-permalink-search-input">Search Custom Permalink:</label>' .
-                  '<input type="search" id="custom-permalink-search-input" name="s" value="' . $searchValue . '">' .
-                  '<input type="submit" id="search-submit" class="button" value="Search Permalink"></p>' .
-                '</form>' .
-                '<form action="' . $_SERVER["REQUEST_URI"] . '" method="post">' .
-                  '<div class="tablenav top">' .
-                    '<div class="alignleft actions bulkactions">' .
-                      '<label for="bulk-action-selector-top" class="screen-reader-text">Select bulk action</label>' .
-                      '<select name="action" id="bulk-action-selector-top">' .
-                        '<option value="-1">' . __( "Bulk Actions", "custom-permalinks" ) . '</option>' .
-                        '<option value="delete">' . __( "Delete Permalinks", "custom-permalinks" ) . '</option>' .
-                      '</select>' .
-                      '<input type="submit" id="doaction" class="button action" value="Apply">' .
-                    '</div>';
+    $page_html .= '<form action="' . $_SERVER["REQUEST_URI"] . '" method="get">' .
+                    '<p class="search-box">' .
+                    '<input type="hidden" name="page" value="cp-category-permalinks" />' .
+                    '<label class="screen-reader-text" for="custom-permalink-search-input">Search Custom Permalink:</label>' .
+                    '<input type="search" id="custom-permalink-search-input" name="s" value="' . $search_value . '">' .
+                    '<input type="submit" id="search-submit" class="button" value="Search Permalink"></p>' .
+                  '</form>' .
+                  '<form action="' . $_SERVER["REQUEST_URI"] . '" method="post">' .
+                    '<div class="tablenav top">' .
+                      '<div class="alignleft actions bulkactions">' .
+                        '<label for="bulk-action-selector-top" class="screen-reader-text">Select bulk action</label>' .
+                        '<select name="action" id="bulk-action-selector-top">' .
+                          '<option value="-1">' . __( "Bulk Actions", "custom-permalinks" ) . '</option>' .
+                          '<option value="delete">' . __( "Delete Permalinks", "custom-permalinks" ) . '</option>' .
+                        '</select>' .
+                        '<input type="submit" id="doaction" class="button action" value="Apply">' .
+                      '</div>';
 
-    $table          = get_option( 'custom_permalink_table' );
-    $countTags      = 0;
-    $paginationHTML = '';
+    $table           = get_option( 'custom_permalink_table' );
+    $count_tags      = 0;
+    $pagination_html = '';
     if ( isset( $table ) && is_array( $table ) ) {
-      $countTags = count( $table );
+      $count_tags = count( $table );
     }
-    if ( 0 < $countTags ) {
+    if ( 0 < $count_tags ) {
       require_once(
         CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-pager.php'
       );
-      $cpPager = new CustomPermalinksPager();
+      $cp_pager = new Custom_Permalinks_Pager();
 
       $filtered = array();
-      if ( '' != $searchValue ) {
+      if ( '' != $search_value ) {
         foreach ( $table as $key => $value ) {
-          if ( preg_match( '/' . $searchValue . '/', $key) ) {
+          if ( preg_match( '/' . $search_value . '/', $key) ) {
             $filtered[$key] = $value;
           }
         }
-        $table = $filtered;
-        $countTags = count( $table );
+        $table      = $filtered;
+        $count_tags = count( $table );
       }
 
-      $taxHTML .= '<h2 class="screen-reader-text">Custom Permalink navigation</h2>';
+      $page_html .= '<h2 class="screen-reader-text">Custom Permalink navigation</h2>';
 
-      $totalPages = ceil( $countTags / 20 );
+      $total_pages = ceil( $count_tags / 20 );
       if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] )
         && 0 < $_GET['paged'] ) {
-        $paginationHTML = $cpPager->getPagination(
-          $countTags, $_GET['paged'], $totalPages
+        $pagination_html = $cp_pager->get_pagination(
+          $count_tags, $_GET['paged'], $total_pages
         );
-        if ( $_GET['paged'] > $totalPages ) {
-          $redirectUri = explode(
+        if ( $_GET['paged'] > $total_pages ) {
+          $redirect_uri = explode(
             '&paged=' . $_GET['paged'] . '', $_SERVER['REQUEST_URI']
           );
-          header( 'Location: ' . $redirectUri[0], 301 );
+          header( 'Location: ' . $redirect_uri[0], 301 );
           exit(0);
         }
       } elseif ( ! isset( $_GET['paged'] ) ) {
-        $paginationHTML = $cpPager->getPagination( $countTags, 1, $totalPages );
+        $pagination_html = $cp_pager->get_pagination( $count_tags, 1, $total_pages );
       }
 
-      $taxHTML .= $paginationHTML;
+      $page_html .= $pagination_html;
     }
-    $tableNavigation = $this->TaxonomyNav();
+    $table_navigation = $this->taxonomy_nav();
 
-    $taxHTML .= '</div>' .
-                '<table class="wp-list-table widefat fixed striped posts">' .
-                '<thead>' . $tableNavigation . '</thead>' .
-                '<tbody>';
+    $page_html .= '</div>' .
+                  '<table class="wp-list-table widefat fixed striped posts">' .
+                  '<thead>' . $table_navigation . '</thead>' .
+                  '<tbody>';
 
-    if ( $table && is_array( $table ) && 0 < $countTags ) {
+    if ( $table && is_array( $table ) && 0 < $count_tags ) {
       uasort( $table, array( 'Custom_Permalinks_Admin', 'sort_array' ) );
       $loopCount = -1;
       foreach ( $table as $permalink => $info ) {
         $loopCount++;
-        if ( $loopCount < $pagerOffset ) {
+        if ( $loopCount < $pager_offset ) {
           continue;
         }
 
-        if ( $loopCount >= $pageLimit ) {
+        if ( $loopCount >= $page_limit ) {
           break;
         }
 
@@ -182,42 +182,42 @@ class CustomPermalinksTaxonomies {
           $type = 'post_tag';
         }
 
-        $term  = get_term( $info['id'], $type );
-        $taxHTML .= '<tr valign="top">' .
-                      '<th scope="row" class="check-column">' .
-                        '<input type="checkbox" name="permalink[]" value="' . $info['id'] . '" />' .
-                      '</th>' .
-                      '<td><strong>' .
-                        '<a class="row-title" href="edit-tags.php?action=edit&taxonomy=' . $type . '&tag_ID=' . $info['id'] . ' ">' . $term->name . '</a>' .
-                      '</strong></td>' .
-                      '<td>' . ucwords( $info['kind'] ) . '</td>' .
-                      '<td>' .
-                        '<a href="/' . $permalink . '" target="_blank" title="' . __( "Visit " . $term->name, "custom-permalinks" ) . '">/' . $permalink . '</a>' .
-                      '</td>' .
-                    '</tr>';
+        $term       = get_term( $info['id'], $type );
+        $page_html .= '<tr valign="top">' .
+                        '<th scope="row" class="check-column">' .
+                          '<input type="checkbox" name="permalink[]" value="' . $info['id'] . '" />' .
+                        '</th>' .
+                        '<td><strong>' .
+                          '<a class="row-title" href="edit-tags.php?action=edit&taxonomy=' . $type . '&tag_ID=' . $info['id'] . ' ">' . $term->name . '</a>' .
+                        '</strong></td>' .
+                        '<td>' . ucwords( $info['kind'] ) . '</td>' .
+                        '<td>' .
+                          '<a href="/' . $permalink . '" target="_blank" title="' . __( "Visit " . $term->name, "custom-permalinks" ) . '">/' . $permalink . '</a>' .
+                        '</td>' .
+                      '</tr>';
       }
     } else {
-      $taxHTML .= '<tr class="no-items">' .
-                    '<td class="colspanchange" colspan="4">' . __( "No permalinks found.", "custom-permalinks" ) . '</td>' .
-                  '</tr>';
+      $page_html .= '<tr class="no-items">' .
+                      '<td class="colspanchange" colspan="4">' . __( "No permalinks found.", "custom-permalinks" ) . '</td>' .
+                    '</tr>';
     }
-    $taxHTML .= '</tbody>' .
-                '<tfoot>' . $tableNavigation . '</tfoot>' .
-                '</table>';
+    $page_html .= '</tbody>' .
+                  '<tfoot>' . $table_navigation . '</tfoot>' .
+                  '</table>';
 
-    $taxHTML .= '<div class="tablenav bottom">' .
-                  '<div class="alignleft actions bulkactions">' .
-                    '<label for="bulk-action-selector-bottom" class="screen-reader-text">Select bulk action</label>' .
-                    '<select name="action2" id="bulk-action-selector-bottom">' .
-                      '<option value="-1">' . __( "Bulk Actions", "custom-permalinks" ) . '</option>' .
-                      '<option value="delete">' . __( "Delete Permalinks", "custom-permalinks" ) . '</option>' .
-                    '</select>' .
-                    '<input type="submit" id="doaction2" class="button action" value="Apply">' .
+    $page_html .= '<div class="tablenav bottom">' .
+                    '<div class="alignleft actions bulkactions">' .
+                      '<label for="bulk-action-selector-bottom" class="screen-reader-text">Select bulk action</label>' .
+                      '<select name="action2" id="bulk-action-selector-bottom">' .
+                        '<option value="-1">' . __( "Bulk Actions", "custom-permalinks" ) . '</option>' .
+                        '<option value="delete">' . __( "Delete Permalinks", "custom-permalinks" ) . '</option>' .
+                      '</select>' .
+                      '<input type="submit" id="doaction2" class="button action" value="Apply">' .
+                    '</div>' .
+                    $pagination_html .
                   '</div>' .
-                  $paginationHTML .
-                '</div>' .
-                '</form></div>';
+                  '</form></div>';
 
-    echo $taxHTML;
+    echo $page_html;
   }
 }

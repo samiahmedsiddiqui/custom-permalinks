@@ -3,9 +3,9 @@
  * @package CustomPermalinks
  */
 
-class CustomPermalinksForm {
+class Custom_Permalinks_Form {
 
-  private $permalinkMetabox = 0;
+  private $permalink_metabox = 0;
 
   /**
    * Initialize WordPress Hooks.
@@ -14,24 +14,24 @@ class CustomPermalinksForm {
    * @access public
    */
   public function init() {
-    add_action( 'add_meta_boxes', array( $this, 'permalinkEditBox' ) );
-    add_action( 'save_post', array( $this, 'savePost' ), 10, 3 );
-    add_action( 'delete_post', array( $this, 'deletePermalink' ), 10 );
-    add_action( 'category_add_form', array( $this, 'termOptions' ) );
-    add_action( 'category_edit_form', array( $this, 'termOptions' ) );
-    add_action( 'post_tag_add_form', array( $this, 'termOptions' ) );
-    add_action( 'post_tag_edit_form', array( $this, 'termOptions' ) );
-    add_action( 'edited_post_tag', array( $this, 'saveTag' ) );
-    add_action( 'edited_category', array( $this, 'saveCategory' ) );
-    add_action( 'create_post_tag', array( $this, 'saveTag' ) );
-    add_action( 'create_category', array( $this, 'saveCategory' ) );
-    add_action( 'delete_post_tag', array( $this, 'deleteTerm' ) );
-    add_action( 'delete_post_category', array( $this, 'deleteTerm' ) );
+    add_action( 'add_meta_boxes', array( $this, 'permalink_edit_box' ) );
+    add_action( 'save_post', array( $this, 'save_post' ), 10, 3 );
+    add_action( 'delete_post', array( $this, 'delete_permalink' ), 10 );
+    add_action( 'category_add_form', array( $this, 'term_options' ) );
+    add_action( 'category_edit_form', array( $this, 'term_options' ) );
+    add_action( 'post_tag_add_form', array( $this, 'term_options' ) );
+    add_action( 'post_tag_edit_form', array( $this, 'term_options' ) );
+    add_action( 'edited_post_tag', array( $this, 'save_tag' ) );
+    add_action( 'edited_category', array( $this, 'save_category' ) );
+    add_action( 'create_post_tag', array( $this, 'save_tag' ) );
+    add_action( 'create_category', array( $this, 'save_category' ) );
+    add_action( 'delete_post_tag', array( $this, 'delete_term' ) );
+    add_action( 'delete_post_category', array( $this, 'delete_term' ) );
 
     add_filter( 'get_sample_permalink_html',
-      array( $this, 'getSamplePermalinkHTML' ), 10, 2
+      array( $this, 'sample_permalink_html' ), 10, 2
     );
-    add_filter( 'is_protected_meta', array( $this, 'protectMeta' ), 10, 2 );
+    add_filter( 'is_protected_meta', array( $this, 'protect_meta' ), 10, 2 );
   }
 
   /**
@@ -40,10 +40,10 @@ class CustomPermalinksForm {
    * @since 1.4.0
    * @access public
    */
-  public function permalinkEditBox() {
+  public function permalink_edit_box() {
     add_meta_box( 'custom-permalinks-edit-box',
       __( 'Permalink', 'custom-permalinks' ),
-      array( $this, 'metaEditForm' ), null, 'normal', 'high',
+      array( $this, 'meta_edit_form' ), null, 'normal', 'high',
       array(
         '__back_compat_meta_box' => false,
       )
@@ -57,12 +57,12 @@ class CustomPermalinksForm {
    * @access public
    *
    * @param bool $protected Whether the key is protected or not.
-   * @param string $metaKey Meta key.
+   * @param string $meta_key Meta key.
    *
    * @return bool `true` for the custom_permalink key.
    */
-  public function protectMeta( $protected, $metaKey ) {
-    if ( 'custom_permalink' === $metaKey ) {
+  public function protect_meta( $protected, $meta_key ) {
+    if ( 'custom_permalink' === $meta_key ) {
       $protected = true;
     }
     return $protected;
@@ -73,19 +73,19 @@ class CustomPermalinksForm {
    *
    * @access public
    *
-   * @param int $postId Post ID.
+   * @param int $post_id Post ID.
    */
-  public function savePost( $postId ) {
+  public function save_post( $post_id ) {
     if ( ! isset( $_REQUEST['custom_permalinks_edit'] ) ) {
       return;
     }
 
-    delete_post_meta( $postId, 'custom_permalink' );
+    delete_post_meta( $post_id, 'custom_permalink' );
 
-    $cpFrontend = new CustomPermalinksFrontend();
-    $originalLink = $cpFrontend->originalPostLink( $postId );
-    if ( $_REQUEST['custom_permalink'] && $_REQUEST['custom_permalink'] != $originalLink ) {
-      add_post_meta( $postId, 'custom_permalink',
+    $cp_frontend = new Custom_Permalinks_Frontend();
+    $original_link = $cp_frontend->original_post_link( $post_id );
+    if ( $_REQUEST['custom_permalink'] && $_REQUEST['custom_permalink'] != $original_link ) {
+      add_post_meta( $post_id, 'custom_permalink',
         str_replace( '%2F', '/',
           urlencode( ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), "/" ) )
         )
@@ -98,11 +98,11 @@ class CustomPermalinksForm {
    *
    * @access public
    *
-   * @param int $postId Post ID.
+   * @param int $post_id Post ID.
    */
-  public function deletePermalink( $postId ) {
+  public function delete_permalink( $post_id ) {
     global $wpdb;
-    $wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->postmeta WHERE meta_key = 'custom_permalink' AND post_id = %d", $postId ) );
+    $wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->postmeta WHERE meta_key = 'custom_permalink' AND post_id = %d", $post_id ) );
   }
 
   /**
@@ -111,44 +111,44 @@ class CustomPermalinksForm {
    * @access public
    *
    * @param string $html WP Post Permalink HTML.
-   * @param int $postId Post ID.
+   * @param int $post_id Post ID.
    *
    * @return string Edit Form string.
    */
-  public function getSamplePermalinkHTML( $html, $postId ) {
-    $post                   = get_post( $postId );
-    $this->permalinkMetabox = 1;
+  public function sample_permalink_html( $html, $post_id ) {
+    $post                    = get_post( $post_id );
+    $this->permalink_metabox = 1;
 
     if ( 'attachment' == $post->post_type || $post->ID == get_option( 'page_on_front' ) ) {
       return $html;
     }
 
-    $excludePostTypes = $post->post_type;
-    $excluded = apply_filters( 'custom_permalinks_exclude_post_type', $excludePostTypes );
+    $exclude_post_types = $post->post_type;
+    $excluded           = apply_filters( 'custom_permalinks_exclude_post_type', $exclude_post_types );
     if ( '__true' === $excluded ) {
       return $html;
     }
-    $permalink = get_post_meta( $postId, 'custom_permalink', true );
+    $permalink = get_post_meta( $post_id, 'custom_permalink', true );
 
     ob_start();
 
-    $cpFrontend = new CustomPermalinksFrontend();
+    $cp_frontend = new Custom_Permalinks_Frontend();
     if ( 'page' == $post->post_type ) {
-      $originalPermalink = $cpFrontend->originalPageLink( $postId );
-      $viewPost          = __( 'View Page', 'custom-permalinks' );
+      $original_permalink = $cp_frontend->original_page_link( $post_id );
+      $view_post          = __( 'View Page', 'custom-permalinks' );
     } else {
-      $originalPermalink = $cpFrontend->originalPostLink( $postId );
-      $viewPost          = __( 'View ' . ucfirst( $post->post_type ), 'custom-permalinks' );
+      $original_permalink = $cp_frontend->original_post_link( $post_id );
+      $view_post          = __( 'View ' . ucfirst( $post->post_type ), 'custom-permalinks' );
     }
-    $this->getPermalinkForm( $permalink, $originalPermalink, false, $post->post_name );
+    $this->get_permalink_form( $permalink, $original_permalink, false, $post->post_name );
 
     $content = ob_get_contents();
     ob_end_clean();
 
-    $viewPostLink = get_permalink( $post );
+    $view_post_link = get_permalink( $post );
 
     return '<strong>' . __( 'Permalink:', 'custom-permalinks' ) . "</strong>\n" . $content .
-         ( isset( $viewPost ) ? "<span id='view-post-btn'><a href='$viewPostLink' class='button button-small' target='_blank'>$viewPost</a></span>\n" : "" );
+         ( isset( $view_post ) ? "<span id='view-post-btn'><a href='$view_post_link' class='button button-small' target='_blank'>$view_post</a></span>\n" : "" );
   }
 
   /**
@@ -159,8 +159,8 @@ class CustomPermalinksForm {
    *
    * @param object $post WP Post Object.
    */
-  public function metaEditForm( $post ) {
-    if ( isset( $this->permalinkMetabox ) && 1 === $this->permalinkMetabox ) {
+  public function meta_edit_form( $post ) {
+    if ( isset( $this->permalink_metabox ) && 1 === $this->permalink_metabox ) {
       wp_enqueue_script( 'custom-permalinks-form',
         plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
       );
@@ -179,8 +179,8 @@ class CustomPermalinksForm {
       return;
     }
 
-    $excludePostTypes = $post->post_type;
-    $excluded = apply_filters( 'custom_permalinks_exclude_post_type', $excludePostTypes );
+    $exclude_post_types = $post->post_type;
+    $excluded           = apply_filters( 'custom_permalinks_exclude_post_type', $exclude_post_types );
     if ( '__true' === $excluded ) {
       wp_enqueue_script( 'custom-permalinks-form',
         plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
@@ -191,15 +191,15 @@ class CustomPermalinksForm {
 
     ob_start();
 
-    $cpFrontend = new CustomPermalinksFrontend();
+    $cp_frontend = new Custom_Permalinks_Frontend();
     if ( 'page' == $post->post_type ) {
-      $originalPermalink = $cpFrontend->originalPageLink( $post->ID );
-      $viewPost = __( 'View Page', 'custom-permalinks' );
+      $original_permalink = $cp_frontend->original_page_link( $post->ID );
+      $view_post          = __( 'View Page', 'custom-permalinks' );
     } else {
-      $originalPermalink = $cpFrontend->originalPostLink( $post->ID );
-      $viewPost = __( 'View ' . ucfirst( $post->post_type ), 'custom-permalinks' );
+      $original_permalink = $cp_frontend->original_post_link( $post->ID );
+      $view_post          = __( 'View ' . ucfirst( $post->post_type ), 'custom-permalinks' );
     }
-    $this->getPermalinkForm( $permalink, $originalPermalink, false, $post->post_name );
+    $this->get_permalink_form( $permalink, $original_permalink, false, $post->post_name );
 
     $content = ob_get_contents();
     ob_end_clean();
@@ -208,10 +208,10 @@ class CustomPermalinksForm {
       wp_enqueue_script( 'custom-permalinks-form',
         plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
       );
-      $viewPostLink = get_permalink( $post );
+      $view_post_link = get_permalink( $post );
 
       $content .= ' <span id="view-post-btn">' .
-                    '<a href="' . $viewPostLink . '" class="button button-small" target="_blank">' . $viewPost . '</a>' .
+                    '<a href="' . $view_post_link . '" class="button button-small" target="_blank">' . $view_post . '</a>' .
                   '</span><br>';
     }
     echo $content;
@@ -222,23 +222,23 @@ class CustomPermalinksForm {
    *
    * @access public
    */
-  public function postOptions() {
+  public function post_options() {
     global $post;
 
     if ( is_object( $post ) ) {
-      $postId = $post->ID;
+      $post_id = $post->ID;
     } else {
-      $postId = $post;
+      $post_id = $post;
     }
 
-    $permalink = get_post_meta( $postId, 'custom_permalink', true );
+    $permalink = get_post_meta( $post_id, 'custom_permalink', true );
     ?>
     <div class="postbox closed">
       <h3><?php _e( 'Custom Permalink', 'custom-permalinks' ) ?></h3>
       <div class="inside">
         <?php
-          $cpFrontend = new CustomPermalinksFrontend();
-          $cpFrontend->getPermalinkForm( $permalink, $cpFrontend->originalPostLink( $postId ) );
+          $cp_frontend = new Custom_Permalinks_Frontend();
+          $this->get_permalink_form( $permalink, $cp_frontend->original_post_link( $post_id ) );
         ?>
       </div>
     </div>
@@ -250,24 +250,24 @@ class CustomPermalinksForm {
    *
    * @access public
    */
-  public function pageOptions() {
+  public function page_options() {
     global $post;
 
     if ( is_object( $post ) ) {
-      $postId = $post->ID;
+      $post_id = $post->ID;
     } else {
-      $postId = $post;
+      $post_id = $post;
     }
 
-    $permalink = get_post_meta( $postId, 'custom_permalink', true );
+    $permalink = get_post_meta( $post_id, 'custom_permalink', true );
     ?>
     <div class="postbox closed">
       <h3><?php _e( 'Custom Permalink', 'custom-permalinks' ); ?></h3>
       <div class="inside">
       <?php
-        $cpFrontend = new CustomPermalinksFrontend();
-        $pagePermalink = $cpFrontend->originalPageLink( $postId );
-        $this->getPermalinkForm( $permalink, $pagePermalink );
+        $cp_frontend    = new Custom_Permalinks_Frontend();
+        $page_permalink = $cp_frontend->original_page_link( $post_id );
+        $this->get_permalink_form( $permalink, $page_permalink );
       ?>
       </div>
     </div>
@@ -281,22 +281,22 @@ class CustomPermalinksForm {
    *
    * @param object $object Term Object.
    */
-  public function termOptions( $object ) {
+  public function term_options( $object ) {
     if ( is_object( $object ) && isset( $object->term_id ) ) {
-      $cpFrontend = new CustomPermalinksFrontend();
-      $permalink  = $cpFrontend->termPermalink( $object->term_id );
+      $cp_frontend = new Custom_Permalinks_Frontend();
+      $permalink   = $cp_frontend->term_permalink( $object->term_id );
 
       if ( $object->term_id ) {
         if ( $object->taxonomy == 'post_tag' ) {
-          $originalPermalink = $cpFrontend->originalTagLink( $object->term_id );
+          $original_permalink = $cp_frontend->original_tag_link( $object->term_id );
         } else {
-          $originalPermalink = $cpFrontend->originalCategoryLink( $object->term_id );
+          $original_permalink = $cp_frontend->original_category_link( $object->term_id );
         }
       }
 
-      $this->getPermalinkForm( $permalink, $originalPermalink );
+      $this->get_permalink_form( $permalink, $original_permalink );
     } else {
-      $this->getPermalinkForm( '' );
+      $this->get_permalink_form( '' );
     }
 
     // Move the save button to above this form
@@ -321,7 +321,7 @@ class CustomPermalinksForm {
    * @param bool $renderContainers Shows Post/Term Edit.
    * @param string $postname Post Name.
    */
-  private function getPermalinkForm( $permalink, $original = '', $renderContainers = true, $postname = '' ) {
+  private function get_permalink_form( $permalink, $original = '', $renderContainers = true, $postname = '' ) {
     ?>
     <input value="true" type="hidden" name="custom_permalinks_edit" />
     <input value="<?php echo home_url(); ?>" type="hidden" name="custom_permalinks_home_url" id="custom_permalinks_home_url" />
@@ -337,7 +337,7 @@ class CustomPermalinksForm {
     <?php
     endif;
     if ( $permalink == '' ) {
-      $original = $this->checkConflicts( $original );
+      $original = $this->check_conflicts( $original );
     }
     $postSlug = htmlspecialchars( $permalink ? urldecode( $permalink ) : urldecode( $original ) );
     $originalEncodedUrl = htmlspecialchars( urldecode( $original ) );
@@ -371,22 +371,22 @@ class CustomPermalinksForm {
    *
    * @access public
    *
-   * @param int $termId Term ID.
+   * @param int $term_id Term ID.
    */
-  public function saveTag( $termId ) {
+  public function save_tag( $term_id ) {
     if ( ! isset( $_REQUEST['custom_permalinks_edit'] )
       || isset( $_REQUEST['post_ID'] ) ) {
       return;
     }
-    $newPermalink = ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), '/' );
+    $new_permalink = ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), '/' );
 
-    $cpFrontend = new CustomPermalinksFrontend();
-    if ( $newPermalink == $cpFrontend->originalTagLink( $termId ) ) {
+    $cp_frontend = new Custom_Permalinks_Frontend();
+    if ( $new_permalink == $cp_frontend->original_tag_link( $term_id ) ) {
       return;
     }
 
-    $term = get_term( $termId, 'post_tag' );
-    $this->saveTerm( $term, str_replace( '%2F', '/', urlencode( $newPermalink ) ) );
+    $term = get_term( $term_id, 'post_tag' );
+    $this->save_term( $term, str_replace( '%2F', '/', urlencode( $new_permalink ) ) );
   }
 
   /**
@@ -394,23 +394,23 @@ class CustomPermalinksForm {
    *
    * @access public
    *
-   * @param int $termId Term ID.
+   * @param int $term_id Term ID.
    */
-  public function saveCategory( $termId ) {
+  public function save_category( $term_id ) {
     if ( ! isset( $_REQUEST['custom_permalinks_edit'] )
       || isset( $_REQUEST['post_ID'] ) ) {
       return;
     }
-    $newPermalink = ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), '/' );
+    $new_permalink = ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), '/' );
 
-    $cpFrontend = new CustomPermalinksFrontend();
-    if ( $newPermalink == $cpFrontend->originalCategoryLink( $termId ) ) {
+    $cp_frontend = new Custom_Permalinks_Frontend();
+    if ( $new_permalink == $cp_frontend->original_category_link( $term_id ) ) {
       return;
     }
 
-    $term = get_term( $termId, 'category' );
-    $this->saveTerm(
-      $term, str_replace( '%2F', '/', urlencode( $newPermalink ) )
+    $term = get_term( $term_id, 'category' );
+    $this->save_term(
+      $term, str_replace( '%2F', '/', urlencode( $new_permalink ) )
     );
   }
 
@@ -422,9 +422,9 @@ class CustomPermalinksForm {
    * @param object $term Term Object.
    * @param string $permalink New permalink which needs to be saved.
    */
-  public function saveTerm( $term, $permalink ) {
+  public function save_term( $term, $permalink ) {
 
-    $this->deleteTerm( $term->term_id );
+    $this->delete_term( $term->term_id );
     $table = get_option( 'custom_permalink_table' );
     if ( $permalink ) {
       $table[$permalink] = array(
@@ -442,13 +442,13 @@ class CustomPermalinksForm {
    *
    * @access public
    *
-   * @param int $termId Term ID.
+   * @param int $term_id Term ID.
    */
-  public function deleteTerm( $termId ) {
+  public function delete_term( $term_id ) {
     $table = get_option( 'custom_permalink_table' );
     if ( $table ) {
       foreach ( $table as $link => $info ) {
-        if ( $info['id'] == $termId ) {
+        if ( $info['id'] == $term_id ) {
           unset( $table[$link] );
           break;
         }
@@ -466,7 +466,7 @@ class CustomPermalinksForm {
    *
    * @return string requested URL by removing the language/ from it if exist.
    */
-  public function checkConflicts( $requestedUrl = '' ) {
+  public function check_conflicts( $requestedUrl = '' ) {
     if ( '' == $requestedUrl ) {
       return;
     }

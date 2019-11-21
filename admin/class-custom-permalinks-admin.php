@@ -3,17 +3,17 @@
  * @package CustomPermalinks
  */
 
-class CustomPermalinksAdmin {
+class Custom_Permalinks_Admin {
 
   /**
    * Initializes WordPress hooks.
    */
   function __construct() {
-    add_action( 'admin_menu', array( $this, 'adminMenu' ) );
+    add_action( 'admin_menu', array( $this, 'admin_menu' ) );
     add_filter( 'plugin_action_links_' . CUSTOM_PERMALINKS_BASENAME,
-      array( $this, 'settingsLink' )
+      array( $this, 'settings_link' )
     );
-    add_action( 'admin_init', array( $this, 'privacyPolicy' ) );
+    add_action( 'admin_init', array( $this, 'privacy_policy' ) );
   }
 
   /**
@@ -22,22 +22,22 @@ class CustomPermalinksAdmin {
    * @since 1.2.0
    * @access public
    */
-  public function adminMenu() {
+  public function admin_menu() {
     add_menu_page( 'Custom Permalinks', 'Custom Permalinks', 'cp_view_post_permalinks',
-      'cp-post-permalinks', array( $this,'postPermalinksPage' ),
+      'cp-post-permalinks', array( $this,'post_Permalinks_Page' ),
       'dashicons-admin-links'
     );
     add_submenu_page( 'cp-post-permalinks', 'PostTypes Permalinks',
       'PostTypes Permalinks', 'cp_view_post_permalinks', 'cp-post-permalinks',
-      array( $this, 'postPermalinksPage' )
+      array( $this, 'post_Permalinks_Page' )
     );
     add_submenu_page( 'cp-post-permalinks', 'Taxonomies Permalinks',
       'Taxonomies Permalinks', 'cp_view_category_permalinks', 'cp-category-permalinks',
-      array( $this, 'taxonomyPermalinksPage' )
+      array( $this, 'taxonomy_Permalinks_Page' )
     );
     add_submenu_page( 'cp-post-permalinks', 'About Custom Permalinks',
       'About', 'install_plugins', 'cp-about-plugins',
-      array( $this, 'aboutPlugin' )
+      array( $this, 'about_plugin' )
     );
   }
 
@@ -47,13 +47,13 @@ class CustomPermalinksAdmin {
    * @since 1.2.0
    * @access public
    */
-  public function postPermalinksPage() {
+  public function post_Permalinks_Page() {
     require_once(
       CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-posttypes.php'
     );
-    new CustomPermalinksPostTypes();
+    new Custom_Permalinks_PostTypes();
 
-    add_filter( 'admin_footer_text', array( $this, 'adminFooterText' ), 1 );
+    add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
   }
 
 
@@ -63,13 +63,13 @@ class CustomPermalinksAdmin {
    * @since 1.2.0
    * @access public
    */
-  public function taxonomyPermalinksPage() {
+  public function taxonomy_Permalinks_Page() {
     require_once(
       CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-taxonomies.php'
     );
-    new CustomPermalinksTaxonomies();
+    new Custom_Permalinks_Taxonomies();
 
-    add_filter( 'admin_footer_text', array( $this, 'adminFooterText' ), 1 );
+    add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
   }
 
   /**
@@ -78,12 +78,12 @@ class CustomPermalinksAdmin {
    * @since 1.2.11
    * @access public
    */
-  public function aboutPlugin() {
+  public function about_plugin() {
     require_once(
       CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-about.php'
     );
-    new CustomPermalinksAbout();
-    add_filter( 'admin_footer_text', array( $this, 'adminFooterText' ), 1 );
+    new Custom_Permalinks_About();
+    add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
   }
 
   /**
@@ -94,15 +94,15 @@ class CustomPermalinksAdmin {
    *
    * @return string Shows version, website link and twitter.
    */
-  public function adminFooterText() {
-    $footerText = sprintf(
+  public function admin_footer_text() {
+    $footer_text = sprintf(
       __( 'Custom Permalinks version %s by <a href="%s" title="Sami Ahmed Siddiqui Company Website" target="_blank">Sami Ahmed Siddiqui</a> - <a href="%s" title="Support forums" target="_blank">Support forums</a> - Follow on Twitter: <a href="%s" title="Follow Sami Ahmed Siddiqui on Twitter" target="_blank">Sami Ahmed Siddiqui</a>', 'custom-permalinks' ),
       CUSTOM_PERMALINKS_PLUGIN_VERSION, 'https://www.yasglobal.com/',
       'https://wordpress.org/support/plugin/custom-permalinks',
       'https://twitter.com/samisiddiqui91'
     );
 
-    return $footerText;
+    return $footer_text;
   }
 
   /**
@@ -117,12 +117,12 @@ class CustomPermalinksAdmin {
    * @return array Plugin Basic Links and added some custome link for Settings,
    *   Contact, and About.
    */
-  public function settingsLink( $links ) {
+  public function settings_link( $links ) {
     $about = sprintf(
       __( '<a href="%s" title="About">About</a>', 'custom-permalinks' ),
       'admin.php?page=cp-about-plugins'
     );
-    $premiumSupport = sprintf(
+    $premium_support = sprintf(
       __( '<a href="%s" title="Premium Support" target="_blank">Premium Support</a>', 'custom-permalinks' ),
       'https://www.custompermalinks.com/#pricing-section'
     );
@@ -131,7 +131,7 @@ class CustomPermalinksAdmin {
       'https://www.custompermalinks.com/contact-us/'
     );
     array_unshift( $links, $contact );
-    array_unshift( $links, $premiumSupport );
+    array_unshift( $links, $premium_support );
     array_unshift( $links, $about );
 
     return $links;
@@ -143,7 +143,7 @@ class CustomPermalinksAdmin {
    * @since 1.2.23
    * @access public
    */
-  public function privacyPolicy() {
+  public function privacy_policy() {
     if ( ! function_exists( 'wp_add_privacy_policy_content' ) ) {
       return;
     }

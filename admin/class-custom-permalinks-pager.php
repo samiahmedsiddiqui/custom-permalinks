@@ -3,7 +3,7 @@
  * @package CustomPermalinks
  */
 
-class CustomPermalinksPager {
+class Custom_Permalinks_Pager {
 
   /**
    * Return the Pager HTML.
@@ -11,82 +11,82 @@ class CustomPermalinksPager {
    * @since 1.2.0
    * @access public
    *
-   * @param int $totalPermalinks No. of total results found.
-   * @param int $currentPagerValue Optional. Current Page. 1.
-   * @param int $totalPager Optional. Total no. of pages. 0.
+   * @param int $total_permalinks No. of total results found.
+   * @param int $current_pager_value Optional. Current Page. 1.
+   * @param int $total_pager Optional. Total no. of pages. 0.
    *
    * @return string Pagination HTML if pager exist.
    */
-  public function getPagination( $totalPermalinks, $currentPagerValue = 1, $totalPager = 0 ) {
+  public function get_pagination( $total_permalinks, $current_pager_value = 1, $total_pager = 0 ) {
 
-    if ( 0 == $totalPager ) {
+    if ( 0 == $total_pager ) {
       return;
     }
 
-    if ( 1 == $totalPager ) {
-      $paginationHTML = '<div class="tablenav-pages one-page">' .
+    if ( 1 == $total_pager ) {
+      $pagination_html = '<div class="tablenav-pages one-page">' .
                           '<span class="displaying-num">' .
-                            $totalPermalinks . ' items' .
+                            $total_permalinks . ' items' .
                           '</span>' .
-                        '</div>';
+                         '</div>';
 
-      return $paginationHTML;
+      return $pagination_html;
     }
 
-    $removePagerUri = explode(
-      '&paged=' . $currentPagerValue . '', $_SERVER['REQUEST_URI']
+    $remove_pager_uri = explode(
+      '&paged=' . $current_pager_value . '', $_SERVER['REQUEST_URI']
     );
-    $paginationHTML = '<div class="tablenav-pages">' .
+    $pagination_html = '<div class="tablenav-pages">' .
                           '<span class="displaying-num">' .
-                            $totalPermalinks . ' items' .
+                            $total_permalinks . ' items' .
                           '</span>' .
                           '<span class="pagination-links">';
 
-    if ( 1 == $currentPagerValue ) {
-      $paginationHTML .= '<span class="tablenav-pages-navspan" aria-hidden="true">&laquo; </span>' .
+    if ( 1 == $current_pager_value ) {
+      $pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&laquo; </span>' .
                           '<span class="tablenav-pages-navspan" aria-hidden="true">&lsaquo; </span>';
     } else {
-      $prevPage = $currentPagerValue - 1;
-      if ( 1 == $prevPage ) {
-        $paginationHTML .= '<span class="tablenav-pages-navspan" aria-hidden="true">&laquo;</span>';
+      $prev_page = $current_pager_value - 1;
+      if ( 1 == $prev_page ) {
+        $pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&laquo;</span>';
       } else {
-        $paginationHTML .= ' <a href="' . $removePagerUri[0] . '&paged=1" title="First page" class="first-page">' .
-                             '<span class="screen-reader-text">First page</span>' .
-                             '<span aria-hidden="true">&laquo;</span>' .
-                           '</a> ';
+        $pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=1" title="First page" class="first-page">' .
+                              '<span class="screen-reader-text">First page</span>' .
+                              '<span aria-hidden="true">&laquo;</span>' .
+                            '</a> ';
       }
-      $paginationHTML .= ' <a href="' . $removePagerUri[0] . '&paged=' . $prevPage . '" title="Previous page" class="prev-page">' .
+      $pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $prev_page . '" title="Previous page" class="prev-page">' .
                             '<span class="screen-reader-text">Previous page</span>' .
                             '<span aria-hidden="true">&lsaquo;</span>' .
-                         '</a> ';
+                          '</a> ';
     }
 
-    $paginationHTML .= '<span class="paging-input">' .
+    $pagination_html .= '<span class="paging-input">' .
                           '<label for="current-page-selector" class="screen-reader-text">Current Page</label>' .
-                          '<input class="current-page" id="current-page-selector" type="text" name="paged" value="' . $currentPagerValue . '" size="1" aria-describedby="table-paging" />' .
-                          '<span class="tablenav-paging-text"> of <span class="total-pages">' . $totalPager . ' </span> </span>' .
-                       '</span>';
+                          '<input class="current-page" id="current-page-selector" type="text" name="paged" value="' . $current_pager_value . '" size="1" aria-describedby="table-paging" />' .
+                          '<span class="tablenav-paging-text"> of <span class="total-pages">' . $total_pager . ' </span> </span>' .
+                        '</span>';
 
-    if ( $currentPagerValue == $totalPager ) {
-      $paginationHTML .= '<span class="tablenav-pages-navspan" aria-hidden="true">&rsaquo; </span>' .
+    if ( $current_pager_value == $total_pager ) {
+      $pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&rsaquo; </span>' .
                           '<span class="tablenav-pages-navspan" aria-hidden="true">&raquo; </span>';
     } else {
-      $nextPage = $currentPagerValue + 1;
-      $paginationHTML .= ' <a href="' . $removePagerUri[0] . '&paged=' . $nextPage . '" title="Next page" class="next-page">' .
+      $next_page = $current_pager_value + 1;
+      $pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $next_page . '" title="Next page" class="next-page">' .
                             '<span class="screen-reader-text">Next page</span>' .
                             '<span aria-hidden="true">&rsaquo;</span>' .
-                         '</a> ';
-      if ( $totalPager == $nextPage) {
-        $paginationHTML .= '<span class="tablenav-pages-navspan" aria-hidden="true">&raquo;</span>';
+                          '</a> ';
+      if ( $total_pager == $next_page) {
+        $pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&raquo;</span>';
       } else {
-        $paginationHTML .= ' <a href="' . $removePagerUri[0] . '&paged=' . $totalPager . '" title="Last page" class="last-page">' .
+        $pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $total_pager . '" title="Last page" class="last-page">' .
                               '<span class="screen-reader-text">Last page</span>' .
                               '<span aria-hidden="true">&raquo;</span>' .
-                           '</a> ';
+                            '</a> ';
       }
     }
-    $paginationHTML .= '</span></div>';
+    $pagination_html .= '</span></div>';
 
-    return $paginationHTML;
+    return $pagination_html;
   }
 }

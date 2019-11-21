@@ -3,13 +3,13 @@
  * @package CustomPermalinks
  */
 
-class CustomPermalinksPostTypes {
+class Custom_Permalinks_PostTypes {
 
   /**
-  * Call Taxonomy Permalinks Function.
+  * Call Post Permalinks Function.
   */
   function __construct() {
-    $this->postPermalinks();
+    $this->post_permalinks();
   }
 
   /**
@@ -18,20 +18,20 @@ class CustomPermalinksPostTypes {
    * @since 1.2.0
    * @access private
    *
-   * @param string $orderByClass Class either asc or desc.
-   * @param string $orderBy set orderby for sorting.
-   * @param string $searchPermalink Permalink which has been searched or an empty string.
+   * @param string $order_by_class Class either asc or desc.
+   * @param string $order_by set orderby for sorting.
+   * @param string $search_permalink Permalink which has been searched or an empty string.
    *
    * @return string table row according to the provided params.
    */
-  private function postNav( $orderByClass, $orderBy, $searchPermalink ) {
-    $postsNav = '<tr>' .
+  private function postNav( $order_by_class, $order_by, $search_permalink ) {
+    $post_nav = '<tr>' .
                   '<td id="cb" class="manage-column column-cb check-column">' .
                     '<label class="screen-reader-text" for="cb-select-all-1">Select All</label>' .
                     '<input id="cb-select-all-1" type="checkbox">' .
                   '</td>' .
-                  '<th scope="col" id="title" class="manage-column column-title column-primary sortable ' . $orderByClass . '">' .
-                    '<a href="/wp-admin/admin.php?page=cp-post-permalinks&amp;orderby=title&amp;order=' . $orderBy . $searchPermalink . '">' .
+                  '<th scope="col" id="title" class="manage-column column-title column-primary sortable ' . $order_by_class . '">' .
+                    '<a href="/wp-admin/admin.php?page=cp-post-permalinks&amp;orderby=title&amp;order=' . $order_by . $search_permalink . '">' .
                       '<span>' . __( "Title", "custom-permalinks" ) . '</span>' .
                       '<span class="sorting-indicator"></span>' .
                     '</a>' .
@@ -40,7 +40,7 @@ class CustomPermalinksPostTypes {
                   '<th scope="col">' . __( "Permalink", "custom-permalinks" ) . '</th>' .
                 '</tr>';
 
-    return $postsNav;
+    return $post_nav;
   }
 
   /**
@@ -50,23 +50,23 @@ class CustomPermalinksPostTypes {
    * @since 1.2.0
    * @access private
    */
-  private function postPermalinks() {
+  private function post_permalinks() {
     global $wpdb;
 
-    $error           = '';
-    $filterOptions   = '';
-    $filterPermalink = '';
-    $postshtml       = '';
-    $searchPermalink = '';
+    $error            = '';
+    $filter_options   = '';
+    $filter_permalink = '';
+    $post_html        = '';
+    $search_permalink = '';
 
     // Handle Bulk Operations
     if ( ( isset( $_POST['action'] ) && 'delete' === $_POST['action'] )
       || ( isset( $_POST['action2'] ) && 'delete' === $_POST['action2'] )
     ) {
       if ( isset( $_POST['permalink'] ) && ! empty( $_POST['permalink'] ) ) {
-        $postIds = implode( ',', $_POST['permalink'] );
-        if ( preg_match( '/^\d+(?:,\d+)*$/', $postIds ) ) {
-          $wpdb->query( "DELETE FROM $wpdb->postmeta WHERE post_id IN ($postIds) AND meta_key = 'custom_permalink'" );
+        $post_ids = implode( ',', $_POST['permalink'] );
+        if ( preg_match( '/^\d+(?:,\d+)*$/', $post_ids ) ) {
+          $wpdb->query( "DELETE FROM $wpdb->postmeta WHERE post_id IN ($post_ids) AND meta_key = 'custom_permalink'" );
         } else {
           $error = '<div id="message" class="error">' .
                       '<p>' .
@@ -82,50 +82,50 @@ class CustomPermalinksPostTypes {
                   '</div>';
       }
     }
-    $postshtml .= '<div class="wrap">' .
+    $post_html .= '<div class="wrap">' .
                     '<h1 class="wp-heading-inline">' . __( 'PostTypes Permalinks', 'custom-permalinks' ) . '</h1>' .
                     $error;
 
-    $searchValue = '';
+    $search_value = '';
     if ( isset( $_GET['s'] ) && ! empty( $_GET['s'] ) ) {
-      $filterPermalink = 'AND pm.meta_value LIKE "%' . $_GET['s'] . '%"';
-      $searchPermalink = '&s=' . $_GET['s'] . '';
-      $searchValue     = ltrim( htmlspecialchars( $_GET['s'] ), '/' );
-      $postshtml      .= '<span class="subtitle">Search results for "' . $searchValue . '"</span>';
+      $filter_permalink = 'AND pm.meta_value LIKE "%' . $_GET['s'] . '%"';
+      $search_permalink = '&s=' . $_GET['s'] . '';
+      $search_value     = ltrim( htmlspecialchars( $_GET['s'] ), '/' );
+      $post_html       .= '<span class="subtitle">Search results for "' . $search_value . '"</span>';
     }
-    $pageLimit = 'LIMIT 0, 20';
+    $page_limit = 'LIMIT 0, 20';
     if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] )
       && 1 < $_GET['paged']
     ) {
-      $pager     = 20 * ( $_GET['paged'] - 1 );
-      $pageLimit = 'LIMIT ' . $pager . ', 20';
+      $pager      = 20 * ( $_GET['paged'] - 1 );
+      $page_limit = 'LIMIT ' . $pager . ', 20';
     }
-    $sortingBy    = 'ORDER By p.ID DESC';
-    $orderBy      = 'asc';
-    $orderByClass = 'desc';
+    $sorting_by     = 'ORDER By p.ID DESC';
+    $order_by       = 'asc';
+    $order_by_class = 'desc';
     if ( isset( $_GET['orderby'] ) && 'title' == $_GET['orderby'] ) {
-      $filterOptions .= '<input type="hidden" name="orderby" value="title" />';
+      $filter_options .= '<input type="hidden" name="orderby" value="title" />';
       if ( isset( $_GET['order'] ) && 'desc' == $_GET['order'] ) {
-        $sortingBy      = 'ORDER By p.post_title DESC';
-        $orderBy        = 'asc';
-        $orderByClass   = 'desc';
-        $filterOptions .= '<input type="hidden" name="order" value="desc" />';
+        $sorting_by      = 'ORDER By p.post_title DESC';
+        $order_by        = 'asc';
+        $order_by_class  = 'desc';
+        $filter_options .= '<input type="hidden" name="order" value="desc" />';
       } else {
-        $sortingBy      = 'ORDER By p.post_title';
-        $orderBy        = 'desc';
-        $orderByClass   = 'asc';
-        $filterOptions .= '<input type="hidden" name="order" value="asc" />';
+        $sorting_by      = 'ORDER By p.post_title';
+        $order_by        = 'desc';
+        $order_by_class  = 'asc';
+        $filter_options .= '<input type="hidden" name="order" value="asc" />';
       }
     }
-    $countQuery = "SELECT COUNT(p.ID) AS total_permalinks FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != '' " . $filterPermalink . "";
-    $countPosts = $wpdb->get_row( $countQuery );
+    $count_query = "SELECT COUNT(p.ID) AS total_permalinks FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != '' " . $filter_permalink . "";
+    $count_posts = $wpdb->get_row( $count_query );
 
-    $postshtml .= '<form action="' . $_SERVER["REQUEST_URI"] . '" method="get">' .
+    $post_html .= '<form action="' . $_SERVER["REQUEST_URI"] . '" method="get">' .
                     '<p class="search-box">' .
                     '<input type="hidden" name="page" value="cp-post-permalinks" />' .
-                    $filterOptions .
+                    $filter_options .
                     '<label class="screen-reader-text" for="custom-permalink-search-input">Search Custom Permalink:</label>' .
-                    '<input type="search" id="custom-permalink-search-input" name="s" value="' . $searchValue . '">' .
+                    '<input type="search" id="custom-permalink-search-input" name="s" value="' . $search_value . '">' .
                     '<input type="submit" id="search-submit" class="button" value="Search Permalink"></p>' .
                   '</form>' .
                   '<form action="' . $_SERVER["REQUEST_URI"] . '" method="post">' .
@@ -139,54 +139,54 @@ class CustomPermalinksPostTypes {
                         '<input type="submit" id="doaction" class="button action" value="Apply">' .
                       '</div>';
 
-    $posts          = 0;
-    $paginationHTML = '';
-    if ( isset( $countPosts->total_permalinks )
-      && 0 < $countPosts->total_permalinks
+    $posts           = 0;
+    $pagination_html = '';
+    if ( isset( $count_posts->total_permalinks )
+      && 0 < $count_posts->total_permalinks
     ) {
       require_once(
         CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-pager.php'
       );
-      $cpPager = new CustomPermalinksPager();
+      $cp_pager = new Custom_Permalinks_Pager();
 
-      $postshtml .= '<h2 class="screen-reader-text">Custom Permalink navigation</h2>';
+      $post_html .= '<h2 class="screen-reader-text">Custom Permalink navigation</h2>';
 
-      $query = "SELECT p.ID, p.post_title, p.post_type, pm.meta_value FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != '' " . $filterPermalink . " " . $sortingBy . " " . $pageLimit . "";
+      $query = "SELECT p.ID, p.post_title, p.post_type, pm.meta_value FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != '' " . $filter_permalink . " " . $sorting_by . " " . $page_limit . "";
       $posts = $wpdb->get_results( $query );
 
-      $totalPages = ceil( $countPosts->total_permalinks / 20 );
+      $total_pages = ceil( $count_posts->total_permalinks / 20 );
       if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] )
         && 0 < $_GET['paged']
       ) {
-        $paginationHTML = $cpPager->getPagination(
-          $countPosts->total_permalinks, $_GET['paged'], $totalPages
+        $pagination_html = $cp_pager->get_pagination(
+          $count_posts->total_permalinks, $_GET['paged'], $total_pages
         );
-        if ( $_GET['paged'] > $totalPages ) {
-          $redirectUri = explode(
+        if ( $_GET['paged'] > $total_pages ) {
+          $redirect_uri = explode(
             '&paged=' . $_GET['paged'] . '', $_SERVER['REQUEST_URI']
           );
-          header( 'Location: ' . $redirectUri[0], 301 );
+          header( 'Location: ' . $redirect_uri[0], 301 );
           exit(0);
         }
       } elseif ( ! isset( $_GET['paged'] ) ) {
-        $paginationHTML = $cpPager->getPagination(
-          $countPosts->total_permalinks, 1, $totalPages
+        $pagination_html = $cp_pager->get_pagination(
+          $count_posts->total_permalinks, 1, $total_pages
         );
       }
 
-      $postshtml .= $paginationHTML;
+      $post_html .= $pagination_html;
     }
-    $tableNavigation = $this->postNav(
-      $orderByClass, $orderBy, $searchPermalink
+    $table_navigation = $this->postNav(
+      $order_by_class, $order_by, $search_permalink
     );
 
-    $postshtml .= '</div>';
-    $postshtml .= '<table class="wp-list-table widefat fixed striped posts">' .
-                    '<thead>' . $tableNavigation . '</thead>' .
+    $post_html .= '</div>';
+    $post_html .= '<table class="wp-list-table widefat fixed striped posts">' .
+                    '<thead>' . $table_navigation . '</thead>' .
                     '<tbody>';
     if ( 0 != $posts && ! empty( $posts ) ) {
       foreach ( $posts as $post ) {
-        $postshtml .= '<tr valign="top">' .
+        $post_html .= '<tr valign="top">' .
                         '<th scope="row" class="check-column">' .
                           '<input type="checkbox" name="permalink[]" value="' . $post->ID . '" />' .
                         '</th>' .
@@ -204,15 +204,15 @@ class CustomPermalinksPostTypes {
                       '</tr>';
       }
     } else {
-      $postshtml .= '<tr class="no-items">' .
+      $post_html .= '<tr class="no-items">' .
                       '<td class="colspanchange" colspan="4">' . __( "No permalinks found.", "custom-permalinks" ) . '</td>' .
                     '</tr>';
     }
-    $postshtml .= '</tbody>' .
-                  '<tfoot>' . $tableNavigation . '</tfoot>' .
+    $post_html .= '</tbody>' .
+                  '<tfoot>' . $table_navigation . '</tfoot>' .
                   '</table>';
 
-    $postshtml .= '<div class="tablenav bottom">' .
+    $post_html .= '<div class="tablenav bottom">' .
                     '<div class="alignleft actions bulkactions">' .
                       '<label for="bulk-action-selector-bottom" class="screen-reader-text">Select bulk action</label>' .
                       '<select name="action2" id="bulk-action-selector-bottom">' .
@@ -221,10 +221,10 @@ class CustomPermalinksPostTypes {
                       '</select>' .
                       '<input type="submit" id="doaction2" class="button action" value="Apply">' .
                     '</div>' .
-                    $paginationHTML .
+                    $pagination_html .
                   '</div>' .
                   '</form></div>';
 
-    echo $postshtml;
+    echo $post_html;
   }
 }
