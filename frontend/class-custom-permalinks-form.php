@@ -27,6 +27,7 @@ class Custom_Permalinks_Form {
     add_action( 'create_category', array( $this, 'save_category' ) );
     add_action( 'delete_post_tag', array( $this, 'delete_term' ) );
     add_action( 'delete_post_category', array( $this, 'delete_term' ) );
+    add_action( 'rest_api_init', array( $this, 'rest_edit_form' ) );
 
     add_filter( 'get_sample_permalink_html',
       array( $this, 'sample_permalink_html' ), 10, 2
@@ -183,6 +184,9 @@ class Custom_Permalinks_Form {
       $form_return = 1;
     }
 
+    $args = array(
+      'public' => true
+    );
     $post_types = get_post_types( $args, 'objects' );
     if ( ! isset( $post_types[$post->post_type] ) ) {
       $form_return = 1;
@@ -535,5 +539,44 @@ class Custom_Permalinks_Form {
     }
 
     return $requested_url;
+  }
+
+  /**
+   * Refresh Permalink using AJAX Call.
+   *
+   * @since 2.0.0
+   * @access public
+   *
+   * @param object $data Contains post id with some default REST Values.
+   */
+  public function refresh_meta_form( $data ) {
+    if ( isset( $data['id'] ) && is_numeric( $data['id'] ) ) {
+      $post = get_post( $data['id'] );
+      $all_permalinks = array();
+      $all_permalinks['custom_permalink'] = get_post_meta( $data['id'], 'custom_permalink', true );
+      $cp_frontend = new Custom_Permalinks_Frontend;
+      if ( 'page' === $post->post_type ) {
+        $all_permalinks['original_permalink'] = $cp_frontend->original_page_link( $data['id'] );
+      } else {
+        $all_permalinks['original_permalink'] = $cp_frontend->original_post_link( $data['id'] );
+      }
+      echo json_encode( $all_permalinks );
+      exit;
+    }
+  }
+
+  /**
+   * Added Custom Endpoints for refreshing the permalink.
+   *
+   * @since 2.0.0
+   * @access public
+   */
+  public function rest_edit_form() {
+    register_rest_route( 'custom-permalinks/v1',
+      '/get-permalink/(?P<id>\d+)', array(
+        'methods' => 'GET',
+        'callback' => array( $this, 'refresh_meta_form' )
+      )
+    );
   }
 }

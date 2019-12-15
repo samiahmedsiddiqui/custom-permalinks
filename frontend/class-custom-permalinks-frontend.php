@@ -421,16 +421,16 @@ class Custom_Permalinks_Frontend {
    *
    * @access public
    *
-   * @param int $postId Post ID.
+   * @param int $post_id Post ID.
    *
    * @return string Original Permalink for Posts.
    */
-  public function original_post_link( $postId ) {
+  public function original_post_link( $post_id ) {
     remove_filter( 'post_link', array( $this, 'custom_post_link' ), 10, 3 );
     remove_filter( 'post_type_link', array( $this, 'custom_post_link' ), 10, 2 );
 
     require_once ABSPATH . '/wp-admin/includes/post.php';
-    list( $permalink, $postName ) = get_sample_permalink( $postId );
+    list( $permalink, $postName ) = get_sample_permalink( $post_id );
     $permalink = str_replace( array( '%pagename%','%postname%' ), $postName, $permalink );
     $permalink = ltrim( str_replace( home_url(), '', $permalink ), '/' );
 
@@ -445,16 +445,16 @@ class Custom_Permalinks_Frontend {
    *
    * @access public
    *
-   * @param int $postId Page ID.
+   * @param int $post_id Page ID.
    *
    * @return string Original Permalink for the Page.
    */
-  public function original_page_link( $postId ) {
+  public function original_page_link( $post_id ) {
     remove_filter( 'page_link', array( $this, 'custom_page_link' ), 10, 2 );
     remove_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
 
     require_once ABSPATH . '/wp-admin/includes/post.php';
-    list( $permalink, $postName ) = get_sample_permalink( $postId );
+    list( $permalink, $postName ) = get_sample_permalink( $post_id );
     $permalink = str_replace( array( '%pagename%','%postname%' ), $postName, $permalink );
     $permalink = ltrim( str_replace( home_url(), '', $permalink ), '/' );
 
@@ -468,14 +468,14 @@ class Custom_Permalinks_Frontend {
    *
    * @access public
    *
-   * @param int $tagId Term ID.
+   * @param int $tag_id Term ID.
    *
    * @return string Original Permalink for the Term.
    */
-  public function original_tag_link( $tagId ) {
+  public function original_tag_link( $tag_id ) {
     remove_filter( 'tag_link', array( $this, 'custom_term_link' ), 10, 2 );
     remove_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
-    $original_permalink = ltrim( str_replace( home_url(), '', get_tag_link( $tagId ) ), '/' );
+    $original_permalink = ltrim( str_replace( home_url(), '', get_tag_link( $tag_id ) ), '/' );
     add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
     add_filter( 'tag_link', array( $this, 'custom_term_link' ), 10, 2 );
 
@@ -487,14 +487,14 @@ class Custom_Permalinks_Frontend {
    *
    * @access public
    *
-   * @param int $categoryId Term ID.
+   * @param int $category_id Term ID.
    *
    * @return string Original Permalink for the Term.
    */
-  public function original_category_link( $categoryId ) {
+  public function original_category_link( $category_id ) {
     remove_filter( 'category_link', array( $this, 'custom_term_link' ), 10, 2 );
     remove_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
-    $original_permalink = ltrim( str_replace( home_url(), '', get_category_link( $categoryId ) ), '/' );
+    $original_permalink = ltrim( str_replace( home_url(), '', get_category_link( $category_id ) ), '/' );
     add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
     add_filter( 'category_link', array( $this, 'custom_term_link' ), 10, 2 );
 
@@ -540,11 +540,11 @@ class Custom_Permalinks_Frontend {
    *
    * @return bool Term link.
    */
-  public function term_permalink( $termId ) {
+  public function term_permalink( $term_id ) {
     $table = get_option( 'custom_permalink_table' );
     if ( $table ) {
       foreach ( $table as $link => $info ) {
-        if ( $info['id'] == $termId ) {
+        if ( $info['id'] == $term_id ) {
           return $link;
         }
       }
