@@ -119,7 +119,7 @@ class Custom_Permalinks_Form {
     $post                    = get_post( $post_id );
     $this->permalink_metabox = 1;
 
-    if ( 'attachment' == $post->post_type || $post->ID == get_option( 'page_on_front' ) ) {
+    if ( 'attachment' === $post->post_type || $post->ID === get_option( 'page_on_front' ) ) {
       return $html;
     }
 
@@ -133,7 +133,7 @@ class Custom_Permalinks_Form {
     ob_start();
 
     $cp_frontend = new Custom_Permalinks_Frontend();
-    if ( 'page' == $post->post_type ) {
+    if ( 'page' === $post->post_type ) {
       $original_permalink = $cp_frontend->original_page_link( $post_id );
       $view_post          = __( 'View Page', 'custom-permalinks' );
     } else {
@@ -145,10 +145,22 @@ class Custom_Permalinks_Form {
     $content = ob_get_contents();
     ob_end_clean();
 
-    $view_post_link = get_permalink( $post );
+    if ( 'trash' !== $post->post_status ) {
+      wp_enqueue_script( 'custom-permalinks-form',
+        plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
+      );
+      if ( isset( $permalink ) && ! empty( $permalink ) ) {
+        $view_post_link = trailingslashit( home_url() ) . $permalink;
+      } else {
+        $view_post_link = trailingslashit( home_url() ) . $original_permalink;
+      }
 
-    return '<strong>' . __( 'Permalink:', 'custom-permalinks' ) . "</strong>\n" . $content .
-         ( isset( $view_post ) ? "<span id='view-post-btn'><a href='$view_post_link' class='button button-small' target='_blank'>$view_post</a></span>\n" : "" );
+      $content .= ' <span id="view-post-btn">' .
+                    '<a href="' . $view_post_link . '" class="button button-small" target="_blank">' . $view_post .' </a>' .
+                  '</span><br>';
+    }
+
+    return '<strong>' . __( 'Permalink:', 'custom-permalinks' ) . '</strong>\n' . $content;
   }
 
   /**
@@ -160,7 +172,29 @@ class Custom_Permalinks_Form {
    * @param object $post WP Post Object.
    */
   public function meta_edit_form( $post ) {
+    $form_return = 0;
     if ( isset( $this->permalink_metabox ) && 1 === $this->permalink_metabox ) {
+      $form_return = 1;
+    }
+
+    if ( 'attachment' === $post->post_type ) {
+      $form_return = 1;
+    } else if ( $post->ID === get_option( 'page_on_front' ) ) {
+      $form_return = 1;
+    }
+
+    $post_types = get_post_types( $args, 'objects' );
+    if ( ! isset( $post_types[$post->post_type] ) ) {
+      $form_return = 1;
+    }
+
+    $exclude_post_types = $post->post_type;
+    $excluded           = apply_filters( 'custom_permalinks_exclude_post_type', $exclude_post_types );
+    if ( '__true' === $excluded ) {
+      $form_return = 1;
+    }
+
+    if ( 1 === $form_return ) {
       wp_enqueue_script( 'custom-permalinks-form',
         plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
       );
@@ -169,30 +203,14 @@ class Custom_Permalinks_Form {
 
     $screen = get_current_screen();
     if ( 'add' === $screen->action ) {
-      wp_enqueue_script( 'custom-permalinks-form',
-        plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
-      );
-      return;
-    }
-
-    if ( 'attachment' == $post->post_type || $post->ID == get_option( 'page_on_front' ) ) {
-      return;
-    }
-
-    $exclude_post_types = $post->post_type;
-    $excluded           = apply_filters( 'custom_permalinks_exclude_post_type', $exclude_post_types );
-    if ( '__true' === $excluded ) {
-      wp_enqueue_script( 'custom-permalinks-form',
-        plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
-      );
-      return;
+      echo '<input value="add" type="hidden" name="custom-permalinks-add" id="custom-permalinks-add" />';
     }
     $permalink = get_post_meta( $post->ID, 'custom_permalink', true );
 
     ob_start();
 
     $cp_frontend = new Custom_Permalinks_Frontend();
-    if ( 'page' == $post->post_type ) {
+    if ( 'page' === $post->post_type ) {
       $original_permalink = $cp_frontend->original_page_link( $post->ID );
       $view_post          = __( 'View Page', 'custom-permalinks' );
     } else {
@@ -204,16 +222,25 @@ class Custom_Permalinks_Form {
     $content = ob_get_contents();
     ob_end_clean();
 
-    if ( 'trash' != $post->post_status ) {
+    if ( 'trash' !== $post->post_status ) {
       wp_enqueue_script( 'custom-permalinks-form',
         plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
       );
-      $view_post_link = get_permalink( $post );
-
-      $content .= ' <span id="view-post-btn">' .
-                    '<a href="' . $view_post_link . '" class="button button-small" target="_blank">' . $view_post . '</a>' .
-                  '</span><br>';
+      $content .= '<label style="display:block;">Actions</label>';
+      if ( isset( $permalink ) && ! empty( $permalink ) ) {
+        $view_url = trailingslashit( home_url() ) . $permalink;
+        $content .= ' <span id="view-post-btn">' .
+                      '<a href="' . $view_url . '" class="button button-small" target="_blank">' . $view_post . '</a>' .
+                    '</span><br>';
+      } else {
+        $view_url = trailingslashit( home_url() ) . $original_permalink;
+        $content .= ' <span id="view-post-btn">' .
+                      '<a href="' . $view_url . '" class="button button-small" target="_blank">' . $view_post .' </a>' .
+                    '</span><br>';
+      }
+      $content .= '<style>.editor-post-permalink,.cp-permalink-hidden{display:none;}</style>';
     }
+
     echo $content;
   }
 
@@ -287,7 +314,7 @@ class Custom_Permalinks_Form {
       $permalink   = $cp_frontend->term_permalink( $object->term_id );
 
       if ( $object->term_id ) {
-        if ( $object->taxonomy == 'post_tag' ) {
+        if ( 'post_tag' === $object->taxonomy ) {
           $original_permalink = $cp_frontend->original_tag_link( $object->term_id );
         } else {
           $original_permalink = $cp_frontend->original_category_link( $object->term_id );
@@ -318,45 +345,44 @@ class Custom_Permalinks_Form {
    *
    * @param string $permalink Permalink which is created by the plugin.
    * @param string $original Permalink which set by WordPress.
-   * @param bool $renderContainers Shows Post/Term Edit.
+   * @param bool $render_containers Shows Post/Term Edit.
    * @param string $postname Post Name.
    */
-  private function get_permalink_form( $permalink, $original = '', $renderContainers = true, $postname = '' ) {
-    ?>
-    <input value="true" type="hidden" name="custom_permalinks_edit" />
-    <input value="<?php echo home_url(); ?>" type="hidden" name="custom_permalinks_home_url" id="custom_permalinks_home_url" />
-    <input value="<?php echo htmlspecialchars( urldecode( $permalink ) ); ?>" type="hidden" name="custom_permalink" id="custom_permalink" />
+  private function get_permalink_form( $permalink, $original = '', $render_containers = true, $postname = '' ) {
+    $encoded_permalink = htmlspecialchars( urldecode( $permalink ) );
+    echo '<input value="true" type="hidden" name="custom_permalinks_edit" />' .
+         '<input value="' . home_url() . '" type="hidden" name="custom_permalinks_home_url" id="custom_permalinks_home_url" />' .
+         '<input value="' . $encoded_permalink . '" type="hidden" name="custom_permalink" id="custom_permalink" />';
 
-    <?php
-    if ( $renderContainers ) :
-    ?>
-    <table class="form-table" id="custom_permalink_form">
-    <tr>
-      <th scope="row"><?php _e( 'Custom Permalink', 'custom-permalinks' ); ?></th>
-      <td>
-    <?php
-    endif;
-    if ( $permalink == '' ) {
+    if ( $render_containers ) {
+      echo '<table class="form-table" id="custom_permalink_form">' .
+              '<tr>' .
+                '<th scope="row">' . __( 'Custom Permalink', 'custom-permalinks' ) . '</th>' .
+                '<td>';
+    }
+    if ( '' === $permalink ) {
       $original = $this->check_conflicts( $original );
     }
-    $postSlug = htmlspecialchars( $permalink ? urldecode( $permalink ) : urldecode( $original ) );
-    $originalEncodedUrl = htmlspecialchars( urldecode( $original ) );
+    $post_slug = htmlspecialchars( $permalink ? urldecode( $permalink ) : urldecode( $original ) );
+    $original_encoded_url = htmlspecialchars( urldecode( $original ) );
     wp_enqueue_script( 'custom-permalinks-form', plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true );
-    $postnameHTML = '';
-    if ( isset( $postname ) && $postname != '' ) {
-      $postnameHTML = '<input type="hidden" id="new-post-slug" class="text" value="' . $postname . '" />';
+    $postname_html = '';
+    if ( isset( $postname ) && '' !== $postname ) {
+      $postname_html = '<input type="hidden" id="new-post-slug" class="text" value="' . $postname . '" />';
     }
 
-    echo home_url() . '/<span id="editable-post-name" title="Click to edit this part of the permalink">' . $postnameHTML;
+    $home_url   = trailingslashit( home_url() );
+
+    echo $home_url . '/<span id="editable-post-name" title="Click to edit this part of the permalink">' . $postname_html;
 
     ?>
-    <input type="text" id="custom-permalinks-post-slug" class="text" value="<?php echo $postSlug; ?>"
+    <input type="text" id="custom-permalinks-post-slug" class="text" value="<?php echo $post_slug; ?>"
     style="width: 250px; <?php if ( !$permalink ) echo 'color: #ddd'; ?>"
     onfocus="if ( this.style.color = '#ddd' ) { this.style.color = '#000'; }"
-    onblur="document.getElementById('custom_permalink').value = this.value; if ( this.value == '' || this.value == '<?php echo $originalEncodedUrl;  ?>' ) { this.value = '<?php echo $originalEncodedUrl; ?>'; this.style.color = '#ddd'; }" />
+    onblur="document.getElementById('custom_permalink').value = this.value; if ( this.value === '' || this.value === '<?php echo $original_encoded_url;  ?>' ) { this.value = '<?php echo $original_encoded_url; ?>'; this.style.color = '#ddd'; }" />
     </span>
 
-    <?php if ( $renderContainers ) : ?>
+    <?php if ( $render_containers ) : ?>
     <br />
     <small><?php _e( 'Leave blank to disable', 'custom-permalinks' ); ?></small>
     </td>
@@ -381,7 +407,7 @@ class Custom_Permalinks_Form {
     $new_permalink = ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), '/' );
 
     $cp_frontend = new Custom_Permalinks_Frontend();
-    if ( $new_permalink == $cp_frontend->original_tag_link( $term_id ) ) {
+    if ( $new_permalink === $cp_frontend->original_tag_link( $term_id ) ) {
       return;
     }
 
@@ -404,7 +430,7 @@ class Custom_Permalinks_Form {
     $new_permalink = ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), '/' );
 
     $cp_frontend = new Custom_Permalinks_Frontend();
-    if ( $new_permalink == $cp_frontend->original_category_link( $term_id ) ) {
+    if ( $new_permalink === $cp_frontend->original_category_link( $term_id ) ) {
       return;
     }
 
@@ -429,7 +455,7 @@ class Custom_Permalinks_Form {
     if ( $permalink ) {
       $table[$permalink] = array(
         'id' => $term->term_id,
-        'kind' => ( $term->taxonomy == 'category' ? 'category' : 'tag' ),
+        'kind' => ( $term->taxonomy === 'category' ? 'category' : 'tag' ),
         'slug' => $term->slug
       );
     }
@@ -448,7 +474,7 @@ class Custom_Permalinks_Form {
     $table = get_option( 'custom_permalink_table' );
     if ( $table ) {
       foreach ( $table as $link => $info ) {
-        if ( $info['id'] == $term_id ) {
+        if ( $info['id'] === $term_id ) {
           unset( $table[$link] );
           break;
         }
@@ -466,48 +492,48 @@ class Custom_Permalinks_Form {
    *
    * @return string requested URL by removing the language/ from it if exist.
    */
-  public function check_conflicts( $requestedUrl = '' ) {
-    if ( '' == $requestedUrl ) {
+  public function check_conflicts( $requested_url = '' ) {
+    if ( '' === $requested_url ) {
       return;
     }
 
     // Check if the Polylang Plugin is installed so, make changes in the URL
     if ( defined( 'POLYLANG_VERSION' ) ) {
-      $polylangConfig = get_option( 'polylang' );
-      if ( $polylangConfig['force_lang'] == 1 ) {
+      $polylang_config = get_option( 'polylang' );
+      if ( 1 === $polylang_config['force_lang'] ) {
 
         if ( false !== strpos( $requestedUrl, 'language/' ) ) {
-          $requestedUrl = str_replace( 'language/', '', $requestedUrl );
+          $requested_url = str_replace( 'language/', '', $requested_url );
         }
 
         /*
          * Check if hide_default is true and the current language is not the
          * default. If true the remove the  lang code from the url.
          */
-        if ( 1 == $polylangConfig['hide_default'] ) {
-          $currentLanguage = '';
+        if ( 1 === $polylang_config['hide_default'] ) {
+          $current_language = '';
           if ( function_exists( 'pll_current_language' ) ) {
             // get current language
-            $currentLanguage = pll_current_language();
+            $current_language = pll_current_language();
           }
 
           // get default language
-          $defaultLanguage = $polylangConfig['default_lang'];
-          if ( $currentLanguage !== $defaultLanguage ) {
-            $removeLang = ltrim( strstr( $requestedUrl, '/' ), '/' );
-            if ( '' != $removeLang ) {
-              return $removeLang;
+          $default_language = $polylang_config['default_lang'];
+          if ( $current_language !== $default_language ) {
+            $remove_lang = ltrim( strstr( $requested_url, '/' ), '/' );
+            if ( '' != $remove_lang ) {
+              return $remove_lang;
             }
           }
         } else {
-          $removeLang = ltrim( strstr( $requestedUrl, '/' ), '/' );
-          if ( '' != $removeLang ) {
-            return $removeLang;
+          $remove_lang = ltrim( strstr( $requested_url, '/' ), '/' );
+          if ( '' != $remove_lang ) {
+            return $remove_lang;
           }
         }
       }
     }
 
-    return $requestedUrl;
+    return $requested_url;
   }
 }
