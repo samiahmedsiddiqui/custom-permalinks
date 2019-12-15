@@ -38,12 +38,12 @@ class Custom_Permalinks_Taxonomies {
    * Sort the terms array in desc order using term id.
    *
    * @since 1.2.0
-   * @access private
+   * @access public
    *
    * @return int
    */
-  private function sort_array( $a, $b ) {
-    return $b['id'] - $a['id'];
+  public function sort_array( $comp1, $comp2 ) {
+    return $comp2['id'] - $comp1['id'];
   }
 
   /**
@@ -165,7 +165,7 @@ class Custom_Permalinks_Taxonomies {
                   '<tbody>';
 
     if ( $table && is_array( $table ) && 0 < $count_tags ) {
-      uasort( $table, array( 'Custom_Permalinks_Admin', 'sort_array' ) );
+      uasort( $table, array( $this, 'sort_array' ) );
       $loopCount = -1;
       foreach ( $table as $permalink => $info ) {
         $loopCount++;

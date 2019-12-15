@@ -137,4 +137,3 @@ class Custom_Permalinks {
 }
 
 new Custom_Permalinks();
-

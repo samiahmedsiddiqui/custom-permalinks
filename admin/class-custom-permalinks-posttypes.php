@@ -24,7 +24,7 @@ class Custom_Permalinks_PostTypes {
    *
    * @return string table row according to the provided params.
    */
-  private function postNav( $order_by_class, $order_by, $search_permalink ) {
+  private function post_nav( $order_by_class, $order_by, $search_permalink ) {
     $post_nav = '<tr>' .
                   '<td id="cb" class="manage-column column-cb check-column">' .
                     '<label class="screen-reader-text" for="cb-select-all-1">Select All</label>' .
@@ -176,7 +176,7 @@ class Custom_Permalinks_PostTypes {
 
       $post_html .= $pagination_html;
     }
-    $table_navigation = $this->postNav(
+    $table_navigation = $this->post_nav(
       $order_by_class, $order_by, $search_permalink
     );
 

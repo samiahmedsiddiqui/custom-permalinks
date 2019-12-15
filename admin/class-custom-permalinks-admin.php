@@ -24,16 +24,16 @@ class Custom_Permalinks_Admin {
    */
   public function admin_menu() {
     add_menu_page( 'Custom Permalinks', 'Custom Permalinks', 'cp_view_post_permalinks',
-      'cp-post-permalinks', array( $this,'post_Permalinks_Page' ),
+      'cp-post-permalinks', array( $this,'post_permalinks_page' ),
       'dashicons-admin-links'
     );
     add_submenu_page( 'cp-post-permalinks', 'PostTypes Permalinks',
       'PostTypes Permalinks', 'cp_view_post_permalinks', 'cp-post-permalinks',
-      array( $this, 'post_Permalinks_Page' )
+      array( $this, 'post_permalinks_page' )
     );
     add_submenu_page( 'cp-post-permalinks', 'Taxonomies Permalinks',
       'Taxonomies Permalinks', 'cp_view_category_permalinks', 'cp-category-permalinks',
-      array( $this, 'taxonomy_Permalinks_Page' )
+      array( $this, 'taxonomy_permalinks_page' )
     );
     add_submenu_page( 'cp-post-permalinks', 'About Custom Permalinks',
       'About', 'install_plugins', 'cp-about-plugins',
@@ -47,7 +47,7 @@ class Custom_Permalinks_Admin {
    * @since 1.2.0
    * @access public
    */
-  public function post_Permalinks_Page() {
+  public function post_permalinks_page() {
     require_once(
       CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-posttypes.php'
     );
@@ -63,7 +63,7 @@ class Custom_Permalinks_Admin {
    * @since 1.2.0
    * @access public
    */
-  public function taxonomy_Permalinks_Page() {
+  public function taxonomy_permalinks_page() {
     require_once(
       CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-taxonomies.php'
     );
