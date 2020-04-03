@@ -230,7 +230,6 @@ class Custom_Permalinks_Form {
       wp_enqueue_script( 'custom-permalinks-form',
         plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
       );
-      $content .= '<label style="display:block;">Actions</label>';
       if ( isset( $permalink ) && ! empty( $permalink ) ) {
         $view_url = trailingslashit( home_url() ) . $permalink;
         $content .= ' <span id="view-post-btn">' .

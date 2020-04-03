@@ -60,6 +60,9 @@ function updateMetaBox() {
         var setPermlinks = JSON.parse(this.responseText);
         var permalinkAdd = document.getElementById("custom-permalinks-add");
         getPermalink.value = setPermlinks.custom_permalink;
+        if (setPermlinks.custom_permalink === "") {
+          setPermlinks.custom_permalink = setPermlinks.original_permalink;
+        }
         document.getElementById("custom-permalinks-post-slug").value = setPermlinks.custom_permalink;
         document.getElementById("original-permalink").value = setPermlinks.original_permalink;
         if (document.querySelector("#view-post-btn a")) {
