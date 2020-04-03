@@ -375,9 +375,9 @@ class Custom_Permalinks_Form {
       $postname_html = '<input type="hidden" id="new-post-slug" class="text" value="' . $postname . '" />';
     }
 
-    $home_url   = trailingslashit( home_url() );
+    $home_url = trailingslashit( home_url() );
 
-    echo $home_url . '/<span id="editable-post-name" title="Click to edit this part of the permalink">' . $postname_html;
+    echo $home_url . '<span id="editable-post-name" title="Click to edit this part of the permalink">' . $postname_html;
 
     ?>
     <input type="text" id="custom-permalinks-post-slug" class="text" value="<?php echo $post_slug; ?>"
