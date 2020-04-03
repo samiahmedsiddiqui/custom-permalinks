@@ -138,8 +138,22 @@ class Custom_Permalinks_Form {
       $original_permalink = $cp_frontend->original_page_link( $post_id );
       $view_post          = __( 'View Page', 'custom-permalinks' );
     } else {
+
+      $post_type_name = ucfirst( $post->post_type );
+      $post_type_object = get_post_type_object( $post->post_type );
+      if ( is_object($post_type_object)
+        && isset( $post_type_object->labels )
+        && isset( $post_type_object->labels->singular_name )
+      ) {
+        $post_type_name = $post_type_object->labels->singular_name;
+      } else if ( is_object($post_type_object)
+        && isset( $post_type_object->label )
+      ) {
+        $post_type_name = $post_type_object->label;
+      }
+
       $original_permalink = $cp_frontend->original_post_link( $post_id );
-      $view_post          = __( 'View ' . ucfirst( $post->post_type ), 'custom-permalinks' );
+      $view_post          = __( 'View ', 'custom-permalinks' ) . $post_type_name;
     }
     $this->get_permalink_form( $permalink, $original_permalink, false, $post->post_name );
 
@@ -161,7 +175,7 @@ class Custom_Permalinks_Form {
                   '</span><br>';
     }
 
-    return '<strong>' . __( 'Permalink:', 'custom-permalinks' ) . '</strong>\n' . $content;
+    return '<strong>' . __( 'Permalink:', 'custom-permalinks' ) . '</strong> ' . $content;
   }
 
   /**
