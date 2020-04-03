@@ -1,10 +1,21 @@
-# folders and files to be ignored by git
+# Editors
+project.xml
+project.properties
+/nbproject/private/
+.buildpath
+.project
+.settings*
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+.sublimelinterrc
 
-############
-## OSes
-############
+# Gulp
+/node_modules/
 
-[Tt]humbs.db
-[Dd]esktop.ini
-*.DS_store
-.DS_store?
+# OS X metadata
+.DS_Store
+
+# Windows junk
+Thumbs.db
