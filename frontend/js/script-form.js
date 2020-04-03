@@ -23,10 +23,11 @@ function blurPermalinkField() {
   "use strict";
 
   var newPostSlug = document.getElementById("custom-permalinks-post-slug");
-  var originalPermalink = document.getElementById("original_permalink");
+  var originalPermalink = document.getElementById("original-permalink");
   if (!newPostSlug) {
     return;
   }
+
   getPermalink.value = newPostSlug.value;
   if (newPostSlug.value === "" || newPostSlug.value === originalPermalink.value) {
     newPostSlug.value = originalPermalink.value;
@@ -58,15 +59,20 @@ function updateMetaBox() {
       if (this.readyState == 4 && this.status == 200) {
         var setPermlinks = JSON.parse(this.responseText);
         var permalinkAdd = document.getElementById("custom-permalinks-add");
-        getPermalink.value = setPermlinks.permalink_customizer;
-        document.getElementById("custom-permalinks-post-slug").value = setPermlinks.permalink_customizer;
-        document.getElementById("original_permalink").value = setPermlinks.original_permalink;
-        document.querySelector("#view-post-btn a").href = getHomeURL.value + "/" + setPermlinks.permalink_customizer;
+        getPermalink.value = setPermlinks.custom_permalink;
+        document.getElementById("custom-permalinks-post-slug").value = setPermlinks.custom_permalink;
+        document.getElementById("original-permalink").value = setPermlinks.original_permalink;
+        if (document.querySelector("#view-post-btn a")) {
+          document.querySelector("#view-post-btn a").href = getHomeURL.value + setPermlinks.custom_permalink;
+        }
+        if (document.querySelector("a.editor-post-preview")) {
+          document.querySelector("a.editor-post-preview").href = getHomeURL.value + setPermlinks.custom_permalink;
+        }
         if (permalinkAdd && permalinkAdd.value === "add") {
           document.getElementById("custom-permalinks-edit-box").style.display = "";
         }
         if (document.querySelector(".components-notice__content a")) {
-          document.querySelector(".components-notice__content a").href = "/" + setPermlinks.permalink_customizer;
+          document.querySelector(".components-notice__content a").href = "/" + setPermlinks.custom_permalink;
         }
       }
     };

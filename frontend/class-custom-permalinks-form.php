@@ -354,8 +354,10 @@ class Custom_Permalinks_Form {
    */
   private function get_permalink_form( $permalink, $original = '', $render_containers = true, $postname = '' ) {
     $encoded_permalink = htmlspecialchars( urldecode( $permalink ) );
+    $home_url = trailingslashit( home_url() );
+
     echo '<input value="true" type="hidden" name="custom_permalinks_edit" />' .
-         '<input value="' . home_url() . '" type="hidden" name="custom_permalinks_home_url" id="custom_permalinks_home_url" />' .
+         '<input value="' . $home_url . '" type="hidden" name="custom_permalinks_home_url" id="custom_permalinks_home_url" />' .
          '<input value="' . $encoded_permalink . '" type="hidden" name="custom_permalink" id="custom_permalink" />';
 
     if ( $render_containers ) {
@@ -375,25 +377,25 @@ class Custom_Permalinks_Form {
       $postname_html = '<input type="hidden" id="new-post-slug" class="text" value="' . $postname . '" />';
     }
 
-    $home_url = trailingslashit( home_url() );
+    $field_style = 'width: 250px;';
+    if ( !$permalink ) {
+      $field_style .= ' color: #ddd;';
+    }
 
-    echo $home_url . '<span id="editable-post-name" title="Click to edit this part of the permalink">' . $postname_html;
+    echo $home_url .
+      '<span id="editable-post-name" title="Click to edit this part of the permalink">' .
+        $postname_html .
+        '<input type="hidden" id="original-permalink" value="' . $original_encoded_url . '" />' .
+        '<input type="text" id="custom-permalinks-post-slug" class="text" value="' . $post_slug . '" style="' . $field_style . '" />' .
+      '</span>';
 
-    ?>
-    <input type="text" id="custom-permalinks-post-slug" class="text" value="<?php echo $post_slug; ?>"
-    style="width: 250px; <?php if ( !$permalink ) echo 'color: #ddd'; ?>"
-    onfocus="if ( this.style.color = '#ddd' ) { this.style.color = '#000'; }"
-    onblur="document.getElementById('custom_permalink').value = this.value; if ( this.value === '' || this.value === '<?php echo $original_encoded_url;  ?>' ) { this.value = '<?php echo $original_encoded_url; ?>'; this.style.color = '#ddd'; }" />
-    </span>
-
-    <?php if ( $render_containers ) : ?>
-    <br />
-    <small><?php _e( 'Leave blank to disable', 'custom-permalinks' ); ?></small>
-    </td>
-    </tr>
-    </table>
-    <?php
-    endif;
+    if ( $render_containers ) {
+      echo '<br />' .
+            '<small>' . _e( "Leave blank to disable", "custom-permalinks" ) . '</small>' .
+            '</td>' .
+            '</tr>' .
+            '</table>';
+    }
   }
 
   /**
