@@ -107,6 +107,82 @@ class Custom_Permalinks_Form {
   }
 
   /**
+   * Result Permalink HTML Form for classic editor and Gutenberg.
+   *
+   * @since 2.0.0
+   * @access private
+   *
+   * @param object $post WP Post Object.
+   * @param bool $meta_box Show whether calls from clasic WordPress or Gutenberg.
+   *
+   * @return string Permalink Form HTML.
+   */
+  private function get_permalink_html( $post, $meta_box = false ) {
+    $post_id   = $post->ID;
+    $permalink = get_post_meta( $post_id, 'custom_permalink', true );
+
+    ob_start();
+
+    $cp_frontend = new Custom_Permalinks_Frontend();
+    if ( 'page' === $post->post_type ) {
+      $original_permalink = $cp_frontend->original_page_link( $post_id );
+      $view_post          = __( 'View Page', 'custom-permalinks' );
+    } else {
+      $post_type_name   = '';
+      $post_type_object = get_post_type_object( $post->post_type );
+      if ( is_object($post_type_object)
+        && isset( $post_type_object->labels )
+        && isset( $post_type_object->labels->singular_name )
+      ) {
+        $post_type_name = ' ' . $post_type_object->labels->singular_name;
+      } else if ( is_object($post_type_object)
+        && isset( $post_type_object->label )
+      ) {
+        $post_type_name = ' ' . $post_type_object->label;
+      }
+
+      $original_permalink = $cp_frontend->original_post_link( $post_id );
+      $view_post          = __( 'View', 'custom-permalinks' ) . $post_type_name;
+    }
+    $this->get_permalink_form( $permalink, $original_permalink, false, $post->post_name );
+
+    $content = ob_get_contents();
+    ob_end_clean();
+
+    if ( 'trash' !== $post->post_status ) {
+      wp_enqueue_script( 'custom-permalinks-form',
+        plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
+      );
+
+      if ( isset( $permalink ) && ! empty( $permalink ) ) {
+        $view_post_link = trailingslashit( home_url() ) . $permalink;
+      } else {
+        if ( 'draft' === $post->post_status ) {
+          $view_post = 'Preview';
+          if ( 'page' === $post->post_type ) {
+            $view_post_link = trailingslashit( home_url() ) . '?page_id=' . $post_id . '&preview=true';
+          } else if ( 'post' === $post->post_type ) {
+            $view_post_link = trailingslashit( home_url() ) . '?p=' . $post_id . '&preview=true';
+          } else {
+            $view_post_link = trailingslashit( home_url() ) . '?post_type=' . $post->post_type . '&p=' . $post_id . '&preview=true';
+          }
+        } else {
+          $view_post_link = trailingslashit( home_url() ) . $original_permalink;
+        }
+      }
+
+      $content .= ' <span id="view-post-btn">' .
+                    '<a href="' . $view_post_link . '" class="button button-small" target="_blank">' . $view_post .'</a>' .
+                  '</span><br>';
+      if ( true === $meta_box ) {
+        $content .= '<style>.editor-post-permalink,.cp-permalink-hidden{display:none;}</style>';
+      }
+    }
+
+    return '<strong>' . __( 'Permalink:', 'custom-permalinks' ) . '</strong> ' . $content;
+  }
+
+  /**
    * Per-post/page options (Wordpress > 2.9).
    *
    * @access public
@@ -129,53 +205,10 @@ class Custom_Permalinks_Form {
     if ( '__true' === $excluded ) {
       return $html;
     }
-    $permalink = get_post_meta( $post_id, 'custom_permalink', true );
 
-    ob_start();
+    $output_content = $this->get_permalink_html( $post );
 
-    $cp_frontend = new Custom_Permalinks_Frontend();
-    if ( 'page' === $post->post_type ) {
-      $original_permalink = $cp_frontend->original_page_link( $post_id );
-      $view_post          = __( 'View Page', 'custom-permalinks' );
-    } else {
-
-      $post_type_name = ucfirst( $post->post_type );
-      $post_type_object = get_post_type_object( $post->post_type );
-      if ( is_object($post_type_object)
-        && isset( $post_type_object->labels )
-        && isset( $post_type_object->labels->singular_name )
-      ) {
-        $post_type_name = $post_type_object->labels->singular_name;
-      } else if ( is_object($post_type_object)
-        && isset( $post_type_object->label )
-      ) {
-        $post_type_name = $post_type_object->label;
-      }
-
-      $original_permalink = $cp_frontend->original_post_link( $post_id );
-      $view_post          = __( 'View ', 'custom-permalinks' ) . $post_type_name;
-    }
-    $this->get_permalink_form( $permalink, $original_permalink, false, $post->post_name );
-
-    $content = ob_get_contents();
-    ob_end_clean();
-
-    if ( 'trash' !== $post->post_status ) {
-      wp_enqueue_script( 'custom-permalinks-form',
-        plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
-      );
-      if ( isset( $permalink ) && ! empty( $permalink ) ) {
-        $view_post_link = trailingslashit( home_url() ) . $permalink;
-      } else {
-        $view_post_link = trailingslashit( home_url() ) . $original_permalink;
-      }
-
-      $content .= ' <span id="view-post-btn">' .
-                    '<a href="' . $view_post_link . '" class="button button-small" target="_blank">' . $view_post .' </a>' .
-                  '</span><br>';
-    }
-
-    return '<strong>' . __( 'Permalink:', 'custom-permalinks' ) . '</strong> ' . $content;
+    return $output_content;
   }
 
   /**
@@ -223,42 +256,10 @@ class Custom_Permalinks_Form {
     if ( 'add' === $screen->action ) {
       echo '<input value="add" type="hidden" name="custom-permalinks-add" id="custom-permalinks-add" />';
     }
-    $permalink = get_post_meta( $post->ID, 'custom_permalink', true );
 
-    ob_start();
+    $output_content = $this->get_permalink_html( $post, true );
 
-    $cp_frontend = new Custom_Permalinks_Frontend();
-    if ( 'page' === $post->post_type ) {
-      $original_permalink = $cp_frontend->original_page_link( $post->ID );
-      $view_post          = __( 'View Page', 'custom-permalinks' );
-    } else {
-      $original_permalink = $cp_frontend->original_post_link( $post->ID );
-      $view_post          = __( 'View ' . ucfirst( $post->post_type ), 'custom-permalinks' );
-    }
-    $this->get_permalink_form( $permalink, $original_permalink, false, $post->post_name );
-
-    $content = ob_get_contents();
-    ob_end_clean();
-
-    if ( 'trash' !== $post->post_status ) {
-      wp_enqueue_script( 'custom-permalinks-form',
-        plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
-      );
-      if ( isset( $permalink ) && ! empty( $permalink ) ) {
-        $view_url = trailingslashit( home_url() ) . $permalink;
-        $content .= ' <span id="view-post-btn">' .
-                      '<a href="' . $view_url . '" class="button button-small" target="_blank">' . $view_post . '</a>' .
-                    '</span><br>';
-      } else {
-        $view_url = trailingslashit( home_url() ) . $original_permalink;
-        $content .= ' <span id="view-post-btn">' .
-                      '<a href="' . $view_url . '" class="button button-small" target="_blank">' . $view_post .' </a>' .
-                    '</span><br>';
-      }
-      $content .= '<style>.editor-post-permalink,.cp-permalink-hidden{display:none;}</style>';
-    }
-
-    echo $content;
+    echo $output_content;
   }
 
   /**
