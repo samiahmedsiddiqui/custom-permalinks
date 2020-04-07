@@ -506,31 +506,45 @@ class Custom_Permalinks_Frontend {
    *
    * @access public
    *
-   * @param string $string URL with or without a trailing slash.
+   * @param string $url_string URL with or without a trailing slash.
    *
    * @return string Adds/removes a trailing slash based on the permalink structure.
    */
-  public function custom_trailingslash( $string ) {
+  public function custom_trailingslash( $url_string ) {
     global $_CPRegisteredURL;
 
     remove_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
-    $url = parse_url( get_bloginfo( 'url' ) );
-    $request = ltrim( isset( $url['path'] ) ? substr( $string, strlen( $url['path'] ) ) : $string, '/' );
-    add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
 
-    if ( ! trim( $request ) ) {
-      return $string;
+    $trailingslash_string = $url_string;
+    $url                  = parse_url( get_bloginfo( 'url' ) );
+
+    if ( isset( $url['path'] ) ) {
+      $request = substr( $url_string, strlen( $url['path'] ) );
+    } else {
+      $request = $url_string;
     }
 
-    if ( trim( $_CPRegisteredURL, '/' ) == trim( $request, '/' ) ) {
-      if ( isset( $url['path'] ) ) {
-        return ( $string{0} == '/' ? '/' : '' ) . trailingslashit( $url['path'] ) . $_CPRegisteredURL;
-      } else {
-        return ( $string{0} == '/' ? '/' : '' ) . $_CPRegisteredURL;
+    $request = ltrim( $request, '/' );
+
+    add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
+
+    if ( trim( $request ) ) {
+      if ( trim( $_CPRegisteredURL, '/' ) == trim( $request, '/' ) ) {
+        if ( '/' === $url_string[0] ) {
+          $trailingslash_string = '/';
+        } else {
+          $trailingslash_string = '';
+        }
+
+        if ( isset( $url['path'] ) ) {
+          $trailingslash_string .= trailingslashit( $url['path'] );
+        }
+
+        $trailingslash_string .= $_CPRegisteredURL;
       }
     }
 
-    return $string;
+    return $trailingslash_string;
   }
 
   /**
