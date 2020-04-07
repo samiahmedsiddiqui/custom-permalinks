@@ -18,8 +18,7 @@ class Custom_Permalinks_Frontend {
     add_filter( 'post_link', array( $this, 'custom_post_link' ), 10, 2 );
     add_filter( 'post_type_link', array( $this, 'custom_post_link' ), 10, 2 );
     add_filter( 'page_link', array( $this, 'custom_page_link' ), 10, 2 );
-    add_filter( 'tag_link', array( $this, 'custom_term_link' ), 10, 2 );
-    add_filter( 'category_link', array( $this, 'custom_term_link' ), 10, 2 );
+    add_filter( 'term_link', array( $this, 'custom_term_link' ), 10, 2 );
     add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
   }
 
@@ -145,14 +144,9 @@ class Custom_Permalinks_Frontend {
             $_CPRegisteredURL = $request;
           }
 
-          if ( 'category' == $term['kind'] ) {
-            $category_link = $this->original_category_link( $term['id'] );
-          } else {
-            $category_link = $this->original_tag_link( $term['id'] );
-          }
-
+          $term_link    = $this->original_term_link( $term['id'] );
           $original_url = str_replace(
-            trim( $permalink, '/' ), $category_link, trim( $request, '/' )
+            trim( $permalink, '/' ), $term_link, trim( $request, '/' )
           );
         }
       }
@@ -295,13 +289,9 @@ class Custom_Permalinks_Frontend {
           $original_permalink = $this->original_post_link( $post->ID );
         }
       } elseif ( is_tag() || is_category() ) {
-        $the_term = $wp_query->get_queried_object();
-        $custom_permalink = $this->term_permalink( $the_term->term_id );
-        if ( is_tag() ) {
-          $original_permalink = $this->original_tag_link( $the_term->term_id );
-        } else {
-          $original_permalink = $this->original_category_link( $the_term->term_id );
-        }
+        $the_term           = $wp_query->get_queried_object();
+        $custom_permalink   = $this->term_permalink( $the_term->term_id );
+        $original_permalink = $this->original_term_link( $the_term->term_id );
       }
     } else {
       $custom_permalink = $posts[0]->meta_value;
@@ -388,28 +378,28 @@ class Custom_Permalinks_Frontend {
    *
    * @access public
    *
-   * @param string $permalink Default WordPress Permalink of Term.
-   * @param object $term Term Details.
+   * @param string $permalink Term link URL.
+   * @param object $term Term object.
    *
    * @return string customized Term Permalink.
    */
   public function custom_term_link( $permalink, $term ) {
-    if ( is_object( $term ) ) {
-      $term = $term->term_id;
-    }
+    if ( isset( $term ) ) {
+      if ( isset( $term->term_id ) ) {
+        $custom_permalink = $this->term_permalink( $term->term_id );
+      }
 
-    $custom_permalink = $this->term_permalink( $term );
-    if ( $custom_permalink ) {
-      $taxonomy = get_term( $term );
-      if ( isset( $taxonomy ) && isset( $taxonomy->term_taxonomy_id ) ) {
-        $termType = 'category';
-        if ( isset( $taxonomy->taxonomy ) ) {
-          $termType =  $taxonomy->taxonomy;
+      if ( isset( $custom_permalink ) ) {
+        if ( isset( $term->term_taxonomy_id ) ) {
+          $term_type = 'category';
+          if ( isset( $term->taxonomy ) ) {
+            $term_type = $term->taxonomy;
+          }
+          $language_code = apply_filters( 'wpml_element_language_code', null, array( 'element_id' => $term->term_taxonomy_id, 'element_type' => $term_type ) );
+          return apply_filters( 'wpml_permalink', trailingslashit( home_url() ) . $custom_permalink, $language_code );
+        } else {
+          return apply_filters( 'wpml_permalink', trailingslashit( home_url() ) . $custom_permalink );
         }
-        $language_code = apply_filters( 'wpml_element_language_code', null, array( 'element_id' => $taxonomy->term_taxonomy_id, 'element_type' => $termType ) );
-        return apply_filters( 'wpml_permalink', trailingslashit( home_url() ) . $custom_permalink, $language_code );
-      } else {
-        return apply_filters( 'wpml_permalink', trailingslashit( home_url() ) . $custom_permalink );
       }
     }
 
@@ -417,7 +407,8 @@ class Custom_Permalinks_Frontend {
   }
 
   /**
-   * Get original permalink for post.
+   * Remove the post_link and user_trailingslashit filter to get the original
+   * permalink of the default and custom post type and apply right after that.
    *
    * @access public
    *
@@ -441,7 +432,8 @@ class Custom_Permalinks_Frontend {
   }
 
   /**
-   * Get original permalink for page.
+   * Remove the page_link and user_trailingslashit filter to get the original
+   * permalink of the page and apply right after that.
    *
    * @access public
    *
@@ -460,43 +452,36 @@ class Custom_Permalinks_Frontend {
 
     add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
     add_filter( 'page_link', array( $this, 'custom_page_link' ), 10, 2 );
+
     return $permalink;
   }
 
   /**
-   * Get original permalink for tag
+   * Remove the term_link and user_trailingslashit filter to get the original
+   * permalink of the Term and apply right after that.
    *
+   * @since 2.0.0
    * @access public
    *
-   * @param int $tag_id Term ID.
+   * @param int $term_id Term ID.
    *
-   * @return string Original Permalink for the Term.
+   * @return string Original Permalink for Posts.
    */
-  public function original_tag_link( $tag_id ) {
-    remove_filter( 'tag_link', array( $this, 'custom_term_link' ), 10, 2 );
+  public function original_term_link( $term_id ) {
+    remove_filter( 'term_link', array( $this, 'custom_term_link' ), 10, 2 );
     remove_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
-    $original_permalink = ltrim( str_replace( home_url(), '', get_tag_link( $tag_id ) ), '/' );
-    add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
-    add_filter( 'tag_link', array( $this, 'custom_term_link' ), 10, 2 );
 
-    return $original_permalink;
-  }
+    $term      = get_term( $term_id );
+    $term_link = get_term_link( $term );
 
-  /**
-   * Get original permalink for category.
-   *
-   * @access public
-   *
-   * @param int $category_id Term ID.
-   *
-   * @return string Original Permalink for the Term.
-   */
-  public function original_category_link( $category_id ) {
-    remove_filter( 'category_link', array( $this, 'custom_term_link' ), 10, 2 );
-    remove_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
-    $original_permalink = ltrim( str_replace( home_url(), '', get_category_link( $category_id ) ), '/' );
     add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
-    add_filter( 'category_link', array( $this, 'custom_term_link' ), 10, 2 );
+    add_filter( 'term_link', array( $this, 'custom_term_link' ), 10, 2 );
+
+    if ( is_wp_error( $term_link ) ) {
+      return '';
+    }
+
+    $original_permalink = ltrim( str_replace( home_url(), '', $term_link ), '/' );
 
     return $original_permalink;
   }
