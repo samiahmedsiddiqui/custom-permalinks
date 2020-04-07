@@ -21,12 +21,9 @@ class Custom_Permalinks_Form {
     add_action( 'category_edit_form', array( $this, 'term_options' ) );
     add_action( 'post_tag_add_form', array( $this, 'term_options' ) );
     add_action( 'post_tag_edit_form', array( $this, 'term_options' ) );
-    add_action( 'edited_post_tag', array( $this, 'save_tag' ) );
-    add_action( 'edited_category', array( $this, 'save_category' ) );
-    add_action( 'create_post_tag', array( $this, 'save_tag' ) );
-    add_action( 'create_category', array( $this, 'save_category' ) );
-    add_action( 'delete_post_tag', array( $this, 'delete_term' ) );
-    add_action( 'delete_post_category', array( $this, 'delete_term' ) );
+    add_action( 'created_term', array( $this, 'save_term' ), 10, 3 );
+    add_action( 'edited_term', array( $this, 'save_term' ), 10, 3 );
+    add_action( 'delete_term', array( $this, 'delete_term_permalink' ), 10, 3 );
     add_action( 'rest_api_init', array( $this, 'rest_edit_form' ) );
 
     add_filter( 'get_sample_permalink_html',
@@ -327,22 +324,17 @@ class Custom_Permalinks_Form {
    * @param object $object Term Object.
    */
   public function term_options( $object ) {
+    $permalink          = '';
+    $original_permalink = '';
     if ( is_object( $object ) && isset( $object->term_id ) ) {
       $cp_frontend = new Custom_Permalinks_Frontend();
-      $permalink   = $cp_frontend->term_permalink( $object->term_id );
-
       if ( $object->term_id ) {
-        if ( 'post_tag' === $object->taxonomy ) {
-          $original_permalink = $cp_frontend->original_tag_link( $object->term_id );
-        } else {
-          $original_permalink = $cp_frontend->original_category_link( $object->term_id );
-        }
+        $permalink          = $cp_frontend->term_permalink( $object->term_id );
+        $original_permalink = $cp_frontend->original_term_link( $object->term_id );
       }
-
-      $this->get_permalink_form( $permalink, $original_permalink );
-    } else {
-      $this->get_permalink_form( '' );
     }
+
+    $this->get_permalink_form( $permalink, $original_permalink );
 
     // Move the save button to above this form
     wp_enqueue_script( 'jquery' );
@@ -405,7 +397,7 @@ class Custom_Permalinks_Form {
 
     if ( $render_containers ) {
       echo '<br />' .
-            '<small>' . _e( "Leave blank to disable", "custom-permalinks" ) . '</small>' .
+            '<small>' . __( "Leave blank to disable", "custom-permalinks" ) . '</small>' .
             '</td>' .
             '</tr>' .
             '</table>';
@@ -413,74 +405,49 @@ class Custom_Permalinks_Form {
   }
 
   /**
-   * Save per-tag options.
-   *
-   * @access public
-   *
-   * @param int $term_id Term ID.
-   */
-  public function save_tag( $term_id ) {
-    if ( ! isset( $_REQUEST['custom_permalinks_edit'] )
-      || isset( $_REQUEST['post_ID'] ) ) {
-      return;
-    }
-    $new_permalink = ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), '/' );
-
-    $cp_frontend = new Custom_Permalinks_Frontend();
-    if ( $new_permalink === $cp_frontend->original_tag_link( $term_id ) ) {
-      return;
-    }
-
-    $term = get_term( $term_id, 'post_tag' );
-    $this->save_term( $term, str_replace( '%2F', '/', urlencode( $new_permalink ) ) );
-  }
-
-  /**
-   * Save per-category options.
-   *
-   * @access public
-   *
-   * @param int $term_id Term ID.
-   */
-  public function save_category( $term_id ) {
-    if ( ! isset( $_REQUEST['custom_permalinks_edit'] )
-      || isset( $_REQUEST['post_ID'] ) ) {
-      return;
-    }
-    $new_permalink = ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), '/' );
-
-    $cp_frontend = new Custom_Permalinks_Frontend();
-    if ( $new_permalink === $cp_frontend->original_category_link( $term_id ) ) {
-      return;
-    }
-
-    $term = get_term( $term_id, 'category' );
-    $this->save_term(
-      $term, str_replace( '%2F', '/', urlencode( $new_permalink ) )
-    );
-  }
-
-  /**
    * Save term (common to tags and categories).
    *
+   * @since 2.0.0
    * @access public
    *
-   * @param object $term Term Object.
-   * @param string $permalink New permalink which needs to be saved.
+   * @param string $term_id Term ID.
    */
-  public function save_term( $term, $permalink ) {
+  public function save_term( $term_id ) {
+    $term = get_term( $term_id );
+    if ( isset( $term ) && isset( $term->taxonomy ) ) {
+      $taxonomy_name = $term->taxonomy;
+      if ( 'category' === $taxonomy_name || 'post_tag' === $taxonomy_name ) {
+        if ( 'post_tag' === $taxonomy_name ) {
+          $taxonomy_name = 'tag';
+        }
 
-    $this->delete_term( $term->term_id );
-    $table = get_option( 'custom_permalink_table' );
-    if ( $permalink ) {
-      $table[$permalink] = array(
-        'id' => $term->term_id,
-        'kind' => ( $term->taxonomy === 'category' ? 'category' : 'tag' ),
-        'slug' => $term->slug
-      );
+        $new_permalink = ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), '/' );
+        if ( empty( $new_permalink ) || '' === $new_permalink ) {
+          return;
+        }
+
+        $cp_frontend   = new Custom_Permalinks_Frontend();
+        $old_permalink = $cp_frontend->original_term_link( $term_id );
+        if ( $new_permalink === $old_permalink ) {
+          return;
+        }
+
+        $this->delete_term_permalink( $term_id );
+
+        $permalink = str_replace( '%2F', '/', urlencode( $new_permalink ) );
+        $table     = get_option( 'custom_permalink_table' );
+
+        if ( $permalink ) {
+          $table[$permalink] = array(
+            'id'   => $term_id,
+            'kind' => $taxonomy_name,
+            'slug' => $term->slug
+          );
+        }
+
+        update_option( 'custom_permalink_table', $table );
+      }
     }
-
-    update_option( 'custom_permalink_table', $table );
   }
 
   /**
@@ -490,7 +457,7 @@ class Custom_Permalinks_Form {
    *
    * @param int $term_id Term ID.
    */
-  public function delete_term( $term_id ) {
+  public function delete_term_permalink( $term_id ) {
     $table = get_option( 'custom_permalink_table' );
     if ( $table ) {
       foreach ( $table as $link => $info ) {

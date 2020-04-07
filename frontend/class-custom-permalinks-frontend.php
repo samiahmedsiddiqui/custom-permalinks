@@ -112,16 +112,16 @@ class Custom_Permalinks_Frontend {
           $original_url = '?post_type=' . $posts[0]->post_type . '&p=' . $posts[0]->ID;
         }
       } else {
-        $postMeta = trim( strtolower( $posts[0]->meta_value ), '/' );
+        $post_meta = trim( strtolower( $posts[0]->meta_value ), '/' );
         if ( $posts[0]->post_type == 'page' ) {
-          $getOriginalUrl = $this->original_page_link( $posts[0]->ID );
-          $original_url = preg_replace( '@/+@', '/',
-            str_replace( $postMeta, $getOriginalUrl, strtolower( $request_no_slash ) )
+          $get_original_url = $this->original_page_link( $posts[0]->ID );
+          $original_url     = preg_replace( '@/+@', '/',
+            str_replace( $post_meta, $get_original_url, strtolower( $request_no_slash ) )
           );
         } else {
-          $getOriginalUrl = $this->original_post_link( $posts[0]->ID );
-          $original_url = preg_replace( '@/+@', '/',
-            str_replace( $postMeta, $getOriginalUrl, strtolower( $request_no_slash ) )
+          $get_original_url = $this->original_post_link( $posts[0]->ID );
+          $original_url     = preg_replace( '@/+@', '/',
+            str_replace( $post_meta, $get_original_url, strtolower( $request_no_slash ) )
           );
         }
       }
@@ -135,12 +135,12 @@ class Custom_Permalinks_Frontend {
       }
 
       foreach ( array_keys( $table ) as $permalink ) {
-        if ( $permalink == substr( $request_no_slash, 0, strlen( $permalink ) )
-          || $permalink == substr( $request_no_slash . '/', 0, strlen( $permalink ) ) ) {
+        if ( $permalink === substr( $request_no_slash, 0, strlen( $permalink ) )
+          || $permalink === substr( $request_no_slash . '/', 0, strlen( $permalink ) ) ) {
           $term = $table[$permalink];
 
           // Preserve this url for later if it's the same as the permalink (no extra stuff)
-          if ( $request_no_slash == trim( $permalink, '/' ) ) {
+          if ( $request_no_slash === trim( $permalink, '/' ) ) {
             $_CPRegisteredURL = $request;
           }
 
@@ -183,10 +183,10 @@ class Custom_Permalinks_Frontend {
         $_SERVER['QUERY_STRING'] = substr( $original_url, $pos + 1 );
       }
 
-      parse_str( $_SERVER['QUERY_STRING'], $queryArray );
+      parse_str( $_SERVER['QUERY_STRING'], $query_array );
       $old_values = array();
-      if ( is_array( $queryArray ) ) {
-        foreach ( $queryArray as $key => $value ) {
+      if ( is_array( $query_array ) ) {
+        foreach ( $query_array as $key => $value ) {
           $old_values[$key] = '';
           if ( isset( $_REQUEST[$key] ) ) {
             $old_values[$key] = $_REQUEST[$key];
@@ -389,7 +389,7 @@ class Custom_Permalinks_Frontend {
         $custom_permalink = $this->term_permalink( $term->term_id );
       }
 
-      if ( isset( $custom_permalink ) ) {
+      if ( $custom_permalink ) {
         if ( isset( $term->term_taxonomy_id ) ) {
           $term_type = 'category';
           if ( isset( $term->taxonomy ) ) {
@@ -421,8 +421,8 @@ class Custom_Permalinks_Frontend {
     remove_filter( 'post_type_link', array( $this, 'custom_post_link' ), 10, 2 );
 
     require_once ABSPATH . '/wp-admin/includes/post.php';
-    list( $permalink, $postName ) = get_sample_permalink( $post_id );
-    $permalink = str_replace( array( '%pagename%','%postname%' ), $postName, $permalink );
+    list( $permalink, $post_name ) = get_sample_permalink( $post_id );
+    $permalink = str_replace( array( '%pagename%','%postname%' ), $post_name, $permalink );
     $permalink = ltrim( str_replace( home_url(), '', $permalink ), '/' );
 
     add_filter( 'post_link', array( $this, 'custom_post_link' ), 10, 3 );
@@ -446,8 +446,8 @@ class Custom_Permalinks_Frontend {
     remove_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
 
     require_once ABSPATH . '/wp-admin/includes/post.php';
-    list( $permalink, $postName ) = get_sample_permalink( $post_id );
-    $permalink = str_replace( array( '%pagename%','%postname%' ), $postName, $permalink );
+    list( $permalink, $post_name ) = get_sample_permalink( $post_id );
+    $permalink = str_replace( array( '%pagename%','%postname%' ), $post_name, $permalink );
     $permalink = ltrim( str_replace( home_url(), '', $permalink ), '/' );
 
     add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
