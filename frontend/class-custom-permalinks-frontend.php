@@ -345,7 +345,7 @@ class Custom_Permalinks_Frontend {
       if ( ( is_single() || is_page() ) && ! empty( $wp_query->post ) ) {
         $post = $wp_query->post;
         $custom_permalink = get_post_meta( $post->ID, 'custom_permalink', true );
-        if ( $post->post_type == 'page' ) {
+        if ( 'page' === $post->post_type ) {
           $original_permalink = $this->original_page_link( $post->ID );
         } else {
           $original_permalink = $this->original_post_link( $post->ID );
@@ -357,7 +357,7 @@ class Custom_Permalinks_Frontend {
       }
     } else {
       $custom_permalink = $posts[0]->meta_value;
-      if ( 'page' == $posts[0]->post_type ) {
+      if ( 'page' === $posts[0]->post_type ) {
         $original_permalink = $this->original_page_link( $posts[0]->ID );
       } else {
         $original_permalink = $this->original_post_link( $posts[0]->ID );
