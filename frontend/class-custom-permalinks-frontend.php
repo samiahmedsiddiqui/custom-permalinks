@@ -20,6 +20,9 @@ class Custom_Permalinks_Frontend {
     add_filter( 'page_link', array( $this, 'custom_page_link' ), 10, 2 );
     add_filter( 'term_link', array( $this, 'custom_term_link' ), 10, 2 );
     add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
+
+    // WPSEO Filters
+    add_filter( 'wpseo_canonical', array( $this, 'fix_canonical_double_slash' ), 20, 1 );
   }
 
   /**
@@ -550,5 +553,33 @@ class Custom_Permalinks_Frontend {
     }
 
     return false;
+  }
+
+  /**
+   * Fix double slash issue with canonical of Yoast SEO specially with WPML.
+   *
+   * @since 2.0.0
+   * @access public
+   *
+   * @param string $canonical The canonical.
+   *
+   * @return string the canonical after removing double slash if exist.
+   */
+  public function fix_canonical_double_slash( $canonical ) {
+    $protocol = '';
+    if ( 0 === strpos( $canonical, 'http://' ) ||
+      0 === strpos( $canonical, 'https://' )
+    ) {
+      $split_protocol = explode( '://', $canonical );
+      if ( 1 < count( $split_protocol ) ) {
+        $protocol = $split_protocol[0] . '://';
+        $canonical = str_replace( $protocol, '', $canonical );
+      }
+    }
+
+    $canonical = str_replace( '//', '/', $canonical );
+    $canonical = $protocol . $canonical;
+
+    return $canonical;
   }
 }
