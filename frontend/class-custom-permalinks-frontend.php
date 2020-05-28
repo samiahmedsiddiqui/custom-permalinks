@@ -54,6 +54,37 @@ class Custom_Permalinks_Frontend {
   }
 
   /**
+   * Use `wpml_permalink` to add language information to permalinks and
+   * resolve language switcher issue if found.
+   *
+   * @since 2.0.0
+   * @access private
+   *
+   * @param string $permalink Custom Permalink.
+   * @param string $language_code The language to convert the url into.
+   *
+   * @return string permalink with language information.
+   */
+  private function wpml_permalink_filter( $permalink = '', $language_code ) {
+    $custom_permalink = $permalink;
+    $trailing_permalink = trailingslashit( home_url() ) . $custom_permalink;
+    if ( $language_code ) {
+      $permalink = apply_filters( 'wpml_permalink', $trailing_permalink, $language_code );
+      $site_url = site_url();
+      $wpml_href = str_replace( $site_url, '', $permalink );
+      if ( 0 === strpos( $wpml_href, '//' ) ) {
+        if ( 0 !== strpos( $wpml_href, '//' . $language_code  . '/' ) ) {
+          $permalink = $site_url . '/' . $language_code  . '/' . $custom_permalink;
+        }
+      }
+    } else {
+      $permalink = apply_filters( 'wpml_permalink', $trailing_permalink );
+    }
+
+    return $permalink;
+  }
+
+  /**
    * Filter to rewrite the query if we have a matching post.
    *
    * @since 0.1.0
@@ -377,24 +408,7 @@ class Custom_Permalinks_Frontend {
         null, array( 'element_id' => $post->ID, 'element_type' => $post_type )
       );
 
-      if ( $language_code ) {
-        $permalink = apply_filters( 'wpml_permalink',
-          trailingslashit( home_url() ) . $custom_permalink, $language_code
-        );
-
-        $site_url = site_url();
-        $wpml_href = str_replace( $site_url, '', $permalink );
-        if ( strpos( $wpml_href, '//' ) === 0 ) {
-          if ( strpos( $wpml_href, '//' . $language_code  . '/' ) !== 0 ) {
-            $permalink = $site_url . '/' . $language_code  . '/' . $custom_permalink;
-          }
-        }
-      } else {
-        $permalink = apply_filters( 'wpml_permalink',
-          trailingslashit( home_url() ) . $custom_permalink
-        );
-      }
-
+      $permalink = $this->wpml_permalink_filter( $custom_permalink, $language_code );
       $permalink = $this->remove_double_slash( $permalink );
     }
 
@@ -418,24 +432,7 @@ class Custom_Permalinks_Frontend {
         null, array( 'element_id' => $page, 'element_type' => 'page' )
       );
 
-      if ( $language_code ) {
-        $permalink = apply_filters( 'wpml_permalink',
-          trailingslashit( home_url() ) . $custom_permalink, $language_code
-        );
-
-        $site_url = site_url();
-        $wpml_href = str_replace( $site_url, '', $permalink );
-        if ( strpos( $wpml_href, '//' ) === 0 ) {
-          if ( strpos( $wpml_href, '//' . $language_code  . '/' ) !== 0 ) {
-            $permalink = $site_url . '/' . $language_code  . '/' . $custom_permalink;
-          }
-        }
-      } else {
-        $permalink = apply_filters( 'wpml_permalink',
-          trailingslashit( home_url() ) . $custom_permalink
-        );
-      }
-
+      $permalink = $this->wpml_permalink_filter( $custom_permalink, $language_code );
       $permalink = $this->remove_double_slash( $permalink );
     }
 
@@ -459,6 +456,7 @@ class Custom_Permalinks_Frontend {
       }
 
       if ( $custom_permalink ) {
+        $language_code = NULL;
         if ( isset( $term->term_taxonomy_id ) ) {
           $term_type = 'category';
           if ( isset( $term->taxonomy ) ) {
@@ -468,30 +466,9 @@ class Custom_Permalinks_Frontend {
           $language_code = apply_filters( 'wpml_element_language_code',
             null, array( 'element_id' => $term->term_taxonomy_id, 'element_type' => $term_type )
           );
-
-          if ( $language_code ) {
-            $permalink = apply_filters( 'wpml_permalink',
-              trailingslashit( home_url() ) . $custom_permalink, $language_code
-            );
-
-            $site_url = site_url();
-            $wpml_href = str_replace( $site_url, '', $permalink );
-            if ( strpos( $wpml_href, '//' ) === 0 ) {
-              if ( strpos( $wpml_href, '//' . $language_code  . '/' ) !== 0 ) {
-                $permalink = $site_url . '/' . $language_code  . '/' . $custom_permalink;
-              }
-            }
-          } else {
-            $permalink = apply_filters( 'wpml_permalink',
-              trailingslashit( home_url() ) . $custom_permalink
-            );
-          }
-        } else {
-          $permalink = apply_filters( 'wpml_permalink',
-            trailingslashit( home_url() ) . $custom_permalink
-          );
         }
 
+        $permalink = $this->wpml_permalink_filter( $custom_permalink, $language_code );
         $permalink = $this->remove_double_slash( $permalink );
       }
     }
