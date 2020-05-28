@@ -340,13 +340,46 @@ class Custom_Permalinks_Frontend {
   public function custom_post_link( $permalink, $post ) {
     $custom_permalink = get_post_meta( $post->ID, 'custom_permalink', true );
     if ( $custom_permalink ) {
-      $post_type     = isset( $post->post_type ) ? $post->post_type : 'post';
-      $language_code = apply_filters( 'wpml_element_language_code', null, array( 'element_id' => $post->ID, 'element_type' => $post_type ) );
-      if ( $language_code ) {
-        return apply_filters( 'wpml_permalink', trailingslashit( home_url() ) . $custom_permalink, $language_code );
-      } else {
-        return apply_filters( 'wpml_permalink', trailingslashit( home_url() ) . $custom_permalink );
+      $post_type = 'post';
+      if ( isset( $post->post_type ) ) {
+        $post_type = $post->post_type;
       }
+
+      $language_code = apply_filters( 'wpml_element_language_code',
+        null, array( 'element_id' => $post->ID, 'element_type' => $post_type )
+      );
+
+      if ( $language_code ) {
+        $permalink = apply_filters( 'wpml_permalink',
+          trailingslashit( home_url() ) . $custom_permalink, $language_code
+        );
+
+        $site_url = site_url();
+        $wpml_href = str_replace( $site_url, '', $permalink );
+        if ( strpos( $wpml_href, '//' ) === 0 ) {
+          if ( strpos( $wpml_href, '//' . $language_code  . '/' ) !== 0 ) {
+            $permalink = $site_url . '/' . $language_code  . '/' . $custom_permalink;
+          }
+        }
+      } else {
+        $permalink = apply_filters( 'wpml_permalink',
+          trailingslashit( home_url() ) . $custom_permalink
+        );
+      }
+
+      $protocol = '';
+      if ( 0 === strpos( $permalink, 'http://' ) ||
+        0 === strpos( $permalink, 'https://' )
+      ) {
+        $split_protocol = explode( '://', $permalink );
+        if ( 1 < count( $split_protocol ) ) {
+          $protocol = $split_protocol[0] . '://';
+          $permalink = str_replace( $protocol, '', $permalink );
+        }
+      }
+
+      $permalink = str_replace( '//', '/', $permalink );
+      $permalink = $protocol . $permalink;
     }
 
     return $permalink;
@@ -365,12 +398,41 @@ class Custom_Permalinks_Frontend {
   public function custom_page_link( $permalink, $page ) {
     $custom_permalink = get_post_meta( $page, 'custom_permalink', true );
     if ( $custom_permalink ) {
-      $language_code = apply_filters( 'wpml_element_language_code', null, array( 'element_id' => $page, 'element_type' => 'page' ) );
+      $language_code = apply_filters( 'wpml_element_language_code',
+        null, array( 'element_id' => $page, 'element_type' => 'page' )
+      );
+
       if ( $language_code ) {
-        return apply_filters( 'wpml_permalink', trailingslashit( home_url() ) . $custom_permalink, $language_code );
+        $permalink = apply_filters( 'wpml_permalink',
+          trailingslashit( home_url() ) . $custom_permalink, $language_code
+        );
+
+        $site_url = site_url();
+        $wpml_href = str_replace( $site_url, '', $permalink );
+        if ( strpos( $wpml_href, '//' ) === 0 ) {
+          if ( strpos( $wpml_href, '//' . $language_code  . '/' ) !== 0 ) {
+            $permalink = $site_url . '/' . $language_code  . '/' . $custom_permalink;
+          }
+        }
       } else {
-        return apply_filters( 'wpml_permalink', trailingslashit( home_url() ) . $custom_permalink );
+        $permalink = apply_filters( 'wpml_permalink',
+          trailingslashit( home_url() ) . $custom_permalink
+        );
       }
+
+      $protocol = '';
+      if ( 0 === strpos( $permalink, 'http://' ) ||
+        0 === strpos( $permalink, 'https://' )
+      ) {
+        $split_protocol = explode( '://', $permalink );
+        if ( 1 < count( $split_protocol ) ) {
+          $protocol = $split_protocol[0] . '://';
+          $permalink = str_replace( $protocol, '', $permalink );
+        }
+      }
+
+      $permalink = str_replace( '//', '/', $permalink );
+      $permalink = $protocol . $permalink;
     }
 
     return $permalink;
@@ -398,11 +460,47 @@ class Custom_Permalinks_Frontend {
           if ( isset( $term->taxonomy ) ) {
             $term_type = $term->taxonomy;
           }
-          $language_code = apply_filters( 'wpml_element_language_code', null, array( 'element_id' => $term->term_taxonomy_id, 'element_type' => $term_type ) );
-          return apply_filters( 'wpml_permalink', trailingslashit( home_url() ) . $custom_permalink, $language_code );
+
+          $language_code = apply_filters( 'wpml_element_language_code',
+            null, array( 'element_id' => $term->term_taxonomy_id, 'element_type' => $term_type )
+          );
+
+          if ( $language_code ) {
+            $permalink = apply_filters( 'wpml_permalink',
+              trailingslashit( home_url() ) . $custom_permalink, $language_code
+            );
+
+            $site_url = site_url();
+            $wpml_href = str_replace( $site_url, '', $permalink );
+            if ( strpos( $wpml_href, '//' ) === 0 ) {
+              if ( strpos( $wpml_href, '//' . $language_code  . '/' ) !== 0 ) {
+                $permalink = $site_url . '/' . $language_code  . '/' . $custom_permalink;
+              }
+            }
+          } else {
+            $permalink = apply_filters( 'wpml_permalink',
+              trailingslashit( home_url() ) . $custom_permalink
+            );
+          }
         } else {
-          return apply_filters( 'wpml_permalink', trailingslashit( home_url() ) . $custom_permalink );
+          $permalink = apply_filters( 'wpml_permalink',
+            trailingslashit( home_url() ) . $custom_permalink
+          );
         }
+
+        $protocol = '';
+        if ( 0 === strpos( $permalink, 'http://' ) ||
+          0 === strpos( $permalink, 'https://' )
+        ) {
+          $split_protocol = explode( '://', $permalink );
+          if ( 1 < count( $split_protocol ) ) {
+            $protocol = $split_protocol[0] . '://';
+            $permalink = str_replace( $protocol, '', $permalink );
+          }
+        }
+
+        $permalink = str_replace( '//', '/', $permalink );
+        $permalink = $protocol . $permalink;
       }
     }
 
