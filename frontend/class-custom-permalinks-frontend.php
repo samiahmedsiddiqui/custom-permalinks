@@ -26,6 +26,34 @@ class Custom_Permalinks_Frontend {
   }
 
   /**
+   * Replace double slash `//` with single slash `/`.
+   *
+   * @since 2.0.0
+   * @access private
+   *
+   * @param string $permalink URL in which `//` needs to be replaced with `/`.
+   *
+   * @return string URL with single slash.
+   */
+  private function remove_double_slash( $permalink = '' ) {
+    $protocol = '';
+    if ( 0 === strpos( $permalink, 'http://' ) ||
+      0 === strpos( $permalink, 'https://' )
+    ) {
+      $split_protocol = explode( '://', $permalink );
+      if ( 1 < count( $split_protocol ) ) {
+        $protocol = $split_protocol[0] . '://';
+        $permalink = str_replace( $protocol, '', $permalink );
+      }
+    }
+
+    $permalink = str_replace( '//', '/', $permalink );
+    $permalink = $protocol . $permalink;
+
+    return $permalink;
+  }
+
+  /**
    * Filter to rewrite the query if we have a matching post.
    *
    * @since 0.1.0
@@ -367,19 +395,7 @@ class Custom_Permalinks_Frontend {
         );
       }
 
-      $protocol = '';
-      if ( 0 === strpos( $permalink, 'http://' ) ||
-        0 === strpos( $permalink, 'https://' )
-      ) {
-        $split_protocol = explode( '://', $permalink );
-        if ( 1 < count( $split_protocol ) ) {
-          $protocol = $split_protocol[0] . '://';
-          $permalink = str_replace( $protocol, '', $permalink );
-        }
-      }
-
-      $permalink = str_replace( '//', '/', $permalink );
-      $permalink = $protocol . $permalink;
+      $permalink = $this->remove_double_slash( $permalink );
     }
 
     return $permalink;
@@ -420,19 +436,7 @@ class Custom_Permalinks_Frontend {
         );
       }
 
-      $protocol = '';
-      if ( 0 === strpos( $permalink, 'http://' ) ||
-        0 === strpos( $permalink, 'https://' )
-      ) {
-        $split_protocol = explode( '://', $permalink );
-        if ( 1 < count( $split_protocol ) ) {
-          $protocol = $split_protocol[0] . '://';
-          $permalink = str_replace( $protocol, '', $permalink );
-        }
-      }
-
-      $permalink = str_replace( '//', '/', $permalink );
-      $permalink = $protocol . $permalink;
+      $permalink = $this->remove_double_slash( $permalink );
     }
 
     return $permalink;
@@ -488,19 +492,7 @@ class Custom_Permalinks_Frontend {
           );
         }
 
-        $protocol = '';
-        if ( 0 === strpos( $permalink, 'http://' ) ||
-          0 === strpos( $permalink, 'https://' )
-        ) {
-          $split_protocol = explode( '://', $permalink );
-          if ( 1 < count( $split_protocol ) ) {
-            $protocol = $split_protocol[0] . '://';
-            $permalink = str_replace( $protocol, '', $permalink );
-          }
-        }
-
-        $permalink = str_replace( '//', '/', $permalink );
-        $permalink = $protocol . $permalink;
+        $permalink = $this->remove_double_slash( $permalink );
       }
     }
 
@@ -664,19 +656,7 @@ class Custom_Permalinks_Frontend {
    * @return string the canonical after removing double slash if exist.
    */
   public function fix_canonical_double_slash( $canonical ) {
-    $protocol = '';
-    if ( 0 === strpos( $canonical, 'http://' ) ||
-      0 === strpos( $canonical, 'https://' )
-    ) {
-      $split_protocol = explode( '://', $canonical );
-      if ( 1 < count( $split_protocol ) ) {
-        $protocol = $split_protocol[0] . '://';
-        $canonical = str_replace( $protocol, '', $canonical );
-      }
-    }
-
-    $canonical = str_replace( '//', '/', $canonical );
-    $canonical = $protocol . $canonical;
+    $canonical = $this->remove_double_slash( $canonical );
 
     return $canonical;
   }
