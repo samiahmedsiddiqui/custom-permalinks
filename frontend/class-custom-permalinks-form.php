@@ -25,16 +25,17 @@ class Custom_Permalinks_Form
         add_action( 'post_tag_edit_form', array( $this, 'term_options' ) );
         add_action( 'created_term', array( $this, 'save_term' ), 10, 3 );
         add_action( 'edited_term', array( $this, 'save_term' ), 10, 3 );
-        add_action( 'delete_term',
-            array( $this, 'delete_term_permalink' ), 10, 3
+        add_action(
+            'delete_term', array( $this, 'delete_term_permalink' ), 10, 3
         );
         add_action( 'rest_api_init', array( $this, 'rest_edit_form' ) );
 
-        add_filter( 'get_sample_permalink_html',
+        add_filter(
+            'get_sample_permalink_html',
             array( $this, 'sample_permalink_html' ), 10, 2
         );
-        add_filter( 'is_protected_meta',
-            array( $this, 'protect_meta' ), 10, 2
+        add_filter(
+            'is_protected_meta', array( $this, 'protect_meta' ), 10, 2
         );
     }
 
@@ -175,7 +176,8 @@ class Custom_Permalinks_Form
         ob_end_clean();
 
         if ( 'trash' !== $post->post_status ) {
-            wp_enqueue_script( 'custom-permalinks-form',
+            wp_enqueue_script(
+                'custom-permalinks-form',
                 plugins_url( '/js/script-form.min.js', __FILE__ ), array(),
                 false, true
             );
@@ -512,7 +514,9 @@ class Custom_Permalinks_Form
 
                 $this->delete_term_permalink( $term_id );
 
-                $permalink = str_replace( '%2F', '/', urlencode( $new_permalink ) );
+                $permalink = str_replace(
+                    '%2F', '/', urlencode( $new_permalink )
+                );
                 $table     = get_option( 'custom_permalink_table' );
 
                 if ( $permalink ) {

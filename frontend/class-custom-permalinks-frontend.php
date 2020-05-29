@@ -18,19 +18,19 @@ class Custom_Permalinks_Frontend
 
         add_filter( 'request', array( $this, 'parse_request' ) );
         add_filter( 'post_link', array( $this, 'custom_post_link' ), 10, 2 );
-        add_filter( 'post_type_link',
-            array( $this, 'custom_post_link' ), 10, 2
+        add_filter(
+            'post_type_link', array( $this, 'custom_post_link' ), 10, 2
         );
         add_filter( 'page_link', array( $this, 'custom_page_link' ), 10, 2 );
         add_filter( 'term_link', array( $this, 'custom_term_link' ), 10, 2 );
         add_filter(
-            'user_trailingslashit',
-            array( $this, 'custom_trailingslash' )
+            'user_trailingslashit', array( $this, 'custom_trailingslash' )
         );
 
         // WPSEO Filters
-        add_filter( 'wpseo_canonical',
-            array( $this, 'fix_canonical_double_slash' ), 20, 1
+        add_filter(
+            'wpseo_canonical', array( $this, 'fix_canonical_double_slash' ),
+            20, 1
         );
     }
 
@@ -81,9 +81,7 @@ class Custom_Permalinks_Frontend
         $trailing_permalink = trailingslashit( home_url() ) . $custom_permalink;
         if ( $language_code ) {
             $permalink = apply_filters(
-                'wpml_permalink',
-                $trailing_permalink,
-                $language_code
+                'wpml_permalink', $trailing_permalink, $language_code
             );
             $site_url  = site_url();
             $wpml_href = str_replace( $site_url, '', $permalink );
@@ -326,7 +324,9 @@ class Custom_Permalinks_Frontend
         // Get request URI, strip parameters
         $url     = parse_url( get_bloginfo( 'url' ) );
         $url     = isset( $url['path'] ) ? $url['path'] : '';
-        $request = ltrim( substr( $_SERVER['REQUEST_URI'], strlen( $url ) ), '/' );
+        $request = ltrim(
+            substr( $_SERVER['REQUEST_URI'], strlen( $url ) ), '/'
+        );
         $pos     = strpos( $request, '?' );
         if ( $pos ) {
             $request = substr( $request, 0, $pos );
@@ -374,8 +374,8 @@ class Custom_Permalinks_Frontend
             global $wp_query;
 
             /*
-             * If the post/tag/category we're on has a custom permalink, get it and
-             * check against the request.
+             * If the post/tag/category we're on has a custom permalink, get it
+             * and check against the request.
              */
             if ( ( is_single() || is_page() ) && ! empty( $wp_query->post ) ) {
                 $post = $wp_query->post;
@@ -464,8 +464,7 @@ class Custom_Permalinks_Frontend
             }
 
             $language_code = apply_filters(
-                'wpml_element_language_code',
-                null,
+                'wpml_element_language_code', null,
                 array(
                     'element_id'   => $post->ID,
                     'element_type' => $post_type
@@ -473,8 +472,7 @@ class Custom_Permalinks_Frontend
             );
 
             $permalink = $this->wpml_permalink_filter(
-                $custom_permalink,
-                $language_code
+                $custom_permalink, $language_code
             );
             $permalink = $this->remove_double_slash( $permalink );
         }
@@ -497,8 +495,7 @@ class Custom_Permalinks_Frontend
         $custom_permalink = get_post_meta( $page, 'custom_permalink', true );
         if ( $custom_permalink ) {
             $language_code = apply_filters(
-                'wpml_element_language_code',
-                null,
+                'wpml_element_language_code', null,
                 array(
                     'element_id' => $page,
                     'element_type' => 'page'
@@ -506,8 +503,7 @@ class Custom_Permalinks_Frontend
             );
 
             $permalink = $this->wpml_permalink_filter(
-                $custom_permalink,
-                $language_code
+                $custom_permalink, $language_code
             );
             $permalink = $this->remove_double_slash( $permalink );
         }
@@ -541,8 +537,7 @@ class Custom_Permalinks_Frontend
                     }
 
                     $language_code = apply_filters(
-                        'wpml_element_language_code',
-                        null,
+                        'wpml_element_language_code', null,
                         array(
                             'element_id'   => $term->term_taxonomy_id,
                             'element_type' => $term_type
@@ -551,8 +546,7 @@ class Custom_Permalinks_Frontend
                 }
 
                 $permalink = $this->wpml_permalink_filter(
-                    $custom_permalink,
-                    $language_code
+                    $custom_permalink, $language_code
                 );
                 $permalink = $this->remove_double_slash( $permalink );
             }

@@ -89,7 +89,9 @@ class Custom_Permalinks_Taxonomies
             }
         }
         $page_html .= '<div class="wrap">' .
-                        '<h1 class="wp-heading-inline">' . __( 'Taxonomies Permalinks', 'custom-permalinks' ) . '</h1>';
+                        '<h1 class="wp-heading-inline">' .
+                            __( 'Taxonomies Permalinks', 'custom-permalinks' ) .
+                        '</h1>';
 
         $search_value = '';
         if ( isset( $_GET['s'] ) && ! empty( $_GET['s'] ) ) {

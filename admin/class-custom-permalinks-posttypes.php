@@ -74,20 +74,28 @@ class Custom_Permalinks_PostTypes
               } else {
                   $error = '<div id="message" class="error">' .
                               '<p>' .
-                                __( 'Please select permalinks which you like to be deleted.', 'custom-permalinks' ) .
+                                __(
+                                    'Please select permalinks which you like to be deleted.',
+                                    'custom-permalinks'
+                                ) .
                               '</p>' .
                             '</div>';
               }
           } else {
               $error = '<div id="message" class="error">' .
                           '<p>' .
-                            __( 'There is some error to proceed your request. Please retry with your request or contact to the plugin author.', 'custom-permalinks' ) .
+                            __(
+                                'There is some error to proceed your request. Please retry with your request or contact to the plugin author.',
+                                'custom-permalinks'
+                            ) .
                           '</p>' .
                         '</div>';
           }
         }
         $post_html .= '<div class="wrap">' .
-                        '<h1 class="wp-heading-inline">' . __( 'PostTypes Permalinks', 'custom-permalinks' ) . '</h1>' .
+                        '<h1 class="wp-heading-inline">' .
+                            __( 'PostTypes Permalinks', 'custom-permalinks' ) .
+                        '</h1>' .
                         $error;
 
         $search_value = '';

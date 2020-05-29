@@ -12,7 +12,8 @@ class Custom_Permalinks_Admin
     function __construct()
     {
         add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-        add_filter( 'plugin_action_links_' . CUSTOM_PERMALINKS_BASENAME,
+        add_filter(
+            'plugin_action_links_' . CUSTOM_PERMALINKS_BASENAME,
             array( $this, 'settings_link' )
         );
         add_action( 'admin_init', array( $this, 'privacy_policy' ) );
@@ -26,21 +27,25 @@ class Custom_Permalinks_Admin
      */
     public function admin_menu()
     {
-        add_menu_page( 'Custom Permalinks', 'Custom Permalinks',
+        add_menu_page(
+            'Custom Permalinks', 'Custom Permalinks',
             'cp_view_post_permalinks', 'cp-post-permalinks',
             array( $this,'post_permalinks_page' ), 'dashicons-admin-links'
         );
-        add_submenu_page( 'cp-post-permalinks', 'PostTypes Permalinks',
-          'PostTypes Permalinks', 'cp_view_post_permalinks',
-          'cp-post-permalinks', array( $this, 'post_permalinks_page' )
+        add_submenu_page(
+            'cp-post-permalinks', 'PostTypes Permalinks',
+            'PostTypes Permalinks', 'cp_view_post_permalinks',
+            'cp-post-permalinks', array( $this, 'post_permalinks_page' )
         );
-        add_submenu_page( 'cp-post-permalinks', 'Taxonomies Permalinks',
-          'Taxonomies Permalinks', 'cp_view_category_permalinks',
-          'cp-category-permalinks', array( $this, 'taxonomy_permalinks_page' )
+        add_submenu_page(
+            'cp-post-permalinks', 'Taxonomies Permalinks',
+            'Taxonomies Permalinks', 'cp_view_category_permalinks',
+            'cp-category-permalinks', array( $this, 'taxonomy_permalinks_page' )
         );
-        add_submenu_page( 'cp-post-permalinks', 'About Custom Permalinks',
-          'About', 'install_plugins', 'cp-about-plugins',
-          array( $this, 'about_plugin' )
+        add_submenu_page(
+            'cp-post-permalinks', 'About Custom Permalinks',
+            'About', 'install_plugins', 'cp-about-plugins',
+            array( $this, 'about_plugin' )
         );
     }
 
@@ -93,7 +98,9 @@ class Custom_Permalinks_Admin
             CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-about.php'
         );
         new Custom_Permalinks_About();
-        add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
+        add_filter(
+            'admin_footer_text', array( $this, 'admin_footer_text' ), 1
+        );
     }
 
     /**
@@ -134,7 +141,9 @@ class Custom_Permalinks_Admin
     public function settings_link( $links )
     {
         $about = sprintf(
-            __( '<a href="%s" title="About">About</a>', 'custom-permalinks' ),
+            __(
+                '<a href="%s" title="About">About</a>', 'custom-permalinks'
+            ),
             'admin.php?page=cp-about-plugins'
         );
         $premium_support = sprintf(
