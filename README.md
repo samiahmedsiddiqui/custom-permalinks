@@ -1,10 +1,10 @@
 # Custom Permalinks
 
 Lay out your site the way *you* want it. Set the URL of any post, page, tag or category to 
-anything you want. Old permalinks will redirect properly to the new address.  
-Custom Permalinks gives you ultimate control over your site structure.
+anything you want. Old permalinks will redirect properly to the new address. Custom 
+Permalinks gives you ultimate control over your site structure.
 
-:warning: *This plugin is not a replacement for WordPress's built-in permalink system*. 
+> :warning: *This plugin is not a replacement for WordPress's built-in permalink system*. 
 Check your WordPress administration's "Permalinks" settings page first, to make sure that 
 this doesn't already meet your needs.
 
@@ -12,7 +12,7 @@ This plugin is only useful for assigning custom permalinks for *individual* post
 tags or categories. It will not apply whole permalink structures or automatically apply a 
 category's custom permalink to the posts within that category.
 
-:information_source: If anyone wants the different Structure Tags for their PostTypes or use 
+> :information_source: If anyone wants the different Structure Tags for their PostTypes or use 
 symbols in the URLs So, use the 
 [Permalinks Customizer](https://wordpress.org/plugins/permalinks-customizer/) which is a
 fork of this plugin and contains the enhancement of this plugin.
@@ -64,15 +64,16 @@ which has been created previously.
 
 To remove `like` query to being work, add below-mentioned line in your theme 
 `functions.php`:
+
 ```php
 add_filter( 'cp_remove_like_query', '__return_false' );
 ```
+
 Note: Use `custom_permalinks_like_query` filter if the URLs doesn't works for you after 
 upgrading to `v1.2.9`.
 
 ### Add `PATH_INFO` in `$_SERVER` Variable
 
-Add below-mentioned line in your theme `functions.php`:
 ```php
 add_filter( 'custom_permalinks_path_info', '__return_true' );
 ```
