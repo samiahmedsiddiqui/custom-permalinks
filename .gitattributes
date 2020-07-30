@@ -1,0 +1,12 @@
+# git files
+.gitattributes export-ignore
+.gitignore export-ignore
+
+# general text file
+README.md export-ignore
+
+# manifest file
+package.json export-ignore
+
+# Gulp file to minify CSS and JS
+gulpfile.js export-ignore
