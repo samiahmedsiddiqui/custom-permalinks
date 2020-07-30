@@ -10,3 +10,7 @@ package.json export-ignore
 
 # Gulp file to minify CSS and JS
 gulpfile.js export-ignore
+
+# Unminified CSS and JS files
+about-plugins.css export-ignore
+script-form.js export-ignore

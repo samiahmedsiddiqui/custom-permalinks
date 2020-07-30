@@ -3,8 +3,8 @@ Contributors: sasiddiqui, michaeltyson
 Donate link: https://www.paypal.me/yasglobal
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Requires at least: 2.6
-Tested up to: 5.2
-Stable tag: 1.5.1
+Tested up to: 5.4
+Stable tag: 1.6.0-alpha
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -27,7 +27,7 @@ within that category.
 
 == Privacy Policy ==
 
-This plugin doesn't collect/store any user related information.
+This plugin collect information about the site like URL, WordPress version etc. This plugin doesn\'t collect any user related information.
 
 To have any kind of further query please feel free to [contact us](https://www.custompermalinks.com/contact-us/).
 
@@ -97,9 +97,24 @@ This process defines you the steps to follow either you are installing through W
 
 == Changelog ==
 
-= 1.5.1 - Jun 11, 2019 =
+= 1.6.0-alpha - July 30, 2020 =
 
   * Bugs
+    * [Undefined index and undefined variable error](https://github.com/yasglobal/custom-permalinks/issues/28)
+    * [count(): Parameter must be an array or an object](https://github.com/yasglobal/custom-permalinks/issues/27)
+    * Fix double slash from the permalink form
+    * [use 'view_item' label for previewing custom post types](https://github.com/yasglobal/custom-permalinks/issues/31)
+    * [Fix PHP 7.4 issues](https://github.com/yasglobal/custom-permalinks/issues/32)
+    * Fix Yoast Canonical double slash issue
+    * [Replacing category_link with term_link](https://github.com/yasglobal/custom-permalinks/issues/34)
+  * Enhancements
+    * Improved Gutenberg Support
+    * Added compatibility for WPML language switcher
+    * Optimized Code
+
+= 1.5.1 - Jun 11, 2019 =
+
+  * Bug
     * Added additional check for [Call to undefined function pll_current_language](https://wordpress.org/support/topic/call-to-undefined-function-pll_current_language/)
 
 = 1.5.0 - Jun 04, 2019 =
@@ -110,13 +125,13 @@ This process defines you the steps to follow either you are installing through W
 
 = 1.4.0 - Nov 08, 2018 =
 
-  * Enhancement
+  * Enhancements
     * Added Support for Gutenberg
     * Set meta_keys to be protected to stop duplication in Custom Fields
 
 = 1.3.0 - June 07, 2018 =
 
-  * Enhancement
+  * Enhancements
     * [Conflict with WPML](https://wordpress.org/support/topic/conflict-with-wpml-17/)
     * Avoid appending slashes and use trailingslashit instead
 

@@ -157,10 +157,12 @@ class Custom_Permalinks_Admin
             return;
         }
 
-        $content = sprintf( __(
-                'This plugin doesn\'t collect/store any user related information.
-                To have any kind of further query please feel free to
-                <a href="%s" target="_blank">contact us</a>.',
+        $content = sprintf(
+            __(
+                'This plugin collect information about the site like URL, WordPress version etc.' .
+                ' This plugin doesn\'t collect any user related information.' .
+                ' To have any kind of further query please feel free to' .
+                ' <a href="%s" target="_blank">contact us</a>.',
                 'custom-permalinks'
             ),
             'https://www.custompermalinks.com/contact-us/'
