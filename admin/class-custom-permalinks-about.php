@@ -25,6 +25,7 @@ class Custom_Permalinks_About
         $plugin_url = plugins_url( '/admin', CUSTOM_PERMALINKS_FILE );
         $img_src    = $plugin_url . '/images';
         wp_enqueue_style( 'style', $plugin_url . '/css/about-plugins.min.css' );
+
         $plugin_name = __( 'Custom Permalinks', 'custom-permalinks' );
         $button_text = __( 'Check it out', 'custom-permalinks' );
         $fivestar    = '<span class="star">
@@ -268,4 +269,3 @@ class Custom_Permalinks_About
         <?php
     }
 }
-

@@ -29,7 +29,9 @@ class Custom_Permalinks_Taxonomies
                           '<label class="screen-reader-text" for="cb-select-all-1">Select All</label>' .
                           '<input id="cb-select-all-1" type="checkbox">' .
                         '</td>' .
-                        '<th scope="col" id="title" class="manage-column column-title column-primary">' . __( "Title", "custom-permalinks" ) . '</th>' .
+                        '<th scope="col" id="title" class="manage-column column-title column-primary">' .
+                            __( "Title", "custom-permalinks" ) .
+                        '</th>' .
                         '<th scope="col">' . __( "Type", "custom-permalinks" ) . '</th>' .
                         '<th scope="col">' . __( "Permalink", "custom-permalinks" )  . '</th>' .
                       '</tr>';
@@ -65,9 +67,7 @@ class Custom_Permalinks_Taxonomies
         if ( ( isset( $_POST['action'] ) && 'delete' === $_POST['action'] )
             || ( isset( $_POST['action2'] ) && 'delete' === $_POST['action2'] )
         ) {
-            if ( isset( $_POST['permalink'] )
-                && ! empty( $_POST['permalink'] )
-            ) {
+            if ( isset( $_POST['permalink'] ) && ! empty( $_POST['permalink'] ) ) {
                 $removePerm = $_POST['permalink'];
                 $data = get_option( 'custom_permalink_table' );
                 if ( isset( $data ) && is_array( $data ) ) {
@@ -76,15 +76,14 @@ class Custom_Permalinks_Taxonomies
                         if ( in_array( $info['id'], $removePerm ) ) {
                             unset( $data[$link] );
                             unset( $removePerm[$loopCount] );
-                            if ( ! is_array( $removePerm )
-                                || empty( $removePerm )
-                            ) {
+                            if ( ! is_array( $removePerm ) || empty( $removePerm ) ) {
                                 break;
                             }
                         }
-                        $loopCount++;
+                        $loopCount += 1;
                     }
                 }
+
                 update_option( 'custom_permalink_table', $data );
             }
         }
@@ -101,7 +100,7 @@ class Custom_Permalinks_Taxonomies
         $pager_offset = '0';
         $page_limit   = 20;
         if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] )
-          && 1 < $_GET['paged']
+            && 1 < $_GET['paged']
         ) {
             $pager_offset = 20 * ( $_GET['paged'] - 1 );
             $page_limit   = $pager_offset + 20;
@@ -131,11 +130,9 @@ class Custom_Permalinks_Taxonomies
             $count_tags = count( $table );
         }
         if ( 0 < $count_tags ) {
-            require_once(
-                CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-pager.php'
-            );
-            $cp_pager = new Custom_Permalinks_Pager();
+            include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-pager.php';
 
+            $cp_pager = new Custom_Permalinks_Pager();
             $filtered = array();
             if ( '' != $search_value ) {
                 foreach ( $table as $key => $value ) {
@@ -151,21 +148,22 @@ class Custom_Permalinks_Taxonomies
 
             $total_pages = ceil( $count_tags / 20 );
             if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] )
-              && 0 < $_GET['paged']
+                && 0 < $_GET['paged']
             ) {
                 $pagination_html = $cp_pager->get_pagination(
                     $count_tags, $_GET['paged'], $total_pages
                 );
                 if ( $_GET['paged'] > $total_pages ) {
-                    $redirect_uri = explode(
-                        '&paged=' . $_GET['paged'] . '', $_SERVER['REQUEST_URI']
+                    $redirect_uri = explode( '&paged=' . $_GET['paged'] . '',
+                        $_SERVER['REQUEST_URI']
                     );
+
                     header( 'Location: ' . $redirect_uri[0], 301 );
                     exit(0);
                 }
             } elseif ( ! isset( $_GET['paged'] ) ) {
-                $pagination_html = $cp_pager->get_pagination(
-                    $count_tags, 1, $total_pages
+                $pagination_html = $cp_pager->get_pagination(  $count_tags, 1,
+                    $total_pages
                 );
             }
 
@@ -182,7 +180,7 @@ class Custom_Permalinks_Taxonomies
             uasort( $table, array( $this, 'sort_array' ) );
             $loopCount = -1;
             foreach ( $table as $permalink => $info ) {
-                $loopCount++;
+                $loopCount += 1;
                 if ( $loopCount < $pager_offset ) {
                     continue;
                 }

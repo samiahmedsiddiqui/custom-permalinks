@@ -47,8 +47,8 @@ class Custom_Permalinks_PostTypes
     }
 
     /**
-     * Shows all the Permalinks created by using this Plugin with Pager and
-     * Search Functionality of Posts/Pages.
+     * Shows all the Permalinks created by using this Plugin with Pager and Search
+     * Functionality of Posts/Pages.
      *
      * @since 1.2.0
      * @access private
@@ -74,8 +74,7 @@ class Custom_Permalinks_PostTypes
               } else {
                   $error = '<div id="message" class="error">' .
                               '<p>' .
-                                __(
-                                    'Please select permalinks which you like to be deleted.',
+                                __( 'Please select permalinks which you like to be deleted.',
                                     'custom-permalinks'
                                 ) .
                               '</p>' .
@@ -84,8 +83,7 @@ class Custom_Permalinks_PostTypes
           } else {
               $error = '<div id="message" class="error">' .
                           '<p>' .
-                            __(
-                                'There is some error to proceed your request. Please retry with your request or contact to the plugin author.',
+                            __( 'There is some error to proceed your request. Please retry with your request or contact to the plugin author.',
                                 'custom-permalinks'
                             ) .
                           '</p>' .
@@ -156,11 +154,9 @@ class Custom_Permalinks_PostTypes
         if ( isset( $count_posts->total_permalinks )
             && 0 < $count_posts->total_permalinks
         ) {
-            require_once(
-                CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-pager.php'
-            );
-            $cp_pager = new Custom_Permalinks_Pager();
+            include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-pager.php';
 
+            $cp_pager   = new Custom_Permalinks_Pager();
             $post_html .= '<h2 class="screen-reader-text">Custom Permalink navigation</h2>';
 
             $query = "SELECT p.ID, p.post_title, p.post_type, pm.meta_value FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != '' " . $filter_permalink . " " . $sorting_by . " " . $page_limit . "";
@@ -188,8 +184,8 @@ class Custom_Permalinks_PostTypes
 
             $post_html .= $pagination_html;
         }
-        $table_navigation = $this->post_nav(
-            $order_by_class, $order_by, $search_permalink
+        $table_navigation = $this->post_nav( $order_by_class, $order_by,
+            $search_permalink
         );
 
         $post_html .= '</div>';

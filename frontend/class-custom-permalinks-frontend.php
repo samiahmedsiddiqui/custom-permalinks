@@ -18,19 +18,14 @@ class Custom_Permalinks_Frontend
 
         add_filter( 'request', array( $this, 'parse_request' ) );
         add_filter( 'post_link', array( $this, 'custom_post_link' ), 10, 2 );
-        add_filter(
-            'post_type_link', array( $this, 'custom_post_link' ), 10, 2
-        );
+        add_filter( 'post_type_link', array( $this, 'custom_post_link' ), 10, 2 );
         add_filter( 'page_link', array( $this, 'custom_page_link' ), 10, 2 );
         add_filter( 'term_link', array( $this, 'custom_term_link' ), 10, 2 );
-        add_filter(
-            'user_trailingslashit', array( $this, 'custom_trailingslash' )
-        );
+        add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
 
         // WPSEO Filters
-        add_filter(
-            'wpseo_canonical', array( $this, 'fix_canonical_double_slash' ),
-            20, 1
+        add_filter( 'wpseo_canonical',
+            array( $this, 'fix_canonical_double_slash' ), 20, 1
         );
     }
 
@@ -52,7 +47,7 @@ class Custom_Permalinks_Frontend
         ) {
             $split_protocol = explode( '://', $permalink );
             if ( 1 < count( $split_protocol ) ) {
-                $protocol = $split_protocol[0] . '://';
+                $protocol  = $split_protocol[0] . '://';
                 $permalink = str_replace( $protocol, '', $permalink );
             }
         }
@@ -80,8 +75,8 @@ class Custom_Permalinks_Frontend
         $custom_permalink   = $permalink;
         $trailing_permalink = trailingslashit( home_url() ) . $custom_permalink;
         if ( $language_code ) {
-            $permalink = apply_filters(
-                'wpml_permalink', $trailing_permalink, $language_code
+            $permalink = apply_filters( 'wpml_permalink', $trailing_permalink,
+                $language_code
             );
             $site_url  = site_url();
             $wpml_href = str_replace( $site_url, '', $permalink );
@@ -140,7 +135,7 @@ class Custom_Permalinks_Frontend
         if ( defined( 'POLYLANG_VERSION' ) ) {
             $cp_file_path  = CUSTOM_PERMALINKS_PATH;
             $cp_file_path .= 'frontend/class-custom-permalinks-form.php';
-            require_once $cp_file_path;
+            include_once $cp_file_path;
 
             $cp_form = new Custom_Permalinks_Form();
             $request = $cp_form->check_conflicts( $request );
@@ -191,22 +186,16 @@ class Custom_Permalinks_Frontend
             } else {
                 $post_meta = trim( strtolower( $posts[0]->meta_value ), '/' );
                 if ( $posts[0]->post_type == 'page' ) {
-                    $get_original_url = $this->original_page_link(
-                        $posts[0]->ID
-                    );
+                    $get_original_url = $this->original_page_link( $posts[0]->ID );
                     $original_url     = preg_replace( '@/+@', '/',
-                        str_replace(
-                            $post_meta, $get_original_url,
+                        str_replace( $post_meta, $get_original_url,
                             strtolower( $request_no_slash )
                         )
                     );
                 } else {
-                    $get_original_url = $this->original_post_link(
-                        $posts[0]->ID
-                    );
+                    $get_original_url = $this->original_post_link( $posts[0]->ID );
                     $original_url     = preg_replace( '@/+@', '/',
-                        str_replace(
-                            $post_meta, $get_original_url,
+                        str_replace( $post_meta, $get_original_url,
                             strtolower( $request_no_slash )
                         )
                     );
@@ -236,9 +225,8 @@ class Custom_Permalinks_Frontend
                     }
 
                     $term_link    = $this->original_term_link( $term['id'] );
-                    $original_url = str_replace(
-                        trim( $permalink, '/' ), $term_link,
-                        trim( $request, '/' )
+                    $original_url = str_replace( trim( $permalink, '/' ),
+                        $term_link, trim( $request, '/' )
                     );
                 }
             }
@@ -324,9 +312,7 @@ class Custom_Permalinks_Frontend
         // Get request URI, strip parameters
         $url     = parse_url( get_bloginfo( 'url' ) );
         $url     = isset( $url['path'] ) ? $url['path'] : '';
-        $request = ltrim(
-            substr( $_SERVER['REQUEST_URI'], strlen( $url ) ), '/'
-        );
+        $request = ltrim( substr( $_SERVER['REQUEST_URI'], strlen( $url ) ), '/' );
         $pos     = strpos( $request, '?' );
         if ( $pos ) {
             $request = substr( $request, 0, $pos );
@@ -335,7 +321,7 @@ class Custom_Permalinks_Frontend
         if ( defined( 'POLYLANG_VERSION' ) ) {
             $cp_file_path  = CUSTOM_PERMALINKS_PATH;
             $cp_file_path .= 'frontend/class-custom-permalinks-form.php';
-            require_once $cp_file_path;
+            include_once $cp_file_path;
 
             $cp_form = new Custom_Permalinks_Form();
             $request = $cp_form->check_conflicts( $request );
@@ -379,42 +365,31 @@ class Custom_Permalinks_Frontend
              */
             if ( ( is_single() || is_page() ) && ! empty( $wp_query->post ) ) {
                 $post = $wp_query->post;
-                $custom_permalink = get_post_meta(
-                    $post->ID, 'custom_permalink', true
+                $custom_permalink = get_post_meta( $post->ID,
+                    'custom_permalink', true
                 );
                 if ( 'page' === $post->post_type ) {
-                    $original_permalink = $this->original_page_link(
-                        $post->ID
-                    );
+                    $original_permalink = $this->original_page_link( $post->ID );
                 } else {
-                    $original_permalink = $this->original_post_link(
-                        $post->ID
-                    );
+                    $original_permalink = $this->original_post_link( $post->ID );
                 }
             } elseif ( is_tag() || is_category() ) {
                 $the_term           = $wp_query->get_queried_object();
-                $custom_permalink   = $this->term_permalink(
-                    $the_term->term_id
-                );
-                $original_permalink = $this->original_term_link(
-                    $the_term->term_id
-                );
+                $custom_permalink   = $this->term_permalink( $the_term->term_id );
+                $original_permalink = $this->original_term_link( $the_term->term_id );
             }
         } else {
             $custom_permalink = $posts[0]->meta_value;
             if ( 'page' === $posts[0]->post_type ) {
-                $original_permalink = $this->original_page_link(
-                    $posts[0]->ID
-                );
+                $original_permalink = $this->original_page_link( $posts[0]->ID );
             } else {
-                $original_permalink = $this->original_post_link(
-                    $posts[0]->ID
-                );
+                $original_permalink = $this->original_post_link( $posts[0]->ID );
             }
         }
 
         if ( $custom_permalink
-            && ( substr( $request, 0, strlen( $custom_permalink ) ) != $custom_permalink
+            && (
+                substr( $request, 0, strlen( $custom_permalink ) ) != $custom_permalink
                 || $request == $custom_permalink . '/'
             )
         ) {
@@ -425,14 +400,10 @@ class Custom_Permalinks_Frontend
                 && trim( $request, '/' ) != trim( $original_permalink, '/' )
             ) {
                 // This is the original link; we can use this url to derive the new one
-                $url = preg_replace(
-                    '@//*@', '/',
-                    str_replace(
+                $url = preg_replace( '@//*@', '/', str_replace(
                         trim( $original_permalink, '/' ),
-                        trim( $custom_permalink, '/' ),
-                        $request
-                    )
-                );
+                        trim( $custom_permalink, '/' ), $request
+                ) );
                 $url = preg_replace( '@([^?]*)&@', '\1?', $url );
             }
 
@@ -463,16 +434,15 @@ class Custom_Permalinks_Frontend
                 $post_type = $post->post_type;
             }
 
-            $language_code = apply_filters(
-                'wpml_element_language_code', null,
+            $language_code = apply_filters( 'wpml_element_language_code', null,
                 array(
                     'element_id'   => $post->ID,
                     'element_type' => $post_type
                 )
             );
 
-            $permalink = $this->wpml_permalink_filter(
-                $custom_permalink, $language_code
+            $permalink = $this->wpml_permalink_filter( $custom_permalink,
+                $language_code
             );
             $permalink = $this->remove_double_slash( $permalink );
         }
@@ -494,16 +464,15 @@ class Custom_Permalinks_Frontend
     {
         $custom_permalink = get_post_meta( $page, 'custom_permalink', true );
         if ( $custom_permalink ) {
-            $language_code = apply_filters(
-                'wpml_element_language_code', null,
+            $language_code = apply_filters( 'wpml_element_language_code', null,
                 array(
-                    'element_id' => $page,
+                    'element_id'   => $page,
                     'element_type' => 'page'
                 )
             );
 
-            $permalink = $this->wpml_permalink_filter(
-                $custom_permalink, $language_code
+            $permalink = $this->wpml_permalink_filter( $custom_permalink,
+                $language_code
             );
             $permalink = $this->remove_double_slash( $permalink );
         }
@@ -536,17 +505,16 @@ class Custom_Permalinks_Frontend
                         $term_type = $term->taxonomy;
                     }
 
-                    $language_code = apply_filters(
-                        'wpml_element_language_code', null,
-                        array(
+                    $language_code = apply_filters( 'wpml_element_language_code',
+                        null, array(
                             'element_id'   => $term->term_taxonomy_id,
                             'element_type' => $term_type
                         )
                     );
                 }
 
-                $permalink = $this->wpml_permalink_filter(
-                    $custom_permalink, $language_code
+                $permalink = $this->wpml_permalink_filter( $custom_permalink,
+                    $language_code
                 );
                 $permalink = $this->remove_double_slash( $permalink );
             }
@@ -568,23 +536,19 @@ class Custom_Permalinks_Frontend
     public function original_post_link( $post_id )
     {
         remove_filter( 'post_link', array( $this, 'custom_post_link' ), 10, 3 );
-        remove_filter( 'post_type_link',
-            array( $this, 'custom_post_link' ), 10, 2
-        );
+        remove_filter( 'post_type_link', array( $this, 'custom_post_link' ), 10, 2 );
 
         $post_file_path = ABSPATH . '/wp-admin/includes/post.php';
         require_once $post_file_path;
 
         list( $permalink, $post_name ) = get_sample_permalink( $post_id );
-        $permalink = str_replace(
-            array( '%pagename%','%postname%' ), $post_name, $permalink
+        $permalink = str_replace( array( '%pagename%','%postname%' ), $post_name,
+            $permalink
         );
         $permalink = ltrim( str_replace( home_url(), '', $permalink ), '/' );
 
         add_filter( 'post_link', array( $this, 'custom_post_link' ), 10, 3 );
-        add_filter( 'post_type_link',
-            array( $this, 'custom_post_link' ), 10, 2
-        );
+        add_filter( 'post_type_link', array( $this, 'custom_post_link' ), 10, 2 );
 
         return $permalink;
     }
@@ -610,15 +574,12 @@ class Custom_Permalinks_Frontend
         require_once $post_file_path;
 
         list( $permalink, $post_name ) = get_sample_permalink( $post_id );
-        $permalink = str_replace(
-            array( '%pagename%','%postname%' ),
-            $post_name, $permalink
+        $permalink = str_replace( array( '%pagename%','%postname%' ), $post_name,
+            $permalink
         );
         $permalink = ltrim( str_replace( home_url(), '', $permalink ), '/' );
 
-        add_filter( 'user_trailingslashit',
-            array( $this, 'custom_trailingslash' )
-        );
+        add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
         add_filter( 'page_link', array( $this, 'custom_page_link' ), 10, 2 );
 
         return $permalink;
@@ -645,18 +606,14 @@ class Custom_Permalinks_Frontend
         $term      = get_term( $term_id );
         $term_link = get_term_link( $term );
 
-        add_filter( 'user_trailingslashit',
-            array( $this, 'custom_trailingslash' )
-        );
+        add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
         add_filter( 'term_link', array( $this, 'custom_term_link' ), 10, 2 );
 
         if ( is_wp_error( $term_link ) ) {
             return '';
         }
 
-        $original_permalink = ltrim(
-            str_replace( home_url(), '', $term_link ), '/'
-        );
+        $original_permalink = ltrim( str_replace( home_url(), '', $term_link ), '/' );
 
         return $original_permalink;
     }
@@ -689,9 +646,7 @@ class Custom_Permalinks_Frontend
 
         $request = ltrim( $request, '/' );
 
-        add_filter( 'user_trailingslashit',
-            array( $this, 'custom_trailingslash' )
-        );
+        add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
 
         if ( trim( $request ) ) {
             if ( trim( $_CPRegisteredURL, '/' ) == trim( $request, '/' ) ) {

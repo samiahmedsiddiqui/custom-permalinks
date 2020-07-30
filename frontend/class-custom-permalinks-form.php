@@ -6,6 +6,9 @@
 class Custom_Permalinks_Form
 {
 
+    /*
+     * Decide whether to show metabox or override WordPress default Permalink box.
+     */
     private $permalink_metabox = 0;
 
     /**
@@ -25,18 +28,13 @@ class Custom_Permalinks_Form
         add_action( 'post_tag_edit_form', array( $this, 'term_options' ) );
         add_action( 'created_term', array( $this, 'save_term' ), 10, 3 );
         add_action( 'edited_term', array( $this, 'save_term' ), 10, 3 );
-        add_action(
-            'delete_term', array( $this, 'delete_term_permalink' ), 10, 3
-        );
+        add_action( 'delete_term', array( $this, 'delete_term_permalink' ), 10, 3 );
         add_action( 'rest_api_init', array( $this, 'rest_edit_form' ) );
 
-        add_filter(
-            'get_sample_permalink_html',
+        add_filter( 'get_sample_permalink_html',
             array( $this, 'sample_permalink_html' ), 10, 2
         );
-        add_filter(
-            'is_protected_meta', array( $this, 'protect_meta' ), 10, 2
-        );
+        add_filter( 'is_protected_meta', array( $this, 'protect_meta' ), 10, 2 );
     }
 
     /**
@@ -47,8 +45,7 @@ class Custom_Permalinks_Form
      */
     public function permalink_edit_box()
     {
-        add_meta_box(
-            'custom-permalinks-edit-box',
+        add_meta_box( 'custom-permalinks-edit-box',
             __( 'Permalink', 'custom-permalinks' ),
             array( $this, 'meta_edit_form' ), null, 'normal', 'high',
             array(
@@ -92,21 +89,15 @@ class Custom_Permalinks_Form
 
         delete_post_meta( $post_id, 'custom_permalink' );
 
-        $cp_frontend = new Custom_Permalinks_Frontend();
+        $cp_frontend   = new Custom_Permalinks_Frontend();
         $original_link = $cp_frontend->original_post_link( $post_id );
         if ( $_REQUEST['custom_permalink']
             && $_REQUEST['custom_permalink'] != $original_link
         ) {
-            add_post_meta(
-                $post_id, 'custom_permalink',
-                str_replace( '%2F', '/',
-                    urlencode(
-                        ltrim(
-                            stripcslashes( $_REQUEST['custom_permalink'] ),
-                             '/'
-                        )
-                    )
-                )
+            add_post_meta( $post_id, 'custom_permalink',
+                str_replace( '%2F', '/', urlencode(
+                    ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), '/' )
+                ) )
             );
         }
     }
@@ -121,12 +112,10 @@ class Custom_Permalinks_Form
     public function delete_permalink( $post_id )
     {
         global $wpdb;
-        $wpdb->query(
-            $wpdb->prepare(
-                "DELETE FROM $wpdb->postmeta WHERE meta_key = 'custom_permalink' AND post_id = %d",
-                $post_id
-            )
-        );
+        $wpdb->query( $wpdb->prepare(
+            "DELETE FROM $wpdb->postmeta WHERE meta_key = 'custom_permalink' AND post_id = %d",
+            $post_id
+        ) );
     }
 
     /**
@@ -154,8 +143,7 @@ class Custom_Permalinks_Form
         } else {
             $post_type_name   = '';
             $post_type_object = get_post_type_object( $post->post_type );
-            if ( is_object($post_type_object)
-                && isset( $post_type_object->labels )
+            if ( is_object($post_type_object) && isset( $post_type_object->labels )
                 && isset( $post_type_object->labels->singular_name )
             ) {
                 $post_type_name = ' ' . $post_type_object->labels->singular_name;
@@ -168,16 +156,15 @@ class Custom_Permalinks_Form
             $original_permalink = $cp_frontend->original_post_link( $post_id );
             $view_post = __( 'View', 'custom-permalinks' ) . $post_type_name;
         }
-        $this->get_permalink_form(
-            $permalink, $original_permalink, false, $post->post_name
+        $this->get_permalink_form( $permalink, $original_permalink, false,
+            $post->post_name
         );
 
         $content = ob_get_contents();
         ob_end_clean();
 
         if ( 'trash' !== $post->post_status ) {
-            wp_enqueue_script(
-                'custom-permalinks-form',
+            wp_enqueue_script( 'custom-permalinks-form',
                 plugins_url( '/js/script-form.min.js', __FILE__ ), array(),
                 false, true
             );
@@ -187,7 +174,7 @@ class Custom_Permalinks_Form
                 $view_post_link = $home_url . $permalink;
             } else {
                 if ( 'draft' === $post->post_status ) {
-                    $view_post = 'Preview';
+                    $view_post      = 'Preview';
                     $view_post_link = $home_url . '?';
                     if ( 'page' === $post->post_type ) {
                         $view_post_link .= 'page_id';
@@ -235,8 +222,8 @@ class Custom_Permalinks_Form
         }
 
         $exclude_post_types = $post->post_type;
-        $excluded = apply_filters(
-            'custom_permalinks_exclude_post_type', $exclude_post_types
+        $excluded = apply_filters( 'custom_permalinks_exclude_post_type',
+            $exclude_post_types
         );
         if ( '__true' === $excluded ) {
             return $html;
@@ -258,9 +245,7 @@ class Custom_Permalinks_Form
     public function meta_edit_form( $post )
     {
         $form_return = 0;
-        if ( isset( $this->permalink_metabox )
-            && 1 === $this->permalink_metabox
-        ) {
+        if ( isset( $this->permalink_metabox ) && 1 === $this->permalink_metabox ) {
             $form_return = 1;
         }
 
@@ -279,16 +264,15 @@ class Custom_Permalinks_Form
         }
 
         $exclude_post_types = $post->post_type;
-        $excluded = apply_filters(
-            'custom_permalinks_exclude_post_type', $exclude_post_types
+        $excluded = apply_filters( 'custom_permalinks_exclude_post_type',
+            $exclude_post_types
         );
         if ( '__true' === $excluded ) {
             $form_return = 1;
         }
 
         if ( 1 === $form_return ) {
-            wp_enqueue_script(
-                'custom-permalinks-form',
+            wp_enqueue_script( 'custom-permalinks-form',
                 plugins_url( '/js/script-form.min.js', __FILE__ ), array(),
                 false, true
             );
@@ -332,8 +316,8 @@ class Custom_Permalinks_Form
           <div class="inside">
           <?php
           $cp_frontend = new Custom_Permalinks_Frontend();
-          $this->get_permalink_form(
-              $permalink, $cp_frontend->original_post_link( $post_id )
+          $this->get_permalink_form( $permalink,
+              $cp_frontend->original_post_link( $post_id )
           );
           ?>
           </div>
@@ -448,10 +432,8 @@ class Custom_Permalinks_Form
             $original_encoded_url = $post_slug;
         }
 
-        wp_enqueue_script(
-            'custom-permalinks-form',
-            plugins_url( '/js/script-form.min.js', __FILE__ ), array(),
-            false, true
+        wp_enqueue_script( 'custom-permalinks-form',
+            plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
         );
         $postname_html = '';
         if ( isset( $postname ) && '' !== $postname ) {
@@ -514,9 +496,7 @@ class Custom_Permalinks_Form
 
                 $this->delete_term_permalink( $term_id );
 
-                $permalink = str_replace(
-                    '%2F', '/', urlencode( $new_permalink )
-                );
+                $permalink = str_replace( '%2F', '/', urlencode( $new_permalink ) );
                 $table     = get_option( 'custom_permalink_table' );
 
                 if ( $permalink ) {
@@ -550,6 +530,7 @@ class Custom_Permalinks_Form
                 }
             }
         }
+
         update_option( 'custom_permalink_table', $table );
     }
 
@@ -573,15 +554,12 @@ class Custom_Permalinks_Form
             $polylang_config = get_option( 'polylang' );
             if ( 1 === $polylang_config['force_lang'] ) {
                 if ( false !== strpos( $requested_url, 'language/' ) ) {
-                    $requested_url = str_replace(
-                        'language/', '', $requested_url
-                    );
+                    $requested_url = str_replace( 'language/', '', $requested_url );
                 }
 
                 /*
-                 * Check if `hide_default` is `true` and the current language
-                 * is not the default. Otherwise remove the lang code
-                 * from the url.
+                 * Check if `hide_default` is `true` and the current language is not
+                 * the default. Otherwise remove the lang code from the url.
                  */
                 if ( 1 === $polylang_config['hide_default'] ) {
                     $current_language = '';
@@ -623,15 +601,20 @@ class Custom_Permalinks_Form
         if ( isset( $data['id'] ) && is_numeric( $data['id'] ) ) {
             $post = get_post( $data['id'] );
             $all_permalinks = array();
-            $all_permalinks['custom_permalink'] = get_post_meta(
-                $data['id'], 'custom_permalink', true
+            $all_permalinks['custom_permalink'] = get_post_meta( $data['id'],
+                'custom_permalink', true
             );
             $cp_frontend = new Custom_Permalinks_Frontend;
             if ( 'page' === $post->post_type ) {
-                $all_permalinks['original_permalink'] = $cp_frontend->original_page_link( $data['id'] );
+                $all_permalinks['original_permalink'] = $cp_frontend->original_page_link(
+                    $data['id']
+                );
             } else {
-                $all_permalinks['original_permalink'] = $cp_frontend->original_post_link( $data['id'] );
+                $all_permalinks['original_permalink'] = $cp_frontend->original_post_link(
+                    $data['id']
+                );
             }
+
             echo json_encode( $all_permalinks );
             exit;
         }
@@ -645,8 +628,7 @@ class Custom_Permalinks_Form
      */
     public function rest_edit_form()
     {
-        register_rest_route(
-            'custom-permalinks/v1', '/get-permalink/(?P<id>\d+)',
+        register_rest_route( 'custom-permalinks/v1', '/get-permalink/(?P<id>\d+)',
             array(
                 'methods'  => 'GET',
                 'callback' => array( $this, 'refresh_meta_form' ),
