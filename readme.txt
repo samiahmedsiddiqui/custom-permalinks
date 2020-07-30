@@ -37,38 +37,42 @@ The plugin provides some filter which may be used according to your needs.
 
 To exclude any Permalink to processed with the plugin so, just add the filter looks like this:
 `
-function yasglobal_xml_sitemap_url( $permalink ) {
-  if ( false !== strpos( $permalink, 'sitemap.xml' )) {
-    return '__true';
-  }
-  return;
+function yasglobal_xml_sitemap_url( $permalink )
+{
+    if ( false !== strpos( $permalink, 'sitemap.xml' ) ) {
+        return '__true';
+    }
+
+    return;
 }
 add_filter( 'custom_permalinks_request_ignore', 'yasglobal_xml_sitemap_url' );
 `
 
 To exclude permalink from any post type so, just add the filter looks like this:
 `
-function yasglobal_exclude_post_types( $post_type ) {
-  if ( $post_type == 'custompost' ) {
-    return '__true';
-  }
-  return '__false';
+function yasglobal_exclude_post_types( $post_type )
+{
+    if ( 'custompost' === $post_type ) {
+        return '__true';
+    }
+
+    return '__false';
 }
-add_filter( 'custom_permalinks_exclude_post_type', 'yasglobal_exclude_post_types');
+add_filter( 'custom_permalinks_exclude_post_type', 'yasglobal_exclude_post_types' );
 `
 
 Note: custom_permalinks_exclude_post_type doesn't work on the post's permalink which has been created previously.
 
-To remove the like query to being work just add this line in your theme's functions.php:
+To remove the like query to being work just add this line in your theme's `functions.php`:
 `
-add_filter( 'cp_remove_like_query', '__return_false');
+add_filter( 'cp_remove_like_query', '__return_false' );
 `
 
-Note: Use `custom_permalinks_like_query` filter if the URLs doesn't work for you after upgrading to `v1.2.9`
+Note: Use `custom_permalinks_like_query` filter if the URLs doesn't work for you after upgrading to `v1.2.9`.
 
-To add `PATH_INFO` in `$_SERVER` Variable just add this line in your theme's functions.php:
+To add `PATH_INFO` in `$_SERVER` Variable just add this line in your theme's `functions.php`:
 `
-add_filter( 'custom_permalinks_path_info', '__return_true');
+add_filter( 'custom_permalinks_path_info', '__return_true' );
 `
 
 === Thanks for the Support ===
