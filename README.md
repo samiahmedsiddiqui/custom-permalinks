@@ -1,22 +1,29 @@
 # Custom Permalinks
 
-Lay out your site the way *you* want it. Set the URL of any post, page, tag or category to anything you want. Old permalinks will redirect properly to the new address.  Custom Permalinks gives you ultimate control over your site structure.
-
-> Be warned: *This plugin is not a replacement for WordPress's built-in permalink system*. Check your WordPress administration's "Permalinks" settings page first, to make sure that this doesn't already meet your needs.
+Lay out your site the way *you* want it. Set the URL of any post, page, tag or category to 
+anything you want. Old permalinks will redirect properly to the new address.  
+Custom Permalinks gives you ultimate control over your site structure.
 
 :warning: *This plugin is not a replacement for WordPress's built-in permalink system*. 
-Check your WordPress administration's "Permalinks" settings page first, to make sure that this 
-doesn't already meet your needs.
+Check your WordPress administration's "Permalinks" settings page first, to make sure that 
+this doesn't already meet your needs.
 
-This plugin is only useful for assigning custom permalinks for *individual* posts, pages, tags or categories. It will not apply whole permalink structures or automatically apply a category's custom permalink to the posts within that category.
+This plugin is only useful for assigning custom permalinks for *individual* posts, pages, 
+tags or categories. It will not apply whole permalink structures or automatically apply a 
+category's custom permalink to the posts within that category.
 
-:information_source: If anyone wants the different Structure Tags for their PostTypes or use symbols in the URLs So, use the [Permalinks Customizer](https://wordpress.org/plugins/permalinks-customizer/) which is a fork of this plugin and contains the enhancement of this plugin.
+:information_source: If anyone wants the different Structure Tags for their PostTypes or use 
+symbols in the URLs So, use the 
+[Permalinks Customizer](https://wordpress.org/plugins/permalinks-customizer/) which is a
+fork of this plugin and contains the enhancement of this plugin.
 
 ## Privacy Policy
 
-This plugin collect information about the site like URL, WordPress version etc. This plugin doesn\'t collect any user related information.
+This plugin collect information about the site like URL, WordPress version etc. This plugin 
+doesn\'t collect any user related information.
 
-To have any kind of further query please feel free to [contact us](https://www.custompermalinks.com/contact-us/).
+To have any kind of further query please feel free to 
+[contact us](https://www.custompermalinks.com/contact-us/).
 
 ## Filters
 
@@ -49,15 +56,19 @@ function yasglobal_exclude_post_types( $post_type )
 }
 add_filter( 'custom_permalinks_exclude_post_type', 'yasglobal_exclude_post_types' );
 ```
-Note: `custom_permalinks_exclude_post_type` doesn't work on the posts permalink which has been created previously.
+
+Note: `custom_permalinks_exclude_post_type` doesn't work on the posts permalink 
+which has been created previously.
 
 ### Remove `like` query
 
-To remove `like` query to being work, add below-mentioned line in your theme `functions.php`:
+To remove `like` query to being work, add below-mentioned line in your theme 
+`functions.php`:
 ```php
 add_filter( 'cp_remove_like_query', '__return_false' );
 ```
-Note: Use `custom_permalinks_like_query` filter if the URLs doesn't works for you after upgrading to `v1.2.9`.
+Note: Use `custom_permalinks_like_query` filter if the URLs doesn't works for you after 
+upgrading to `v1.2.9`.
 
 ### Add `PATH_INFO` in `$_SERVER` Variable
 
@@ -68,15 +79,21 @@ add_filter( 'custom_permalinks_path_info', '__return_true' );
 
 ## Thanks for the Support
 
-I do not always provide active support for the Custom Permalinks plugin on the WordPress.org forums, as I have prioritized the email support. One-on-one email support is available to people who bought [Custom Permalinks Premium](https://www.custompermalinks.com/#pricing-section) only.
+I do not always provide active support for the Custom Permalinks plugin on the 
+WordPress.org forums, as I have prioritized the email support. One-on-one email support 
+is available to people who bought 
+[Custom Permalinks Premium](https://www.custompermalinks.com/#pricing-section) only.
 
 ## Bug reports
 
-Bug reports for Custom Permalinks are [welcomed on GitHub](https://github.com/yasglobal/custom-permalinks). Please note GitHub is not a support forum, and issues that aren't properly qualified as bugs will be closed.
+Bug reports for Custom Permalinks are 
+[welcomed on GitHub](https://github.com/yasglobal/custom-permalinks). Please note 
+GitHub is not a support forum, and issues that aren't properly qualified as bugs will be closed.
 
 ## Installation
 
-This process defines you the steps to follow either you are installing through WordPress or Manually from FTP.
+This process defines you the steps to follow either you are installing through WordPress 
+or Manually from FTP.
 
 ## From within WordPress
 
