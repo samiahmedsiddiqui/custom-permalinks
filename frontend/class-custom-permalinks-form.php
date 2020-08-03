@@ -604,6 +604,23 @@ class Custom_Permalinks_Form
             $all_permalinks['custom_permalink'] = get_post_meta( $data['id'],
                 'custom_permalink', true
             );
+
+            if ( ! $all_permalinks['custom_permalink'] ) {
+                if ( 'draft' === $post->post_status ) {
+                    $view_post_link = '?';
+                    if ( 'page' === $post->post_type ) {
+                        $view_post_link .= 'page_id';
+                    } else if ( 'post' === $post->post_type ) {
+                        $view_post_link .= 'p';
+                    } else {
+                        $view_post_link .= 'post_type=' . $post->post_type . '&p';
+                    }
+                    $view_post_link .= '=' . $data['id'] . '&preview=true';
+
+                    $all_permalinks['preview_permalink'] = $view_post_link;
+                }
+            }
+
             $cp_frontend = new Custom_Permalinks_Frontend;
             if ( 'page' === $post->post_type ) {
                 $all_permalinks['original_permalink'] = $cp_frontend->original_page_link(

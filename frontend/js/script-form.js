@@ -59,17 +59,25 @@ function updateMetaBox() {
       if (this.readyState == 4 && this.status == 200) {
         var setPermlinks = JSON.parse(this.responseText);
         var permalinkAdd = document.getElementById("custom-permalinks-add");
+        var viewPermalink;
+
         getPermalink.value = setPermlinks.custom_permalink;
         if (setPermlinks.custom_permalink === "") {
           setPermlinks.custom_permalink = setPermlinks.original_permalink;
         }
+        if (setPermlinks.preview_permalink) {
+          viewPermalink = getHomeURL.value + setPermlinks.preview_permalink;
+        } else {
+          viewPermalink = getHomeURL.value + setPermlinks.custom_permalink;
+        }
+
         document.getElementById("custom-permalinks-post-slug").value = setPermlinks.custom_permalink;
         document.getElementById("original-permalink").value = setPermlinks.original_permalink;
         if (document.querySelector("#view-post-btn a")) {
-          document.querySelector("#view-post-btn a").href = getHomeURL.value + setPermlinks.custom_permalink;
+          document.querySelector("#view-post-btn a").href = viewPermalink;
         }
         if (document.querySelector("a.editor-post-preview")) {
-          document.querySelector("a.editor-post-preview").href = getHomeURL.value + setPermlinks.custom_permalink;
+          document.querySelector("a.editor-post-preview").href = viewPermalink;
         }
         if (permalinkAdd && permalinkAdd.value === "add") {
           document.getElementById("custom-permalinks-edit-box").style.display = "";
