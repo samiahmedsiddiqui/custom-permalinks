@@ -2,14 +2,17 @@
 .gitattributes export-ignore
 .gitignore export-ignore
 
+# Composer file
+composer.json export-ignore
+
 # general text file
 README.md export-ignore
 
-# manifest file
-package.json export-ignore
-
 # Gulp file to minify CSS and JS
 gulpfile.js export-ignore
+
+# manifest file
+package.json export-ignore
 
 # Unminified CSS and JS files
 about-plugins.css export-ignore
