@@ -52,7 +52,7 @@ function updateMetaBox() {
     }
 
     isSaving = editPost.isSavingMetaBoxes();
-    if (!isSaving || isSaving !== lastIsSaving) {
+    if (isSaving !== lastIsSaving && !isSaving) {
         var postId = wp.data.select("core/editor").getEditedPostAttribute("id");
         var xhttp = new XMLHttpRequest();
 
