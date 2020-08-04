@@ -88,7 +88,7 @@ is available to people who bought
 ## Bug reports
 
 Bug reports for Custom Permalinks are 
-[welcomed on GitHub](https://github.com/yasglobal/custom-permalinks). Please note 
+[welcomed on GitHub](https://github.com/samiahmedsiddiqui/custom-permalinks). Please note 
 GitHub is not a support forum, and issues that aren't properly qualified as bugs will be closed.
 
 ## Installation

@@ -1,6 +1,5 @@
 === Custom Permalinks ===
 Contributors: sasiddiqui, michaeltyson
-Donate link: https://www.paypal.me/yasglobal
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Requires at least: 2.6
 Tested up to: 5.4
@@ -82,7 +81,7 @@ One-on-one email support is available to people who bought [Custom Permalinks Pr
 
 === Bug reports ===
 
-Bug reports for Custom Permalinks are [welcomed on GitHub](https://github.com/yasglobal/custom-permalinks). Please note GitHub is not a support forum, and issues that aren't properly qualified as bugs will be closed.
+Bug reports for Custom Permalinks are [welcomed on GitHub](https://github.com/samiahmedsiddiqui/custom-permalinks). Please note GitHub is not a support forum, and issues that aren't properly qualified as bugs will be closed.
 
 == Installation ==
 
@@ -104,13 +103,13 @@ This process defines you the steps to follow either you are installing through W
 = 1.6.0-alpha - July 30, 2020 =
 
   * Bugs
-    * [Undefined index and undefined variable error](https://github.com/yasglobal/custom-permalinks/issues/28)
-    * [count(): Parameter must be an array or an object](https://github.com/yasglobal/custom-permalinks/issues/27)
+    * [Undefined index and undefined variable error](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/28)
+    * [count(): Parameter must be an array or an object](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/27)
     * Fix double slash from the permalink form
-    * [use 'view_item' label for previewing custom post types](https://github.com/yasglobal/custom-permalinks/issues/31)
-    * [Fix PHP 7.4 issues](https://github.com/yasglobal/custom-permalinks/issues/32)
+    * [use 'view_item' label for previewing custom post types](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/31)
+    * [Fix PHP 7.4 issues](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/32)
     * Fix Yoast Canonical double slash issue
-    * [Replacing category_link with term_link](https://github.com/yasglobal/custom-permalinks/issues/34)
+    * [Replacing category_link with term_link](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/34)
   * Enhancements
     * Improved Gutenberg Support
     * Added compatibility for WPML language switcher
