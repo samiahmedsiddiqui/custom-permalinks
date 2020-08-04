@@ -61,7 +61,13 @@ class Custom_Permalinks_Taxonomies
      */
     private function taxonomies_permalinks()
     {
-        $page_html = '';
+        $home_url    = home_url();
+        $page_html   = '';
+        $request_uri = '';
+
+        if ( isset( $_SERVER['REQUEST_URI'] ) ) {
+            $request_uri = $_SERVER['REQUEST_URI'];
+        }
 
         // Handle Bulk Operations
         if ( ( isset( $_POST['action'] ) && 'delete' === $_POST['action'] )
@@ -105,14 +111,14 @@ class Custom_Permalinks_Taxonomies
             $pager_offset = 20 * ( $_GET['paged'] - 1 );
             $page_limit   = $pager_offset + 20;
         }
-        $page_html .= '<form action="' . $_SERVER["REQUEST_URI"] . '" method="get">' .
+        $page_html .= '<form action="' . $home_url . $request_uri . '" method="get">' .
                         '<p class="search-box">' .
                         '<input type="hidden" name="page" value="cp-category-permalinks" />' .
                         '<label class="screen-reader-text" for="custom-permalink-search-input">Search Custom Permalink:</label>' .
                         '<input type="search" id="custom-permalink-search-input" name="s" value="' . $search_value . '">' .
                         '<input type="submit" id="search-submit" class="button" value="Search Permalink"></p>' .
                       '</form>' .
-                      '<form action="' . $_SERVER["REQUEST_URI"] . '" method="post">' .
+                      '<form action="' . $home_url . $request_uri . '" method="post">' .
                         '<div class="tablenav top">' .
                           '<div class="alignleft actions bulkactions">' .
                             '<label for="bulk-action-selector-top" class="screen-reader-text">Select bulk action</label>' .
@@ -155,7 +161,7 @@ class Custom_Permalinks_Taxonomies
                 );
                 if ( $_GET['paged'] > $total_pages ) {
                     $redirect_uri = explode( '&paged=' . $_GET['paged'] . '',
-                        $_SERVER['REQUEST_URI']
+                        $request_uri
                     );
 
                     header( 'Location: ' . $redirect_uri[0], 301 );
@@ -200,11 +206,11 @@ class Custom_Permalinks_Taxonomies
                                   '<input type="checkbox" name="permalink[]" value="' . $info['id'] . '" />' .
                                 '</th>' .
                                 '<td><strong>' .
-                                  '<a class="row-title" href="edit-tags.php?action=edit&taxonomy=' . $type . '&tag_ID=' . $info['id'] . ' ">' . $term->name . '</a>' .
+                                  '<a class="row-title" href="' . $home_url . '/wp-admin/edit-tags.php?action=edit&taxonomy=' . $type . '&tag_ID=' . $info['id'] . ' ">' . $term->name . '</a>' .
                                 '</strong></td>' .
                                 '<td>' . ucwords( $info['kind'] ) . '</td>' .
                                 '<td>' .
-                                  '<a href="/' . $permalink . '" target="_blank" title="' . __( "Visit " . $term->name, "custom-permalinks" ) . '">/' . $permalink . '</a>' .
+                                  '<a href="' . $home_url . '/' . $permalink . '" target="_blank" title="' . __( "Visit " . $term->name, "custom-permalinks" ) . '">/' . $permalink . '</a>' .
                                 '</td>' .
                               '</tr>';
             }

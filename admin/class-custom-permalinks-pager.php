@@ -35,9 +35,12 @@ class Custom_Permalinks_Pager
             return $pagination_html;
         }
 
-        $remove_pager_uri = explode(
-            '&paged=' . $current_pager_value . '', $_SERVER['REQUEST_URI']
-        );
+        $remove_pager_uri = array();
+        if ( isset( $_SERVER['REQUEST_URI'] ) ) {
+            $remove_pager_uri = explode(
+                '&paged=' . $current_pager_value . '', $_SERVER['REQUEST_URI']
+            );
+        }
         $pagination_html = '<div class="tablenav-pages">' .
                               '<span class="displaying-num">' .
                                 $total_permalinks . ' items' .

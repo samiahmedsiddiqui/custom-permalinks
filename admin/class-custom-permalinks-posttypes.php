@@ -60,8 +60,14 @@ class Custom_Permalinks_PostTypes
         $error            = '';
         $filter_options   = '';
         $filter_permalink = '';
+        $home_url         = home_url();
         $post_html        = '';
+        $request_uri      = '';
         $search_permalink = '';
+
+        if ( isset( $_SERVER['REQUEST_URI'] ) ) {
+            $request_uri = $_SERVER['REQUEST_URI'];
+        }
 
         // Handle Bulk Operations
         if ( ( isset( $_POST['action'] ) && 'delete' === $_POST['action'] )
@@ -130,7 +136,7 @@ class Custom_Permalinks_PostTypes
         $count_query = "SELECT COUNT(p.ID) AS total_permalinks FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != '' " . $filter_permalink . "";
         $count_posts = $wpdb->get_row( $count_query );
 
-        $post_html .= '<form action="' . $_SERVER["REQUEST_URI"] . '" method="get">' .
+        $post_html .= '<form action="' . $home_url . $request_uri . '" method="get">' .
                         '<p class="search-box">' .
                         '<input type="hidden" name="page" value="cp-post-permalinks" />' .
                         $filter_options .
@@ -138,13 +144,17 @@ class Custom_Permalinks_PostTypes
                         '<input type="search" id="custom-permalink-search-input" name="s" value="' . $search_value . '">' .
                         '<input type="submit" id="search-submit" class="button" value="Search Permalink"></p>' .
                       '</form>' .
-                      '<form action="' . $_SERVER["REQUEST_URI"] . '" method="post">' .
+                      '<form action="' . $home_url . $request_uri . '" method="post">' .
                         '<div class="tablenav top">' .
                           '<div class="alignleft actions bulkactions">' .
                             '<label for="bulk-action-selector-top" class="screen-reader-text">Select bulk action</label>' .
                             '<select name="action" id="bulk-action-selector-top">' .
-                              '<option value="-1">' . __( "Bulk Actions", "custom-permalinks" ) . '</option>' .
-                              '<option value="delete">' . __( "Delete Permalinks", "custom-permalinks" ) . '</option>' .
+                              '<option value="-1">' .
+                                __( "Bulk Actions", "custom-permalinks" ) .
+                              '</option>' .
+                              '<option value="delete">' .
+                                __( "Delete Permalinks", "custom-permalinks" ) .
+                              '</option>' .
                             '</select>' .
                             '<input type="submit" id="doaction" class="button action" value="Apply">' .
                           '</div>';
@@ -170,8 +180,8 @@ class Custom_Permalinks_PostTypes
                     $count_posts->total_permalinks, $_GET['paged'], $total_pages
                 );
                 if ( $_GET['paged'] > $total_pages ) {
-                    $redirect_uri = explode(
-                        '&paged=' . $_GET['paged'] . '', $_SERVER['REQUEST_URI']
+                    $redirect_uri = explode( '&paged=' . $_GET['paged'] . '',
+                        $request_uri
                     );
                     header( 'Location: ' . $redirect_uri[0], 301 );
                     exit(0);
@@ -200,12 +210,14 @@ class Custom_Permalinks_PostTypes
                                 '</th>' .
                                 '<td>' .
                                   '<strong>' .
-                                    '<a class="row-title" href="post.php?action=edit&post=' . $post->ID . '">' . $post->post_title . '</a>' .
+                                    '<a class="row-title" href="' . $home_url . '/wp-admin/post.php?action=edit&post=' . $post->ID . '">' .
+                                      $post->post_title .
+                                    '</a>' .
                                   '</strong>' .
                                 '</td>' .
                                 '<td>' . ucwords( $post->post_type ) . '</td>' .
                                 '<td>' .
-                                  '<a href="/' . $post->meta_value . '" target="_blank" title="' . __( "Visit " . $post->post_title, "custom-permalinks" ) . '">/' .
+                                  '<a href="' . $home_url . '/' . $post->meta_value . '" target="_blank" title="' . __( "Visit " . $post->post_title, "custom-permalinks" ) . '">/' .
                                     urldecode( $post->meta_value ) .
                                   '</a>' .
                                 '</td>' .
@@ -213,7 +225,9 @@ class Custom_Permalinks_PostTypes
             }
         } else {
             $post_html .= '<tr class="no-items">' .
-                            '<td class="colspanchange" colspan="4">' . __( "No permalinks found.", "custom-permalinks" ) . '</td>' .
+                            '<td class="colspanchange" colspan="4">' .
+                              __( "No permalinks found.", "custom-permalinks" ) .
+                            '</td>' .
                           '</tr>';
         }
         $post_html .= '</tbody>' .
@@ -224,8 +238,12 @@ class Custom_Permalinks_PostTypes
                         '<div class="alignleft actions bulkactions">' .
                           '<label for="bulk-action-selector-bottom" class="screen-reader-text">Select bulk action</label>' .
                           '<select name="action2" id="bulk-action-selector-bottom">' .
-                            '<option value="-1">' . __( "Bulk Actions", "custom-permalinks" ) . '</option>' .
-                            '<option value="delete">' . __( "Delete Permalinks", "custom-permalinks" ) . '</option>' .
+                            '<option value="-1">'
+                              . __( "Bulk Actions", "custom-permalinks" ) .
+                            '</option>' .
+                            '<option value="delete">' .
+                              __( "Delete Permalinks", "custom-permalinks" ) .
+                            '</option>' .
                           '</select>' .
                           '<input type="submit" id="doaction2" class="button action" value="Apply">' .
                         '</div>' .

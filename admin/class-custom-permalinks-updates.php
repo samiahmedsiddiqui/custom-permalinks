@@ -25,7 +25,6 @@ class Custom_Permalinks_Updates
         if ( function_exists( 'curl_init' ) === true ) {
             $admin_email = get_bloginfo( 'admin_email' );
             $curl_url    = 'https://www.custompermalinks.com/plugin-update/';
-            $cp_version  = CUSTOM_PERMALINKS_PLUGIN_VERSION;
             $site_name   = get_bloginfo( 'name' );
             $site_url    = get_bloginfo( 'wpurl' );
             $wp_version  = get_bloginfo( 'version' );
@@ -40,21 +39,21 @@ class Custom_Permalinks_Updates
             );
 
             // Create a connection
-            $ch = curl_init( $curl_url );
+            $curl_conn = curl_init( $curl_url );
 
             // Generate URL-encoded query string
             $encoded_data = http_build_query( $updates, '', '&' );
 
             // Setting options
-            curl_setopt( $ch, CURLOPT_POST, 1 );
-            curl_setopt( $ch, CURLOPT_POSTFIELDS, $encoded_data );
-            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, TRUE );
+            curl_setopt( $curl_conn, CURLOPT_POST, 1 );
+            curl_setopt( $curl_conn, CURLOPT_POSTFIELDS, $encoded_data );
+            curl_setopt( $curl_conn, CURLOPT_RETURNTRANSFER, TRUE );
 
             // Execute the given cURL session
-            curl_exec( $ch );
+            curl_exec( $curl_conn );
 
             // Closes a cURL session and frees all resources
-            curl_close( $ch );
+            curl_close( $curl_conn );
         }
     }
 }

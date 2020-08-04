@@ -6,6 +6,16 @@
 class Custom_Permalinks_Frontend
 {
 
+    /*
+     * The query string, if any, via which the page is accessed otherwise empty.
+     */
+    private $query_string_uri = '';
+
+    /*
+     * The URI which is given in order to access this page. Default empty.
+     */
+    private $request_uri = '';
+
     /**
      * Initialize WordPress Hooks.
      *
@@ -14,6 +24,14 @@ class Custom_Permalinks_Frontend
      */
     public function init()
     {
+        if ( isset( $_SERVER['QUERY_STRING'] ) ) {
+            $this->query_string_uri = $_SERVER['QUERY_STRING'];
+        }
+
+        if ( isset( $_SERVER['REQUEST_URI'] ) ) {
+            $this->request_uri = $_SERVER['REQUEST_URI'];
+        }
+
         add_action( 'template_redirect', array( $this, 'make_redirect' ), 5 );
 
         add_filter( 'request', array( $this, 'parse_request' ) );
@@ -116,7 +134,7 @@ class Custom_Permalinks_Frontend
         // Get request URI, strip parameters and /'s
         $url     = parse_url( get_bloginfo( 'url' ) );
         $url     = isset( $url['path'] ) ? $url['path'] : '';
-        $request = ltrim( substr( $_SERVER['REQUEST_URI'], strlen( $url ) ), '/' );
+        $request = ltrim( substr( $this->request_uri, strlen( $url ) ), '/' );
         $pos     = strpos( $request, '?' );
         if ( $pos ) {
             $request = substr( $request, 0, $pos );
@@ -235,9 +253,9 @@ class Custom_Permalinks_Frontend
         if ( NULL !== $original_url ) {
             $original_url = str_replace( '//', '/', $original_url );
 
-            $pos = strpos( $_SERVER['REQUEST_URI'], '?' );
+            $pos = strpos( $this->request_uri, '?' );
             if ( false !== $pos ) {
-                $query_vars    = substr( $_SERVER['REQUEST_URI'], $pos + 1 );
+                $query_vars    = substr( $this->request_uri, $pos + 1 );
                 $original_url .= ( strpos( $original_url, '?' ) === false ? '?' : '&' ) . $query_vars;
             }
 
@@ -246,11 +264,6 @@ class Custom_Permalinks_Frontend
              * in order to parse parameters properly.
              * We set $_SERVER variables to fool the function.
              */
-            $old_request_uri  = $_SERVER['REQUEST_URI'];
-            $old_query_string = '';
-            if ( isset( $_SERVER['QUERY_STRING'] ) ) {
-                $old_query_string = $_SERVER['QUERY_STRING'];
-            }
             $_SERVER['REQUEST_URI'] = '/' . ltrim( $original_url, '/' );
             $path_info = apply_filters( 'custom_permalinks_path_info', '__false' );
             if ( '__false' !== $path_info ) {
@@ -286,8 +299,8 @@ class Custom_Permalinks_Frontend
             add_filter( 'request', array( $this, 'parse_request' ) );
 
             // Restore values
-            $_SERVER['REQUEST_URI']  = $old_request_uri;
-            $_SERVER['QUERY_STRING'] = $old_query_string;
+            $_SERVER['REQUEST_URI']  = $this->request_uri;
+            $_SERVER['QUERY_STRING'] = $this->query_string_uri;
             foreach ( $old_values as $key => $value ) {
                 $_REQUEST[$key] = $value;
             }
@@ -312,7 +325,7 @@ class Custom_Permalinks_Frontend
         // Get request URI, strip parameters
         $url     = parse_url( get_bloginfo( 'url' ) );
         $url     = isset( $url['path'] ) ? $url['path'] : '';
-        $request = ltrim( substr( $_SERVER['REQUEST_URI'], strlen( $url ) ), '/' );
+        $request = ltrim( substr( $this->request_uri, strlen( $url ) ), '/' );
         $pos     = strpos( $request, '?' );
         if ( $pos ) {
             $request = substr( $request, 0, $pos );
@@ -408,7 +421,7 @@ class Custom_Permalinks_Frontend
             }
 
             // Append any query compenent
-            $url .= strstr( $_SERVER['REQUEST_URI'], '?' );
+            $url .= strstr( $this->request_uri, '?' );
 
             wp_safe_redirect( home_url() . '/' . $url, 301 );
             exit(0);
