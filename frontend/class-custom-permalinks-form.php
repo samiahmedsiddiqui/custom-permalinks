@@ -178,7 +178,7 @@ class Custom_Permalinks_Form
                     $view_post_link = $home_url . '?';
                     if ( 'page' === $post->post_type ) {
                         $view_post_link .= 'page_id';
-                    } else if ( 'post' === $post->post_type ) {
+                    } elseif ( 'post' === $post->post_type ) {
                         $view_post_link .= 'p';
                     } else {
                         $view_post_link .= 'post_type=' . $post->post_type . '&p';
@@ -251,7 +251,7 @@ class Custom_Permalinks_Form
 
         if ( 'attachment' === $post->post_type ) {
             $form_return = 1;
-        } else if ( $post->ID === get_option( 'page_on_front' ) ) {
+        } elseif ( $post->ID === get_option( 'page_on_front' ) ) {
             $form_return = 1;
         }
 
@@ -610,7 +610,7 @@ class Custom_Permalinks_Form
                     $view_post_link = '?';
                     if ( 'page' === $post->post_type ) {
                         $view_post_link .= 'page_id';
-                    } else if ( 'post' === $post->post_type ) {
+                    } elseif ( 'post' === $post->post_type ) {
                         $view_post_link .= 'p';
                     } else {
                         $view_post_link .= 'post_type=' . $post->post_type . '&p';
