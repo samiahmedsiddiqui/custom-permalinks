@@ -50,14 +50,14 @@ class Custom_Permalinks_Frontend
     /**
      * Replace double slash `//` with single slash `/`.
      *
-     * @since 2.0.0
-     * @access private
+     * @since 1.6.0
+     * @access public
      *
      * @param string $permalink URL in which `//` needs to be replaced with `/`.
      *
      * @return string URL with single slash.
      */
-    private function remove_double_slash( $permalink = '' )
+    public function remove_double_slash( $permalink = '' )
     {
         $protocol = '';
         if ( 0 === strpos( $permalink, 'http://' )
@@ -80,15 +80,15 @@ class Custom_Permalinks_Frontend
      * Use `wpml_permalink` to add language information to permalinks and
      * resolve language switcher issue if found.
      *
-     * @since 2.0.0
-     * @access private
+     * @since 1.6.0
+     * @access public
      *
      * @param string $permalink Custom Permalink.
      * @param string $language_code The language to convert the url into.
      *
      * @return string permalink with language information.
      */
-    private function wpml_permalink_filter( $permalink = '', $language_code )
+    public function wpml_permalink_filter( $permalink = '', $language_code )
     {
         $custom_permalink   = $permalink;
         $trailing_permalink = trailingslashit( home_url() ) . $custom_permalink;
@@ -457,8 +457,9 @@ class Custom_Permalinks_Frontend
             $permalink = $this->wpml_permalink_filter( $custom_permalink,
                 $language_code
             );
-            $permalink = $this->remove_double_slash( $permalink );
         }
+
+        $permalink = $this->remove_double_slash( $permalink );
 
         return $permalink;
     }
@@ -487,8 +488,9 @@ class Custom_Permalinks_Frontend
             $permalink = $this->wpml_permalink_filter( $custom_permalink,
                 $language_code
             );
-            $permalink = $this->remove_double_slash( $permalink );
         }
+
+        $permalink = $this->remove_double_slash( $permalink );
 
         return $permalink;
     }
@@ -529,9 +531,10 @@ class Custom_Permalinks_Frontend
                 $permalink = $this->wpml_permalink_filter( $custom_permalink,
                     $language_code
                 );
-                $permalink = $this->remove_double_slash( $permalink );
             }
         }
+
+        $permalink = $this->remove_double_slash( $permalink );
 
         return $permalink;
     }
@@ -650,6 +653,16 @@ class Custom_Permalinks_Frontend
 
         $trailingslash_string = $url_string;
         $url = parse_url( get_bloginfo( 'url' ) );
+
+        if ( class_exists( 'SitePress' ) ) {
+            $wpml_lang_format = apply_filters( 'wpml_setting', 0,
+                'language_negotiation_type'
+            );
+
+            if ( 1 === intval( $wpml_lang_format ) ) {
+                $url = parse_url( get_bloginfo( 'wpurl' ) );
+            }
+        }
 
         if ( isset( $url['path'] ) ) {
             $request = substr( $url_string, strlen( $url['path'] ) );

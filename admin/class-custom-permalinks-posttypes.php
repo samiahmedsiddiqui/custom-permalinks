@@ -64,6 +64,7 @@ class Custom_Permalinks_PostTypes
         $post_html        = '';
         $request_uri      = '';
         $search_permalink = '';
+        $site_url         = site_url();
 
         if ( isset( $_SERVER['REQUEST_URI'] ) ) {
             $request_uri = $_SERVER['REQUEST_URI'];
@@ -136,7 +137,7 @@ class Custom_Permalinks_PostTypes
         $count_query = "SELECT COUNT(p.ID) AS total_permalinks FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != '' " . $filter_permalink . "";
         $count_posts = $wpdb->get_row( $count_query );
 
-        $post_html .= '<form action="' . $home_url . $request_uri . '" method="get">' .
+        $post_html .= '<form action="' . $site_url . $request_uri . '" method="get">' .
                         '<p class="search-box">' .
                         '<input type="hidden" name="page" value="cp-post-permalinks" />' .
                         $filter_options .
@@ -144,7 +145,7 @@ class Custom_Permalinks_PostTypes
                         '<input type="search" id="custom-permalink-search-input" name="s" value="' . $search_value . '">' .
                         '<input type="submit" id="search-submit" class="button" value="Search Permalink"></p>' .
                       '</form>' .
-                      '<form action="' . $home_url . $request_uri . '" method="post">' .
+                      '<form action="' . $site_url . $request_uri . '" method="post">' .
                         '<div class="tablenav top">' .
                           '<div class="alignleft actions bulkactions">' .
                             '<label for="bulk-action-selector-top" class="screen-reader-text">Select bulk action</label>' .
@@ -203,22 +204,52 @@ class Custom_Permalinks_PostTypes
                         '<thead>' . $table_navigation . '</thead>' .
                         '<tbody>';
         if ( 0 != $posts && ! empty( $posts ) ) {
+            $cp_frontend = new Custom_Permalinks_Frontend();
+            if ( class_exists( 'SitePress' ) ) {
+                $wpml_lang_format = apply_filters( 'wpml_setting', 0,
+                    'language_negotiation_type'
+                );
+
+                if ( 1 === intval( $wpml_lang_format ) ) {
+                    $home_url = $site_url;
+                }
+            }
+
             foreach ( $posts as $post ) {
+                $custom_permalink = '/' . $post->meta_value;
+                $post_type        = 'post';
+                if ( isset( $post->post_type ) ) {
+                    $post_type = $post->post_type;
+                }
+
+                $language_code = apply_filters( 'wpml_element_language_code', null,
+                    array(
+                        'element_id'   => $post->ID,
+                        'element_type' => $post_type
+                    )
+                );
+
+                $permalink = $cp_frontend->wpml_permalink_filter( $custom_permalink,
+                    $language_code
+                );
+                $permalink = $cp_frontend->remove_double_slash( $permalink );
+                $perm_text = str_replace( $home_url, '', $permalink );
+
                 $post_html .= '<tr valign="top">' .
                                 '<th scope="row" class="check-column">' .
                                   '<input type="checkbox" name="permalink[]" value="' . $post->ID . '" />' .
                                 '</th>' .
                                 '<td>' .
                                   '<strong>' .
-                                    '<a class="row-title" href="' . $home_url . '/wp-admin/post.php?action=edit&post=' . $post->ID . '">' .
+                                    '<a class="row-title" href="' . $site_url . '/wp-admin/post.php?action=edit&post=' . $post->ID . '">' .
                                       $post->post_title .
                                     '</a>' .
                                   '</strong>' .
                                 '</td>' .
                                 '<td>' . ucwords( $post->post_type ) . '</td>' .
                                 '<td>' .
-                                  '<a href="' . $home_url . '/' . $post->meta_value . '" target="_blank" title="' . __( "Visit " . $post->post_title, "custom-permalinks" ) . '">/' .
-                                    urldecode( $post->meta_value ) .
+                                  '<a href="' . $permalink . '" target="_blank" title="' . __( "Visit " . $post->post_title, "custom-permalinks" ) . '">' .
+                                    $perm_text .
                                   '</a>' .
                                 '</td>' .
                               '</tr>';
