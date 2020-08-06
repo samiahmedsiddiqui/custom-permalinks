@@ -1,3 +1,5 @@
+/* global wp */
+
 var getHomeURL = document.getElementById("custom_permalinks_home_url");
 var getPermalink = document.getElementById("custom_permalink");
 var editPost = "";

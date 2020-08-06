@@ -28,6 +28,22 @@ p a {
   text-decoration: none;
 }
 
+.box > a {
+  display: inline-block;
+  float: right;
+  color: #fff;
+  background: linear-gradient(-35deg, rgba(216, 225, 231, 0.8) 12%, rgb(181, 198, 208) 13%);
+  text-decoration: none;
+  font-size: 20px;
+  padding: 8px 17px;
+  border-radius: 3px;
+  transition: all 250ms ease;
+}
+
+.box > a:hover {
+  font-size: 22px;
+}
+
 #footer-left a {
   text-decoration: underline;
 }
@@ -171,22 +187,6 @@ a .star svg:hover polygon {
 
 .box.recommended:hover::after {
   animation: blinking 2s 1 linear;
-}
-
-.box > a {
-  display: inline-block;
-  float: right;
-  color: #fff;
-  background: linear-gradient(-35deg, rgba(216, 225, 231, 0.8) 12%, rgb(181, 198, 208) 13%);
-  text-decoration: none;
-  font-size: 20px;
-  padding: 8px 17px;
-  border-radius: 3px;
-  transition: all 250ms ease;
-}
-
-.box > a:hover {
-  font-size: 22px;
 }
 
 @media (max-width: 991px) {
