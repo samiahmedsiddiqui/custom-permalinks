@@ -46,9 +46,8 @@ a .star svg:hover polygon {
   text-align: center;
 }
 
-.product >span {
+.product > span {
   font-size: 1.3em;
-  margin-bottom: 1em;
   display: block;
   text-align: left;
   margin: 0 auto 1em;
@@ -112,7 +111,7 @@ a .star svg:hover polygon {
   }
 
   .product .box:hover p {
-    max-height: 300px
+    max-height: 300px;
   }
 }
 
@@ -170,11 +169,11 @@ a .star svg:hover polygon {
   width: 150px;
 }
 
-.box.recommended::hover::after {
+.box.recommended:hover::after {
   animation: blinking 2s 1 linear;
 }
 
-.box >a {
+.box > a {
   display: inline-block;
   float: right;
   color: #fff;
@@ -186,7 +185,7 @@ a .star svg:hover polygon {
   transition: all 250ms ease;
 }
 
-.box >a:hover {
+.box > a:hover {
   font-size: 22px;
 }
 

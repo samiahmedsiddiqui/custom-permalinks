@@ -5,27 +5,27 @@ anything you want. Old permalinks will redirect properly to the new address. Cus
 Permalinks gives you ultimate control over your site structure.
 
 > :warning: *This plugin is not a replacement for WordPress's built-in permalink system*. 
-Check your WordPress administration's "Permalinks" settings page first, to make sure that 
-this doesn't already meet your needs.
+> Check your WordPress administration's "Permalinks" settings page first, to make sure that 
+> this doesn't already meet your needs.
 
 This plugin is only useful for assigning custom permalinks for *individual* posts, pages, 
 tags or categories. It will not apply whole permalink structures or automatically apply a 
 category's custom permalink to the posts within that category.
 
 > :information_source: If anyone wants the different Structure Tags for their PostTypes or use 
-symbols in the URLs So, use the 
-[Permalinks Customizer](https://wordpress.org/plugins/permalinks-customizer/) which is a
-fork of this plugin and contains the enhancement of this plugin.
+> symbols in the URLs So, use the 
+> [Permalinks Customizer](https://wordpress.org/plugins/permalinks-customizer/) which is a
+> fork of this plugin and contains the enhancement of this plugin.
 
 ## Privacy Policy
 
 This plugin only collects the following information.
 
-1. Administration Email Address (Only the email that is set in the WordPress setting)
-2. Plugin version
-3. Site Title
-4. WordPress Address (URL)
-5. WordPress version
+1.  Administration Email Address (Only the email that is set in the WordPress setting)
+2.  Plugin version
+3.  Site Title
+4.  WordPress Address (URL)
+5.  WordPress version
 
 All this information gets collected when the plugin is installed or updated.
 
@@ -123,11 +123,11 @@ or Manually from FTP.
 
 ## From within WordPress
 
-1. Visit 'Plugins > Add New'
-2. Search for Custom Permalinks
-3. Activate Custom Permalinks from your Plugins page.
+1.  Visit 'Plugins > Add New'
+2.  Search for Custom Permalinks
+3.  Activate Custom Permalinks from your Plugins page.
 
 ## Manually
 
-1. Upload the `custom-permalinks` folder to the `/wp-content/plugins/` directory
-2. Activate Custom Permalinks through the 'Plugins' menu in WordPress
+1.  Upload the `custom-permalinks` folder to the `/wp-content/plugins/` directory
+2.  Activate Custom Permalinks through the 'Plugins' menu in WordPress
