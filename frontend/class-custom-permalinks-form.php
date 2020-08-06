@@ -55,10 +55,13 @@ class Custom_Permalinks_Form
         $args = array(
             'public' => true,
         );
-        $excluded_post_types = apply_filters( 'custom_permalinks_exclude_post_type',
+        $exclude_post_types = apply_filters( 'custom_permalinks_exclude_post_type',
             $post->post_type
         );
-        $public_post_types   = get_post_types( $args, 'objects' );
+        $exclude_posts      = apply_filters( 'custom_permalinks_exclude_posts',
+            $post
+        );
+        $public_post_types  = get_post_types( $args, 'objects' );
 
         if ( isset( $this->permalink_metabox ) && 1 === $this->permalink_metabox ) {
             $check_availability = true;
@@ -68,7 +71,9 @@ class Custom_Permalinks_Form
             $check_availability = true;
         } elseif ( ! isset( $public_post_types[$post->post_type] ) ) {
             $check_availability = true;
-        } elseif ( '__true' === $excluded_post_types ) {
+        } elseif ( '__true' === $exclude_post_types ) {
+            $check_availability = true;
+        } elseif ( $exclude_posts ) {
             $check_availability = true;
         } else {
             $check_availability = false;

@@ -19,10 +19,17 @@ fork of this plugin and contains the enhancement of this plugin.
 
 ## Privacy Policy
 
-This plugin collect information about the site like URL, WordPress version etc. This plugin 
-doesn\'t collect any user related information.
+This plugin only collects the following information.
 
-To have any kind of further query please feel free to 
+1. Administration Email Address (Only the email that is set in the WordPress setting)
+2. Plugin version
+3. Site Title
+4. WordPress Address (URL)
+5. WordPress version
+
+All this information gets collected when the plugin is installed or updated.
+
+To have any kind of query please feel free to 
 [contact us](https://www.custompermalinks.com/contact-us/).
 
 ## Filters
@@ -59,6 +66,24 @@ add_filter( 'custom_permalinks_exclude_post_type', 'yasglobal_exclude_post_types
 
 Note: `custom_permalinks_exclude_post_type` doesn't work on the posts permalink 
 which has been created previously.
+
+### Exclude Posts
+
+To exclude permalink from any posts (based on ID, Template, etc), just add the filter looks
+like this:
+```php
+function yasglobal_exclude_posts( $post )
+{
+    if ( 1557 === $post->ID ) {
+        return true;
+    }
+
+    return false;
+}
+add_filter( 'custom_permalinks_exclude_posts', 'yasglobal_exclude_posts' );
+```
+Note: `custom_permalinks_exclude_posts` doesn't work on the posts permalink which 
+has been created previously.
 
 ### Remove `like` query
 
