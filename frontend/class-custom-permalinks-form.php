@@ -73,7 +73,7 @@ class Custom_Permalinks_Form
             $check_availability = true;
         } elseif ( '__true' === $exclude_post_types ) {
             $check_availability = true;
-        } elseif ( $exclude_posts ) {
+        } elseif ( is_bool( $exclude_posts ) && $exclude_posts ) {
             $check_availability = true;
         } else {
             $check_availability = false;
