@@ -670,6 +670,8 @@ class Custom_Permalinks_Form
      * @param int $new_homepage_id Page ID of current Front Page.
      */
     public function static_homepage( $prev_homepage_id, $new_homepage_id ) {
-        $this->delete_permalink( $new_homepage_id );
+        if ( $prev_homepage_id !== $new_homepage_id ) {
+            $this->delete_permalink( $new_homepage_id );
+        }
     }
 }
