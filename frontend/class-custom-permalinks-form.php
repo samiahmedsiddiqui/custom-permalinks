@@ -255,9 +255,9 @@ class Custom_Permalinks_Form
     {
         $post = get_post( $post_id );
 
-        $disable_custom_permalink = $this->exclude_custom_permalinks( $post );
+        $disable_cp = $this->exclude_custom_permalinks( $post );
         $this->permalink_metabox  = 1;
-        if ( $disable_custom_permalink ) {
+        if ( $disable_cp ) {
             return $html;
         }
 
@@ -276,8 +276,8 @@ class Custom_Permalinks_Form
      */
     public function meta_edit_form( $post )
     {
-        $disable_custom_permalink = $this->exclude_custom_permalinks( $post );
-        if ( $disable_custom_permalink ) {
+        $disable_cp = $this->exclude_custom_permalinks( $post );
+        if ( $disable_cp ) {
             wp_enqueue_script( 'custom-permalinks-form',
                 plugins_url( '/js/script-form.min.js', __FILE__ ), array(),
                 false, true
