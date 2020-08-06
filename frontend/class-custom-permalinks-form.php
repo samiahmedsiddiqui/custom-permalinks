@@ -30,11 +30,51 @@ class Custom_Permalinks_Form
         add_action( 'edited_term', array( $this, 'save_term' ), 10, 3 );
         add_action( 'delete_term', array( $this, 'delete_term_permalink' ), 10, 3 );
         add_action( 'rest_api_init', array( $this, 'rest_edit_form' ) );
+        add_action( 'update_option_page_on_front',
+            array( $this, 'static_homepage' ), 10, 2
+        );
 
         add_filter( 'get_sample_permalink_html',
             array( $this, 'sample_permalink_html' ), 10, 2
         );
         add_filter( 'is_protected_meta', array( $this, 'protect_meta' ), 10, 2 );
+    }
+
+    /**
+     * Initialize WordPress Hooks.
+     *
+     * @since 1.6.0
+     * @access private
+     *
+     * @param object $post WP Post Object.
+     *
+     * return bool false Whether to show Custom Permalink form or not.
+     */
+    private function exclude_custom_permalinks( $post )
+    {
+        $args = array(
+            'public' => true,
+        );
+        $excluded_post_types = apply_filters( 'custom_permalinks_exclude_post_type',
+            $post->post_type
+        );
+        $public_post_types   = get_post_types( $args, 'objects' );
+
+        if ( isset( $this->permalink_metabox ) && 1 === $this->permalink_metabox ) {
+            $check_availability = true;
+        } elseif ( 'attachment' === $post->post_type ) {
+            $check_availability = true;
+        } elseif ( $post->ID === intval( get_option( 'page_on_front' ) ) ) {
+            $check_availability = true;
+        } elseif ( ! isset( $public_post_types[$post->post_type] ) ) {
+            $check_availability = true;
+        } elseif ( '__true' === $excluded_post_types ) {
+            $check_availability = true;
+        } else {
+            $check_availability = false;
+        }
+
+        return $check_availability;
     }
 
     /**
@@ -87,7 +127,7 @@ class Custom_Permalinks_Form
             return;
         }
 
-        delete_post_meta( $post_id, 'custom_permalink' );
+        $this->delete_permalink( $post_id );
 
         $cp_frontend   = new Custom_Permalinks_Frontend();
         $original_link = $cp_frontend->original_post_link( $post_id );
@@ -111,11 +151,7 @@ class Custom_Permalinks_Form
      */
     public function delete_permalink( $post_id )
     {
-        global $wpdb;
-        $wpdb->query( $wpdb->prepare(
-            "DELETE FROM $wpdb->postmeta WHERE meta_key = 'custom_permalink' AND post_id = %d",
-            $post_id
-        ) );
+        delete_post_meta( $post_id, 'custom_permalink' );
     }
 
     /**
@@ -213,19 +249,10 @@ class Custom_Permalinks_Form
     public function sample_permalink_html( $html, $post_id )
     {
         $post = get_post( $post_id );
-        $this->permalink_metabox = 1;
 
-        if ( 'attachment' === $post->post_type
-            || $post->ID === get_option( 'page_on_front' )
-        ) {
-            return $html;
-        }
-
-        $exclude_post_types = $post->post_type;
-        $excluded = apply_filters( 'custom_permalinks_exclude_post_type',
-            $exclude_post_types
-        );
-        if ( '__true' === $excluded ) {
+        $disable_custom_permalink = $this->exclude_custom_permalinks( $post );
+        $this->permalink_metabox  = 1;
+        if ( $disable_custom_permalink ) {
             return $html;
         }
 
@@ -244,38 +271,13 @@ class Custom_Permalinks_Form
      */
     public function meta_edit_form( $post )
     {
-        $form_return = 0;
-        if ( isset( $this->permalink_metabox ) && 1 === $this->permalink_metabox ) {
-            $form_return = 1;
-        }
-
-        if ( 'attachment' === $post->post_type ) {
-            $form_return = 1;
-        } elseif ( $post->ID === get_option( 'page_on_front' ) ) {
-            $form_return = 1;
-        }
-
-        $args = array(
-            'public' => true,
-        );
-        $post_types = get_post_types( $args, 'objects' );
-        if ( ! isset( $post_types[$post->post_type] ) ) {
-            $form_return = 1;
-        }
-
-        $exclude_post_types = $post->post_type;
-        $excluded = apply_filters( 'custom_permalinks_exclude_post_type',
-            $exclude_post_types
-        );
-        if ( '__true' === $excluded ) {
-            $form_return = 1;
-        }
-
-        if ( 1 === $form_return ) {
+        $disable_custom_permalink = $this->exclude_custom_permalinks( $post );
+        if ( $disable_custom_permalink ) {
             wp_enqueue_script( 'custom-permalinks-form',
                 plugins_url( '/js/script-form.min.js', __FILE__ ), array(),
                 false, true
             );
+
             return;
         }
 
@@ -651,5 +653,18 @@ class Custom_Permalinks_Form
                 'callback' => array( $this, 'refresh_meta_form' ),
             )
         );
+    }
+
+    /**
+     * Delete the Permalink for the Page selected as the Static Homepage.
+     *
+     * @since 1.6.0
+     * @access public
+     *
+     * @param int $prev_homepage_id Page ID of previously set Front Page.
+     * @param int $new_homepage_id Page ID of current Front Page.
+     */
+    public function static_homepage( $prev_homepage_id, $new_homepage_id ) {
+        $this->delete_permalink( $new_homepage_id );
     }
 }

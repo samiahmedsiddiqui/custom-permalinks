@@ -3,7 +3,7 @@ Contributors: sasiddiqui, michaeltyson
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Requires at least: 2.6
 Tested up to: 5.4
-Stable tag: 1.6.0-beta
+Stable tag: 1.6.0-beta3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -100,7 +100,7 @@ This process defines you the steps to follow either you are installing through W
 
 == Changelog ==
 
-= 1.6.0-beta - Aug 04, 2020 =
+= 1.6.0-beta3 - Aug 06, 2020 =
 
   * Bugs
     * [Undefined index and undefined variable error](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/28)
@@ -111,6 +111,7 @@ This process defines you the steps to follow either you are installing through W
     * Fix Yoast Canonical double slash issue
     * [Replacing category_link with term_link](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/34)
     * [Bug with WPML and Use directory for default language](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/36)
+    * Fix Static Homepage redirect issue
   * Enhancements
     * Improved Gutenberg Support
     * Added compatibility for WPML language switcher
