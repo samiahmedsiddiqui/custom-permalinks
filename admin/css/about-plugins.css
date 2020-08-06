@@ -21,7 +21,6 @@
 
 .tagline p {
   font-size: 1.3em;
-  margin-bottom: 1em;
   margin: 0 auto 1em;
 }
 
@@ -47,7 +46,7 @@ a .star svg:hover polygon {
   text-align: center;
 }
 
-.product>span {
+.product >span {
   font-size: 1.3em;
   margin-bottom: 1em;
   display: block;
@@ -105,12 +104,13 @@ a .star svg:hover polygon {
   margin: 1em 0 2em;
 }
 
-@media(min-width:746px) {
+@media (min-width: 746px) {
   .product p {
     min-height: 185px;
     max-height: 135px;
     overflow: hidden;
   }
+
   .product .box:hover p {
     max-height: 300px
   }
@@ -126,14 +126,13 @@ a .star svg:hover polygon {
   z-index: 2;
 }
 
-.box.recommended:before {
+.box.recommended::before {
   content: "";
   position: absolute;
   width: 100%;
   height: 100%;
   transition: all 350ms ease;
   z-index: 1;
-  background: aliceblue;
   right: 0;
   top: 0;
   background: linear-gradient(35deg, rgb(232, 235, 238) 62%, rgba(181, 198, 208, 1) 50%);
@@ -143,15 +142,16 @@ a .star svg:hover polygon {
 @keyframes blinking {
   0%,
   100% {
-    opacity: 0.1
+    opacity: 0.1;
   }
+
   25%,
   75% {
-    opacity: 1
+    opacity: 1;
   }
 }
 
-.box.recommended:after {
+.box.recommended::after {
   content: "RECOMMENDED";
   position: absolute;
   top: 41px;
@@ -165,19 +165,18 @@ a .star svg:hover polygon {
   animation: blinking 2s infinite linear;
 }
 
-.box.recommended:hover:before {
+.box.recommended:hover::before {
   height: 175px;
   width: 150px;
 }
 
-.box.recommended:hover:after {
+.box.recommended::hover::after {
   animation: blinking 2s 1 linear;
 }
 
-.box>a {
+.box >a {
   display: inline-block;
   float: right;
-  background: rgb(181, 198, 208);
   color: #fff;
   background: linear-gradient(-35deg, rgba(216, 225, 231, 0.8) 12%, rgb(181, 198, 208) 13%);
   text-decoration: none;
@@ -187,17 +186,17 @@ a .star svg:hover polygon {
   transition: all 250ms ease;
 }
 
-.box>a:hover {
+.box >a:hover {
   font-size: 22px;
 }
 
-@media(max-width:991px) {
+@media (max-width: 991px) {
   .wrap {
     max-width: 725px;
   }
 }
 
-@media(max-width:767px) {
+@media (max-width: 767px) {
   .wrap {
     max-width: 640px;
   }
@@ -208,7 +207,7 @@ a .star svg:hover polygon {
   }
 }
 
-@media(max-width:650px) {
+@media (max-width: 650px) {
   .wrap {
     max-width: 460px;
   }
@@ -239,9 +238,9 @@ a .star svg:hover polygon {
   }
 }
 
-@media(max-width:450px) {
+@media (max-width: 450px) {
   .wrap h1 {
-    margin: 0px 0 150px;
+    margin: 0 0 150px;
     font-size: 2em;
     width: 300px;
   }
