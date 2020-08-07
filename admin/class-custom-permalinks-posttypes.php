@@ -62,22 +62,37 @@ class Custom_Permalinks_PostTypes
         $filter_permalink = '';
         $home_url         = home_url();
         $post_html        = '';
+        $post_action      = filter_input( INPUT_POST, 'action' );
+        $post_action2     = filter_input( INPUT_POST, 'action2' );
+        $post_permalinks  = filter_input( INPUT_POST, 'permalink', FILTER_DEFAULT,
+            FILTER_REQUIRE_ARRAY
+        );
         $request_uri      = '';
         $search_permalink = '';
         $site_url         = site_url();
+        $user_id          = get_current_user_id();
 
         if ( isset( $_SERVER['REQUEST_URI'] ) ) {
             $request_uri = $_SERVER['REQUEST_URI'];
         }
 
         // Handle Bulk Operations
-        if ( ( isset( $_POST['action'] ) && 'delete' === $_POST['action'] )
-            || ( isset( $_POST['action2'] ) && 'delete' === $_POST['action2'] )
+        if ( (
+                ( isset( $post_action ) && 'delete' === $post_action )
+                || ( isset( $post_action2 ) && 'delete' === $post_action2 )
+            )
+            && check_admin_referer( 'custom-permalinks-post_' . $user_id,
+                '_custom_permalinks_post_nonce',
+            )
         ) {
-          if ( isset( $_POST['permalink'] ) && ! empty( $_POST['permalink'] ) ) {
-              $post_ids = implode( ',', $_POST['permalink'] );
-              if ( preg_match( '/^\d+(?:,\d+)*$/', $post_ids ) ) {
-                  $wpdb->query( "DELETE FROM $wpdb->postmeta WHERE post_id IN ($post_ids) AND meta_key = 'custom_permalink'" );
+          if ( isset( $post_permalinks ) && ! empty( $post_permalinks ) ) {
+              $post_ids = $post_permalinks;
+              if ( is_array( $post_ids ) && 0 < count( $post_ids ) ) {
+                  foreach ( $post_ids as $post_id ) {
+                      if ( is_numeric( $post_id ) ) {
+                          delete_post_meta( $post_id, 'custom_permalink' );
+                      }
+                  }
               } else {
                   $error = '<div id="message" class="error">' .
                               '<p>' .
@@ -103,26 +118,35 @@ class Custom_Permalinks_PostTypes
                         '</h1>' .
                         $error;
 
-        $search_value = '';
-        if ( isset( $_GET['s'] ) && ! empty( $_GET['s'] ) ) {
-            $filter_permalink = 'AND pm.meta_value LIKE "%' . $_GET['s'] . '%"';
-            $search_permalink = '&s=' . $_GET['s'] . '';
-            $search_value     = ltrim( htmlspecialchars( $_GET['s'] ), '/' );
-            $post_html       .= '<span class="subtitle">Search results for "' . $search_value . '"</span>';
-        }
-        $page_limit = 'LIMIT 0, 20';
-        if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] )
-            && 1 < $_GET['paged']
-        ) {
-            $pager      = 20 * ( $_GET['paged'] - 1 );
-            $page_limit = 'LIMIT ' . $pager . ', 20';
-        }
-        $sorting_by     = 'ORDER By p.ID DESC';
+        $get_paged      = filter_input( INPUT_GET, 'paged' );
+        $get_order      = filter_input( INPUT_GET, 'order' );
+        $get_order_by   = filter_input( INPUT_GET, 'orderby' );
         $order_by       = 'asc';
         $order_by_class = 'desc';
-        if ( isset( $_GET['orderby'] ) && 'title' == $_GET['orderby'] ) {
+        $page_limit     = 'LIMIT 0, 20';
+        $search_input   = filter_input( INPUT_GET, 's' );
+        $search_value   = '';
+        $sorting_by     = 'ORDER By p.ID DESC';
+
+        if ( $search_input
+            && check_admin_referer( 'custom-permalinks-post_' . $user_id,
+                '_custom_permalinks_post_nonce',
+            )
+        ) {
+            $filter_permalink = 'AND pm.meta_value LIKE "%' . $search_input . '%"';
+            $search_permalink = '&s=' . $search_input . '';
+            $search_value     = ltrim( htmlspecialchars( $search_input ), '/' );
+            $post_html       .= '<span class="subtitle">Search results for "' . $search_value . '"</span>';
+        }
+
+        if ( $get_paged && is_numeric( $get_paged ) && 1 < $get_paged ) {
+            $pager      = 20 * ( $get_paged - 1 );
+            $page_limit = 'LIMIT ' . $pager . ', 20';
+        }
+
+        if ( $get_order_by && 'title' === $get_order_by ) {
             $filter_options .= '<input type="hidden" name="orderby" value="title" />';
-            if ( isset( $_GET['order'] ) && 'desc' == $_GET['order'] ) {
+            if ( $get_order && 'desc' === $get_order ) {
                 $sorting_by      = 'ORDER By p.post_title DESC';
                 $order_by        = 'asc';
                 $order_by_class  = 'desc';
@@ -134,12 +158,18 @@ class Custom_Permalinks_PostTypes
                 $filter_options .= '<input type="hidden" name="order" value="asc" />';
             }
         }
+
         $count_query = "SELECT COUNT(p.ID) AS total_permalinks FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != '' " . $filter_permalink . "";
         $count_posts = $wpdb->get_row( $count_query );
+        $post_nonce  = wp_nonce_field(
+            'custom-permalinks-post_' . $user_id, '_custom_permalinks_post_nonce',
+            true, false
+        );
 
         $post_html .= '<form action="' . $site_url . $request_uri . '" method="get">' .
                         '<p class="search-box">' .
                         '<input type="hidden" name="page" value="cp-post-permalinks" />' .
+                        $post_nonce .
                         $filter_options .
                         '<label class="screen-reader-text" for="custom-permalink-search-input">Search Custom Permalink:</label>' .
                         '<input type="search" id="custom-permalink-search-input" name="s" value="' . $search_value . '">' .
@@ -149,6 +179,7 @@ class Custom_Permalinks_PostTypes
                         '<div class="tablenav top">' .
                           '<div class="alignleft actions bulkactions">' .
                             '<label for="bulk-action-selector-top" class="screen-reader-text">Select bulk action</label>' .
+                            $post_nonce .
                             '<select name="action" id="bulk-action-selector-top">' .
                               '<option value="-1">' .
                                 __( "Bulk Actions", "custom-permalinks" ) .
@@ -174,21 +205,19 @@ class Custom_Permalinks_PostTypes
             $posts = $wpdb->get_results( $query );
 
             $total_pages = ceil( $count_posts->total_permalinks / 20 );
-            if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] )
-              && 0 < $_GET['paged']
-            ) {
+            if ( $get_paged && is_numeric( $get_paged ) && 0 < $get_paged ) {
                 $pagination_html = $cp_pager->get_pagination(
-                    $count_posts->total_permalinks, $_GET['paged'], $total_pages
+                    $count_posts->total_permalinks, $get_paged, $total_pages
                 );
-                if ( $_GET['paged'] > $total_pages ) {
-                    $redirect_uri = explode( '&paged=' . $_GET['paged'] . '',
+                if ( $get_paged > $total_pages ) {
+                    $redirect_uri = explode( '&paged=' . $get_paged . '',
                         $request_uri
                     );
 
                     wp_safe_redirect( $redirect_uri[0], 301 );
                     exit;
                 }
-            } elseif ( ! isset( $_GET['paged'] ) ) {
+            } elseif ( ! $get_paged ) {
                 $pagination_html = $cp_pager->get_pagination(
                     $count_posts->total_permalinks, 1, $total_pages
                 );

@@ -61,29 +61,41 @@ class Custom_Permalinks_Taxonomies
      */
     private function taxonomies_permalinks()
     {
-        $home_url    = home_url();
-        $page_html   = '';
-        $request_uri = '';
-        $site_url    = site_url();
+        $home_url        = home_url();
+        $page_html       = '';
+        $request_uri     = '';
+        $site_url        = site_url();
+        $term_action     = filter_input( INPUT_POST, 'action' );
+        $term_action2    = filter_input( INPUT_POST, 'action2' );
+        $term_permalinks = filter_input( INPUT_POST, 'permalink',
+            FILTER_DEFAULT, FILTER_REQUIRE_ARRAY
+        );
+        $user_id         = get_current_user_id();
 
         if ( isset( $_SERVER['REQUEST_URI'] ) ) {
             $request_uri = $_SERVER['REQUEST_URI'];
         }
 
         // Handle Bulk Operations
-        if ( ( isset( $_POST['action'] ) && 'delete' === $_POST['action'] )
-            || ( isset( $_POST['action2'] ) && 'delete' === $_POST['action2'] )
+        if ( (
+                ( isset( $term_action ) && 'delete' === $term_action )
+                || ( isset( $term_action2 ) && 'delete' === $term_action2 )
+            )
+            && check_admin_referer( 'custom-permalinks-term_' . $user_id,
+                '_custom_permalinks_term_nonce',
+            )
         ) {
-            if ( isset( $_POST['permalink'] ) && ! empty( $_POST['permalink'] ) ) {
-                $removePerm = $_POST['permalink'];
+            if ( isset( $term_permalinks ) && ! empty( $term_permalinks ) ) {
                 $data = get_option( 'custom_permalink_table' );
                 if ( isset( $data ) && is_array( $data ) ) {
                     $loopCount = 0;
                     foreach ( $data as $link => $info ) {
-                        if ( in_array( $info['id'], $removePerm ) ) {
+                        if ( in_array( $info['id'], $term_permalinks ) ) {
                             unset( $data[$link] );
-                            unset( $removePerm[$loopCount] );
-                            if ( ! is_array( $removePerm ) || empty( $removePerm ) ) {
+                            unset( $term_permalinks[$loopCount] );
+                            if ( ! is_array( $term_permalinks )
+                                || empty( $term_permalinks )
+                            ) {
                                 break;
                             }
                         }
@@ -99,22 +111,34 @@ class Custom_Permalinks_Taxonomies
                             __( 'Taxonomies Permalinks', 'custom-permalinks' ) .
                         '</h1>';
 
+        $get_paged    = filter_input( INPUT_GET, 'paged' );
+        $page_limit   = 20;
+        $pager_offset = '0';
+        $search_input = filter_input( INPUT_GET, 's' );
         $search_value = '';
-        if ( isset( $_GET['s'] ) && ! empty( $_GET['s'] ) ) {
-            $search_value = ltrim( htmlspecialchars( $_GET['s'] ), '/' );
+        $term_nonce = wp_nonce_field(
+            'custom-permalinks-term_' . $user_id, '_custom_permalinks_term_nonce',
+            true, false
+        );
+
+        if ( $search_input && ! empty( $search_input )
+            && check_admin_referer( 'custom-permalinks-term_' . $user_id,
+                '_custom_permalinks_term_nonce',
+            )
+        ) {
+            $search_value = ltrim( htmlspecialchars( $search_input ), '/' );
             $page_html   .= '<span class="subtitle">Search results for "' . $search_value . '"</span>';
         }
-        $pager_offset = '0';
-        $page_limit   = 20;
-        if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] )
-            && 1 < $_GET['paged']
-        ) {
-            $pager_offset = 20 * ( $_GET['paged'] - 1 );
+
+        if ( $get_paged && is_numeric( $get_paged ) && 1 < $get_paged ) {
+            $pager_offset = 20 * ( $get_paged - 1 );
             $page_limit   = $pager_offset + 20;
         }
+
         $page_html .= '<form action="' . $site_url . $request_uri . '" method="get">' .
                         '<p class="search-box">' .
                         '<input type="hidden" name="page" value="cp-category-permalinks" />' .
+                        $term_nonce .
                         '<label class="screen-reader-text" for="custom-permalink-search-input">Search Custom Permalink:</label>' .
                         '<input type="search" id="custom-permalink-search-input" name="s" value="' . $search_value . '">' .
                         '<input type="submit" id="search-submit" class="button" value="Search Permalink"></p>' .
@@ -123,6 +147,7 @@ class Custom_Permalinks_Taxonomies
                         '<div class="tablenav top">' .
                           '<div class="alignleft actions bulkactions">' .
                             '<label for="bulk-action-selector-top" class="screen-reader-text">Select bulk action</label>' .
+                            $term_nonce .
                             '<select name="action" id="bulk-action-selector-top">' .
                               '<option value="-1">' . __( "Bulk Actions", "custom-permalinks" ) . '</option>' .
                               '<option value="delete">' . __( "Delete Permalinks", "custom-permalinks" ) . '</option>' .
@@ -136,6 +161,7 @@ class Custom_Permalinks_Taxonomies
         if ( isset( $table ) && is_array( $table ) ) {
             $count_tags = count( $table );
         }
+
         if ( 0 < $count_tags ) {
             include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-pager.php';
 
@@ -154,21 +180,19 @@ class Custom_Permalinks_Taxonomies
             $page_html .= '<h2 class="screen-reader-text">Custom Permalink navigation</h2>';
 
             $total_pages = ceil( $count_tags / 20 );
-            if ( isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] )
-                && 0 < $_GET['paged']
-            ) {
+            if ( $get_paged && is_numeric( $get_paged ) && 0 < $get_paged ) {
                 $pagination_html = $cp_pager->get_pagination(
-                    $count_tags, $_GET['paged'], $total_pages
+                    $count_tags, $get_paged, $total_pages
                 );
-                if ( $_GET['paged'] > $total_pages ) {
-                    $redirect_uri = explode( '&paged=' . $_GET['paged'] . '',
+                if ( $get_paged > $total_pages ) {
+                    $redirect_uri = explode( '&paged=' . $get_paged . '',
                         $request_uri
                     );
 
                     wp_safe_redirect( $redirect_uri[0], 301 );
                     exit;
                 }
-            } elseif ( ! isset( $_GET['paged'] ) ) {
+            } elseif ( ! isset( $get_paged ) ) {
                 $pagination_html = $cp_pager->get_pagination(  $count_tags, 1,
                     $total_pages
                 );
