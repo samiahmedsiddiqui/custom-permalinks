@@ -457,6 +457,20 @@ class Custom_Permalinks_Frontend
             $permalink = $this->wpml_permalink_filter( $custom_permalink,
                 $language_code
             );
+        } else {
+            if ( class_exists( 'SitePress' ) ) {
+                $wpml_lang_format = apply_filters( 'wpml_setting', 0,
+                    'language_negotiation_type'
+                );
+
+                if ( 1 === intval( $wpml_lang_format ) ) {
+                    $get_original_url = $this->original_post_link( $post->ID );
+                    $permalink        = $this->remove_double_slash( $permalink );
+                    if ( strlen( $get_original_url ) === strlen( $permalink ) ) {
+                        $permalink = $get_original_url;
+                    }
+                }
+            }
         }
 
         $permalink = $this->remove_double_slash( $permalink );
@@ -488,6 +502,20 @@ class Custom_Permalinks_Frontend
             $permalink = $this->wpml_permalink_filter( $custom_permalink,
                 $language_code
             );
+        } else {
+            if ( class_exists( 'SitePress' ) ) {
+                $wpml_lang_format = apply_filters( 'wpml_setting', 0,
+                    'language_negotiation_type'
+                );
+
+                if ( 1 === intval( $wpml_lang_format ) ) {
+                    $get_original_url = $this->original_page_link( $page );
+                    $permalink        = $this->remove_double_slash( $permalink );
+                    if ( strlen( $get_original_url ) === strlen( $permalink ) ) {
+                        $permalink = $get_original_url;
+                    }
+                }
+            }
         }
 
         $permalink = $this->remove_double_slash( $permalink );
@@ -531,6 +559,22 @@ class Custom_Permalinks_Frontend
                 $permalink = $this->wpml_permalink_filter( $custom_permalink,
                     $language_code
                 );
+            } elseif ( isset( $term->term_id ) ) {
+                if ( class_exists( 'SitePress' ) ) {
+                    $wpml_lang_format = apply_filters( 'wpml_setting', 0,
+                        'language_negotiation_type'
+                    );
+
+                    if ( 1 === intval( $wpml_lang_format ) ) {
+                        $get_original_url = $this->original_term_link(
+                            $term->term_id
+                        );
+                        $permalink        = $this->remove_double_slash( $permalink );
+                        if ( strlen( $get_original_url ) === strlen( $permalink ) ) {
+                            $permalink = $get_original_url;
+                        }
+                    }
+                }
             }
         }
 
@@ -605,7 +649,7 @@ class Custom_Permalinks_Frontend
      * Remove the term_link and user_trailingslashit filter to get the original
      * permalink of the Term and apply right after that.
      *
-     * @since 2.0.0
+     * @since 1.6.0
      * @access public
      *
      * @param int $term_id Term ID.
@@ -653,16 +697,6 @@ class Custom_Permalinks_Frontend
 
         $trailingslash_string = $url_string;
         $url = parse_url( get_bloginfo( 'url' ) );
-
-        if ( class_exists( 'SitePress' ) ) {
-            $wpml_lang_format = apply_filters( 'wpml_setting', 0,
-                'language_negotiation_type'
-            );
-
-            if ( 1 === intval( $wpml_lang_format ) ) {
-                $url = parse_url( get_bloginfo( 'wpurl' ) );
-            }
-        }
 
         if ( isset( $url['path'] ) ) {
             $request = substr( $url_string, strlen( $url['path'] ) );
@@ -717,7 +751,7 @@ class Custom_Permalinks_Frontend
     /**
      * Fix double slash issue with canonical of Yoast SEO specially with WPML.
      *
-     * @since 2.0.0
+     * @since 1.6.0
      * @access public
      *
      * @param string $canonical The canonical.
