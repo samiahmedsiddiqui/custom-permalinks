@@ -3,7 +3,7 @@ Contributors: sasiddiqui, michaeltyson
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Requires at least: 2.6
 Tested up to: 5.4
-Stable tag: 1.6.0-beta4
+Stable tag: 1.6.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -125,7 +125,7 @@ This process defines you the steps to follow either you are installing through W
 
 == Changelog ==
 
-= 1.6.0-beta4 =
+= 1.6.0 - Aug 08, 2020 =
 
   * Bugs
     * [Undefined index and undefined variable error](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/28)

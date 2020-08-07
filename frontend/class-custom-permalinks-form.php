@@ -162,7 +162,7 @@ class Custom_Permalinks_Form
     /**
      * Result Permalink HTML Form for classic editor and Gutenberg.
      *
-     * @since 2.0.0
+     * @since 1.6.0
      * @access private
      *
      * @param object $post WP Post Object.
@@ -471,7 +471,7 @@ class Custom_Permalinks_Form
     /**
      * Save term (common to tags and categories).
      *
-     * @since 2.0.0
+     * @since 1.6.0
      * @access public
      *
      * @param string $term_id Term ID.
@@ -598,7 +598,7 @@ class Custom_Permalinks_Form
     /**
      * Refresh Permalink using AJAX Call.
      *
-     * @since 2.0.0
+     * @since 1.6.0
      * @access public
      *
      * @param object $data Contains post id with some default REST Values.
@@ -647,7 +647,7 @@ class Custom_Permalinks_Form
     /**
      * Added Custom Endpoints for refreshing the permalink.
      *
-     * @since 2.0.0
+     * @since 1.6.0
      * @access public
      */
     public function rest_edit_form()
