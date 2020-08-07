@@ -26,8 +26,6 @@ class Custom_Permalinks_About
         $img_src    = $plugin_url . '/images';
         wp_enqueue_style( 'style', $plugin_url . '/css/about-plugins.min.css' );
 
-        $plugin_name = __( 'Custom Permalinks', 'custom-permalinks' );
-        $button_text = __( 'Check it out', 'custom-permalinks' );
         $fivestar    = '<span class="star">
                           <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 53.867 53.867" width="15" height="15">
                             <polygon points="26.934,1.318 35.256,18.182 53.867,20.887 40.4,34.013 43.579,52.549 26.934,43.798
@@ -54,7 +52,11 @@ class Custom_Permalinks_About
 
         <div class="wrap">
           <div class="float">
-            <h1><?php echo $plugin_name . ' v' . CUSTOM_PERMALINKS_PLUGIN_VERSION; ?></h1>
+            <h1>
+              <?php
+              esc_html_e( 'Custom Permalinks v' . CUSTOM_PERMALINKS_PLUGIN_VERSION, 'custom-permalinks' );
+              ?>
+            </h1>
             <div class="tagline">
               <p>
               <?php
@@ -80,7 +82,7 @@ class Custom_Permalinks_About
           </div>
 
           <div class="float">
-            <object type="image/svg+xml" data="<?php echo $img_src;?>/custom-permalinks.svg" width="128" height="128"></object>
+            <object type="image/svg+xml" data="<?php echo esc_url( $img_src . '/custom-permalinks.svg' );?>" width="128" height="128"></object>
           </div>
 
           <div class="product">
@@ -99,7 +101,7 @@ class Custom_Permalinks_About
             </span>
             <div class="box recommended">
               <div class="img">
-                <img src= "<?php echo $img_src; ?>/prevent-xss-vulnerability.png" style="transform:scale(1.5)" />
+                <img src="<?php echo esc_url( $img_src . '/prevent-xss-vulnerability.png' ); ?>" style="transform:scale(1.5)" />
               </div>
 
               <h3>
@@ -116,13 +118,13 @@ class Custom_Permalinks_About
               ?>
               </p>
               <a href="https://wordpress.org/plugins/prevent-xss-vulnerability/" class="checkout-button" target="_blank">
-                <?php echo $button_text; ?>
+                <?php esc_html_e( 'Check it out', 'custom-permalinks' ); ?>
               </a>
             </div>
 
             <div class="box recommended">
               <div class="img">
-                <img src= "<?php echo $img_src; ?>/http-auth.svg" />
+                <img src="<?php echo esc_url( $img_src . '/http-auth.svg' ); ?>" />
               </div>
 
               <h3>
@@ -139,13 +141,13 @@ class Custom_Permalinks_About
               ?>
               </p>
               <a href="https://wordpress.org/plugins/http-auth/" class="checkout-button" target="_blank">
-                <?php echo $button_text; ?>
+                <?php esc_html_e( 'Check it out', 'custom-permalinks' ); ?>
               </a>
             </div>
 
             <div class="box">
               <div class="img">
-                <img src= "<?php echo $img_src; ?>/make-paths-relative.svg" />
+                <img src="<?php echo esc_url( $img_src . '/make-paths-relative.svg' ); ?>" />
               </div>
 
               <h3>
@@ -162,13 +164,13 @@ class Custom_Permalinks_About
               ?>
               </p>
               <a href="https://wordpress.org/plugins/make-paths-relative/" class="checkout-button" target="_blank">
-                <?php echo $button_text; ?>
+                <?php esc_html_e( 'Check it out', 'custom-permalinks' ); ?>
               </a>
             </div>
 
             <div class="box">
               <div class="img">
-                <img src= "<?php echo $img_src; ?>/schema-for-article.svg" />
+                <img src="<?php echo esc_url( $img_src . '/schema-for-article.svg' ); ?>" />
               </div>
 
               <h3>
@@ -185,13 +187,13 @@ class Custom_Permalinks_About
               ?>
               </p>
               <a href="https://wordpress.org/plugins/schema-for-article/" class="checkout-button" target="_blank">
-                <?php echo $button_text; ?>
+                <?php esc_html_e( 'Check it out', 'custom-permalinks' ); ?>
               </a>
             </div>
 
             <div class="box">
               <div class="img">
-                <img src= "<?php echo $img_src; ?>/remove-links-and-scripts.svg" />
+                <img src="<?php echo esc_url( $img_src . '/remove-links-and-scripts.svg' ); ?>" />
               </div>
 
               <h3>
@@ -208,13 +210,13 @@ class Custom_Permalinks_About
               ?>
               </p>
               <a href="https://wordpress.org/plugins/remove-links-and-scripts/" class="checkout-button" target="_blank">
-                <?php echo $button_text; ?>
+                <?php esc_html_e( 'Check it out', 'custom-permalinks' ); ?>
               </a>
             </div>
 
             <div class="box">
               <div class="img">
-                <img src= "<?php echo $img_src; ?>/media-post-permalink.png" style="transform:scale(1.5)" />
+                <img src="<?php echo esc_url( $img_src . '/media-post-permalink.png' ); ?>" style="transform:scale(1.5)" />
               </div>
 
               <h3>
@@ -231,13 +233,13 @@ class Custom_Permalinks_About
               ?>
               </p>
               <a href="https://wordpress.org/plugins/media-post-permalink/" class="checkout-button" target="_blank">
-                <?php echo $button_text; ?>
+                <?php esc_html_e( 'Check it out', 'custom-permalinks' ); ?>
               </a>
             </div>
 
             <div class="box">
               <div class="img">
-                <img src= "<?php echo $img_src; ?>/json-structuring-markup.svg" />
+                <img src="<?php echo esc_url( $img_src . '/json-structuring-markup.svg' ); ?>" />
               </div>
 
               <h3>
@@ -254,7 +256,7 @@ class Custom_Permalinks_About
               ?>
               </p>
               <a href="https://wordpress.org/plugins/json-structuring-markup/" class="checkout-button" target="_blank">
-                <?php echo $button_text; ?>
+                <?php esc_html_e( 'Check it out', 'custom-permalinks' ); ?>
               </a>
             </div>
           </div>
