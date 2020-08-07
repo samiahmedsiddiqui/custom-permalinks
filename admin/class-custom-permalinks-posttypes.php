@@ -184,8 +184,9 @@ class Custom_Permalinks_PostTypes
                     $redirect_uri = explode( '&paged=' . $_GET['paged'] . '',
                         $request_uri
                     );
-                    header( 'Location: ' . $redirect_uri[0], 301 );
-                    exit(0);
+
+                    wp_safe_redirect( $redirect_uri[0], 301 );
+                    exit;
                 }
             } elseif ( ! isset( $_GET['paged'] ) ) {
                 $pagination_html = $cp_pager->get_pagination(

@@ -165,8 +165,8 @@ class Custom_Permalinks_Taxonomies
                         $request_uri
                     );
 
-                    header( 'Location: ' . $redirect_uri[0], 301 );
-                    exit(0);
+                    wp_safe_redirect( $redirect_uri[0], 301 );
+                    exit;
                 }
             } elseif ( ! isset( $_GET['paged'] ) ) {
                 $pagination_html = $cp_pager->get_pagination(  $count_tags, 1,
