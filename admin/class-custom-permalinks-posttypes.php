@@ -82,7 +82,7 @@ class Custom_Permalinks_PostTypes
                 || ( isset( $post_action2 ) && 'delete' === $post_action2 )
             )
             && check_admin_referer( 'custom-permalinks-post_' . $user_id,
-                '_custom_permalinks_post_nonce',
+                '_custom_permalinks_post_nonce'
             )
         ) {
           if ( isset( $post_permalinks ) && ! empty( $post_permalinks ) ) {
@@ -130,7 +130,7 @@ class Custom_Permalinks_PostTypes
 
         if ( $search_input
             && check_admin_referer( 'custom-permalinks-post_' . $user_id,
-                '_custom_permalinks_post_nonce',
+                '_custom_permalinks_post_nonce'
             )
         ) {
             $filter_permalink = 'AND pm.meta_value LIKE "%' . $search_input . '%"';

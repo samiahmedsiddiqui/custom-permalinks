@@ -82,7 +82,7 @@ class Custom_Permalinks_Taxonomies
                 || ( isset( $term_action2 ) && 'delete' === $term_action2 )
             )
             && check_admin_referer( 'custom-permalinks-term_' . $user_id,
-                '_custom_permalinks_term_nonce',
+                '_custom_permalinks_term_nonce'
             )
         ) {
             if ( isset( $term_permalinks ) && ! empty( $term_permalinks ) ) {
@@ -123,7 +123,7 @@ class Custom_Permalinks_Taxonomies
 
         if ( $search_input && ! empty( $search_input )
             && check_admin_referer( 'custom-permalinks-term_' . $user_id,
-                '_custom_permalinks_term_nonce',
+                '_custom_permalinks_term_nonce'
             )
         ) {
             $search_value = ltrim( htmlspecialchars( $search_input ), '/' );
