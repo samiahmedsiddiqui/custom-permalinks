@@ -95,20 +95,27 @@ class Custom_Permalinks
             new Custom_Permalinks_Admin();
 
             register_activation_hook( CUSTOM_PERMALINKS_FILE,
-                array( 'Custom_Permalinks', 'add_role_and_update_details' )
+                array( 'Custom_Permalinks', 'add_roles' )
+            );
+
+            register_activation_hook( CUSTOM_PERMALINKS_FILE,
+                array( 'Custom_Permalinks', 'activate_details' )
+            );
+
+            register_deactivation_hook( CUSTOM_PERMALINKS_FILE,
+                array( 'Custom_Permalinks', 'deactivate_details' )
             );
         }
     }
 
     /**
      * Add role for the view post and category permalinks and by default assign
-     * it to the administrator if administrator role exist. Also, update details
-     * when plugin gets updated.
+     * it to the administrator if administrator role exist.
      *
      * @since 1.2.22
      * @access public
      */
-    public static function add_role_and_update_details()
+    public static function add_roles()
     {
         $admin_role      = get_role( 'administrator' );
         $cp_role         = get_role( 'custom_permalinks_manager' );
@@ -127,28 +134,35 @@ class Custom_Permalinks
                 )
             );
         }
-
-        if ( -1 === $current_version
-            || $current_version < CUSTOM_PERMALINKS_PLUGIN_VERSION
-        ) {
-            Custom_Permalinks::update_details();
-
-            update_option( 'custom_permalinks_plugin_version',
-                CUSTOM_PERMALINKS_PLUGIN_VERSION
-            );
-        }
     }
 
     /**
-     * Loads the plugin language files.
+     * Sent details when plugin gets activated / updated ans set installed
+     * version in options table.
      *
-     * @since 1.2.18
+     * @since 1.6.1
      * @access public
      */
-    public function update_details()
+    public static function activate_details()
     {
         require_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-updates.php';
-        new Custom_Permalinks_Updates();
+        new Custom_Permalinks_Updates( 'activate' );
+
+        update_option( 'custom_permalinks_plugin_version',
+            CUSTOM_PERMALINKS_PLUGIN_VERSION
+        );
+    }
+
+    /**
+     * Sent details when plugin gets deactivated.
+     *
+     * @since 1.6.1
+     * @access public
+     */
+    public function deactivate_details()
+    {
+        require_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-updates.php';
+        new Custom_Permalinks_Updates( 'deactivate' );
     }
 
     /**
@@ -162,19 +176,13 @@ class Custom_Permalinks
     public function check_loaded_plugins()
     {
         if ( is_admin() ) {
-            $cp_role         = get_role( 'custom_permalinks_manager' );
             $current_version = get_option( 'custom_permalinks_plugin_version', -1 );
 
-            if ( empty( $cp_role ) ) {
-                Custom_Permalinks::add_role_and_update_details();
-            } elseif ( -1 === $current_version
+            if ( -1 === $current_version
                 || $current_version < CUSTOM_PERMALINKS_PLUGIN_VERSION
             ) {
-                Custom_Permalinks::update_details();
-
-                update_option( 'custom_permalinks_plugin_version',
-                    CUSTOM_PERMALINKS_PLUGIN_VERSION
-                );
+                Custom_Permalinks::activate_details();
+                Custom_Permalinks::add_roles();
             }
         }
 

@@ -6,23 +6,31 @@
 class Custom_Permalinks_Updates
 {
 
+    /*
+     * Check Whether Plugin gets activated or deactived.
+     */
+    private $method = 'install';
+
     /**
      * Initializes WordPress hooks.
      */
-    function __construct()
+    function __construct( $action )
     {
+        if ( $action && 'deactivate' === $action) {
+            $this->method = 'uninstall';
+        }
         $this->update_version_details();
     }
 
     /**
      * Fetch site details and sent it to CP.
      *
-     * @since 2.0.0
+     * @since 1.6.0
      * @access private
      */
     private function update_version_details()
     {
-        if ( function_exists( 'curl_init' ) === true ) {
+        if ( true === function_exists( 'curl_init' ) ) {
             $admin_email = get_bloginfo( 'admin_email' );
             $curl_url    = 'https://www.custompermalinks.com/plugin-update/';
             $site_name   = get_bloginfo( 'name' );
@@ -30,7 +38,7 @@ class Custom_Permalinks_Updates
             $wp_version  = get_bloginfo( 'version' );
 
             $updates = array(
-                'action'         => 'install',
+                'action'         => $this->method,
                 'admin_email'    => $admin_email,
                 'plugin_version' => CUSTOM_PERMALINKS_PLUGIN_VERSION,
                 'site_name'      => $site_name,
