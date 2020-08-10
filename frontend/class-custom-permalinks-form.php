@@ -7,6 +7,11 @@ class Custom_Permalinks_Form
 {
 
     /*
+     * JS file suffix (version number with with extension)
+     */
+     private $js_file_suffix = '-' . CUSTOM_PERMALINKS_PLUGIN_VERSION . '.min.js';
+
+    /*
      * Decide whether to show metabox or override WordPress default Permalink box.
      */
     private $permalink_metabox = 0;
@@ -206,8 +211,8 @@ class Custom_Permalinks_Form
 
         if ( 'trash' !== $post->post_status ) {
             wp_enqueue_script( 'custom-permalinks-form',
-                plugins_url( '/js/script-form.min.js', __FILE__ ), array(),
-                false, true
+                plugins_url( '/js/script-form' . $this->js_file_suffix, __FILE__ ),
+                array(), false, true
             );
 
             $home_url = trailingslashit( home_url() );
@@ -279,8 +284,8 @@ class Custom_Permalinks_Form
         $disable_cp = $this->exclude_custom_permalinks( $post );
         if ( $disable_cp ) {
             wp_enqueue_script( 'custom-permalinks-form',
-                plugins_url( '/js/script-form.min.js', __FILE__ ), array(),
-                false, true
+                plugins_url( '/js/script-form' . $this->js_file_suffix, __FILE__ ),
+                array(), false, true
             );
 
             return;
@@ -440,7 +445,8 @@ class Custom_Permalinks_Form
         }
 
         wp_enqueue_script( 'custom-permalinks-form',
-            plugins_url( '/js/script-form.min.js', __FILE__ ), array(), false, true
+            plugins_url( '/js/script-form' . $this->js_file_suffix, __FILE__ ),
+            array(), false, true
         );
         $postname_html = '';
         if ( isset( $postname ) && '' !== $postname ) {

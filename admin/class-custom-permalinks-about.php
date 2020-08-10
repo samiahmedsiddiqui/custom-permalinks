@@ -5,6 +5,10 @@
 
 class Custom_Permalinks_About
 {
+    /*
+     * Css file suffix (version number with with extension)
+     */
+     private $css_file_suffix = '-' . CUSTOM_PERMALINKS_PLUGIN_VERSION . '.min.css';
 
     /**
      * Class constructor.
@@ -22,9 +26,10 @@ class Custom_Permalinks_About
      */
     private function more_plugins()
     {
+        $filename   = 'about-plugins' . $this->css_file_suffix;
         $plugin_url = plugins_url( '/admin', CUSTOM_PERMALINKS_FILE );
         $img_src    = $plugin_url . '/images';
-        wp_enqueue_style( 'style', $plugin_url . '/css/about-plugins.min.css' );
+        wp_enqueue_style( 'style', $plugin_url . '/css/' . $filename );
 
         $fivestar    = '<span class="star">
                           <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 53.867 53.867" width="15" height="15">
