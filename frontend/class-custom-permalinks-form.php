@@ -467,7 +467,9 @@ class Custom_Permalinks_Form
 
         if ( $render_containers ) {
             echo '<br />' .
-                  '<small>' . __( "Leave blank to disable", "custom-permalinks" ) . '</small>' .
+                  '<small>' .
+                      __( 'Leave blank to disable', 'custom-permalinks' ) .
+                  '</small>' .
                   '</td>' .
                   '</tr>' .
                   '</table>';
