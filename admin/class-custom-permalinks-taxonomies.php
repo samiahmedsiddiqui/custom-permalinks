@@ -77,15 +77,12 @@ class Custom_Permalinks_Taxonomies
         }
 
         // Handle Bulk Operations
-        if ( (
-                ( isset( $term_action ) && 'delete' === $term_action )
-                || ( isset( $term_action2 ) && 'delete' === $term_action2 )
-            )
+        if ( ( 'delete' === $term_action || 'delete' === $term_action2 )
             && check_admin_referer( 'custom-permalinks-term_' . $user_id,
                 '_custom_permalinks_term_nonce'
             )
         ) {
-            if ( isset( $term_permalinks ) && ! empty( $term_permalinks ) ) {
+            if ( ! empty( $term_permalinks ) ) {
                 $data = get_option( 'custom_permalink_table' );
                 if ( isset( $data ) && is_array( $data ) ) {
                     $loopCount = 0;
@@ -116,12 +113,11 @@ class Custom_Permalinks_Taxonomies
         $pager_offset = '0';
         $search_input = filter_input( INPUT_GET, 's' );
         $search_value = '';
-        $term_nonce = wp_nonce_field(
-            'custom-permalinks-term_' . $user_id, '_custom_permalinks_term_nonce',
-            true, false
+        $term_nonce = wp_nonce_field( 'custom-permalinks-term_' . $user_id,
+            '_custom_permalinks_term_nonce', true, false
         );
 
-        if ( $search_input && ! empty( $search_input )
+        if ( ! empty( $search_input )
             && check_admin_referer( 'custom-permalinks-term_' . $user_id,
                 '_custom_permalinks_term_nonce'
             )
@@ -130,7 +126,7 @@ class Custom_Permalinks_Taxonomies
             $page_html   .= '<span class="subtitle">Search results for "' . $search_value . '"</span>';
         }
 
-        if ( $get_paged && is_numeric( $get_paged ) && 1 < $get_paged ) {
+        if ( is_numeric( $get_paged ) && 1 < $get_paged ) {
             $pager_offset = 20 * ( $get_paged - 1 );
             $page_limit   = $pager_offset + 20;
         }
@@ -180,7 +176,7 @@ class Custom_Permalinks_Taxonomies
             $page_html .= '<h2 class="screen-reader-text">Custom Permalink navigation</h2>';
 
             $total_pages = ceil( $count_tags / 20 );
-            if ( $get_paged && is_numeric( $get_paged ) && 0 < $get_paged ) {
+            if ( is_numeric( $get_paged ) && 0 < $get_paged ) {
                 $pagination_html = $cp_pager->get_pagination(
                     $count_tags, $get_paged, $total_pages
                 );
