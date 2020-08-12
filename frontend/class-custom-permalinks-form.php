@@ -72,7 +72,7 @@ class Custom_Permalinks_Form
             $check_availability = true;
         } elseif ( 'attachment' === $post->post_type ) {
             $check_availability = true;
-        } elseif ( $post->ID === intval( get_option( 'page_on_front' ) ) ) {
+        } elseif ( $post->ID == get_option( 'page_on_front' ) ) {
             $check_availability = true;
         } elseif ( ! isset( $public_post_types[$post->post_type] ) ) {
             $check_availability = true;
