@@ -28,6 +28,19 @@ class Custom_Permalinks_PostTypes
      */
     private function post_nav( $order_by_class, $order_by, $search_permalink )
     {
+        $admin_url = get_admin_url();
+        $page_url  = $admin_url . 'admin.php?page=cp-post-permalinks';
+        $title_url = $page_url . '&amp;orderby=title&amp;order=' . $order_by;
+        $user_id   = get_current_user_id();
+
+        if ( $search_permalink ) {
+            $title_url = $title_url . $search_permalink;
+            $title_url = wp_nonce_url( $title_url,
+                'custom-permalinks-post_' . $user_id,
+                '_custom_permalinks_post_nonce'
+            );
+        }
+
         $post_nav = '<tr>' .
                       '<td id="cb" class="manage-column column-cb check-column">' .
                         '<label class="screen-reader-text" for="cb-select-all-1">' .
@@ -36,7 +49,7 @@ class Custom_Permalinks_PostTypes
                         '<input id="cb-select-all-1" type="checkbox">' .
                       '</td>' .
                       '<th scope="col" id="title" class="manage-column column-title column-primary sortable ' . $order_by_class . '">' .
-                        '<a href="/wp-admin/admin.php?page=cp-post-permalinks&amp;orderby=title&amp;order=' . $order_by . $search_permalink . '">' .
+                        '<a href="' . $title_url . '">' .
                           '<span>' .
                               __( 'Title', 'custom-permalinks' ) .
                           '</span>' .
