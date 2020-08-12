@@ -137,18 +137,35 @@ class Custom_Permalinks_Form
             return;
         }
 
-        $this->delete_permalink( $post_id );
-
         $cp_frontend   = new Custom_Permalinks_Frontend();
         $original_link = $cp_frontend->original_post_link( $post_id );
+
         if ( $_REQUEST['custom_permalink']
             && $_REQUEST['custom_permalink'] != $original_link
         ) {
-            add_post_meta( $post_id, 'custom_permalink',
-                str_replace( '%2F', '/', urlencode(
-                    ltrim( stripcslashes( $_REQUEST['custom_permalink'] ), '/' )
-                ) )
-            );
+            $permalink = $_REQUEST['custom_permalink'];
+            $permalink = stripcslashes( $permalink );
+            $permalink = ltrim( $permalink, '/' );
+            $permalink = urlencode( $permalink );
+            // Replace encoded slash input with slash
+            $permalink = str_replace( '%2F', '/', $permalink );
+
+            $replace_hyphen = array( '%20', '%2B', '+' );
+            $split_path     = explode( '%3F', $permalink );
+            if ( 1 < count( $split_path ) ) {
+                // Replace encoded space and plus input with hyphen
+                $replaced_path = str_replace( $replace_hyphen, '-', $split_path[0] );
+                $replaced_path = preg_replace( '/(\-+)/', '-', $replaced_path );
+                $permalink     = str_replace( $split_path[0], $replaced_path,
+                    $permalink
+                );
+            } else {
+                // Replace encoded space and plus input with hyphen
+                $permalink = str_replace( $replace_hyphen, '-', $permalink );
+                $permalink = preg_replace( '/(\-+)/', '-', $permalink );
+            }
+
+            update_post_meta( $post_id, 'custom_permalink', $permalink );
         }
     }
 
