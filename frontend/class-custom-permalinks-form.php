@@ -140,7 +140,7 @@ class Custom_Permalinks_Form
         $cp_frontend   = new Custom_Permalinks_Frontend();
         $original_link = $cp_frontend->original_post_link( $post_id );
 
-        if ( $_REQUEST['custom_permalink']
+        if ( isset( $_REQUEST['custom_permalink'] )
             && $_REQUEST['custom_permalink'] != $original_link
         ) {
             $permalink = $_REQUEST['custom_permalink'];
@@ -504,7 +504,9 @@ class Custom_Permalinks_Form
     public function save_term( $term_id )
     {
         $term = get_term( $term_id );
-        if ( isset( $term ) && isset( $term->taxonomy ) ) {
+        if ( isset( $_REQUEST['custom_permalink'] ) && isset( $term )
+            && isset( $term->taxonomy )
+        ) {
             $taxonomy_name = $term->taxonomy;
             if ( 'category' === $taxonomy_name
                 || 'post_tag' === $taxonomy_name
