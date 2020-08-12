@@ -26,7 +26,7 @@ class Custom_Permalinks_Taxonomies
     {
         $navigation = '<tr>' .
                         '<td id="cb" class="manage-column column-cb check-column">' .
-                          '<label class="screen-reader-text" for="cb-select-all-1">
+                          '<label class="screen-reader-text" for="cb-select-all-1">' .
                               __( 'Select All', 'custom-permalinks' ) .
                           '</label>' .
                           '<input id="cb-select-all-1" type="checkbox">' .
