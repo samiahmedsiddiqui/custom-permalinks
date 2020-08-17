@@ -96,7 +96,7 @@ class Custom_Permalinks_Form
     public function permalink_edit_box()
     {
         add_meta_box( 'custom-permalinks-edit-box',
-            __( 'Permalink', 'custom-permalinks' ),
+            __( 'Custom Permalinks', 'custom-permalinks' ),
             array( $this, 'meta_edit_form' ), null, 'normal', 'high',
             array(
                 '__back_compat_meta_box' => false,
@@ -253,7 +253,7 @@ class Custom_Permalinks_Form
             }
 
             $content .= ' <span id="view-post-btn">' .
-                          '<a href="' . $view_post_link . '" class="button button-small" target="_blank">' . $view_post .'</a>' .
+                          '<a href="' . $view_post_link . '" class="button button-medium" target="_blank">' . $view_post .'</a>' .
                         '</span><br>';
             if ( true === $meta_box ) {
                 $content .= '<style>.editor-post-permalink,.cp-permalink-hidden{display:none;}</style>';
@@ -278,7 +278,7 @@ class Custom_Permalinks_Form
         $post = get_post( $post_id );
 
         $disable_cp = $this->exclude_custom_permalinks( $post );
-        $this->permalink_metabox  = 1;
+        $this->permalink_metabox = 1;
         if ( $disable_cp ) {
             return $html;
         }
