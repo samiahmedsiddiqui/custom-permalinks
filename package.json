@@ -17,6 +17,6 @@
     "gulp-uglify": "3.0.2"
   },
   "customPermalinks": {
-    "pluginVersion": "1.6.2"
+    "pluginVersion": "1.6.3-alpha"
   }
 }
