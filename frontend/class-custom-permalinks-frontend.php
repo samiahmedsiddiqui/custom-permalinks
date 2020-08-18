@@ -125,6 +125,12 @@ class Custom_Permalinks_Frontend
         global $wpdb;
         global $_CPRegisteredURL;
 
+        if ( isset( $_SERVER['REQUEST_URI'] )
+            && $_SERVER['REQUEST_URI'] !== $this->request_uri
+        ) {
+            $this->request_uri = $_SERVER['REQUEST_URI'];
+        }
+
         /*
          * First, search for a matching custom permalink, and if found
          * generate the corresponding original URL
@@ -195,15 +201,15 @@ class Custom_Permalinks_Frontend
                 $_CPRegisteredURL = $request;
             }
 
-            if ( 'draft' == $posts[0]->post_status ) {
-                if ( 'page' == $posts[0]->post_type ) {
+            if ( 'draft' === $posts[0]->post_status ) {
+                if ( 'page' === $posts[0]->post_type ) {
                     $original_url = '?page_id=' . $posts[0]->ID;
                 } else {
                     $original_url = '?post_type=' . $posts[0]->post_type . '&p=' . $posts[0]->ID;
                 }
             } else {
                 $post_meta = trim( strtolower( $posts[0]->meta_value ), '/' );
-                if ( $posts[0]->post_type == 'page' ) {
+                if ( 'page' === $posts[0]->post_type ) {
                     $get_original_url = $this->original_page_link( $posts[0]->ID );
                     $original_url     = preg_replace( '@/+@', '/',
                         str_replace( $post_meta, $get_original_url,
@@ -318,6 +324,12 @@ class Custom_Permalinks_Frontend
     public function make_redirect()
     {
         global $wpdb;
+
+        if ( isset( $_SERVER['REQUEST_URI'] )
+            && $_SERVER['REQUEST_URI'] !== $this->request_uri
+        ) {
+            $this->request_uri = $_SERVER['REQUEST_URI'];
+        }
 
         $custom_permalink   = '';
         $original_permalink = '';
@@ -595,8 +607,8 @@ class Custom_Permalinks_Frontend
      */
     public function original_post_link( $post_id )
     {
-        remove_filter( 'post_link', array( $this, 'custom_post_link' ), 10, 3 );
-        remove_filter( 'post_type_link', array( $this, 'custom_post_link' ), 10, 2 );
+        remove_filter( 'post_link', array( $this, 'custom_post_link' ) );
+        remove_filter( 'post_type_link', array( $this, 'custom_post_link' ) );
 
         $post_file_path = ABSPATH . '/wp-admin/includes/post.php';
         require_once $post_file_path;
@@ -625,7 +637,7 @@ class Custom_Permalinks_Frontend
      */
     public function original_page_link( $post_id )
     {
-        remove_filter( 'page_link', array( $this, 'custom_page_link' ), 10, 2 );
+        remove_filter( 'page_link', array( $this, 'custom_page_link' ) );
         remove_filter( 'user_trailingslashit',
             array( $this, 'custom_trailingslash' )
         );
@@ -658,7 +670,7 @@ class Custom_Permalinks_Frontend
      */
     public function original_term_link( $term_id )
     {
-        remove_filter( 'term_link', array( $this, 'custom_term_link' ), 10, 2 );
+        remove_filter( 'term_link', array( $this, 'custom_term_link' ) );
         remove_filter( 'user_trailingslashit',
             array( $this, 'custom_trailingslash' )
         );
