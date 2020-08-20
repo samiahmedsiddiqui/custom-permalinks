@@ -177,6 +177,7 @@ This process defines you the steps to follow either you are installing through W
 
   * Bugs
     * [Paged NextGen Galleries Broken with Custom Permalinks 1.62](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/38)
+    * [custom permalink issue with weglot](https://wordpress.org/support/topic/custom-permalink-issue-with-weglot/)
     * [Permalinks reverting back to old ones](https://wordpress.org/support/topic/permalinks-reverting-back-to-old-ones/)
     * [A problem with wrongly deleted permalinks](https://wordpress.org/support/topic/a-problem-with-wrongly-deleted-permalinks/)
   * Enhancements
