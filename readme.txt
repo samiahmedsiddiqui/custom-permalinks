@@ -74,7 +74,7 @@ add_filter( 'custom_permalinks_avoid_redirect', 'yasglobal_avoid_redirect' );
 
 === Disable specific redirects ===
 
-To disable any specfic redirect to be processed by this plugin, add the filter that looks like this:
+To disable any specific redirect to be processed by this plugin, add the filter that looks like this:
 
 `
 function yasglobal_avoid_redirect( $permalink )
@@ -177,9 +177,11 @@ This process defines you the steps to follow either you are installing through W
 
   * Bugs
     * [Paged NextGen Galleries Broken with Custom Permalinks 1.62](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/38)
+    * [Permalinks reverting back to old ones](https://wordpress.org/support/topic/permalinks-reverting-back-to-old-ones/)
+    * [A problem with wrongly deleted permalinks](https://wordpress.org/support/topic/a-problem-with-wrongly-deleted-permalinks/)
   * Enhancements
     * [Enhanced security through characters restriction](https://github.com/samiahmedsiddiqui/custom-permalinks#unsupported-characters)
-    * Introduce filter to disable specfic redirect(s) or complete functionality
+    * Introduce filter to disable specific redirect(s) or complete functionality
     * Automatic replacement of upper case letters to lower case
 
 = 1.6.2 - Aug 10, 2020 =

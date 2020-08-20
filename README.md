@@ -69,7 +69,7 @@ add_filter( 'custom_permalinks_avoid_redirect', 'yasglobal_avoid_redirect' );
 
 ### Disable specific redirects
 
-To disable any specfic redirect to be processed by this plugin, add the filter that looks like this:
+To disable any specific redirect to be processed by this plugin, add the filter that looks like this:
 
 ```php
 function yasglobal_avoid_redirect( $permalink )
