@@ -23,18 +23,18 @@ This plugin is only useful for assigning custom permalinks for *individual* post
 
 Following characters are no longer allowed in the permalinks.
 
-* <
-* >
-* {
-* }
-* |
-* `
-* ^
-* \
-* (
-* )
-* [
-* ]
+*  `< `
+*  `>`
+*  `{`
+*  `}`
+*  `|`
+*  <code>`</code>
+*  `^`
+*  `\`
+*  `(`
+*  `)`
+*  `[`
+*  `]`
 
 > Permalinks created previously using any of these characters will not be affected in anyway. However, new permalinks will not support the use of these characters as they are not considered to be safe.
 
@@ -42,11 +42,11 @@ Following characters are no longer allowed in the permalinks.
 
 This plugin only collects the following information.
 
-1. Administration Email Address (Only the email that is set in the WordPress setting)
-2. Plugin version
-3. Site Title
-4. WordPress Address (URL)
-5. WordPress version
+1.  Administration Email Address (Only the email that is set in the WordPress setting)
+2.  Plugin version
+3.  Site Title
+4.  WordPress Address (URL)
+5.  WordPress version
 
 All this information gets collected when the plugin is installed or updated.
 
