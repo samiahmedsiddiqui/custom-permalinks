@@ -2,7 +2,7 @@
 
 Lay out your site the way *you* want it. Set the URL of any post, page, tag or category to 
 anything you want. Old permalinks will redirect properly to the new address. Custom 
-Permalinks gives you ultimate control over your site structure.
+Permalinks give you ultimate control over your site structure.
 
 > :warning: *This plugin is not a replacement for WordPress's built-in permalink system*. 
 > Check your WordPress administration's "Permalinks" settings page first, to make sure that 
@@ -12,8 +12,8 @@ This plugin is only useful for assigning custom permalinks for *individual* post
 tags or categories. It will not apply whole permalink structures or automatically apply a 
 category's custom permalink to the posts within that category.
 
-> :information_source: If anyone wants the different Structure Tags for their PostTypes or use 
-> symbols in the URLs So, use the 
+> :information_source: If anyone wants the different Structure Tags for their Post Types or 
+> use symbols in the URLs So, use the 
 > [Permalinks Customizer](https://wordpress.org/plugins/permalinks-customizer/) which is a
 > fork of this plugin and contains the enhancement of this plugin.
 
@@ -21,21 +21,14 @@ category's custom permalink to the posts within that category.
 
 Following characters are no longer allowed in the permalinks. 
 
-* `<`
-* `>`
-* `{`
-* `}`
-* `|`
-* <code>`</code>
-* `^`
-* `\`
-* `(`
-* `)`
-* `[`
-* `]`
+|      |                |     |     |
+|------|----------------|-----|-----|
+| `<`  | `>`            | `{` | `}` |
+| `\|` | <code>`</code> | `^` | `\` |
+| `(`  | `)`            | `[` | `]` |
 
-> :information_source: Permalinks created previously using any of these characters will               
-> not be affected in anyway. However, new permalinks will not support the use of these 
+> :information_source: Permalinks created previously using any of these characters will not
+> be affected in anyway. However, new permalinks will not support the use of these 
 > characters  as they are not considered to be safe.
 
 ## Privacy Policy
@@ -55,9 +48,46 @@ To have any kind of query please feel free to
 
 ## Filters
 
+### Add `PATH_INFO` in `$_SERVER` Variable
+
+```php
+add_filter( 'custom_permalinks_path_info', '__return_true' );
+```
+
+### Disable redirects
+
+To disable complete redirects functionality provided by this plugin, add the filter that looks 
+like this:
+
+```php
+function yasglobal_avoid_redirect( $permalink )
+{
+    return true;
+}
+add_filter( 'custom_permalinks_avoid_redirect', 'yasglobal_avoid_redirect' );
+```
+
+### Disable specific redirects
+
+To disable any specfic redirect to be processed by this plugin, add the filter that looks like this:
+
+```php
+function yasglobal_avoid_redirect( $permalink )
+{
+    // Replace 'testing-hello-world/' with the permalink you want to avoid
+    if ( 'testing-hello-world/' === $permalink ) {
+        return true;
+    }
+
+    return false;
+}
+add_filter( 'custom_permalinks_avoid_redirect', 'yasglobal_avoid_redirect' );
+```
+
 ### Exclude permalink to be processed
 
-To exclude any Permalink to be processed with the plugin, add the filter looks like this:
+To exclude any Permalink to be processed by the plugin, add the filter that looks like this:
+
 ```php
 function yasglobal_xml_sitemap_url( $permalink )
 {
@@ -70,12 +100,14 @@ function yasglobal_xml_sitemap_url( $permalink )
 add_filter( 'custom_permalinks_request_ignore', 'yasglobal_xml_sitemap_url' );
 ```
 
-### Exclude PostType
+### Exclude Post Type
 
-To exclude permalink from any post type so, just add the filter looks like this:
+To remove custom permalink **form** from any post type, add the filter that looks like this:
+
 ```php
 function yasglobal_exclude_post_types( $post_type )
 {
+    // Replace 'custompost' with your post type name
     if ( 'custompost' === $post_type ) {
         return '__true';
     }
@@ -85,13 +117,11 @@ function yasglobal_exclude_post_types( $post_type )
 add_filter( 'custom_permalinks_exclude_post_type', 'yasglobal_exclude_post_types' );
 ```
 
-Note: `custom_permalinks_exclude_post_type` doesn't work on the posts permalink 
-which has been created previously.
-
 ### Exclude Posts
 
-To exclude permalink from any posts (based on ID, Template, etc), just add the filter looks
-like this:
+To exclude custom permalink **form**  from any posts (based on ID, Template, etc), add the
+filter that looks like this:
+
 ```php
 function yasglobal_exclude_posts( $post )
 {
@@ -103,8 +133,6 @@ function yasglobal_exclude_posts( $post )
 }
 add_filter( 'custom_permalinks_exclude_posts', 'yasglobal_exclude_posts' );
 ```
-Note: `custom_permalinks_exclude_posts` doesn't work on the posts permalink which 
-has been created previously.
 
 ### Remove `like` query
 
@@ -117,12 +145,6 @@ add_filter( 'cp_remove_like_query', '__return_false' );
 
 Note: Use `custom_permalinks_like_query` filter if the URLs doesn't works for you after 
 upgrading to `v1.2.9`.
-
-### Add `PATH_INFO` in `$_SERVER` Variable
-
-```php
-add_filter( 'custom_permalinks_path_info', '__return_true' );
-```
 
 ## Thanks for the Support
 

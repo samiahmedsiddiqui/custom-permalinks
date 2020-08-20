@@ -343,6 +343,19 @@ class Custom_Permalinks_Frontend
             $request = substr( $request, 0, $pos );
         }
 
+        /*
+         * Disable redirects to be processed if filter returns `true`.
+         *
+         * @since 1.7.0
+         */
+        $avoid_redirect = apply_filters( 'custom_permalinks_avoid_redirect',
+            $request
+        );
+
+        if ( is_bool( $avoid_redirect ) && $avoid_redirect ) {
+            return;
+        }
+
         if ( defined( 'POLYLANG_VERSION' ) ) {
             $cp_file_path  = CUSTOM_PERMALINKS_PATH;
             $cp_file_path .= 'frontend/class-custom-permalinks-form.php';

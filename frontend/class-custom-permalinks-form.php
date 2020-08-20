@@ -63,6 +63,11 @@ class Custom_Permalinks_Form
         $exclude_post_types = apply_filters( 'custom_permalinks_exclude_post_type',
             $post->post_type
         );
+        /*
+         * Exclude custom permalink `form` from any post(s) if filter returns `true`.
+         *
+         * @since 1.6.0
+         */
         $exclude_posts      = apply_filters( 'custom_permalinks_exclude_posts',
             $post
         );

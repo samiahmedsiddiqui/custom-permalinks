@@ -11,7 +11,7 @@ Set custom permalinks on a per-post, per-tag or per-category basis.
 
 == Description ==
 
-Lay out your site the way *you* want it. Set the URL of any post, page, tag or category to anything you want. Old permalinks will redirect properly to the new address. Custom Permalinks gives you ultimate control over your site structure.
+Lay out your site the way *you* want it. Set the URL of any post, page, tag or category to anything you want. Old permalinks will redirect properly to the new address. Custom Permalinks give you ultimate control over your site structure.
 
 > Be warned: *This plugin is not a replacement for WordPress's built-in permalink system*. Check your WordPress administration's "Permalinks" settings page first, to make sure that this doesn't already meet your needs.
 
@@ -42,11 +42,11 @@ Following characters are no longer allowed in the permalinks.
 
 This plugin only collects the following information.
 
-1.  Administration Email Address (Only the email that is set in the WordPress setting)
-2.  Plugin version
-3.  Site Title
-4.  WordPress Address (URL)
-5.  WordPress version
+1. Administration Email Address (Only the email that is set in the WordPress setting)
+2. Plugin version
+3. Site Title
+4. WordPress Address (URL)
+5. WordPress version
 
 All this information gets collected when the plugin is installed or updated.
 
@@ -54,9 +54,45 @@ To have any kind of query please feel free to [contact us](https://www.customper
 
 == Filters ==
 
+=== Add `PATH_INFO` in `$_SERVER` Variable ===
+
+`
+add_filter( 'custom_permalinks_path_info', '__return_true' );
+`
+
+=== Disable redirects ===
+
+To disable complete redirects functionality provided by this plugin, add the filter that looks like this:
+
+`
+function yasglobal_avoid_redirect( $permalink )
+{
+    return true;
+}
+add_filter( 'custom_permalinks_avoid_redirect', 'yasglobal_avoid_redirect' );
+`
+
+=== Disable specific redirects ===
+
+To disable any specfic redirect to be processed by this plugin, add the filter that looks like this:
+
+`
+function yasglobal_avoid_redirect( $permalink )
+{
+    // Replace 'testing-hello-world/' with the permalink you want to avoid
+    if ( 'testing-hello-world/' === $permalink ) {
+        return true;
+    }
+
+    return false;
+}
+add_filter( 'custom_permalinks_avoid_redirect', 'yasglobal_avoid_redirect' );
+`
+
 === Exclude permalink to be processed ===
 
-To exclude any Permalink to be processed with the plugin, add the filter looks like this:
+To exclude any Permalink to be processed by the plugin, add the filter that looks like this:
+
 `
 function yasglobal_xml_sitemap_url( $permalink )
 {
@@ -69,12 +105,14 @@ function yasglobal_xml_sitemap_url( $permalink )
 add_filter( 'custom_permalinks_request_ignore', 'yasglobal_xml_sitemap_url' );
 `
 
-=== Exclude PostType ===
+=== Exclude Post Type ===
 
-To exclude permalink from any post type so, just add the filter looks like this:
+To remove custom permalink **form** from any post type, add the filter that looks like this:
+
 `
 function yasglobal_exclude_post_types( $post_type )
 {
+    // Replace 'custompost' with your post type name
     if ( 'custompost' === $post_type ) {
         return '__true';
     }
@@ -84,11 +122,10 @@ function yasglobal_exclude_post_types( $post_type )
 add_filter( 'custom_permalinks_exclude_post_type', 'yasglobal_exclude_post_types' );
 `
 
-Note: `custom_permalinks_exclude_post_type` doesn't work on the posts permalink which has been created previously.
-
 === Exclude Posts ===
 
-To exclude permalink from any posts (based on ID, Template, etc), just add the filter looks like this:
+To exclude custom permalink **form**  from any posts (based on ID, Template, etc), add the filter that looks like this:
+
 `
 function yasglobal_exclude_posts( $post )
 {
@@ -101,8 +138,6 @@ function yasglobal_exclude_posts( $post )
 add_filter( 'custom_permalinks_exclude_posts', 'yasglobal_exclude_posts' );
 `
 
-Note: `custom_permalinks_exclude_posts` doesn't wor k on the posts permalink which has been created previously.
-
 === Remove `like` query ===
 
 To remove `like` query to being work, add below-mentioned line in your theme `functions.php`:
@@ -111,12 +146,6 @@ add_filter( 'cp_remove_like_query', '__return_false' );
 `
 
 Note: Use `custom_permalinks_like_query` filter if the URLs doesn't works for you after upgrading to `v1.2.9`.
-
-=== Add `PATH_INFO` in `$_SERVER` Variable ===
-
-`
-add_filter( 'custom_permalinks_path_info', '__return_true' );
-`
 
 === Thanks for the Support ===
 
