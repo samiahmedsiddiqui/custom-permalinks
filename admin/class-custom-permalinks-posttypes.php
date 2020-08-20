@@ -108,7 +108,7 @@ class Custom_Permalinks_PostTypes
               if ( is_array( $post_ids ) && 0 < count( $post_ids ) ) {
                   foreach ( $post_ids as $post_id ) {
                       if ( is_numeric( $post_id ) ) {
-                          delete_post_meta( $post_id, 'custom_permalink' );
+                          delete_metadata( 'post', $post_id, 'custom_permalink' );
                       }
                   }
               } else {

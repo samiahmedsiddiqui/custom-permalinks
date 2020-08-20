@@ -198,7 +198,7 @@ class Custom_Permalinks_Form
      */
     public function delete_permalink( $post_id )
     {
-        delete_post_meta( $post_id, 'custom_permalink' );
+        delete_metadata( 'post', $post_id, 'custom_permalink' );
     }
 
     /**
