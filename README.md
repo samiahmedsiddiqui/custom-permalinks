@@ -17,6 +17,27 @@ category's custom permalink to the posts within that category.
 > [Permalinks Customizer](https://wordpress.org/plugins/permalinks-customizer/) which is a
 > fork of this plugin and contains the enhancement of this plugin.
 
+### Unsupported Characters
+
+Following characters are no longer allowed in the permalinks. 
+
+* < 
+* >
+* {
+* } 
+* | 
+* ` 
+* ^ 
+* \	
+* (
+* )
+* [
+* ]
+
+> :information_source: Permalinks created previously using any of these characters will not
+be affected in anyway. However, new permalinks will not support the use of these characters
+as they are not considered to be safe.
+
 ## Privacy Policy
 
 This plugin only collects the following information.

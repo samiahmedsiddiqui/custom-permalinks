@@ -19,6 +19,25 @@ This plugin is only useful for assigning custom permalinks for *individual* post
 
 > If anyone wants the different Structure Tags for their Post types or use symbols in the URLs So, use the [Permalinks Customizer](https://wordpress.org/plugins/permalinks-customizer/) which is a fork of this plugin and contains the enhancement of this plugin.
 
+=== Unsupported Characters ===
+
+Following characters are no longer allowed in the permalinks.
+
+* <
+* >
+* {
+* }
+* |
+* `
+* ^
+* \
+* (
+* )
+* [
+* ]
+
+> Permalinks created previously using any of these characters will not be affected in anyway. However, new permalinks will not support the use of these characters as they are not considered to be safe.
+
 == Privacy Policy ==
 
 This plugin only collects the following information.

@@ -143,9 +143,29 @@ class Custom_Permalinks_Form
         if ( isset( $_REQUEST['custom_permalink'] )
             && $_REQUEST['custom_permalink'] != $original_link
         ) {
+            $reserved_chars = array(
+                '(',
+                ')',
+                '[',
+                ']',
+            );
+
+            $unsafe_chars = array(
+                '<',
+                '>',
+                '{',
+                '}',
+                '|',
+                '`',
+                '^',
+                '\\',
+            );
+
             $permalink = $_REQUEST['custom_permalink'];
-            $permalink = stripcslashes( $permalink );
             $permalink = ltrim( $permalink, '/' );
+            $permalink = strtolower( $permalink );
+            $permalink = str_replace( $reserved_chars, '', $permalink );
+            $permalink = str_replace( $unsafe_chars, '', $permalink );
             $permalink = urlencode( $permalink );
             // Replace encoded slash input with slash
             $permalink = str_replace( '%2F', '/', $permalink );
