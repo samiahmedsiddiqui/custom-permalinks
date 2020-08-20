@@ -3,7 +3,7 @@ Contributors: sasiddiqui, michaeltyson
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Requires at least: 2.6
 Tested up to: 5.4
-Stable tag: 1.6.3-alpha
+Stable tag: 1.7.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -173,6 +173,15 @@ This process defines you the steps to follow either you are installing through W
 
 == Changelog ==
 
+= 1.7.0 - Aug 20, 2020 =
+
+  * Bugs
+    * [Paged NextGen Galleries Broken with Custom Permalinks 1.62](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/38)
+  * Enhancements
+    * [Enhanced security through characters restriction](https://github.com/samiahmedsiddiqui/custom-permalinks#unsupported-characters)
+    * Introduce filter to disable specfic redirect(s) or complete functionality
+    * Automatic replacement of upper case letters to lower case
+
 = 1.6.2 - Aug 10, 2020 =
 
   * Bugs
@@ -200,39 +209,6 @@ This process defines you the steps to follow either you are installing through W
     * Added compatibility for WPML language switcher
     * Add filter to exclude Custom Permalinks for certain posts (based on Post IDs, template, etc)
     * Optimized Code
-
-= 1.5.1 - Jun 11, 2019 =
-
-  * Bug
-    * Added additional check for [Call to undefined function pll_current_language](https://wordpress.org/support/topic/call-to-undefined-function-pll_current_language/)
-
-= 1.5.0 - Jun 04, 2019 =
-
-  * Bugs
-    * [Issue with Polylang Setting Hide Default Language](https://wordpress.org/support/topic/issue-with-polylang-setting-hide-default-language/)
-    * Change deprecated actions with appropriate actions
-
-= 1.4.0 - Nov 08, 2018 =
-
-  * Enhancements
-    * Added Support for Gutenberg
-    * Set meta_keys to be protected to stop duplication in Custom Fields
-
-= 1.3.0 - June 07, 2018 =
-
-  * Enhancements
-    * [Conflict with WPML](https://wordpress.org/support/topic/conflict-with-wpml-17/)
-    * Avoid appending slashes and use trailingslashit instead
-
-= 1.2.24 - May 31, 2018 =
-
-  * Bug
-    * [FATAL ERROR when the administrator role not found](https://wordpress.org/support/topic/fatal-error-on-update-15/)
-
-= 1.2.23 - May 22, 2018 =
-
-  * Enhancement
-    * Added Privacy Policy Content for WordPress 4.9.6 and higher.
 
 = Earlier versions =
 

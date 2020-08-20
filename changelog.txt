@@ -1,7 +1,39 @@
-
 == Changelog ==
 
 This file contains only old changelog. See readme.txt for newer versions.
+
+= 1.5.1 - Jun 11, 2019 =
+
+  * Bug
+    * Added additional check for [Call to undefined function pll_current_language](https://wordpress.org/support/topic/call-to-undefined-function-pll_current_language/)
+
+= 1.5.0 - Jun 04, 2019 =
+
+  * Bugs
+    * [Issue with Polylang Setting Hide Default Language](https://wordpress.org/support/topic/issue-with-polylang-setting-hide-default-language/)
+    * Change deprecated actions with appropriate actions
+
+= 1.4.0 - Nov 08, 2018 =
+
+  * Enhancements
+    * Added Support for Gutenberg
+    * Set meta_keys to be protected to stop duplication in Custom Fields
+
+= 1.3.0 - June 07, 2018 =
+
+  * Enhancements
+    * [Conflict with WPML](https://wordpress.org/support/topic/conflict-with-wpml-17/)
+    * Avoid appending slashes and use trailingslashit instead
+
+= 1.2.24 - May 31, 2018 =
+
+  * Bug
+    * [FATAL ERROR when the administrator role not found](https://wordpress.org/support/topic/fatal-error-on-update-15/)
+
+= 1.2.23 - May 22, 2018 =
+
+  * Enhancement
+    * Added Privacy Policy Content for WordPress 4.9.6 and higher.
 
 = 1.2.22 - May 16, 2018 =
 
