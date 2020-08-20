@@ -23,18 +23,18 @@ This plugin is only useful for assigning custom permalinks for *individual* post
 
 Following characters are no longer allowed in the permalinks.
 
-*  `< `
-*  `>`
-*  `{`
-*  `}`
-*  `|`
-*  <code>`</code>
-*  `^`
-*  `\`
-*  `(`
-*  `)`
-*  `[`
-*  `]`
+* `<`
+* `>`
+* `{`
+* `}`
+* `|`
+* <code>`</code>
+* `^`
+* `\`
+* `(`
+* `)`
+* `[`
+* `]`
 
 > Permalinks created previously using any of these characters will not be affected in anyway. However, new permalinks will not support the use of these characters as they are not considered to be safe.
 

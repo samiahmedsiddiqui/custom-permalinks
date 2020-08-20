@@ -21,18 +21,18 @@ category's custom permalink to the posts within that category.
 
 Following characters are no longer allowed in the permalinks. 
 
-*  `< `
-*  `>`
-*  `{`
-*  `}`
-*  `|` 
-*  <code>`</code>
-*  `^` 
-*  `\`	
-*  `(`
-*  `)`
-*  `[`
-*  `]`
+* `<`
+* `>`
+* `{`
+* `}`
+* `|`
+* <code>`</code>
+* `^`
+* `\`
+* `(`
+* `)`
+* `[`
+* `]`
 
 > :information_source: Permalinks created previously using any of these characters will               
 > not be affected in anyway. However, new permalinks will not support the use of these 
