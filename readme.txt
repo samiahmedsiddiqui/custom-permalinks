@@ -2,7 +2,7 @@
 Contributors: sasiddiqui, michaeltyson
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Requires at least: 2.6
-Tested up to: 5.4
+Tested up to: 5.5
 Stable tag: 1.7.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
