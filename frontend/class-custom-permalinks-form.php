@@ -708,7 +708,10 @@ class Custom_Permalinks_Form
             array(
                 'methods'  => 'GET',
                 'callback' => array( $this, 'refresh_meta_form' ),
-            )
+            ),
+            'permission_callback' => function() {
+                return current_user_can( 'edit_posts' );
+            }
         );
     }
 
