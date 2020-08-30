@@ -138,7 +138,7 @@ class Custom_Permalinks_Form
      */
     public function save_post( $post_id )
     {
-        if ( ! isset( $_REQUEST['custom_permalinks_edit'] ) ) {
+        if ( ! isset( $_REQUEST['custom_permalinks_edit'] ) || ! is_post_type_viewable( get_post_type( $post_id ) ) ) {
             return;
         }
 
