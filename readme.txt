@@ -3,7 +3,7 @@ Contributors: sasiddiqui, michaeltyson
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Requires at least: 2.6
 Tested up to: 5.5
-Stable tag: 1.7.0
+Stable tag: 1.7.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -172,6 +172,11 @@ This process defines you the steps to follow either you are installing through W
 2. Activate Custom Permalinks through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 1.7.1 - Aug 30, 2020 =
+
+  * Bugs
+    * Fix PHP notice (start reporting with WordPress 5.5)
 
 = 1.7.0 - Aug 20, 2020 =
 
