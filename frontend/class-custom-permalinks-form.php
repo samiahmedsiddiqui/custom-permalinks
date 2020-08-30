@@ -706,12 +706,12 @@ class Custom_Permalinks_Form
     {
         register_rest_route( 'custom-permalinks/v1', '/get-permalink/(?P<id>\d+)',
             array(
-                'methods'  => 'GET',
-                'callback' => array( $this, 'refresh_meta_form' ),
+                'methods'             => 'GET',
+                'callback'            => array( $this, 'refresh_meta_form' ),
+                'permission_callback' => function() {
+                    return current_user_can( 'edit_posts' );
+                },
             ),
-            'permission_callback' => function() {
-                return current_user_can( 'edit_posts' );
-            }
         );
     }
 
