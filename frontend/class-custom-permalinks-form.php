@@ -711,7 +711,7 @@ class Custom_Permalinks_Form
                 'permission_callback' => function() {
                     return current_user_can( 'edit_posts' );
                 },
-            ),
+            )
         );
     }
 
