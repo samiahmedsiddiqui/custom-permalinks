@@ -11,6 +11,9 @@
     <arg name="colors"/>
     <arg value="sp"/>
 
+    <!-- Disable No space after opening parenthesis -->
+    <exclude name="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"/>
+
     <!-- Include the whole PEAR standard -->
     <rule ref="PEAR">
         <exclude name="PEAR.NamingConventions.ValidFunctionName"/>
