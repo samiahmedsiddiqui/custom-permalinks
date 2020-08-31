@@ -7,10 +7,13 @@
     <exclude-pattern>node_modules/*</exclude-pattern>
     <exclude-pattern>languages/*</exclude-pattern>
 
-    <arg name="extensions" value="php"/>
-    <arg name="report" value="summary"/>
+    <arg name="basepath" value="."/>
     <arg name="colors"/>
     <arg value="sp"/>
+
+    <!-- Include the whole PEAR standard -->
+    <rule ref="PEAR">
+    </rule>
 
     <!-- Demand Long arrays -->
     <rule ref="Generic.Arrays.DisallowShortArraySyntax"/>
