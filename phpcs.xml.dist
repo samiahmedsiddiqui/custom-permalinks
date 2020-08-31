@@ -67,11 +67,8 @@
     <!-- PEAR uses warnings for inline control structures, so switch back to errors -->
     <rule ref="Generic.ControlStructures.InlineControlStructure">
         <properties>
-            <property name="requiredSpacesAfterOpen" value="1"/>
-            <property name="requiredSpacesBeforeClose" value="1"/>
+            <property name="error" value="true"/>
         </properties>
-        <exclude name="Generic.ControlStructures.InlineControlStructure.ContentAfterOpenBracket"/>
-        <exclude name="Generic.ControlStructures.InlineControlStructure.CloseBracketLine"/>
     </rule>
 
     <!-- We use custom indent rules for arrays -->
