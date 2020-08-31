@@ -13,6 +13,10 @@
 
     <!-- Include the whole PEAR standard -->
     <rule ref="PEAR">
+        <exclude name="PEAR.Commenting.ClassComment"/>
+        <exclude name="PEAR.Commenting.FileComment.MissingVersion"/>
+        <exclude name="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+        <exclude name="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
     </rule>
 
     <!-- Demand Long arrays -->
