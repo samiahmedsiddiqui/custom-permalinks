@@ -98,8 +98,6 @@
             <property name="requiredSpacesAfterOpen" value="1"/>
             <property name="requiredSpacesBeforeClose" value="1"/>
         </properties>
-        <exclude name="Squiz.WhiteSpace.ControlStructureSpacing.ContentAfterOpenBracket"/>
-        <exclude name="Squiz.WhiteSpace.ControlStructureSpacing.CloseBracketLine"/>
     </rule>
 
     <!-- Single space around function calls -->
