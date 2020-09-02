@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<ruleset name="Custom Permalinks">
+    <description>Custom Permalinks rules for PHP_CodeSniffer</description>
+
+    <file>.</file>
+
+    <!-- Exclude dependency related files and generated files from being scanned. -->
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+
+    <!-- Only check PHP files. -->
+    <arg name="extensions" value="php"/>
+
+    <!-- Strip the filepaths down to the relevant bit. -->
+    <arg name="basepath" value="."/>
+
+    <!-- Show results with colors. -->
+    <arg name="colors"/>
+
+    <!-- Show progress, show the error codes for each message (source). -->
+    <arg value="sp"/>
+
+    <!-- SNIFF FOR PHP CROSS-VERSION COMPATIBILITY. -->
+    <config name="testVersion" value="5.2-"/>
+    <rule ref="PHPCompatibilityWP">
+        <include-pattern>*\.php$</include-pattern>
+    </rule>
+
+    <!-- Rules -->
+    <rule ref="WordPress">
+        <exclude name="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed" />
+        <exclude name="WordPress.WhiteSpace.PrecisionAlignment.Found" />
+    </rule>
+
+</ruleset>

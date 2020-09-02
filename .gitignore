@@ -1,3 +1,6 @@
+# Composer
+/vendor/
+
 # Editors
 project.xml
 project.properties
