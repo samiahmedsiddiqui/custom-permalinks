@@ -34,8 +34,10 @@
   "scripts": {
     "lint": "find . -path ./app/vendor -prune -o -type f -name '*.php' -print0 | xargs -0 -n1 -P4 php -l -n | (! grep -v 'No syntax errors detected')",
     "phpcs": "phpcs",
+    "phpcs-source": "phpcs --report=source",
     "phpcs-summary": "phpcs --report=summary",
     "phpcs-errors": "phpcs -n",
+    "phpcs-errors-source": "@check-cs-source -n",
     "phpcs-errors-summary": "@check-cs-summary -n",
     "phpcbf": "phpcbf"
   },
