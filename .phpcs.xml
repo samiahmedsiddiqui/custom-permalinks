@@ -27,9 +27,6 @@
     </rule>
 
     <!-- Rules -->
-    <rule ref="WordPress">
-        <exclude name="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed" />
-        <exclude name="WordPress.WhiteSpace.PrecisionAlignment.Found" />
-    </rule>
+    <rule ref="WordPress"/>
 
 </ruleset>
