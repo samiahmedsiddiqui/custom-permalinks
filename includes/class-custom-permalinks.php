@@ -1,0 +1,177 @@
+<?php
+/**
+ * @package CustomPermalinks
+ */
+
+/**
+ * Main Custom Permalinks class.
+ */
+class Custom_Permalinks {
+
+
+	/**
+	 * Class constructor.
+	 */
+	public function __construct() {
+		$this->define_constants();
+		$this->includes();
+		$this->init_hooks();
+	}
+
+	/**
+	 * Define Custom Permalinks Constants.
+	 *
+	 * @since 1.8.0
+	 * @access private
+	 */
+	private function define_constants() {
+		$this->define( 'CUSTOM_PERMALINKS_FILE', __FILE__ );
+		$this->define( 'CUSTOM_PERMALINKS_PLUGIN_VERSION', '1.7.1' );
+		$this->define( 'CUSTOM_PERMALINKS_PATH', plugin_dir_path( __FILE__ ) );
+		$this->define( 'CUSTOM_PERMALINKS_BASENAME', plugin_basename( __FILE__ ) );
+	}
+
+	/**
+	 * Define constant if not already set.
+	 *
+	 * @since 1.8.0
+	 * @access private
+	 *
+	 * @param string      $name  Constant name.
+	 * @param string|bool $value Constant value.
+	 */
+	private function define( $name, $value ) {
+		if ( ! defined( $name ) ) {
+			define( $name, $value );
+		}
+	}
+
+	/**
+	 * Include required files.
+	 *
+	 * @since 1.2.18
+	 * @access private
+	 */
+	private function includes() {
+		include_once CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php';
+		include_once CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-form.php';
+		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-admin.php';
+
+		$cp_frontend = new Custom_Permalinks_Frontend();
+		$cp_frontend->init();
+
+		$cp_form = new Custom_Permalinks_Form();
+		$cp_form->init();
+
+		new Custom_Permalinks_Admin();
+	}
+
+	/**
+	 * Hook into actions and filters.
+	 *
+	 * @since 1.8.0
+	 * @access private
+	 */
+	private function init_hooks() {
+		register_activation_hook(
+			CUSTOM_PERMALINKS_FILE,
+			array( 'Custom_Permalinks', 'add_roles' )
+		);
+
+		register_activation_hook(
+			CUSTOM_PERMALINKS_FILE,
+			array( 'Custom_Permalinks', 'activate_details' )
+		);
+
+		register_deactivation_hook(
+			CUSTOM_PERMALINKS_FILE,
+			array( 'Custom_Permalinks', 'deactivate_details' )
+		);
+
+		add_action( 'plugins_loaded', array( $this, 'check_loaded_plugins' ) );
+	}
+
+	/**
+	 * Add role for the view post and category permalinks and by default assign
+	 * it to the administrator if administrator role exist.
+	 *
+	 * @since 1.2.22
+	 * @access public
+	 */
+	public static function add_roles() {
+		$admin_role      = get_role( 'administrator' );
+		$cp_role         = get_role( 'custom_permalinks_manager' );
+		$current_version = get_option( 'custom_permalinks_plugin_version', -1 );
+
+		if ( ! empty( $admin_role ) ) {
+			$admin_role->add_cap( 'cp_view_post_permalinks' );
+			$admin_role->add_cap( 'cp_view_category_permalinks' );
+		}
+
+		if ( empty( $cp_role ) ) {
+			add_role(
+				'custom_permalinks_manager',
+				__( 'Custom Permalinks Manager' ),
+				array(
+					'cp_view_post_permalinks'     => true,
+					'cp_view_category_permalinks' => true,
+				)
+			);
+		}
+	}
+
+	/**
+	 * Sent details when plugin gets activated / updated ans set installed
+	 * version in options table.
+	 *
+	 * @since 1.6.1
+	 * @access public
+	 */
+	public static function activate_details() {
+		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-updates.php';
+		new Custom_Permalinks_Updates( 'activate' );
+
+		update_option(
+			'custom_permalinks_plugin_version',
+			CUSTOM_PERMALINKS_PLUGIN_VERSION
+		);
+	}
+
+	/**
+	 * Sent details when plugin gets deactivated.
+	 *
+	 * @since 1.6.1
+	 * @access public
+	 */
+	public function deactivate_details() {
+		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-updates.php';
+		new Custom_Permalinks_Updates( 'deactivate' );
+	}
+
+	/**
+	 * Check if role not exist then call the function to add it. Update site
+	 * details if plugin gets updated. Also, loads the plugin language files to
+	 * support different languages.
+	 *
+	 * @since 1.2.18
+	 * @access public
+	 */
+	public function check_loaded_plugins() {
+		if ( is_admin() ) {
+			$current_version = get_option( 'custom_permalinks_plugin_version', -1 );
+
+			if ( -1 === $current_version
+				|| $current_version < CUSTOM_PERMALINKS_PLUGIN_VERSION
+			) {
+				self::activate_details();
+				self::add_roles();
+			}
+		}
+
+		load_plugin_textdomain(
+			'custom-permalinks',
+			false,
+			basename( dirname( CUSTOM_PERMALINKS_FILE ) ) . '/languages/'
+		);
+	}
+}
