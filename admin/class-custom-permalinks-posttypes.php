@@ -3,14 +3,13 @@
  * @package CustomPermalinks
  */
 
-class Custom_Permalinks_PostTypes
-{
+class Custom_Permalinks_PostTypes {
+
 
 	/**
 	 * Call Post Permalinks Function.
 	 */
-	function __construct()
-	{
+	function __construct() {
 		$this->post_permalinks();
 	}
 
@@ -26,8 +25,7 @@ class Custom_Permalinks_PostTypes
 	 *
 	 * @return string table row according to the provided params.
 	 */
-	private function post_nav( $order_by_class, $order_by, $search_permalink )
-	{
+	private function post_nav( $order_by_class, $order_by, $search_permalink ) {
 		$admin_url = get_admin_url();
 		$page_url  = $admin_url . 'admin.php?page=cp-post-permalinks';
 		$title_url = $page_url . '&amp;orderby=title&amp;order=' . $order_by;
@@ -35,7 +33,8 @@ class Custom_Permalinks_PostTypes
 
 		if ( $search_permalink ) {
 			$title_url = $title_url . $search_permalink;
-			$title_url = wp_nonce_url( $title_url,
+			$title_url = wp_nonce_url(
+				$title_url,
 				'custom-permalinks-post_' . $user_id,
 				'_custom_permalinks_post_nonce'
 			);
@@ -74,8 +73,7 @@ class Custom_Permalinks_PostTypes
 	 * @since 1.2.0
 	 * @access private
 	 */
-	private function post_permalinks()
-	{
+	private function post_permalinks() {
 		global $wpdb;
 
 		$error            = '';
@@ -85,7 +83,10 @@ class Custom_Permalinks_PostTypes
 		$post_html        = '';
 		$post_action      = filter_input( INPUT_POST, 'action' );
 		$post_action2     = filter_input( INPUT_POST, 'action2' );
-		$post_permalinks  = filter_input( INPUT_POST, 'permalink', FILTER_DEFAULT,
+		$post_permalinks  = filter_input(
+			INPUT_POST,
+			'permalink',
+			FILTER_DEFAULT,
 			FILTER_REQUIRE_ARRAY
 		);
 		$request_uri      = '';
@@ -99,36 +100,39 @@ class Custom_Permalinks_PostTypes
 
 		// Handle Bulk Operations
 		if ( ( 'delete' === $post_action || 'delete' === $post_action2 )
-			&& check_admin_referer( 'custom-permalinks-post_' . $user_id,
+			&& check_admin_referer(
+				'custom-permalinks-post_' . $user_id,
 				'_custom_permalinks_post_nonce'
 			)
 		) {
-		  if ( ! empty( $post_permalinks ) ) {
-			  $post_ids = $post_permalinks;
-			  if ( is_array( $post_ids ) && 0 < count( $post_ids ) ) {
-				  foreach ( $post_ids as $post_id ) {
-					  if ( is_numeric( $post_id ) ) {
-						  delete_metadata( 'post', $post_id, 'custom_permalink' );
-					  }
-				  }
-			  } else {
-				  $error = '<div id="message" class="error">' .
+			if ( ! empty( $post_permalinks ) ) {
+				$post_ids = $post_permalinks;
+				if ( is_array( $post_ids ) && 0 < count( $post_ids ) ) {
+					foreach ( $post_ids as $post_id ) {
+						if ( is_numeric( $post_id ) ) {
+							delete_metadata( 'post', $post_id, 'custom_permalink' );
+						}
+					}
+				} else {
+					$error = '<div id="message" class="error">' .
 							  '<p>' .
-								  __( 'Please select permalinks which you like to be deleted.',
-									  'custom-permalinks'
-								  ) .
+								__(
+									'Please select permalinks which you like to be deleted.',
+									'custom-permalinks'
+								) .
 							  '</p>' .
 							'</div>';
-			  }
-		  } else {
-			  $error = '<div id="message" class="error">' .
+				}
+			} else {
+				$error = '<div id="message" class="error">' .
 						  '<p>' .
-							  __( 'There is some error to proceed your request. Please retry with your request or contact to the plugin author.',
-								  'custom-permalinks'
-							  ) .
+							__(
+								'There is some error to proceed your request. Please retry with your request or contact to the plugin author.',
+								'custom-permalinks'
+							) .
 						  '</p>' .
 						'</div>';
-		  }
+			}
 		}
 		$post_html .= '<div class="wrap">' .
 						'<h1 class="wp-heading-inline">' .
@@ -147,7 +151,8 @@ class Custom_Permalinks_PostTypes
 		$sorting_by     = 'ORDER By p.ID DESC';
 
 		if ( $search_input
-			&& check_admin_referer( 'custom-permalinks-post_' . $user_id,
+			&& check_admin_referer(
+				'custom-permalinks-post_' . $user_id,
 				'_custom_permalinks_post_nonce'
 			)
 		) {
@@ -177,10 +182,13 @@ class Custom_Permalinks_PostTypes
 			}
 		}
 
-		$count_query = "SELECT COUNT(p.ID) AS total_permalinks FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != '' " . $filter_permalink . "";
+		$count_query = "SELECT COUNT(p.ID) AS total_permalinks FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != '' " . $filter_permalink . '';
 		$count_posts = $wpdb->get_row( $count_query );
-		$post_nonce  = wp_nonce_field( 'custom-permalinks-post_' . $user_id,
-			'_custom_permalinks_post_nonce', true, false
+		$post_nonce  = wp_nonce_field(
+			'custom-permalinks-post_' . $user_id,
+			'_custom_permalinks_post_nonce',
+			true,
+			false
 		);
 
 		$post_html .= '<form action="' . $site_url . $request_uri . '" method="get">' .
@@ -192,7 +200,7 @@ class Custom_Permalinks_PostTypes
 							__( 'Search Custom Permalink:', 'custom-permalinks' ) .
 						'</label>' .
 						'<input type="search" id="custom-permalink-search-input" name="s" value="' . $search_value . '">' .
-						'<input type="submit" id="search-submit" class="button" value="' . __( "Search Permalink", "custom-permalinks" ) . '"></p>' .
+						'<input type="submit" id="search-submit" class="button" value="' . __( 'Search Permalink', 'custom-permalinks' ) . '"></p>' .
 					  '</form>' .
 					  '<form action="' . $site_url . $request_uri . '" method="post">' .
 						'<div class="tablenav top">' .
@@ -209,7 +217,7 @@ class Custom_Permalinks_PostTypes
 								  __( 'Delete Permalinks', 'custom-permalinks' ) .
 							  '</option>' .
 							'</select>' .
-							'<input type="submit" id="doaction" class="button action" value="' . __( "Apply", "custom-permalinks" ) . '">' .
+							'<input type="submit" id="doaction" class="button action" value="' . __( 'Apply', 'custom-permalinks' ) . '">' .
 						  '</div>';
 
 		$posts           = 0;
@@ -224,16 +232,19 @@ class Custom_Permalinks_PostTypes
 							__( 'Custom Permalink navigation', 'custom-permalinks' ) .
 						  '</h2>';
 
-			$query = "SELECT p.ID, p.post_title, p.post_type, pm.meta_value FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != '' " . $filter_permalink . " " . $sorting_by . " " . $page_limit . "";
+			$query = "SELECT p.ID, p.post_title, p.post_type, pm.meta_value FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != '' " . $filter_permalink . ' ' . $sorting_by . ' ' . $page_limit . '';
 			$posts = $wpdb->get_results( $query );
 
 			$total_pages = ceil( $count_posts->total_permalinks / 20 );
 			if ( is_numeric( $get_paged ) && 0 < $get_paged ) {
 				$pagination_html = $cp_pager->get_pagination(
-					$count_posts->total_permalinks, $get_paged, $total_pages
+					$count_posts->total_permalinks,
+					$get_paged,
+					$total_pages
 				);
 				if ( $get_paged > $total_pages ) {
-					$redirect_uri = explode( '&paged=' . $get_paged . '',
+					$redirect_uri = explode(
+						'&paged=' . $get_paged . '',
 						$request_uri
 					);
 
@@ -242,13 +253,17 @@ class Custom_Permalinks_PostTypes
 				}
 			} elseif ( ! $get_paged ) {
 				$pagination_html = $cp_pager->get_pagination(
-					$count_posts->total_permalinks, 1, $total_pages
+					$count_posts->total_permalinks,
+					1,
+					$total_pages
 				);
 			}
 
 			$post_html .= $pagination_html;
 		}
-		$table_navigation = $this->post_nav( $order_by_class, $order_by,
+		$table_navigation = $this->post_nav(
+			$order_by_class,
+			$order_by,
 			$search_permalink
 		);
 
@@ -259,7 +274,9 @@ class Custom_Permalinks_PostTypes
 		if ( 0 != $posts && ! empty( $posts ) ) {
 			$cp_frontend = new Custom_Permalinks_Frontend();
 			if ( class_exists( 'SitePress' ) ) {
-				$wpml_lang_format = apply_filters( 'wpml_setting', 0,
+				$wpml_lang_format = apply_filters(
+					'wpml_setting',
+					0,
 					'language_negotiation_type'
 				);
 
@@ -275,14 +292,17 @@ class Custom_Permalinks_PostTypes
 					$post_type = $post->post_type;
 				}
 
-				$language_code = apply_filters( 'wpml_element_language_code', null,
+				$language_code = apply_filters(
+					'wpml_element_language_code',
+					null,
 					array(
 						'element_id'   => $post->ID,
-						'element_type' => $post_type
+						'element_type' => $post_type,
 					)
 				);
 
-				$permalink = $cp_frontend->wpml_permalink_filter( $custom_permalink,
+				$permalink = $cp_frontend->wpml_permalink_filter(
+					$custom_permalink,
 					$language_code
 				);
 				$permalink = $cp_frontend->remove_double_slash( $permalink );
@@ -301,7 +321,7 @@ class Custom_Permalinks_PostTypes
 								'</td>' .
 								'<td>' . ucwords( $post->post_type ) . '</td>' .
 								'<td>' .
-								  '<a href="' . $permalink . '" target="_blank" title="' . __( "Visit " . $post->post_title, "custom-permalinks" ) . '">' .
+								  '<a href="' . $permalink . '" target="_blank" title="' . __( 'Visit ' . $post->post_title, 'custom-permalinks' ) . '">' .
 									$perm_text .
 								  '</a>' .
 								'</td>' .
@@ -331,7 +351,7 @@ class Custom_Permalinks_PostTypes
 								__( 'Delete Permalinks', 'custom-permalinks' ) .
 							'</option>' .
 						  '</select>' .
-						  '<input type="submit" id="doaction2" class="button action" value="' . __( "Apply", "custom-permalinks" ) . '">' .
+						  '<input type="submit" id="doaction2" class="button action" value="' . __( 'Apply', 'custom-permalinks' ) . '">' .
 						'</div>' .
 						$pagination_html .
 					  '</div>' .

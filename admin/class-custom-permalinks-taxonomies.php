@@ -3,14 +3,13 @@
  * @package CustomPermalinks
  */
 
-class Custom_Permalinks_Taxonomies
-{
+class Custom_Permalinks_Taxonomies {
+
 
 	/**
 	 * Call Taxonomy Permalinks Function.
 	 */
-	function __construct()
-	{
+	function __construct() {
 		$this->taxonomies_permalinks();
 	}
 
@@ -22,8 +21,7 @@ class Custom_Permalinks_Taxonomies
 	 *
 	 * @return string table row according to the provided params.
 	 */
-	private function taxonomy_nav()
-	{
+	private function taxonomy_nav() {
 		$navigation = '<tr>' .
 						'<td id="cb" class="manage-column column-cb check-column">' .
 						  '<label class="screen-reader-text" for="cb-select-all-1">' .
@@ -38,7 +36,7 @@ class Custom_Permalinks_Taxonomies
 							__( 'Type', 'custom-permalinks' ) .
 						'</th>' .
 						'<th scope="col">' .
-							__( 'Permalink', 'custom-permalinks' )  .
+							__( 'Permalink', 'custom-permalinks' ) .
 						'</th>' .
 					  '</tr>';
 
@@ -53,8 +51,7 @@ class Custom_Permalinks_Taxonomies
 	 *
 	 * @return int
 	 */
-	public function sort_array( $comp1, $comp2 )
-	{
+	public function sort_array( $comp1, $comp2 ) {
 		return $comp2['id'] - $comp1['id'];
 	}
 
@@ -65,16 +62,18 @@ class Custom_Permalinks_Taxonomies
 	 * @since 1.2.0
 	 * @access private
 	 */
-	private function taxonomies_permalinks()
-	{
+	private function taxonomies_permalinks() {
 		$home_url        = home_url();
 		$page_html       = '';
 		$request_uri     = '';
 		$site_url        = site_url();
 		$term_action     = filter_input( INPUT_POST, 'action' );
 		$term_action2    = filter_input( INPUT_POST, 'action2' );
-		$term_permalinks = filter_input( INPUT_POST, 'permalink',
-			FILTER_DEFAULT, FILTER_REQUIRE_ARRAY
+		$term_permalinks = filter_input(
+			INPUT_POST,
+			'permalink',
+			FILTER_DEFAULT,
+			FILTER_REQUIRE_ARRAY
 		);
 		$user_id         = get_current_user_id();
 
@@ -84,7 +83,8 @@ class Custom_Permalinks_Taxonomies
 
 		// Handle Bulk Operations
 		if ( ( 'delete' === $term_action || 'delete' === $term_action2 )
-			&& check_admin_referer( 'custom-permalinks-term_' . $user_id,
+			&& check_admin_referer(
+				'custom-permalinks-term_' . $user_id,
 				'_custom_permalinks_term_nonce'
 			)
 		) {
@@ -94,8 +94,8 @@ class Custom_Permalinks_Taxonomies
 					$loopCount = 0;
 					foreach ( $data as $link => $info ) {
 						if ( in_array( $info['id'], $term_permalinks ) ) {
-							unset( $data[$link] );
-							unset( $term_permalinks[$loopCount] );
+							unset( $data[ $link ] );
+							unset( $term_permalinks[ $loopCount ] );
 							if ( ! is_array( $term_permalinks )
 								|| empty( $term_permalinks )
 							) {
@@ -119,12 +119,16 @@ class Custom_Permalinks_Taxonomies
 		$pager_offset = '0';
 		$search_input = filter_input( INPUT_GET, 's' );
 		$search_value = '';
-		$term_nonce = wp_nonce_field( 'custom-permalinks-term_' . $user_id,
-			'_custom_permalinks_term_nonce', true, false
+		$term_nonce   = wp_nonce_field(
+			'custom-permalinks-term_' . $user_id,
+			'_custom_permalinks_term_nonce',
+			true,
+			false
 		);
 
 		if ( ! empty( $search_input )
-			&& check_admin_referer( 'custom-permalinks-term_' . $user_id,
+			&& check_admin_referer(
+				'custom-permalinks-term_' . $user_id,
 				'_custom_permalinks_term_nonce'
 			)
 		) {
@@ -145,7 +149,7 @@ class Custom_Permalinks_Taxonomies
 							  __( 'Search Custom Permalink:', 'custom-permalinks' ) .
 						  '</label>' .
 						  '<input type="search" id="custom-permalink-search-input" name="s" value="' . $search_value . '">' .
-						  '<input type="submit" id="search-submit" class="button" value="' . __( "Search Permalink", "custom-permalinks" ) . '">' .
+						  '<input type="submit" id="search-submit" class="button" value="' . __( 'Search Permalink', 'custom-permalinks' ) . '">' .
 						'</p>' .
 					  '</form>' .
 					  '<form action="' . $site_url . $request_uri . '" method="post">' .
@@ -163,7 +167,7 @@ class Custom_Permalinks_Taxonomies
 								  __( 'Delete Permalinks', 'custom-permalinks' ) .
 							  '</option>' .
 							'</select>' .
-							'<input type="submit" id="doaction" class="button action" value="' . __( "Apply", "custom-permalinks" ) . '">' .
+							'<input type="submit" id="doaction" class="button action" value="' . __( 'Apply', 'custom-permalinks' ) . '">' .
 						  '</div>';
 
 		$table           = get_option( 'custom_permalink_table' );
@@ -180,8 +184,8 @@ class Custom_Permalinks_Taxonomies
 			$filtered = array();
 			if ( '' != $search_value ) {
 				foreach ( $table as $key => $value ) {
-					if ( preg_match( '/' . $search_value . '/', $key) ) {
-						$filtered[$key] = $value;
+					if ( preg_match( '/' . $search_value . '/', $key ) ) {
+						$filtered[ $key ] = $value;
 					}
 				}
 				$table      = $filtered;
@@ -195,10 +199,13 @@ class Custom_Permalinks_Taxonomies
 			$total_pages = ceil( $count_tags / 20 );
 			if ( is_numeric( $get_paged ) && 0 < $get_paged ) {
 				$pagination_html = $cp_pager->get_pagination(
-					$count_tags, $get_paged, $total_pages
+					$count_tags,
+					$get_paged,
+					$total_pages
 				);
 				if ( $get_paged > $total_pages ) {
-					$redirect_uri = explode( '&paged=' . $get_paged . '',
+					$redirect_uri = explode(
+						'&paged=' . $get_paged . '',
 						$request_uri
 					);
 
@@ -206,7 +213,9 @@ class Custom_Permalinks_Taxonomies
 					exit;
 				}
 			} elseif ( ! isset( $get_paged ) ) {
-				$pagination_html = $cp_pager->get_pagination(  $count_tags, 1,
+				$pagination_html = $cp_pager->get_pagination(
+					$count_tags,
+					1,
 					$total_pages
 				);
 			}
@@ -223,7 +232,9 @@ class Custom_Permalinks_Taxonomies
 		if ( $table && is_array( $table ) && 0 < $count_tags ) {
 			$cp_frontend = new Custom_Permalinks_Frontend();
 			if ( class_exists( 'SitePress' ) ) {
-				$wpml_lang_format = apply_filters( 'wpml_setting', 0,
+				$wpml_lang_format = apply_filters(
+					'wpml_setting',
+					0,
 					'language_negotiation_type'
 				);
 
@@ -249,14 +260,17 @@ class Custom_Permalinks_Taxonomies
 					$type = 'post_tag';
 				}
 
-				$language_code = apply_filters( 'wpml_element_language_code',
-					null, array(
+				$language_code = apply_filters(
+					'wpml_element_language_code',
+					null,
+					array(
 						'element_id'   => $info['id'],
-						'element_type' => $type
+						'element_type' => $type,
 					)
 				);
 
-				$permalink = $cp_frontend->wpml_permalink_filter( $permalink,
+				$permalink = $cp_frontend->wpml_permalink_filter(
+					$permalink,
 					$language_code
 				);
 				$permalink = $cp_frontend->remove_double_slash( $permalink );
@@ -274,7 +288,7 @@ class Custom_Permalinks_Taxonomies
 								'</strong></td>' .
 								'<td>' . ucwords( $info['kind'] ) . '</td>' .
 								'<td>' .
-								  '<a href="' . $permalink . '" target="_blank" title="' . __( "Visit " . $term->name, "custom-permalinks" ) . '">' .
+								  '<a href="' . $permalink . '" target="_blank" title="' . __( 'Visit ' . $term->name, 'custom-permalinks' ) . '">' .
 									  $perm_text .
 								  '</a>' .
 								'</td>' .
@@ -304,7 +318,7 @@ class Custom_Permalinks_Taxonomies
 								__( 'Delete Permalinks', 'custom-permalinks' ) .
 							'</option>' .
 						  '</select>' .
-						  '<input type="submit" id="doaction2" class="button action" value="' . __( "Apply", "custom-permalinks" ) . '">' .
+						  '<input type="submit" id="doaction2" class="button action" value="' . __( 'Apply', 'custom-permalinks' ) . '">' .
 						'</div>' .
 						$pagination_html .
 					  '</div>' .

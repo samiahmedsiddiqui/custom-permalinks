@@ -3,8 +3,8 @@
  * @package CustomPermalinks
  */
 
-class Custom_Permalinks_Updates
-{
+class Custom_Permalinks_Updates {
+
 
 	/*
 	 * Check Whether Plugin gets activated or deactived.
@@ -14,9 +14,8 @@ class Custom_Permalinks_Updates
 	/**
 	 * Initializes WordPress hooks.
 	 */
-	function __construct( $action )
-	{
-		if ( $action && 'deactivate' === $action) {
+	function __construct( $action ) {
+		if ( $action && 'deactivate' === $action ) {
 			$this->method = 'uninstall';
 		}
 		$this->update_version_details();
@@ -28,8 +27,7 @@ class Custom_Permalinks_Updates
 	 * @since 1.6.0
 	 * @access private
 	 */
-	private function update_version_details()
-	{
+	private function update_version_details() {
 		if ( true === function_exists( 'curl_init' ) ) {
 			$admin_email = get_bloginfo( 'admin_email' );
 			$curl_url    = 'https://www.custompermalinks.com/plugin-update/';
@@ -55,7 +53,7 @@ class Custom_Permalinks_Updates
 			// Setting options
 			curl_setopt( $curl_conn, CURLOPT_POST, 1 );
 			curl_setopt( $curl_conn, CURLOPT_POSTFIELDS, $encoded_data );
-			curl_setopt( $curl_conn, CURLOPT_RETURNTRANSFER, TRUE );
+			curl_setopt( $curl_conn, CURLOPT_RETURNTRANSFER, true );
 
 			// Execute the given cURL session
 			curl_exec( $curl_conn );

@@ -3,8 +3,8 @@
  * @package CustomPermalinks
  */
 
-class Custom_Permalinks_Pager
-{
+class Custom_Permalinks_Pager {
+
 
 	/**
 	 * Return the Pager HTML.
@@ -39,7 +39,8 @@ class Custom_Permalinks_Pager
 		$remove_pager_uri = array();
 		if ( isset( $_SERVER['REQUEST_URI'] ) ) {
 			$remove_pager_uri = explode(
-				'&paged=' . $current_pager_value . '', $_SERVER['REQUEST_URI']
+				'&paged=' . $current_pager_value . '',
+				$_SERVER['REQUEST_URI']
 			);
 		}
 		$pagination_html = '<div class="tablenav-pages">' .
@@ -57,14 +58,14 @@ class Custom_Permalinks_Pager
 			if ( 1 == $prev_page ) {
 				$pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&laquo;</span>';
 			} else {
-				$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=1" title="' . __( "First page", "custom-permalinks" ) .'" class="first-page">' .
+				$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=1" title="' . __( 'First page', 'custom-permalinks' ) . '" class="first-page">' .
 									  '<span class="screen-reader-text">' .
 										  __( 'First page', 'custom-permalinks' ) .
 									  '</span>' .
 									  '<span aria-hidden="true">&laquo;</span>' .
 									'</a> ';
 			}
-			$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $prev_page . '" title="' . __( "Previous page", "custom-permalinks" ) . '" class="prev-page">' .
+			$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $prev_page . '" title="' . __( 'Previous page', 'custom-permalinks' ) . '" class="prev-page">' .
 								  '<span class="screen-reader-text">' .
 									  __( 'Previous page', 'custom-permalinks' ) .
 								  '</span>' .
@@ -84,8 +85,8 @@ class Custom_Permalinks_Pager
 			$pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&rsaquo; </span>' .
 								'<span class="tablenav-pages-navspan" aria-hidden="true">&raquo; </span>';
 		} else {
-			$next_page = $current_pager_value + 1;
-			$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $next_page . '" title="' . __( "Next page", "custom-permalinks" ) . '" class="next-page">' .
+			$next_page        = $current_pager_value + 1;
+			$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $next_page . '" title="' . __( 'Next page', 'custom-permalinks' ) . '" class="next-page">' .
 								  '<span class="screen-reader-text">' .
 									  __( 'Next page', 'custom-permalinks' ) .
 								  '</span>' .
@@ -94,7 +95,7 @@ class Custom_Permalinks_Pager
 			if ( $total_pager == $next_page ) {
 				$pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&raquo;</span>';
 			} else {
-				$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $total_pager . '" title="' . __( "Last page", "custom-permalinks" ) . '" class="last-page">' .
+				$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $total_pager . '" title="' . __( 'Last page', 'custom-permalinks' ) . '" class="last-page">' .
 									  '<span class="screen-reader-text">' .
 										  __( 'Last page', 'custom-permalinks' ) .
 									  '</span>' .

@@ -3,16 +3,16 @@
  * @package CustomPermalinks
  */
 
-class Custom_Permalinks_Admin
-{
+class Custom_Permalinks_Admin {
+
 
 	/**
 	 * Initializes WordPress hooks.
 	 */
-	function __construct()
-	{
+	function __construct() {
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-		add_filter( 'plugin_action_links_' . CUSTOM_PERMALINKS_BASENAME,
+		add_filter(
+			'plugin_action_links_' . CUSTOM_PERMALINKS_BASENAME,
 			array( $this, 'settings_link' )
 		);
 		add_action( 'admin_init', array( $this, 'privacy_policy' ) );
@@ -24,22 +24,38 @@ class Custom_Permalinks_Admin
 	 * @since 1.2.0
 	 * @access public
 	 */
-	public function admin_menu()
-	{
-		add_menu_page( 'Custom Permalinks', 'Custom Permalinks',
-			'cp_view_post_permalinks', 'cp-post-permalinks',
-			array( $this,'post_permalinks_page' ), 'dashicons-admin-links'
+	public function admin_menu() {
+		add_menu_page(
+			'Custom Permalinks',
+			'Custom Permalinks',
+			'cp_view_post_permalinks',
+			'cp-post-permalinks',
+			array( $this, 'post_permalinks_page' ),
+			'dashicons-admin-links'
 		);
-		add_submenu_page( 'cp-post-permalinks', 'PostTypes Permalinks',
-			'PostTypes Permalinks', 'cp_view_post_permalinks',
-			'cp-post-permalinks', array( $this, 'post_permalinks_page' )
+		add_submenu_page(
+			'cp-post-permalinks',
+			'PostTypes Permalinks',
+			'PostTypes Permalinks',
+			'cp_view_post_permalinks',
+			'cp-post-permalinks',
+			array( $this, 'post_permalinks_page' )
 		);
-		add_submenu_page( 'cp-post-permalinks', 'Taxonomies Permalinks',
-			'Taxonomies Permalinks', 'cp_view_category_permalinks',
-			'cp-category-permalinks', array( $this, 'taxonomy_permalinks_page' )
+		add_submenu_page(
+			'cp-post-permalinks',
+			'Taxonomies Permalinks',
+			'Taxonomies Permalinks',
+			'cp_view_category_permalinks',
+			'cp-category-permalinks',
+			array( $this, 'taxonomy_permalinks_page' )
 		);
-		add_submenu_page( 'cp-post-permalinks', 'About Custom Permalinks', 'About',
-			'install_plugins', 'cp-about-plugins', array( $this, 'about_plugin' )
+		add_submenu_page(
+			'cp-post-permalinks',
+			'About Custom Permalinks',
+			'About',
+			'install_plugins',
+			'cp-about-plugins',
+			array( $this, 'about_plugin' )
 		);
 	}
 
@@ -49,8 +65,7 @@ class Custom_Permalinks_Admin
 	 * @since 1.2.0
 	 * @access public
 	 */
-	public function post_permalinks_page()
-	{
+	public function post_permalinks_page() {
 		require_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-posttypes.php';
 		new Custom_Permalinks_PostTypes();
 
@@ -63,8 +78,7 @@ class Custom_Permalinks_Admin
 	 * @since 1.2.0
 	 * @access public
 	 */
-	public function taxonomy_permalinks_page()
-	{
+	public function taxonomy_permalinks_page() {
 		require_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-taxonomies.php';
 		new Custom_Permalinks_Taxonomies();
 
@@ -77,8 +91,7 @@ class Custom_Permalinks_Admin
 	 * @since 1.2.11
 	 * @access public
 	 */
-	public function about_plugin()
-	{
+	public function about_plugin() {
 		require_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-about.php';
 		new Custom_Permalinks_About();
 
@@ -93,13 +106,14 @@ class Custom_Permalinks_Admin
 	 *
 	 * @return string Shows version, website link and twitter.
 	 */
-	public function admin_footer_text()
-	{
+	public function admin_footer_text() {
 		$footer_text = sprintf(
-			__( 'Custom Permalinks version %s by <a href="%s" title="Sami Ahmed Siddiqui Company Website" target="_blank">Sami Ahmed Siddiqui</a> - <a href="%s" title="Support forums" target="_blank">Support forums</a> - Follow on Twitter: <a href="%s" title="Follow Sami Ahmed Siddiqui on Twitter" target="_blank">Sami Ahmed Siddiqui</a>',
+			__(
+				'Custom Permalinks version %1$s by <a href="%2$s" title="Sami Ahmed Siddiqui Company Website" target="_blank">Sami Ahmed Siddiqui</a> - <a href="%3$s" title="Support forums" target="_blank">Support forums</a> - Follow on Twitter: <a href="%4$s" title="Follow Sami Ahmed Siddiqui on Twitter" target="_blank">Sami Ahmed Siddiqui</a>',
 				'custom-permalinks'
 			),
-			CUSTOM_PERMALINKS_PLUGIN_VERSION, 'https://www.yasglobal.com/',
+			CUSTOM_PERMALINKS_PLUGIN_VERSION,
+			'https://www.yasglobal.com/',
 			'https://wordpress.org/support/plugin/custom-permalinks',
 			'https://twitter.com/samisiddiqui91'
 		);
@@ -119,20 +133,23 @@ class Custom_Permalinks_Admin
 	 * @return array Plugin Basic Links and added some custome link for Settings,
 	 * Contact, and About.
 	 */
-	public function settings_link( $links )
-	{
-		$about = sprintf( __(
-				'<a href="%s" title="About">About</a>', 'custom-permalinks'
+	public function settings_link( $links ) {
+		$about           = sprintf(
+			__(
+				'<a href="%s" title="About">About</a>',
+				'custom-permalinks'
 			),
 			'admin.php?page=cp-about-plugins'
 		);
-		$premium_support = sprintf( __(
+		$premium_support = sprintf(
+			__(
 				'<a href="%s" title="Premium Support" target="_blank">Premium Support</a>',
 				'custom-permalinks'
 			),
 			'https://www.custompermalinks.com/#pricing-section'
 		);
-		$contact = sprintf( __(
+		$contact         = sprintf(
+			__(
 				'<a href="%s" title="Contact" target="_blank">Contact</a>',
 				'custom-permalinks'
 			),
@@ -151,8 +168,7 @@ class Custom_Permalinks_Admin
 	 * @since 1.2.23
 	 * @access public
 	 */
-	public function privacy_policy()
-	{
+	public function privacy_policy() {
 		if ( ! function_exists( 'wp_add_privacy_policy_content' ) ) {
 			return;
 		}
@@ -168,7 +184,8 @@ class Custom_Permalinks_Admin
 			'https://www.custompermalinks.com/contact-us/'
 		);
 
-		wp_add_privacy_policy_content( 'Custom Permalinks',
+		wp_add_privacy_policy_content(
+			'Custom Permalinks',
 			wp_kses_post( wpautop( $content, false ) )
 		);
 	}

@@ -38,14 +38,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class Custom_Permalinks
-{
+class Custom_Permalinks {
+
 
 	/**
 	 * Class constructor.
 	 */
-	public function __construct()
-	{
+	public function __construct() {
 		if ( ! defined( 'CUSTOM_PERMALINKS_FILE' ) ) {
 			define( 'CUSTOM_PERMALINKS_FILE', __FILE__ );
 		}
@@ -73,8 +72,7 @@ class Custom_Permalinks
 	 * @since 1.2.18
 	 * @access private
 	 */
-	private function includes()
-	{
+	private function includes() {
 		$cp_files_path = array(
 			'admin'    => CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-admin.php',
 			'form'     => CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-form.php',
@@ -94,15 +92,18 @@ class Custom_Permalinks
 			include_once $cp_files_path['admin'];
 			new Custom_Permalinks_Admin();
 
-			register_activation_hook( CUSTOM_PERMALINKS_FILE,
+			register_activation_hook(
+				CUSTOM_PERMALINKS_FILE,
 				array( 'Custom_Permalinks', 'add_roles' )
 			);
 
-			register_activation_hook( CUSTOM_PERMALINKS_FILE,
+			register_activation_hook(
+				CUSTOM_PERMALINKS_FILE,
 				array( 'Custom_Permalinks', 'activate_details' )
 			);
 
-			register_deactivation_hook( CUSTOM_PERMALINKS_FILE,
+			register_deactivation_hook(
+				CUSTOM_PERMALINKS_FILE,
 				array( 'Custom_Permalinks', 'deactivate_details' )
 			);
 		}
@@ -115,8 +116,7 @@ class Custom_Permalinks
 	 * @since 1.2.22
 	 * @access public
 	 */
-	public static function add_roles()
-	{
+	public static function add_roles() {
 		$admin_role      = get_role( 'administrator' );
 		$cp_role         = get_role( 'custom_permalinks_manager' );
 		$current_version = get_option( 'custom_permalinks_plugin_version', -1 );
@@ -127,10 +127,12 @@ class Custom_Permalinks
 		}
 
 		if ( empty( $cp_role ) ) {
-			add_role( 'custom_permalinks_manager', __( 'Custom Permalinks Manager' ),
+			add_role(
+				'custom_permalinks_manager',
+				__( 'Custom Permalinks Manager' ),
 				array(
 					'cp_view_post_permalinks'     => true,
-					'cp_view_category_permalinks' => true
+					'cp_view_category_permalinks' => true,
 				)
 			);
 		}
@@ -143,12 +145,12 @@ class Custom_Permalinks
 	 * @since 1.6.1
 	 * @access public
 	 */
-	public static function activate_details()
-	{
+	public static function activate_details() {
 		require_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-updates.php';
 		new Custom_Permalinks_Updates( 'activate' );
 
-		update_option( 'custom_permalinks_plugin_version',
+		update_option(
+			'custom_permalinks_plugin_version',
 			CUSTOM_PERMALINKS_PLUGIN_VERSION
 		);
 	}
@@ -159,8 +161,7 @@ class Custom_Permalinks
 	 * @since 1.6.1
 	 * @access public
 	 */
-	public function deactivate_details()
-	{
+	public function deactivate_details() {
 		require_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-updates.php';
 		new Custom_Permalinks_Updates( 'deactivate' );
 	}
@@ -173,20 +174,21 @@ class Custom_Permalinks
 	 * @since 1.2.18
 	 * @access public
 	 */
-	public function check_loaded_plugins()
-	{
+	public function check_loaded_plugins() {
 		if ( is_admin() ) {
 			$current_version = get_option( 'custom_permalinks_plugin_version', -1 );
 
 			if ( -1 === $current_version
 				|| $current_version < CUSTOM_PERMALINKS_PLUGIN_VERSION
 			) {
-				Custom_Permalinks::activate_details();
-				Custom_Permalinks::add_roles();
+				self::activate_details();
+				self::add_roles();
 			}
 		}
 
-		load_plugin_textdomain( 'custom-permalinks', FALSE,
+		load_plugin_textdomain(
+			'custom-permalinks',
+			false,
 			basename( dirname( CUSTOM_PERMALINKS_FILE ) ) . '/languages/'
 		);
 	}

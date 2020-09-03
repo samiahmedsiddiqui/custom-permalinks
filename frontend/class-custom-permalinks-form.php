@@ -3,8 +3,8 @@
  * @package CustomPermalinks
  */
 
-class Custom_Permalinks_Form
-{
+class Custom_Permalinks_Form {
+
 
 	/*
 	 * JS file suffix (version number with with extension)
@@ -22,8 +22,7 @@ class Custom_Permalinks_Form
 	 * @since 1.2.0
 	 * @access public
 	 */
-	public function init()
-	{
+	public function init() {
 		add_action( 'add_meta_boxes', array( $this, 'permalink_edit_box' ) );
 		add_action( 'save_post', array( $this, 'save_post' ), 10, 3 );
 		add_action( 'delete_post', array( $this, 'delete_permalink' ), 10 );
@@ -35,12 +34,18 @@ class Custom_Permalinks_Form
 		add_action( 'edited_term', array( $this, 'save_term' ), 10, 3 );
 		add_action( 'delete_term', array( $this, 'delete_term_permalink' ), 10, 3 );
 		add_action( 'rest_api_init', array( $this, 'rest_edit_form' ) );
-		add_action( 'update_option_page_on_front',
-			array( $this, 'static_homepage' ), 10, 2
+		add_action(
+			'update_option_page_on_front',
+			array( $this, 'static_homepage' ),
+			10,
+			2
 		);
 
-		add_filter( 'get_sample_permalink_html',
-			array( $this, 'sample_permalink_html' ), 10, 2
+		add_filter(
+			'get_sample_permalink_html',
+			array( $this, 'sample_permalink_html' ),
+			10,
+			2
 		);
 		add_filter( 'is_protected_meta', array( $this, 'protect_meta' ), 10, 2 );
 	}
@@ -55,12 +60,12 @@ class Custom_Permalinks_Form
 	 *
 	 * return bool false Whether to show Custom Permalink form or not.
 	 */
-	private function exclude_custom_permalinks( $post )
-	{
-		$args = array(
+	private function exclude_custom_permalinks( $post ) {
+		$args               = array(
 			'public' => true,
 		);
-		$exclude_post_types = apply_filters( 'custom_permalinks_exclude_post_type',
+		$exclude_post_types = apply_filters(
+			'custom_permalinks_exclude_post_type',
 			$post->post_type
 		);
 		/*
@@ -68,10 +73,11 @@ class Custom_Permalinks_Form
 		 *
 		 * @since 1.6.0
 		 */
-		$exclude_posts      = apply_filters( 'custom_permalinks_exclude_posts',
+		$exclude_posts     = apply_filters(
+			'custom_permalinks_exclude_posts',
 			$post
 		);
-		$public_post_types  = get_post_types( $args, 'objects' );
+		$public_post_types = get_post_types( $args, 'objects' );
 
 		if ( isset( $this->permalink_metabox ) && 1 === $this->permalink_metabox ) {
 			$check_availability = true;
@@ -79,7 +85,7 @@ class Custom_Permalinks_Form
 			$check_availability = true;
 		} elseif ( $post->ID == get_option( 'page_on_front' ) ) {
 			$check_availability = true;
-		} elseif ( ! isset( $public_post_types[$post->post_type] ) ) {
+		} elseif ( ! isset( $public_post_types[ $post->post_type ] ) ) {
 			$check_availability = true;
 		} elseif ( '__true' === $exclude_post_types ) {
 			$check_availability = true;
@@ -98,11 +104,14 @@ class Custom_Permalinks_Form
 	 * @since 1.4.0
 	 * @access public
 	 */
-	public function permalink_edit_box()
-	{
-		add_meta_box( 'custom-permalinks-edit-box',
+	public function permalink_edit_box() {
+		add_meta_box(
+			'custom-permalinks-edit-box',
 			__( 'Custom Permalinks', 'custom-permalinks' ),
-			array( $this, 'meta_edit_form' ), null, 'normal', 'high',
+			array( $this, 'meta_edit_form' ),
+			null,
+			'normal',
+			'high',
 			array(
 				'__back_compat_meta_box' => false,
 			)
@@ -115,13 +124,12 @@ class Custom_Permalinks_Form
 	 * @since 1.4.0
 	 * @access public
 	 *
-	 * @param bool $protected Whether the key is protected or not.
+	 * @param bool   $protected Whether the key is protected or not.
 	 * @param string $meta_key Meta key.
 	 *
 	 * @return bool `true` for the custom_permalink key.
 	 */
-	public function protect_meta( $protected, $meta_key )
-	{
+	public function protect_meta( $protected, $meta_key ) {
 		if ( 'custom_permalink' === $meta_key ) {
 			$protected = true;
 		}
@@ -136,8 +144,7 @@ class Custom_Permalinks_Form
 	 *
 	 * @param int $post_id Post ID.
 	 */
-	public function save_post( $post_id )
-	{
+	public function save_post( $post_id ) {
 		if ( ! isset( $_REQUEST['custom_permalinks_edit'] ) ) {
 			return;
 		}
@@ -181,7 +188,9 @@ class Custom_Permalinks_Form
 				// Replace encoded space and plus input with hyphen
 				$replaced_path = str_replace( $replace_hyphen, '-', $split_path[0] );
 				$replaced_path = preg_replace( '/(\-+)/', '-', $replaced_path );
-				$permalink     = str_replace( $split_path[0], $replaced_path,
+				$permalink     = str_replace(
+					$split_path[0],
+					$replaced_path,
 					$permalink
 				);
 			} else {
@@ -201,8 +210,7 @@ class Custom_Permalinks_Form
 	 *
 	 * @param int $post_id Post ID.
 	 */
-	public function delete_permalink( $post_id )
-	{
+	public function delete_permalink( $post_id ) {
 		delete_metadata( 'post', $post_id, 'custom_permalink' );
 	}
 
@@ -213,12 +221,11 @@ class Custom_Permalinks_Form
 	 * @access private
 	 *
 	 * @param object $post WP Post Object.
-	 * @param bool $meta_box Show whether calls from clasic WordPress or Gutenberg.
+	 * @param bool   $meta_box Show whether calls from clasic WordPress or Gutenberg.
 	 *
 	 * @return string Permalink Form HTML.
 	 */
-	private function get_permalink_html( $post, $meta_box = false )
-	{
+	private function get_permalink_html( $post, $meta_box = false ) {
 		$post_id   = $post->ID;
 		$permalink = get_post_meta( $post_id, 'custom_permalink', true );
 
@@ -231,20 +238,23 @@ class Custom_Permalinks_Form
 		} else {
 			$post_type_name   = '';
 			$post_type_object = get_post_type_object( $post->post_type );
-			if ( is_object($post_type_object) && isset( $post_type_object->labels )
+			if ( is_object( $post_type_object ) && isset( $post_type_object->labels )
 				&& isset( $post_type_object->labels->singular_name )
 			) {
 				$post_type_name = ' ' . $post_type_object->labels->singular_name;
-			} elseif ( is_object($post_type_object)
+			} elseif ( is_object( $post_type_object )
 				&& isset( $post_type_object->label )
 			) {
 				$post_type_name = ' ' . $post_type_object->label;
 			}
 
 			$original_permalink = $cp_frontend->original_post_link( $post_id );
-			$view_post = __( 'View', 'custom-permalinks' ) . $post_type_name;
+			$view_post          = __( 'View', 'custom-permalinks' ) . $post_type_name;
 		}
-		$this->get_permalink_form( $permalink, $original_permalink, false,
+		$this->get_permalink_form(
+			$permalink,
+			$original_permalink,
+			false,
 			$post->post_name
 		);
 
@@ -252,9 +262,12 @@ class Custom_Permalinks_Form
 		ob_end_clean();
 
 		if ( 'trash' !== $post->post_status ) {
-			wp_enqueue_script( 'custom-permalinks-form',
+			wp_enqueue_script(
+				'custom-permalinks-form',
 				plugins_url( '/js/script-form' . $this->js_file_suffix, __FILE__ ),
-				array(), false, true
+				array(),
+				false,
+				true
 			);
 
 			$home_url = trailingslashit( home_url() );
@@ -278,7 +291,7 @@ class Custom_Permalinks_Form
 			}
 
 			$content .= ' <span id="view-post-btn">' .
-						  '<a href="' . $view_post_link . '" class="button button-medium" target="_blank">' . $view_post .'</a>' .
+						  '<a href="' . $view_post_link . '" class="button button-medium" target="_blank">' . $view_post . '</a>' .
 						'</span><br>';
 			if ( true === $meta_box ) {
 				$content .= '<style>.editor-post-permalink,.cp-permalink-hidden{display:none;}</style>';
@@ -289,20 +302,19 @@ class Custom_Permalinks_Form
 	}
 
 	/**
-	 * Per-post/page options (Wordpress > 2.9).
+	 * Per-post/page options (WordPress > 2.9).
 	 *
 	 * @access public
 	 *
 	 * @param string $html WP Post Permalink HTML.
-	 * @param int $post_id Post ID.
+	 * @param int    $post_id Post ID.
 	 *
 	 * @return string Edit Form string.
 	 */
-	public function sample_permalink_html( $html, $post_id )
-	{
+	public function sample_permalink_html( $html, $post_id ) {
 		$post = get_post( $post_id );
 
-		$disable_cp = $this->exclude_custom_permalinks( $post );
+		$disable_cp              = $this->exclude_custom_permalinks( $post );
 		$this->permalink_metabox = 1;
 		if ( $disable_cp ) {
 			return $html;
@@ -321,13 +333,15 @@ class Custom_Permalinks_Form
 	 *
 	 * @param object $post WP Post Object.
 	 */
-	public function meta_edit_form( $post )
-	{
+	public function meta_edit_form( $post ) {
 		$disable_cp = $this->exclude_custom_permalinks( $post );
 		if ( $disable_cp ) {
-			wp_enqueue_script( 'custom-permalinks-form',
+			wp_enqueue_script(
+				'custom-permalinks-form',
 				plugins_url( '/js/script-form' . $this->js_file_suffix, __FILE__ ),
-				array(), false, true
+				array(),
+				false,
+				true
 			);
 
 			return;
@@ -344,12 +358,11 @@ class Custom_Permalinks_Form
 	}
 
 	/**
-	 * Per-post options (Wordpress < 2.9).
+	 * Per-post options (WordPress < 2.9).
 	 *
 	 * @access public
 	 */
-	public function post_options()
-	{
+	public function post_options() {
 		global $post;
 
 		if ( is_object( $post ) ) {
@@ -363,29 +376,29 @@ class Custom_Permalinks_Form
 		<div class="postbox closed">
 		  <h3>
 		  <?php
-		  esc_html_e( 'Custom Permalink', 'custom-permalinks' );
-		  ?>
+			esc_html_e( 'Custom Permalink', 'custom-permalinks' );
+			?>
 		  </h3>
 
 		  <div class="inside">
 		  <?php
-		  $cp_frontend = new Custom_Permalinks_Frontend();
-		  $this->get_permalink_form( $permalink,
-			  $cp_frontend->original_post_link( $post_id )
-		  );
-		  ?>
+			$cp_frontend = new Custom_Permalinks_Frontend();
+			$this->get_permalink_form(
+				$permalink,
+				$cp_frontend->original_post_link( $post_id )
+			);
+			?>
 		  </div>
 		</div>
 		<?php
 	}
 
 	/**
-	 * Per-page options (Wordpress < 2.9).
+	 * Per-page options (WordPress < 2.9).
 	 *
 	 * @access public
 	 */
-	public function page_options()
-	{
+	public function page_options() {
 		global $post;
 
 		if ( is_object( $post ) ) {
@@ -399,15 +412,15 @@ class Custom_Permalinks_Form
 		<div class="postbox closed">
 		  <h3>
 		  <?php
-		  esc_html_e( 'Custom Permalink', 'custom-permalinks' );
-		  ?>
+			esc_html_e( 'Custom Permalink', 'custom-permalinks' );
+			?>
 		  </h3>
 		  <div class="inside">
 		  <?php
-		  $cp_frontend    = new Custom_Permalinks_Frontend();
-		  $page_permalink = $cp_frontend->original_page_link( $post_id );
-		  $this->get_permalink_form( $permalink, $page_permalink );
-		  ?>
+			$cp_frontend    = new Custom_Permalinks_Frontend();
+			$page_permalink = $cp_frontend->original_page_link( $post_id );
+			$this->get_permalink_form( $permalink, $page_permalink );
+			?>
 		  </div>
 		</div>
 		<?php
@@ -420,14 +433,13 @@ class Custom_Permalinks_Form
 	 *
 	 * @param object $object Term Object.
 	 */
-	public function term_options( $object )
-	{
+	public function term_options( $object ) {
 		$permalink          = '';
 		$original_permalink = '';
 		if ( is_object( $object ) && isset( $object->term_id ) ) {
 			$cp_frontend = new Custom_Permalinks_Frontend();
 			if ( $object->term_id ) {
-				$permalink = $cp_frontend->term_permalink( $object->term_id );
+				$permalink          = $cp_frontend->term_permalink( $object->term_id );
 				$original_permalink = $cp_frontend->original_term_link(
 					$object->term_id
 				);
@@ -455,14 +467,14 @@ class Custom_Permalinks_Form
 	 *
 	 * @param string $permalink Permalink which is created by the plugin.
 	 * @param string $original Permalink which set by WordPress.
-	 * @param bool $render_containers Shows Post/Term Edit.
+	 * @param bool   $render_containers Shows Post/Term Edit.
 	 * @param string $postname Post Name.
 	 */
 	private function get_permalink_form( $permalink, $original = '',
 		$render_containers = true, $postname = ''
 	) {
 		$encoded_permalink = htmlspecialchars( urldecode( $permalink ) );
-		$home_url = trailingslashit( home_url() );
+		$home_url          = trailingslashit( home_url() );
 
 		echo '<input value="true" type="hidden" name="custom_permalinks_edit" />' .
 			 '<input value="' . $home_url . '" type="hidden" name="custom_permalinks_home_url" id="custom_permalinks_home_url" />' .
@@ -486,9 +498,12 @@ class Custom_Permalinks_Form
 			$original_encoded_url = $post_slug;
 		}
 
-		wp_enqueue_script( 'custom-permalinks-form',
+		wp_enqueue_script(
+			'custom-permalinks-form',
 			plugins_url( '/js/script-form' . $this->js_file_suffix, __FILE__ ),
-			array(), false, true
+			array(),
+			false,
+			true
 		);
 		$postname_html = '';
 		if ( isset( $postname ) && '' !== $postname ) {
@@ -496,7 +511,7 @@ class Custom_Permalinks_Form
 		}
 
 		$field_style = 'width: 250px;';
-		if ( !$permalink ) {
+		if ( ! $permalink ) {
 			$field_style .= ' color: #ddd;';
 		}
 
@@ -526,9 +541,8 @@ class Custom_Permalinks_Form
 	 *
 	 * @param string $term_id Term ID.
 	 */
-	public function save_term( $term_id )
-	{
-		$term = get_term( $term_id );
+	public function save_term( $term_id ) {
+		 $term = get_term( $term_id );
 		if ( isset( $_REQUEST['custom_permalink'] ) && isset( $term )
 			&& isset( $term->taxonomy )
 		) {
@@ -541,7 +555,8 @@ class Custom_Permalinks_Form
 				}
 
 				$new_permalink = ltrim(
-					stripcslashes( $_REQUEST['custom_permalink'] ), '/'
+					stripcslashes( $_REQUEST['custom_permalink'] ),
+					'/'
 				);
 				if ( empty( $new_permalink ) || '' === $new_permalink ) {
 					return;
@@ -559,7 +574,7 @@ class Custom_Permalinks_Form
 				$table     = get_option( 'custom_permalink_table' );
 
 				if ( $permalink ) {
-					$table[$permalink] = array(
+					$table[ $permalink ] = array(
 						'id'   => $term_id,
 						'kind' => $taxonomy_name,
 						'slug' => $term->slug,
@@ -578,13 +593,12 @@ class Custom_Permalinks_Form
 	 *
 	 * @param int $term_id Term ID.
 	 */
-	public function delete_term_permalink( $term_id )
-	{
-		$table = get_option( 'custom_permalink_table' );
+	public function delete_term_permalink( $term_id ) {
+		 $table = get_option( 'custom_permalink_table' );
 		if ( $table ) {
 			foreach ( $table as $link => $info ) {
 				if ( $info['id'] === $term_id ) {
-					unset( $table[$link] );
+					unset( $table[ $link ] );
 					break;
 				}
 			}
@@ -602,8 +616,7 @@ class Custom_Permalinks_Form
 	 *
 	 * @return string requested URL by removing the language/ from it if exist.
 	 */
-	public function check_conflicts( $requested_url = '' )
-	{
+	public function check_conflicts( $requested_url = '' ) {
 		if ( '' === $requested_url ) {
 			return;
 		}
@@ -655,13 +668,14 @@ class Custom_Permalinks_Form
 	 *
 	 * @param object $data Contains post id with some default REST Values.
 	 */
-	public function refresh_meta_form( $data )
-	{
+	public function refresh_meta_form( $data ) {
 		if ( isset( $data['id'] ) && is_numeric( $data['id'] ) ) {
-			$post = get_post( $data['id'] );
-			$all_permalinks = array();
-			$all_permalinks['custom_permalink'] = get_post_meta( $data['id'],
-				'custom_permalink', true
+			$post                               = get_post( $data['id'] );
+			$all_permalinks                     = array();
+			$all_permalinks['custom_permalink'] = get_post_meta(
+				$data['id'],
+				'custom_permalink',
+				true
 			);
 
 			if ( ! $all_permalinks['custom_permalink'] ) {
@@ -680,7 +694,7 @@ class Custom_Permalinks_Form
 				}
 			}
 
-			$cp_frontend = new Custom_Permalinks_Frontend;
+			$cp_frontend = new Custom_Permalinks_Frontend();
 			if ( 'page' === $post->post_type ) {
 				$all_permalinks['original_permalink'] = $cp_frontend->original_page_link(
 					$data['id']
@@ -702,9 +716,10 @@ class Custom_Permalinks_Form
 	 * @since 1.6.0
 	 * @access public
 	 */
-	public function rest_edit_form()
-	{
-		register_rest_route( 'custom-permalinks/v1', '/get-permalink/(?P<id>\d+)',
+	public function rest_edit_form() {
+		register_rest_route(
+			'custom-permalinks/v1',
+			'/get-permalink/(?P<id>\d+)',
 			array(
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'refresh_meta_form' ),
