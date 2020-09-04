@@ -9,26 +9,25 @@ const rename = require('gulp-rename');
 const pluginVersion = package.customPermalinks.pluginVersion;
 
 async function deleteMinFiles() {
-  await del(['admin/**/*.min.css', 'frontend/**/*.min.js']);
+  await del(['assets/**/*.min.*']);
 }
 
 function minifyCss() {
-  return src(['admin/**/*.css', '!admin/**/*/*.min.css'])
+  return src(['assets/**/*.css', '!assets/**/*/*.min.css'])
     .pipe(cleanCSS({compatibility: 'ie8'}))
     .pipe(rename(function(path) {
-        path.extname = "-" + pluginVersion + ".min" + path.extname;
+        path.extname = '-' + pluginVersion + '.min.css';
     }))
-    .pipe(dest('admin/'));
+    .pipe(dest('./assets'));
 }
 
 function minifyJs() {
-  return src(['frontend/**/*.js', '!frontend/**/*/*.min.js'])
+  return src(['assets/**/*.js', '!assets/**/*/*.min.js'])
     .pipe(uglify())
     .pipe(rename(function(path) {
-        console.log(pluginVersion)
-        path.extname = "-" + pluginVersion + ".min" + path.extname;
+        path.extname = '-' + pluginVersion + '.min.js';
     }))
-    .pipe(dest('frontend/'));
+    .pipe(dest('./assets'));
 }
 
 exports.build = parallel(deleteMinFiles, minifyCss, minifyJs);
