@@ -22,7 +22,7 @@
     <arg value="sp"/>
 
     <!-- SNIFF FOR PHP CROSS-VERSION COMPATIBILITY. -->
-    <config name="testVersion" value="5.2-"/>
+    <config name="testVersion" value="5.4-"/>
     <rule ref="PHPCompatibilityWP">
         <include-pattern>*\.php$</include-pattern>
     </rule>
