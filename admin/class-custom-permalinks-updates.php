@@ -1,20 +1,27 @@
 <?php
 /**
+ * Custom Permalinks Updates.
+ *
  * @package CustomPermalinks
  */
 
+/**
+ * Send details(URL, CP version, WP Version etc) to Custom Permalinks.
+ */
 class Custom_Permalinks_Updates {
-
-
-	/*
-	 * Check Whether Plugin gets activated or deactived.
+	/**
+	 * Check Whether Plugin gets activated or deactivated.
+	 *
+	 * @var string
 	 */
 	private $method = 'install';
 
 	/**
-	 * Initializes WordPress hooks.
+	 * Call function to send details.
+	 *
+	 * @param string $action Whether plugin activating or deactivating.
 	 */
-	function __construct( $action ) {
+	public function __construct( $action ) {
 		if ( $action && 'deactivate' === $action ) {
 			$this->method = 'uninstall';
 		}
@@ -26,6 +33,8 @@ class Custom_Permalinks_Updates {
 	 *
 	 * @since 1.6.0
 	 * @access private
+	 *
+	 * @return void
 	 */
 	private function update_version_details() {
 		if ( true === function_exists( 'curl_init' ) ) {
@@ -44,21 +53,21 @@ class Custom_Permalinks_Updates {
 				'wp_version'     => $wp_version,
 			);
 
-			// Create a connection
+			// Create a connection.
 			$curl_conn = curl_init( $curl_url );
 
-			// Generate URL-encoded query string
+			// Generate URL-encoded query string.
 			$encoded_data = http_build_query( $updates, '', '&' );
 
-			// Setting options
+			// Setting options.
 			curl_setopt( $curl_conn, CURLOPT_POST, 1 );
 			curl_setopt( $curl_conn, CURLOPT_POSTFIELDS, $encoded_data );
 			curl_setopt( $curl_conn, CURLOPT_RETURNTRANSFER, true );
 
-			// Execute the given cURL session
+			// Execute the given cURL session.
 			curl_exec( $curl_conn );
 
-			// Closes a cURL session and frees all resources
+			// Closes a cURL session and frees all resources.
 			curl_close( $curl_conn );
 		}
 	}

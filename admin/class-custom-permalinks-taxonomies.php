@@ -1,15 +1,20 @@
 <?php
 /**
+ * Custom Permalinks Taxonomies.
+ *
  * @package CustomPermalinks
  */
 
+/**
+ * Generate Taxonomies Permalinks page HTML.
+ */
 class Custom_Permalinks_Taxonomies {
 
 
 	/**
 	 * Call Taxonomy Permalinks Function.
 	 */
-	function __construct() {
+	public function __construct() {
 		$this->taxonomies_permalinks();
 	}
 
@@ -23,22 +28,22 @@ class Custom_Permalinks_Taxonomies {
 	 */
 	private function taxonomy_nav() {
 		$navigation = '<tr>' .
-						'<td id="cb" class="manage-column column-cb check-column">' .
-						  '<label class="screen-reader-text" for="cb-select-all-1">' .
-							  __( 'Select All', 'custom-permalinks' ) .
-						  '</label>' .
-						  '<input id="cb-select-all-1" type="checkbox">' .
-						'</td>' .
-						'<th scope="col" id="title" class="manage-column column-title column-primary">' .
-							__( 'Title', 'custom-permalinks' ) .
-						'</th>' .
-						'<th scope="col">' .
-							__( 'Type', 'custom-permalinks' ) .
-						'</th>' .
-						'<th scope="col">' .
-							__( 'Permalink', 'custom-permalinks' ) .
-						'</th>' .
-					  '</tr>';
+										'<td id="cb" class="manage-column column-cb check-column">' .
+											'<label class="screen-reader-text" for="cb-select-all-1">' .
+												__( 'Select All', 'custom-permalinks' ) .
+											'</label>' .
+											'<input id="cb-select-all-1" type="checkbox">' .
+										'</td>' .
+										'<th scope="col" id="title" class="manage-column column-title column-primary">' .
+											__( 'Title', 'custom-permalinks' ) .
+										'</th>' .
+										'<th scope="col">' .
+											__( 'Type', 'custom-permalinks' ) .
+										'</th>' .
+										'<th scope="col">' .
+											__( 'Permalink', 'custom-permalinks' ) .
+										'</th>' .
+									'</tr>';
 
 		return $navigation;
 	}
@@ -48,6 +53,9 @@ class Custom_Permalinks_Taxonomies {
 	 *
 	 * @since 1.2.0
 	 * @access public
+	 *
+	 * @param int $comp1 Value 1.
+	 * @param int $comp2 Value 2.
 	 *
 	 * @return int
 	 */
@@ -81,7 +89,7 @@ class Custom_Permalinks_Taxonomies {
 			$request_uri = $_SERVER['REQUEST_URI'];
 		}
 
-		// Handle Bulk Operations
+		// Handle Bulk Operations.
 		if ( ( 'delete' === $term_action || 'delete' === $term_action2 )
 			&& check_admin_referer(
 				'custom-permalinks-term_' . $user_id,
@@ -91,18 +99,18 @@ class Custom_Permalinks_Taxonomies {
 			if ( ! empty( $term_permalinks ) ) {
 				$data = get_option( 'custom_permalink_table' );
 				if ( isset( $data ) && is_array( $data ) ) {
-					$loopCount = 0;
+					$loop_count = 0;
 					foreach ( $data as $link => $info ) {
-						if ( in_array( $info['id'], $term_permalinks ) ) {
+						if ( in_array( $info['id'], $term_permalinks, true ) ) {
 							unset( $data[ $link ] );
-							unset( $term_permalinks[ $loopCount ] );
+							unset( $term_permalinks[ $loop_count ] );
 							if ( ! is_array( $term_permalinks )
 								|| empty( $term_permalinks )
 							) {
 								break;
 							}
 						}
-						$loopCount += 1;
+						++$loop_count;
 					}
 				}
 
@@ -110,9 +118,9 @@ class Custom_Permalinks_Taxonomies {
 			}
 		}
 		$page_html .= '<div class="wrap">' .
-						'<h1 class="wp-heading-inline">' .
-							__( 'Taxonomies Permalinks', 'custom-permalinks' ) .
-						'</h1>';
+										'<h1 class="wp-heading-inline">' .
+											__( 'Taxonomies Permalinks', 'custom-permalinks' ) .
+										'</h1>';
 
 		$get_paged    = filter_input( INPUT_GET, 'paged' );
 		$page_limit   = 20;
@@ -142,33 +150,33 @@ class Custom_Permalinks_Taxonomies {
 		}
 
 		$page_html .= '<form action="' . $site_url . $request_uri . '" method="get">' .
-						'<p class="search-box">' .
-						  '<input type="hidden" name="page" value="cp-category-permalinks" />' .
-						  $term_nonce .
-						  '<label class="screen-reader-text" for="custom-permalink-search-input">' .
-							  __( 'Search Custom Permalink:', 'custom-permalinks' ) .
-						  '</label>' .
-						  '<input type="search" id="custom-permalink-search-input" name="s" value="' . $search_value . '">' .
-						  '<input type="submit" id="search-submit" class="button" value="' . __( 'Search Permalink', 'custom-permalinks' ) . '">' .
-						'</p>' .
-					  '</form>' .
-					  '<form action="' . $site_url . $request_uri . '" method="post">' .
-						'<div class="tablenav top">' .
-						  '<div class="alignleft actions bulkactions">' .
-							'<label for="bulk-action-selector-top" class="screen-reader-text">' .
-								__( 'Select bulk action', 'custom-permalinks' ) .
-							'</label>' .
-							$term_nonce .
-							'<select name="action" id="bulk-action-selector-top">' .
-							  '<option value="-1">' .
-								  __( 'Bulk Actions', 'custom-permalinks' ) .
-							  '</option>' .
-							  '<option value="delete">' .
-								  __( 'Delete Permalinks', 'custom-permalinks' ) .
-							  '</option>' .
-							'</select>' .
-							'<input type="submit" id="doaction" class="button action" value="' . __( 'Apply', 'custom-permalinks' ) . '">' .
-						  '</div>';
+										'<p class="search-box">' .
+											'<input type="hidden" name="page" value="cp-category-permalinks" />' .
+											$term_nonce .
+											'<label class="screen-reader-text" for="custom-permalink-search-input">' .
+												__( 'Search Custom Permalink:', 'custom-permalinks' ) .
+											'</label>' .
+											'<input type="search" id="custom-permalink-search-input" name="s" value="' . $search_value . '">' .
+											'<input type="submit" id="search-submit" class="button" value="' . __( 'Search Permalink', 'custom-permalinks' ) . '">' .
+										'</p>' .
+										'</form>' .
+										'<form action="' . $site_url . $request_uri . '" method="post">' .
+										'<div class="tablenav top">' .
+											'<div class="alignleft actions bulkactions">' .
+											'<label for="bulk-action-selector-top" class="screen-reader-text">' .
+												__( 'Select bulk action', 'custom-permalinks' ) .
+											'</label>' .
+											$term_nonce .
+											'<select name="action" id="bulk-action-selector-top">' .
+												'<option value="-1">' .
+													__( 'Bulk Actions', 'custom-permalinks' ) .
+												'</option>' .
+												'<option value="delete">' .
+													__( 'Delete Permalinks', 'custom-permalinks' ) .
+												'</option>' .
+											'</select>' .
+											'<input type="submit" id="doaction" class="button action" value="' . __( 'Apply', 'custom-permalinks' ) . '">' .
+											'</div>';
 
 		$table           = get_option( 'custom_permalink_table' );
 		$count_tags      = 0;
@@ -193,8 +201,8 @@ class Custom_Permalinks_Taxonomies {
 			}
 
 			$page_html .= '<h2 class="screen-reader-text">' .
-							  __( 'Custom Permalink navigation', 'custom-permalinks' ) .
-						  '</h2>';
+											__( 'Custom Permalink navigation', 'custom-permalinks' ) .
+										'</h2>';
 
 			$total_pages = ceil( $count_tags / 20 );
 			if ( is_numeric( $get_paged ) && 0 < $get_paged ) {
@@ -225,9 +233,9 @@ class Custom_Permalinks_Taxonomies {
 		$table_navigation = $this->taxonomy_nav();
 
 		$page_html .= '</div>' .
-					  '<table class="wp-list-table widefat fixed striped posts">' .
-					  '<thead>' . $table_navigation . '</thead>' .
-					  '<tbody>';
+									'<table class="wp-list-table widefat fixed striped posts">' .
+									'<thead>' . $table_navigation . '</thead>' .
+									'<tbody>';
 
 		if ( $table && is_array( $table ) && 0 < $count_tags ) {
 			$cp_frontend = new Custom_Permalinks_Frontend();
@@ -244,14 +252,14 @@ class Custom_Permalinks_Taxonomies {
 			}
 
 			uasort( $table, array( $this, 'sort_array' ) );
-			$loopCount = -1;
+			$loop_count = -1;
 			foreach ( $table as $permalink => $info ) {
-				$loopCount += 1;
-				if ( $loopCount < $pager_offset ) {
+				++$loop_count;
+				if ( $loop_count < $pager_offset ) {
 					continue;
 				}
 
-				if ( $loopCount >= $page_limit ) {
+				if ( $loop_count >= $page_limit ) {
 					break;
 				}
 
@@ -278,51 +286,51 @@ class Custom_Permalinks_Taxonomies {
 
 				$term       = get_term( $info['id'], $type );
 				$page_html .= '<tr valign="top">' .
-								'<th scope="row" class="check-column">' .
-								  '<input type="checkbox" name="permalink[]" value="' . $info['id'] . '" />' .
-								'</th>' .
-								'<td><strong>' .
-								  '<a class="row-title" href="' . $site_url . '/wp-admin/edit-tags.php?action=edit&taxonomy=' . $type . '&tag_ID=' . $info['id'] . ' ">' .
-									  $term->name .
-								  '</a>' .
-								'</strong></td>' .
-								'<td>' . ucwords( $info['kind'] ) . '</td>' .
-								'<td>' .
-								  '<a href="' . $permalink . '" target="_blank" title="' . __( 'Visit ' . $term->name, 'custom-permalinks' ) . '">' .
-									  $perm_text .
-								  '</a>' .
-								'</td>' .
-							  '</tr>';
+												'<th scope="row" class="check-column">' .
+													'<input type="checkbox" name="permalink[]" value="' . $info['id'] . '" />' .
+												'</th>' .
+												'<td><strong>' .
+													'<a class="row-title" href="' . $site_url . '/wp-admin/edit-tags.php?action=edit&taxonomy=' . $type . '&tag_ID=' . $info['id'] . ' ">' .
+														$term->name .
+													'</a>' .
+												'</strong></td>' .
+												'<td>' . ucwords( $info['kind'] ) . '</td>' .
+												'<td>' .
+													'<a href="' . $permalink . '" target="_blank" title="' . __( 'Visit "$term->name"', 'custom-permalinks' ) . '">' .
+														$perm_text .
+													'</a>' .
+												'</td>' .
+											'</tr>';
 			}
 		} else {
 			$page_html .= '<tr class="no-items">' .
-							'<td class="colspanchange" colspan="4">' .
-								__( 'No permalinks found.', 'custom-permalinks' ) .
-							'</td>' .
-						  '</tr>';
+											'<td class="colspanchange" colspan="4">' .
+												__( 'No permalinks found.', 'custom-permalinks' ) .
+											'</td>' .
+										'</tr>';
 		}
 		$page_html .= '</tbody>' .
-					  '<tfoot>' . $table_navigation . '</tfoot>' .
-					  '</table>';
+									'<tfoot>' . $table_navigation . '</tfoot>' .
+									'</table>';
 
 		$page_html .= '<div class="tablenav bottom">' .
-						'<div class="alignleft actions bulkactions">' .
-						  '<label for="bulk-action-selector-bottom" class="screen-reader-text">' .
-							  __( 'Select bulk action', 'custom-permalinks' ) .
-						  '</label>' .
-						  '<select name="action2" id="bulk-action-selector-bottom">' .
-							'<option value="-1">' .
-								__( 'Bulk Actions', 'custom-permalinks' ) .
-							'</option>' .
-							'<option value="delete">' .
-								__( 'Delete Permalinks', 'custom-permalinks' ) .
-							'</option>' .
-						  '</select>' .
-						  '<input type="submit" id="doaction2" class="button action" value="' . __( 'Apply', 'custom-permalinks' ) . '">' .
-						'</div>' .
-						$pagination_html .
-					  '</div>' .
-					  '</form></div>';
+									'<div class="alignleft actions bulkactions">' .
+										'<label for="bulk-action-selector-bottom" class="screen-reader-text">' .
+											__( 'Select bulk action', 'custom-permalinks' ) .
+										'</label>' .
+										'<select name="action2" id="bulk-action-selector-bottom">' .
+										'<option value="-1">' .
+											__( 'Bulk Actions', 'custom-permalinks' ) .
+										'</option>' .
+										'<option value="delete">' .
+											__( 'Delete Permalinks', 'custom-permalinks' ) .
+										'</option>' .
+										'</select>' .
+										'<input type="submit" id="doaction2" class="button action" value="' . __( 'Apply', 'custom-permalinks' ) . '">' .
+									'</div>' .
+									$pagination_html .
+									'</div>' .
+									'</form></div>';
 
 		echo $page_html;
 	}

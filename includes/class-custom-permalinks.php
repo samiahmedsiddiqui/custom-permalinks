@@ -1,5 +1,7 @@
 <?php
 /**
+ * Custom Permalinks setup.
+ *
  * @package CustomPermalinks
  */
 
@@ -47,7 +49,7 @@ class Custom_Permalinks {
 	}
 
 	/**
-	 * Include required files.
+	 * Include required core files used in admin and on the frontend.
 	 *
 	 * @since 1.2.18
 	 * @access private

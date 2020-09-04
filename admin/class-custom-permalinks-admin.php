@@ -1,15 +1,20 @@
 <?php
 /**
+ * Custom Permalinks Admin.
+ *
  * @package CustomPermalinks
  */
 
+/**
+ * Create admin menu, add privacy policy etc.
+ */
 class Custom_Permalinks_Admin {
 
 
 	/**
 	 * Initializes WordPress hooks.
 	 */
-	function __construct() {
+	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_filter(
 			'plugin_action_links_' . CUSTOM_PERMALINKS_BASENAME,
@@ -23,6 +28,8 @@ class Custom_Permalinks_Admin {
 	 *
 	 * @since 1.2.0
 	 * @access public
+	 *
+	 * @return void
 	 */
 	public function admin_menu() {
 		add_menu_page(
@@ -35,8 +42,8 @@ class Custom_Permalinks_Admin {
 		);
 		add_submenu_page(
 			'cp-post-permalinks',
-			'PostTypes Permalinks',
-			'PostTypes Permalinks',
+			'Post Types Permalinks',
+			'Post Types Permalinks',
 			'cp_view_post_permalinks',
 			'cp-post-permalinks',
 			array( $this, 'post_permalinks_page' )
@@ -60,14 +67,16 @@ class Custom_Permalinks_Admin {
 	}
 
 	/**
-	 * Calls another Function which shows the PostTypes Permalinks Page.
+	 * Calls another Function which shows the Post Types Permalinks Page.
 	 *
 	 * @since 1.2.0
 	 * @access public
+	 *
+	 * @return void
 	 */
 	public function post_permalinks_page() {
-		require_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-posttypes.php';
-		new Custom_Permalinks_PostTypes();
+		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-post-types.php';
+		new Custom_Permalinks_Post_Types();
 
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
 	}
@@ -77,9 +86,11 @@ class Custom_Permalinks_Admin {
 	 *
 	 * @since 1.2.0
 	 * @access public
+	 *
+	 * @return void
 	 */
 	public function taxonomy_permalinks_page() {
-		require_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-taxonomies.php';
+		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-taxonomies.php';
 		new Custom_Permalinks_Taxonomies();
 
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
@@ -90,9 +101,11 @@ class Custom_Permalinks_Admin {
 	 *
 	 * @since 1.2.11
 	 * @access public
+	 *
+	 * @return void
 	 */
 	public function about_plugin() {
-		require_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-about.php';
+		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-about.php';
 		new Custom_Permalinks_About();
 
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
@@ -107,18 +120,23 @@ class Custom_Permalinks_Admin {
 	 * @return string Shows version, website link and twitter.
 	 */
 	public function admin_footer_text() {
-		$footer_text = sprintf(
-			__(
-				'Custom Permalinks version %1$s by <a href="%2$s" title="Sami Ahmed Siddiqui Company Website" target="_blank">Sami Ahmed Siddiqui</a> - <a href="%3$s" title="Support forums" target="_blank">Support forums</a> - Follow on Twitter: <a href="%4$s" title="Follow Sami Ahmed Siddiqui on Twitter" target="_blank">Sami Ahmed Siddiqui</a>',
-				'custom-permalinks'
-			),
-			CUSTOM_PERMALINKS_PLUGIN_VERSION,
-			'https://www.yasglobal.com/',
-			'https://wordpress.org/support/plugin/custom-permalinks',
-			'https://twitter.com/samisiddiqui91'
-		);
+		$cp_footer_text = __( 'Custom Permalinks version', 'custom-permalinks' ) .
+											' ' . CUSTOM_PERMALINKS_PLUGIN_VERSION . ' ' .
+											__( 'by', 'custom-permalinks' ) .
+											' <a href="https://www.yasglobal.com/" target="_blank">' .
+												__( 'Sami Ahmed Siddiqui', 'custom-permalinks' ) .
+											'</a>' .
+											' - ' .
+											'<a href="https://wordpress.org/support/plugin/custom-permalinks" target="_blank">' .
+												__( 'Support forums', 'custom-permalinks' ) .
+											'</a>' .
+											' - ' .
+											'Follow on Twitter:' .
+											' <a href="https://twitter.com/samisiddiqui91" target="_blank">' .
+												__( 'Sami Ahmed Siddiqui', 'custom-permalinks' ) .
+											'</a>';
 
-		return $footer_text;
+		return $cp_footer_text;
 	}
 
 	/**
@@ -134,30 +152,19 @@ class Custom_Permalinks_Admin {
 	 * Contact, and About.
 	 */
 	public function settings_link( $links ) {
-		$about           = sprintf(
-			__(
-				'<a href="%s" title="About">About</a>',
-				'custom-permalinks'
-			),
-			'admin.php?page=cp-about-plugins'
-		);
-		$premium_support = sprintf(
-			__(
-				'<a href="%s" title="Premium Support" target="_blank">Premium Support</a>',
-				'custom-permalinks'
-			),
-			'https://www.custompermalinks.com/#pricing-section'
-		);
-		$contact         = sprintf(
-			__(
-				'<a href="%s" title="Contact" target="_blank">Contact</a>',
-				'custom-permalinks'
-			),
-			'https://www.custompermalinks.com/contact-us/'
-		);
-		array_unshift( $links, $contact );
-		array_unshift( $links, $premium_support );
-		array_unshift( $links, $about );
+		$about_link   = '<a href="admin.php?page=cp-about-plugins" target="_blank">' .
+											__( 'About', 'custom-permalinks' ) .
+										'</a>';
+		$support_link = '<a href="https://www.custompermalinks.com/#pricing-section" target="_blank">' .
+											__( 'Premium Support', 'custom-permalinks' ) .
+										'</a>';
+		$contact_link = '<a href="https://www.custompermalinks.com/contact-us/" target="_blank">' .
+											__( 'Contact', 'custom-permalinks' ) .
+										'</a>';
+
+		array_unshift( $links, $contact_link );
+		array_unshift( $links, $support_link );
+		array_unshift( $links, $about_link );
 
 		return $links;
 	}
@@ -167,26 +174,26 @@ class Custom_Permalinks_Admin {
 	 *
 	 * @since 1.2.23
 	 * @access public
+	 *
+	 * @return void
 	 */
 	public function privacy_policy() {
 		if ( ! function_exists( 'wp_add_privacy_policy_content' ) ) {
 			return;
 		}
 
-		$content = sprintf(
-			__(
-				'This plugin collect information about the site like URL, WordPress version etc.' .
-				' This plugin doesn\'t collect any user related information.' .
-				' To have any kind of further query please feel free to' .
-				' <a href="%s" target="_blank">contact us</a>.',
-				'custom-permalinks'
-			),
-			'https://www.custompermalinks.com/contact-us/'
+		$cp_privacy = esc_html__(
+			'This plugin collect information about the site like URL, WordPress version etc. This plugin doesn\'t collect any user related information. To have any kind of further query please feel free to',
+			'custom-permalinks'
 		);
+		$cp_privacy = $cp_privacy .
+									' <a href="https://www.custompermalinks.com/contact-us/" target="_blank">' .
+										esc_html__( 'contact us', 'custom-permalinks' ) .
+									'</a>';
 
 		wp_add_privacy_policy_content(
 			'Custom Permalinks',
-			wp_kses_post( wpautop( $content, false ) )
+			wp_kses_post( wpautop( $cp_privacy, false ) )
 		);
 	}
 }
