@@ -5,6 +5,10 @@
  * @package CustomPermalinks
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Class that shows permalink form on edit post/category and saves it.
  */
@@ -32,7 +36,7 @@ class Custom_Permalinks_Form {
 	 * @return void
 	 */
 	public function init() {
-		$this->js_file_suffix = '-' . CUSTOM_PERMALINKS_PLUGIN_VERSION . '.min.js';
+		$this->js_file_suffix = '-' . CUSTOM_PERMALINKS_VERSION . '.min.js';
 
 		add_action( 'add_meta_boxes', array( $this, 'permalink_edit_box' ) );
 		add_action( 'save_post', array( $this, 'save_post' ), 10, 3 );
@@ -282,9 +286,12 @@ class Custom_Permalinks_Form {
 		if ( 'trash' !== $post->post_status ) {
 			wp_enqueue_script(
 				'custom-permalinks-form',
-				plugins_url( '/js/script-form' . $this->js_file_suffix, __FILE__ ),
+				plugins_url(
+					'/assets/js/script-form' . $this->js_file_suffix,
+					CUSTOM_PERMALINKS_FILE
+				),
 				array(),
-				CUSTOM_PERMALINKS_PLUGIN_VERSION,
+				CUSTOM_PERMALINKS_VERSION,
 				true
 			);
 
@@ -358,9 +365,12 @@ class Custom_Permalinks_Form {
 		if ( $disable_cp ) {
 			wp_enqueue_script(
 				'custom-permalinks-form',
-				plugins_url( '/js/script-form' . $this->js_file_suffix, __FILE__ ),
+				plugins_url(
+					'/assets/js/script-form' . $this->js_file_suffix,
+					CUSTOM_PERMALINKS_FILE
+				),
 				array(),
-				CUSTOM_PERMALINKS_PLUGIN_VERSION,
+				CUSTOM_PERMALINKS_VERSION,
 				true
 			);
 
@@ -528,9 +538,12 @@ class Custom_Permalinks_Form {
 
 		wp_enqueue_script(
 			'custom-permalinks-form',
-			plugins_url( '/js/script-form' . $this->js_file_suffix, __FILE__ ),
+			plugins_url(
+				'/assets/js/script-form' . $this->js_file_suffix,
+				CUSTOM_PERMALINKS_FILE
+			),
 			array(),
-			CUSTOM_PERMALINKS_PLUGIN_VERSION,
+			CUSTOM_PERMALINKS_VERSION,
 			true
 		);
 		$postname_html = '';

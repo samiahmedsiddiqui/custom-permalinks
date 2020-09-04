@@ -5,6 +5,10 @@
  * @package CustomPermalinks
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Create admin menu, add privacy policy etc.
  */
@@ -121,7 +125,7 @@ class Custom_Permalinks_Admin {
 	 */
 	public function admin_footer_text() {
 		$cp_footer_text = __( 'Custom Permalinks version', 'custom-permalinks' ) .
-											' ' . CUSTOM_PERMALINKS_PLUGIN_VERSION . ' ' .
+											' ' . CUSTOM_PERMALINKS_VERSION . ' ' .
 											__( 'by', 'custom-permalinks' ) .
 											' <a href="https://www.yasglobal.com/" target="_blank">' .
 												__( 'Sami Ahmed Siddiqui', 'custom-permalinks' ) .
@@ -197,3 +201,5 @@ class Custom_Permalinks_Admin {
 		);
 	}
 }
+
+new Custom_Permalinks_Admin();

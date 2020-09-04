@@ -5,6 +5,10 @@
  * @package CustomPermalinks
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Generate about page HTML.
  */
@@ -20,7 +24,7 @@ class Custom_Permalinks_About {
 	 * Class constructor.
 	 */
 	public function __construct() {
-		$this->css_file_suffix = '-' . CUSTOM_PERMALINKS_PLUGIN_VERSION . '.min.css';
+		$this->css_file_suffix = '-' . CUSTOM_PERMALINKS_VERSION . '.min.css';
 		$this->more_plugins();
 	}
 
@@ -33,38 +37,16 @@ class Custom_Permalinks_About {
 	 * @return void
 	 */
 	private function more_plugins() {
-		$filename   = 'about-plugins' . $this->css_file_suffix;
-		$plugin_url = plugins_url( '/admin', CUSTOM_PERMALINKS_FILE );
-		$img_src    = $plugin_url . '/images';
+		$img_src    = plugins_url( '/assets/images', CUSTOM_PERMALINKS_FILE )
 		wp_enqueue_style(
 			'style',
-			$plugin_url . '/css/' . $filename,
+			plugins_url(
+				'/assets/css/about-plugins' . $this->css_file_suffix,
+				CUSTOM_PERMALINKS_FILE
+			),
 			array(),
-			CUSTOM_PERMALINKS_PLUGIN_VERSION
+			CUSTOM_PERMALINKS_VERSION
 		);
-
-		$fivestar = '<span class="star">
-                          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 53.867 53.867" width="15" height="15">
-                            <polygon points="26.934,1.318 35.256,18.182 53.867,20.887 40.4,34.013 43.579,52.549 26.934,43.798
-                            10.288,52.549 13.467,34.013 0,20.887 18.611,18.182 "/>
-                          </svg>
-                          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 53.867 53.867" width="15" height="15">
-                          <polygon points="26.934,1.318 35.256,18.182 53.867,20.887 40.4,34.013 43.579,52.549 26.934,43.798
-                              10.288,52.549 13.467,34.013 0,20.887 18.611,18.182 "/>
-                          </svg>
-                          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 53.867 53.867" width="15" height="15">
-                            <polygon points="26.934,1.318 35.256,18.182 53.867,20.887 40.4,34.013 43.579,52.549 26.934,43.798
-                              10.288,52.549 13.467,34.013 0,20.887 18.611,18.182 "/>
-                          </svg>
-                          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 53.867 53.867" width="15" height="15">
-                            <polygon points="26.934,1.318 35.256,18.182 53.867,20.887 40.4,34.013 43.579,52.549 26.934,43.798
-                              10.288,52.549 13.467,34.013 0,20.887 18.611,18.182 "/>
-                          </svg>
-                          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 53.867 53.867" width="15" height="15">
-                            <polygon points="26.934,1.318 35.256,18.182 53.867,20.887 40.4,34.013 43.579,52.549 26.934,43.798
-                              10.288,52.549 13.467,34.013 0,20.887 18.611,18.182 "/>
-                          </svg>
-                        </span>';
 		?>
 
 		<div class="wrap">
@@ -72,7 +54,7 @@ class Custom_Permalinks_About {
 				<h1>
 				<?php
 				esc_html_e(
-					'Custom Permalinks v"CUSTOM_PERMALINKS_PLUGIN_VERSION"',
+					'Custom Permalinks v"CUSTOM_PERMALINKS_VERSION"',
 					'custom-permalinks'
 				);
 				?>

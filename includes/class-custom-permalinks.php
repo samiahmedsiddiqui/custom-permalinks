@@ -5,11 +5,20 @@
  * @package CustomPermalinks
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Main Custom Permalinks class.
  */
 class Custom_Permalinks {
-
+	/**
+	 * Custom Permalinks version.
+	 *
+	 * @var string
+	 */
+	public $version = '1.7.1';
 
 	/**
 	 * Class constructor.
@@ -27,10 +36,9 @@ class Custom_Permalinks {
 	 * @access private
 	 */
 	private function define_constants() {
-		$this->define( 'CUSTOM_PERMALINKS_FILE', __FILE__ );
-		$this->define( 'CUSTOM_PERMALINKS_PLUGIN_VERSION', '1.7.1' );
-		$this->define( 'CUSTOM_PERMALINKS_PATH', plugin_dir_path( __FILE__ ) );
-		$this->define( 'CUSTOM_PERMALINKS_BASENAME', plugin_basename( __FILE__ ) );
+		$this->define( 'CUSTOM_PERMALINKS_BASENAME', plugin_basename( CUSTOM_PERMALINKS_FILE ) );
+		$this->define( 'CUSTOM_PERMALINKS_PATH', plugin_dir_path( CUSTOM_PERMALINKS_FILE ) );
+		$this->define( 'CUSTOM_PERMALINKS_VERSION', $this->version );
 	}
 
 	/**
@@ -55,17 +63,15 @@ class Custom_Permalinks {
 	 * @access private
 	 */
 	private function includes() {
-		include_once CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-frontend.php';
-		include_once CUSTOM_PERMALINKS_PATH . 'frontend/class-custom-permalinks-form.php';
+		include_once CUSTOM_PERMALINKS_PATH . 'includes/class-custom-permalinks-form.php';
+		include_once CUSTOM_PERMALINKS_PATH . 'includes/class-custom-permalinks-frontend.php';
 		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-admin.php';
-
-		$cp_frontend = new Custom_Permalinks_Frontend();
-		$cp_frontend->init();
 
 		$cp_form = new Custom_Permalinks_Form();
 		$cp_form->init();
 
-		new Custom_Permalinks_Admin();
+		$cp_frontend = new Custom_Permalinks_Frontend();
+		$cp_frontend->init();
 	}
 
 	/**
@@ -133,10 +139,7 @@ class Custom_Permalinks {
 		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-updates.php';
 		new Custom_Permalinks_Updates( 'activate' );
 
-		update_option(
-			'custom_permalinks_plugin_version',
-			CUSTOM_PERMALINKS_PLUGIN_VERSION
-		);
+		update_option( 'custom_permalinks_plugin_version', CUSTOM_PERMALINKS_VERSION );
 	}
 
 	/**
@@ -163,7 +166,7 @@ class Custom_Permalinks {
 			$current_version = get_option( 'custom_permalinks_plugin_version', -1 );
 
 			if ( -1 === $current_version
-				|| $current_version < CUSTOM_PERMALINKS_PLUGIN_VERSION
+				|| $current_version < CUSTOM_PERMALINKS_VERSION
 			) {
 				self::activate_details();
 				self::add_roles();

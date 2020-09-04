@@ -5,6 +5,10 @@
  * @package CustomPermalinks
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Generate Post Types Permalinks page HTML.
  */

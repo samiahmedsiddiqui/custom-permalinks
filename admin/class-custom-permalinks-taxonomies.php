@@ -5,6 +5,10 @@
  * @package CustomPermalinks
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Generate Taxonomies Permalinks page HTML.
  */

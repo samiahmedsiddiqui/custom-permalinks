@@ -32,11 +32,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Make sure we don't expose any info if called directly.
 if ( ! defined( 'ABSPATH' ) ) {
-	echo 'Hi there! I\'m just a plugin, not much I can do when called directly.';
 	exit;
 }
 
-// Main Custom Permalinks class.
+if ( ! defined( 'CUSTOM_PERMALINKS_FILE' ) ) {
+	define( 'CUSTOM_PERMALINKS_FILE', __FILE__ );
+}
+
+// Include the main Custom Permalinks class.
+include_once plugin_dir_path( CUSTOM_PERMALINKS_FILE ) . 'includes/class-custom-permalinks.php';
 new Custom_Permalinks();

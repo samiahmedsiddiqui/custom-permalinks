@@ -5,6 +5,10 @@
  * @package CustomPermalinks
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Class that passes custom link, parse the requested url and redirect.
  */
@@ -167,10 +171,6 @@ class Custom_Permalinks_Frontend {
 		}
 
 		if ( defined( 'POLYLANG_VERSION' ) ) {
-			$cp_file_path  = CUSTOM_PERMALINKS_PATH;
-			$cp_file_path .= 'frontend/class-custom-permalinks-form.php';
-			include_once $cp_file_path;
-
 			$cp_form = new Custom_Permalinks_Form();
 			$request = $cp_form->check_conflicts( $request );
 		}
@@ -387,10 +387,6 @@ class Custom_Permalinks_Frontend {
 		}
 
 		if ( defined( 'POLYLANG_VERSION' ) ) {
-			$cp_file_path  = CUSTOM_PERMALINKS_PATH;
-			$cp_file_path .= 'frontend/class-custom-permalinks-form.php';
-			include_once $cp_file_path;
-
 			$cp_form = new Custom_Permalinks_Form();
 			$request = $cp_form->check_conflicts( $request );
 		}

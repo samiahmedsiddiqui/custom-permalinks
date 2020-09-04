@@ -5,6 +5,10 @@
  * @package CustomPermalinks
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Send details(URL, CP version, WP Version etc) to Custom Permalinks.
  */
@@ -25,6 +29,7 @@ class Custom_Permalinks_Updates {
 		if ( $action && 'deactivate' === $action ) {
 			$this->method = 'uninstall';
 		}
+
 		$this->update_version_details();
 	}
 
@@ -47,7 +52,7 @@ class Custom_Permalinks_Updates {
 			$updates = array(
 				'action'         => $this->method,
 				'admin_email'    => $admin_email,
-				'plugin_version' => CUSTOM_PERMALINKS_PLUGIN_VERSION,
+				'plugin_version' => CUSTOM_PERMALINKS_VERSION,
 				'site_name'      => $site_name,
 				'site_url'       => $site_url,
 				'wp_version'     => $wp_version,
