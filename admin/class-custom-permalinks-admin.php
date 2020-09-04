@@ -13,18 +13,26 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Create admin menu, add privacy policy etc.
  */
 class Custom_Permalinks_Admin {
-
+	/**
+	 * Css file suffix (version number with with extension).
+	 *
+	 * @var string
+	 */
+	private $css_file_suffix = '.min.css';
 
 	/**
 	 * Initializes WordPress hooks.
 	 */
 	public function __construct() {
+		$this->css_file_suffix = '-' . CUSTOM_PERMALINKS_VERSION . '.min.css';
+
+		add_action( 'admin_init', array( $this, 'privacy_policy' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+
 		add_filter(
 			'plugin_action_links_' . CUSTOM_PERMALINKS_BASENAME,
 			array( $this, 'settings_link' )
 		);
-		add_action( 'admin_init', array( $this, 'privacy_policy' ) );
 	}
 
 	/**
@@ -60,13 +68,37 @@ class Custom_Permalinks_Admin {
 			'cp-category-permalinks',
 			array( $this, 'taxonomy_permalinks_page' )
 		);
-		add_submenu_page(
+		$about_page = add_submenu_page(
 			'cp-post-permalinks',
 			'About Custom Permalinks',
 			'About',
 			'install_plugins',
 			'cp-about-plugins',
 			array( $this, 'about_plugin' )
+		);
+
+		add_action( 'admin_print_styles-' . $about_page . '',
+			array( $this, 'add_about_style' )
+		);
+	}
+
+	/**
+	 * Add about page style.
+	 * @since 1.8.0
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function add_about_style()
+	{
+		wp_enqueue_style(
+			'custom-permalinks-about-style',
+			plugins_url(
+				'/assets/css/about-plugins' . $this->css_file_suffix,
+				CUSTOM_PERMALINKS_FILE
+			),
+			array(),
+			CUSTOM_PERMALINKS_VERSION
 		);
 	}
 

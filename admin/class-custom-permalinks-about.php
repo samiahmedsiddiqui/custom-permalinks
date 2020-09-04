@@ -13,18 +13,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Generate about page HTML.
  */
 class Custom_Permalinks_About {
-	/**
-	 * Css file suffix (version number with with extension).
-	 *
-	 * @var string
-	 */
-	private $css_file_suffix = '.min.css';
+
 
 	/**
 	 * Class constructor.
 	 */
 	public function __construct() {
-		$this->css_file_suffix = '-' . CUSTOM_PERMALINKS_VERSION . '.min.css';
 		$this->more_plugins();
 	}
 
@@ -37,16 +31,7 @@ class Custom_Permalinks_About {
 	 * @return void
 	 */
 	private function more_plugins() {
-		$img_src    = plugins_url( '/assets/images', CUSTOM_PERMALINKS_FILE )
-		wp_enqueue_style(
-			'style',
-			plugins_url(
-				'/assets/css/about-plugins' . $this->css_file_suffix,
-				CUSTOM_PERMALINKS_FILE
-			),
-			array(),
-			CUSTOM_PERMALINKS_VERSION
-		);
+		$img_src = plugins_url( '/assets/images', CUSTOM_PERMALINKS_FILE )
 		?>
 
 		<div class="wrap">
