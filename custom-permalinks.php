@@ -41,5 +41,4 @@ if ( ! defined( 'CUSTOM_PERMALINKS_FILE' ) ) {
 }
 
 // Include the main Custom Permalinks class.
-include_once plugin_dir_path( CUSTOM_PERMALINKS_FILE ) . 'includes/class-custom-permalinks.php';
-new Custom_Permalinks();
+require_once plugin_dir_path( CUSTOM_PERMALINKS_FILE ) . 'includes/class-custom-permalinks.php';

@@ -77,20 +77,21 @@ class Custom_Permalinks_Admin {
 			array( $this, 'about_plugin' )
 		);
 
-		add_action( 'admin_print_styles-' . $about_page . '',
+		add_action(
+			'admin_print_styles-' . $about_page . '',
 			array( $this, 'add_about_style' )
 		);
 	}
 
 	/**
 	 * Add about page style.
+	 *
 	 * @since 1.8.0
 	 * @access public
 	 *
 	 * @return void
 	 */
-	public function add_about_style()
-	{
+	public function add_about_style() {
 		wp_enqueue_style(
 			'custom-permalinks-about-style',
 			plugins_url(

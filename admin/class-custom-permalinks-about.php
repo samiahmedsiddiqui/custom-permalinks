@@ -38,10 +38,8 @@ class Custom_Permalinks_About {
 			<div class="float">
 				<h1>
 				<?php
-				esc_html_e(
-					'Custom Permalinks v"CUSTOM_PERMALINKS_VERSION"',
-					'custom-permalinks'
-				);
+				esc_html_e( 'Custom Permalinks', 'custom-permalinks' );
+				esc_html_e( ' v1.7.1' );
 				?>
 				</h1>
 				<div class="tagline">

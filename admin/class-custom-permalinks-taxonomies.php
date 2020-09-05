@@ -300,7 +300,7 @@ class Custom_Permalinks_Taxonomies {
 												'</strong></td>' .
 												'<td>' . ucwords( $info['kind'] ) . '</td>' .
 												'<td>' .
-													'<a href="' . $permalink . '" target="_blank" title="' . __( 'Visit "$term->name"', 'custom-permalinks' ) . '">' .
+													'<a href="' . $permalink . '" target="_blank" title="' . __( 'Visit', 'custom-permalinks' ) . ' ' . $term->name . '">' .
 														$perm_text .
 													'</a>' .
 												'</td>' .
