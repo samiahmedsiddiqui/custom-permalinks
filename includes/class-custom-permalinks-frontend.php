@@ -295,8 +295,12 @@ class Custom_Permalinks_Frontend {
 
 			$pos = strpos( $this->request_uri, '?' );
 			if ( false !== $pos ) {
-				$query_vars    = substr( $this->request_uri, $pos + 1 );
-				$original_url .= ( strpos( $original_url, '?' ) === false ? '?' : '&' ) . $query_vars;
+				$query_vars = substr( $this->request_uri, $pos + 1 );
+				if ( false === strpos( $original_url, '?' ) ) {
+					$original_url .= '?' . $query_vars;
+				} else {
+					$original_url .= '&' . $query_vars;
+				}
 			}
 
 			/*
@@ -305,7 +309,10 @@ class Custom_Permalinks_Frontend {
 			 * We set $_SERVER variables to fool the function.
 			 */
 			$_SERVER['REQUEST_URI'] = '/' . ltrim( $original_url, '/' );
-			$path_info              = apply_filters( 'custom_permalinks_path_info', '__false' );
+			$path_info              = apply_filters(
+				'custom_permalinks_path_info',
+				'__false'
+			);
 			if ( '__false' !== $path_info ) {
 				$_SERVER['PATH_INFO'] = '/' . ltrim( $original_url, '/' );
 			}
@@ -467,17 +474,16 @@ class Custom_Permalinks_Frontend {
 			}
 		}
 
-		if ( $custom_permalink
-			&& (
-				substr( $request, 0, strlen( $custom_permalink ) ) != $custom_permalink
-				|| $request == $custom_permalink . '/'
-			)
+		$custom_length = strlen( $custom_permalink );
+		if ( substr( $request, 0, $custom_length ) !== $custom_permalink
+			|| $request === $custom_permalink . '/'
 		) {
 			// Request doesn't match permalink - redirect.
-			$url = $custom_permalink;
+			$url             = $custom_permalink;
+			$original_length = strlen( $original_permalink );
 
-			if ( substr( $request, 0, strlen( $original_permalink ) ) == $original_permalink
-				&& trim( $request, '/' ) != trim( $original_permalink, '/' )
+			if ( substr( $request, 0, $original_length ) === $original_permalink
+				&& trim( $request, '/' ) !== trim( $original_permalink, '/' )
 			) {
 				// This is the original link; we can use this url to derive the new one.
 				$url = preg_replace(
