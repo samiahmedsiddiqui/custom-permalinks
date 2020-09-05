@@ -211,7 +211,7 @@ class Custom_Permalinks_Post_Types {
 											__( 'Search Custom Permalink:', 'custom-permalinks' ) .
 										'</label>' .
 										'<input type="search" id="custom-permalink-search-input" name="s" value="' . $search_value . '">' .
-										'<input type="submit" id="search-submit" class="button" value="' . __( 'Search Permalink', 'custom-permalinks' ) . '"></p>' .
+										'<input type="submit" id="search-submit" class="button" value="' . __( 'Search Permalinks', 'custom-permalinks' ) . '"></p>' .
 										'</form>' .
 										'<form action="' . $site_url . $request_uri . '" method="post">' .
 										'<div class="tablenav top">' .
@@ -332,7 +332,7 @@ class Custom_Permalinks_Post_Types {
 												'</td>' .
 												'<td>' . ucwords( $post->post_type ) . '</td>' .
 												'<td>' .
-													'<a href="' . $permalink . '" target="_blank" title="' . __( 'Visit "$post->post_title"', 'custom-permalinks' ) . '">' .
+													'<a href="' . $permalink . '" target="_blank" title="' . __( 'Visit', 'custom-permalinks' ) . ' ' . $post->post_title . '">' .
 													$perm_text .
 													'</a>' .
 												'</td>' .

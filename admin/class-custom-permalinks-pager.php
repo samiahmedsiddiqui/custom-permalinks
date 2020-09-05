@@ -37,7 +37,7 @@ class Custom_Permalinks_Pager {
 		if ( 1 == $total_pager ) {
 			$pagination_html = '<div class="tablenav-pages one-page">' .
 														'<span class="displaying-num">' .
-															$total_permalinks .
+															$total_permalinks . ' ' .
 															__( 'items', 'custom-permalinks' ) .
 														'</span>' .
 													'</div>';
@@ -54,27 +54,27 @@ class Custom_Permalinks_Pager {
 		}
 		$pagination_html = '<div class="tablenav-pages">' .
 													'<span class="displaying-num">' .
-														$total_permalinks .
+														$total_permalinks . ' ' .
 														__( 'items', 'custom-permalinks' ) .
 													'</span>' .
 													'<span class="pagination-links">';
 
 		if ( 1 == $current_pager_value ) {
-			$pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&laquo; </span>' .
-													'<span class="tablenav-pages-navspan" aria-hidden="true">&lsaquo; </span>';
+			$pagination_html .= '<span class="tablenav-pages-navspan button disabled" aria-hidden="true">&laquo;</span> ' .
+													'<span class="tablenav-pages-navspan button disabled" aria-hidden="true">&lsaquo;</span> ';
 		} else {
 			$prev_page = $current_pager_value - 1;
 			if ( 1 == $prev_page ) {
-				$pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&laquo;</span>';
+				$pagination_html .= '<span class="tablenav-pages-navspan button" aria-hidden="true">&laquo;</span>';
 			} else {
-				$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=1" title="' . __( 'First page', 'custom-permalinks' ) . '" class="first-page">' .
+				$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=1" class="first-page button">' .
 															'<span class="screen-reader-text">' .
 																__( 'First page', 'custom-permalinks' ) .
 															'</span>' .
 															'<span aria-hidden="true">&laquo;</span>' .
 														'</a> ';
 			}
-			$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $prev_page . '" title="' . __( 'Previous page', 'custom-permalinks' ) . '" class="prev-page">' .
+			$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $prev_page . '" class="prev-page button">' .
 														'<span class="screen-reader-text">' .
 															__( 'Previous page', 'custom-permalinks' ) .
 														'</span>' .
@@ -91,20 +91,20 @@ class Custom_Permalinks_Pager {
 												'</span>';
 
 		if ( $current_pager_value == $total_pager ) {
-			$pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&rsaquo; </span>' .
-													'<span class="tablenav-pages-navspan" aria-hidden="true">&raquo; </span>';
+			$pagination_html .= ' <span class="tablenav-pages-navspan button disabled" aria-hidden="true">&rsaquo;</span>' .
+													' <span class="tablenav-pages-navspan button disabled" aria-hidden="true">&raquo;</span>';
 		} else {
 			$next_page        = $current_pager_value + 1;
-			$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $next_page . '" title="' . __( 'Next page', 'custom-permalinks' ) . '" class="next-page">' .
+			$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $next_page . '" class="next-page button">' .
 														'<span class="screen-reader-text">' .
 															__( 'Next page', 'custom-permalinks' ) .
 														'</span>' .
 														'<span aria-hidden="true">&rsaquo;</span>' .
 													'</a> ';
 			if ( $total_pager == $next_page ) {
-				$pagination_html .= '<span class="tablenav-pages-navspan" aria-hidden="true">&raquo;</span>';
+				$pagination_html .= '<span class="tablenav-pages-navspan button" aria-hidden="true">&raquo;</span>';
 			} else {
-				$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $total_pager . '" title="' . __( 'Last page', 'custom-permalinks' ) . '" class="last-page">' .
+				$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $total_pager . '" class="last-page button">' .
 															'<span class="screen-reader-text">' .
 																__( 'Last page', 'custom-permalinks' ) .
 															'</span>' .
