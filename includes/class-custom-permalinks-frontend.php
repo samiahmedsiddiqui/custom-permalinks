@@ -21,6 +21,13 @@ class Custom_Permalinks_Frontend {
 	private $query_string_uri = '';
 
 	/**
+	 * Preserve the url for later use in parse_request.
+	 *
+	 * @var string
+	 */
+	private $registered_url = '';
+
+	/**
 	 * The URI which is given in order to access this page. Default empty.
 	 *
 	 * @var string
@@ -137,7 +144,6 @@ class Custom_Permalinks_Frontend {
 	 */
 	public function parse_request( $query ) {
 		global $wpdb;
-		global $_CPRegisteredURL;
 
 		if ( isset( $_SERVER['REQUEST_URI'] )
 			&& $_SERVER['REQUEST_URI'] !== $this->request_uri
@@ -215,7 +221,7 @@ class Custom_Permalinks_Frontend {
 			 * if it's the same as the permalink (no extra stuff).
 			 */
 			if ( trim( $posts[0]->meta_value, '/' ) == $request_no_slash ) {
-				$_CPRegisteredURL = $request;
+				$this->registered_url = $request;
 			}
 
 			if ( 'draft' === $posts[0]->post_status ) {
@@ -260,8 +266,9 @@ class Custom_Permalinks_Frontend {
 			}
 
 			foreach ( array_keys( $table ) as $permalink ) {
-				if ( substr( $request_no_slash, 0, strlen( $permalink ) === $permalink )
-					|| substr( $request_no_slash . '/', 0, strlen( $permalink ) === $permalink )
+				$perm_length = strlen( $permalink );
+				if ( substr( $request_no_slash, 0, $perm_length ) === $permalink
+					|| substr( $request_no_slash . '/', 0, $perm_length ) === $permalink
 				) {
 					$term = $table[ $permalink ];
 
@@ -270,7 +277,7 @@ class Custom_Permalinks_Frontend {
 					 * permalink (no extra stuff)
 					 */
 					if ( trim( $permalink, '/' ) === $request_no_slash ) {
-						$_CPRegisteredURL = $request;
+						$this->registered_url = $request;
 					}
 
 					$term_link    = $this->original_term_link( $term['id'] );
@@ -768,8 +775,6 @@ class Custom_Permalinks_Frontend {
 	 * @return string Adds/removes a trailing slash based on the permalink structure.
 	 */
 	public function custom_trailingslash( $url_string ) {
-		global $_CPRegisteredURL;
-
 		remove_filter(
 			'user_trailingslashit',
 			array( $this, 'custom_trailingslash' )
@@ -789,7 +794,7 @@ class Custom_Permalinks_Frontend {
 		add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
 
 		if ( trim( $request ) ) {
-			if ( trim( $_CPRegisteredURL, '/' ) == trim( $request, '/' ) ) {
+			if ( trim( $this->registered_url, '/' ) === trim( $request, '/' ) ) {
 				if ( '/' === $url_string[0] ) {
 					$trailingslash_string = '/';
 				} else {
@@ -800,7 +805,7 @@ class Custom_Permalinks_Frontend {
 					$trailingslash_string .= trailingslashit( $url['path'] );
 				}
 
-				$trailingslash_string .= $_CPRegisteredURL;
+				$trailingslash_string .= $this->registered_url;
 			}
 		}
 
