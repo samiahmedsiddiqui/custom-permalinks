@@ -220,7 +220,7 @@ class Custom_Permalinks_Frontend {
 			 * A post matches our request. Preserve this url for later
 			 * if it's the same as the permalink (no extra stuff).
 			 */
-			if ( trim( $posts[0]->meta_value, '/' ) == $request_no_slash ) {
+			if ( trim( $posts[0]->meta_value, '/' ) === $request_no_slash ) {
 				$this->registered_url = $request;
 			}
 
@@ -831,7 +831,7 @@ class Custom_Permalinks_Frontend {
 		$table = get_option( 'custom_permalink_table' );
 		if ( $table ) {
 			foreach ( $table as $link => $info ) {
-				if ( $info['id'] == $term_id ) {
+				if ( $info['id'] === $term_id ) {
 					return $link;
 				}
 			}

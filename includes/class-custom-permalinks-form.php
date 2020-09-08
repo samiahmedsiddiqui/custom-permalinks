@@ -99,7 +99,7 @@ class Custom_Permalinks_Form {
 			$check_availability = true;
 		} elseif ( 'attachment' === $post->post_type ) {
 			$check_availability = true;
-		} elseif ( get_option( 'page_on_front' ) == $post->ID ) {
+		} elseif ( intval( get_option( 'page_on_front' ) ) === $post->ID ) {
 			$check_availability = true;
 		} elseif ( ! isset( $public_post_types[ $post->post_type ] ) ) {
 			$check_availability = true;
@@ -173,7 +173,7 @@ class Custom_Permalinks_Form {
 		$original_link = $cp_frontend->original_post_link( $post_id );
 
 		if ( isset( $_REQUEST['custom_permalink'] )
-			&& $_REQUEST['custom_permalink'] != $original_link
+			&& $_REQUEST['custom_permalink'] !== $original_link
 		) {
 			$reserved_chars = array(
 				'(',

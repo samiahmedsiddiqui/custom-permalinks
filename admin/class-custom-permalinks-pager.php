@@ -30,11 +30,14 @@ class Custom_Permalinks_Pager {
 	public function get_pagination( $total_permalinks, $current_pager_value = 1,
 		$total_pager = 0
 	) {
-		if ( 0 == $total_pager ) {
+		$current_pager_value = intval( $current_pager_value );
+		$total_pager         = intval( $total_pager );
+
+		if ( 0 === $total_pager ) {
 			return;
 		}
 
-		if ( 1 == $total_pager ) {
+		if ( 1 === $total_pager ) {
 			$pagination_html = '<div class="tablenav-pages one-page">' .
 														'<span class="displaying-num">' .
 															$total_permalinks . ' ' .
@@ -59,13 +62,13 @@ class Custom_Permalinks_Pager {
 													'</span>' .
 													'<span class="pagination-links">';
 
-		if ( 1 == $current_pager_value ) {
+		if ( 1 === $current_pager_value ) {
 			$pagination_html .= '<span class="tablenav-pages-navspan button disabled" aria-hidden="true">&laquo;</span> ' .
 													'<span class="tablenav-pages-navspan button disabled" aria-hidden="true">&lsaquo;</span> ';
 		} else {
 			$prev_page = $current_pager_value - 1;
-			if ( 1 == $prev_page ) {
-				$pagination_html .= '<span class="tablenav-pages-navspan button" aria-hidden="true">&laquo;</span>';
+			if ( 1 === $prev_page ) {
+				$pagination_html .= '<span class="tablenav-pages-navspan button disabled" aria-hidden="true">&laquo;</span>';
 			} else {
 				$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=1" class="first-page button">' .
 															'<span class="screen-reader-text">' .
@@ -90,7 +93,7 @@ class Custom_Permalinks_Pager {
 													'<span class="tablenav-paging-text"> of <span class="total-pages">' . $total_pager . ' </span> </span>' .
 												'</span>';
 
-		if ( $current_pager_value == $total_pager ) {
+		if ( $current_pager_value === $total_pager ) {
 			$pagination_html .= ' <span class="tablenav-pages-navspan button disabled" aria-hidden="true">&rsaquo;</span>' .
 													' <span class="tablenav-pages-navspan button disabled" aria-hidden="true">&raquo;</span>';
 		} else {
@@ -101,8 +104,8 @@ class Custom_Permalinks_Pager {
 														'</span>' .
 														'<span aria-hidden="true">&rsaquo;</span>' .
 													'</a> ';
-			if ( $total_pager == $next_page ) {
-				$pagination_html .= '<span class="tablenav-pages-navspan button" aria-hidden="true">&raquo;</span>';
+			if ( $total_pager === $next_page ) {
+				$pagination_html .= '<span class="tablenav-pages-navspan button disabled" aria-hidden="true">&raquo;</span>';
 			} else {
 				$pagination_html .= ' <a href="' . $remove_pager_uri[0] . '&paged=' . $total_pager . '" class="last-page button">' .
 															'<span class="screen-reader-text">' .

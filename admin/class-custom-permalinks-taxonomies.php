@@ -194,7 +194,8 @@ class Custom_Permalinks_Taxonomies {
 
 			$cp_pager = new Custom_Permalinks_Pager();
 			$filtered = array();
-			if ( '' != $search_value ) {
+			if ( '' !== $search_value ) {
+				$search_value = str_replace( '/', '\/', $search_value );
 				foreach ( $table as $key => $value ) {
 					if ( preg_match( '/' . $search_value . '/', $key ) ) {
 						$filtered[ $key ] = $value;
@@ -268,7 +269,7 @@ class Custom_Permalinks_Taxonomies {
 				}
 
 				$type = 'category';
-				if ( 'tag' == $info['kind'] ) {
+				if ( 'tag' === $info['kind'] ) {
 					$type = 'post_tag';
 				}
 

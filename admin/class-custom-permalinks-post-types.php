@@ -282,7 +282,7 @@ class Custom_Permalinks_Post_Types {
 		$post_html .= '<table class="wp-list-table widefat fixed striped posts">' .
 									'<thead>' . $table_navigation . '</thead>' .
 									'<tbody>';
-		if ( 0 != $posts && ! empty( $posts ) ) {
+		if ( 0 !== $posts && ! empty( $posts ) ) {
 			$cp_frontend = new Custom_Permalinks_Frontend();
 			if ( class_exists( 'SitePress' ) ) {
 				$wpml_lang_format = apply_filters(
