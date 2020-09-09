@@ -21,13 +21,15 @@
     <!-- Show progress, show the error codes for each message (source). -->
     <arg value="sp"/>
 
-    <!-- SNIFF FOR PHP CROSS-VERSION COMPATIBILITY. -->
-    <config name="testVersion" value="5.4-"/>
-    <rule ref="PHPCompatibilityWP">
-        <include-pattern>*\.php$</include-pattern>
-    </rule>
+    <!-- Run against the PHPCompatibilityWP ruleset. -->
+    <rule ref="PHPCompatibilityWP"/>
 
-    <!-- Rules -->
-    <rule ref="WordPress"/>
+		<!-- Run against the WordPress ruleset. -->
+    <rule ref="WordPress">
+			<exclude name="WordPress.Security.ValidatedSanitizedInput.MissingUnslash" />
+		</rule>
+
+		<!-- Check for cross-version support for PHP 5.4 and higher. -->
+    <config name="testVersion" value="5.4-"/>
 
 </ruleset>
