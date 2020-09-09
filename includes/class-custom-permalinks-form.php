@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Custom_Permalinks_Form {
 	/**
-	 * JS file suffix (version number with with extension).
+	 * JS file suffix extension.
 	 *
 	 * @var string
 	 */
@@ -36,6 +36,9 @@ class Custom_Permalinks_Form {
 	 * @return void
 	 */
 	public function init() {
+		/*
+		 * JS file suffix (version number with extension).
+		 */
 		$this->js_file_suffix = '-' . CUSTOM_PERMALINKS_VERSION . '.min.js';
 
 		add_action( 'add_meta_boxes', array( $this, 'permalink_edit_box' ) );

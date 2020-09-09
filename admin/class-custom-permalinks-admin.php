@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Custom_Permalinks_Admin {
 	/**
-	 * Css file suffix (version number with with extension).
+	 * Css file suffix extension.
 	 *
 	 * @var string
 	 */
@@ -24,6 +24,9 @@ class Custom_Permalinks_Admin {
 	 * Initializes WordPress hooks.
 	 */
 	public function __construct() {
+		/*
+		 * Css file suffix (version number with extension).
+		 */
 		$this->css_file_suffix = '-' . CUSTOM_PERMALINKS_VERSION . '.min.css';
 
 		add_action( 'admin_init', array( $this, 'privacy_policy' ) );
