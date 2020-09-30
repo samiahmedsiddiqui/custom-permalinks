@@ -323,14 +323,19 @@ class Custom_Permalinks_Frontend {
 				$_SERVER['QUERY_STRING'] = substr( $original_url, $pos + 1 );
 			}
 
-			parse_str( $_SERVER['QUERY_STRING'], $query_array );
-			$old_values = array();
-			if ( is_array( $query_array ) ) {
+			$old_values  = array();
+			$query_array = array();
+			if ( isset( $_SERVER['QUERY_STRING'] ) ) {
+				parse_str( $_SERVER['QUERY_STRING'], $query_array );
+			}
+
+			if ( is_array( $query_array ) && count( $query_array ) > 0 ) {
 				foreach ( $query_array as $key => $value ) {
 					$old_values[ $key ] = '';
 					if ( isset( $_REQUEST[ $key ] ) ) {
 						$old_values[ $key ] = $_REQUEST[ $key ];
 					}
+
 					$_GET[ $key ]     = $value;
 					$_REQUEST[ $key ] = $value;
 				}
