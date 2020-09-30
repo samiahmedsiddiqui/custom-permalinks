@@ -243,7 +243,16 @@ class Custom_Permalinks_Post_Types {
 											__( 'Custom Permalink navigation', 'custom-permalinks' ) .
 										'</h2>';
 
-			$query = "SELECT p.ID, p.post_title, p.post_type, pm.meta_value FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != '' " . $filter_permalink . ' ' . $sorting_by . ' ' . $page_limit . '';
+			$query = $wpdb->prepare(
+				"
+        SELECT p.ID, p.post_title, p.post_type, pm.meta_value
+        FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id)
+        WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != ''
+        %s %s %s",
+				$filter_permalink,
+				$sorting_by,
+				$page_limit
+			);
 			$posts = $wpdb->get_results( $query );
 
 			$total_pages = ceil( $count_posts->total_permalinks / 20 );
