@@ -295,17 +295,6 @@ class Custom_Permalinks_Form {
 		ob_end_clean();
 
 		if ( 'trash' !== $post->post_status ) {
-			wp_enqueue_script(
-				'custom-permalinks-form',
-				plugins_url(
-					'/assets/js/script-form' . $this->js_file_suffix,
-					CUSTOM_PERMALINKS_FILE
-				),
-				array(),
-				CUSTOM_PERMALINKS_VERSION,
-				true
-			);
-
 			$home_url = trailingslashit( home_url() );
 			if ( isset( $permalink ) && ! empty( $permalink ) ) {
 				$view_post_link = $home_url . $permalink;
@@ -744,7 +733,12 @@ class Custom_Permalinks_Form {
 			array(
 				'methods'             => 'GET',
 				'callback'            => array( $this, 'refresh_meta_form' ),
-				'permission_callback' => function() {
+				'args'                => array(
+					'id' => array(
+						'validate_callback' => 'is_numeric',
+					),
+				),
+				'permission_callback' => function () {
 					return current_user_can( 'edit_posts' );
 				},
 			)

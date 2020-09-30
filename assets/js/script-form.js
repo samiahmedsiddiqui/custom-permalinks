@@ -43,7 +43,7 @@ function blurPermalinkField() {
 function updateMetaBox() {
     "use strict";
 
-    if (!editPost) {
+    if (!editPost || !wpApiSettings || !wpApiSettings.nonce) {
         return;
     }
 
@@ -96,8 +96,10 @@ function updateMetaBox() {
             }
         };
 
-        xhttp.open("GET", getHomeURL.value + "/wp-json/custom-permalinks/v1/get-permalink/" + postId, true);
+        xhttp.open("GET", getHomeURL.value + "wp-json/custom-permalinks/v1/get-permalink/" + postId, true);
         xhttp.setRequestHeader("Cache-Control", "private, max-age=0, no-cache");
+				xhttp.setRequestHeader( 'X-WP-NONCE', wpApiSettings.nonce );
+
         xhttp.send();
     }
 
@@ -129,8 +131,10 @@ function permalinkContentLoaded() {
         postSlug.addEventListener("blur", blurPermalinkField);
     }
 
-    if (document.querySelector("#custom-permalinks-edit-box .inside").innerHTML.trim() === "") {
-        permalinkEdit.style.display = "none";
+		if (permalinkEdit) {
+				if (document.querySelector("#custom-permalinks-edit-box .inside").innerHTML.trim() === "") {
+						permalinkEdit.style.display = "none";
+				}
     }
 
     if (wp.data) {
