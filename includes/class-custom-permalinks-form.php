@@ -575,7 +575,7 @@ class Custom_Permalinks_Form {
 				$permalink = str_replace( '%2F', '/', urlencode( $new_permalink ) );
 				$table     = get_option( 'custom_permalink_table' );
 
-				if ( $permalink ) {
+				if ( $permalink && ! array_key_exists( $permalink, $table ) ) {
 					$table[ $permalink ] = array(
 						'id'   => $term_id,
 						'kind' => $taxonomy_name,

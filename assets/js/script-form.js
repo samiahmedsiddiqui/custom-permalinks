@@ -9,31 +9,30 @@ var lastIsSaving = false;
 /**
  * Change color of edit box on focus.
  */
-function focusPermalinkField() {
+function focusPermalinkField(event) {
     "use strict";
 
-    var newPostSlug = document.getElementById("custom-permalinks-post-slug");
-    if (newPostSlug) {
-        newPostSlug.style.color = "#000";
+    if (event.target) {
+        event.target.style.color = "#000";
     }
 }
 
 /**
  * Change color of edit box on blur.
  */
-function blurPermalinkField() {
+function blurPermalinkField(event) {
     "use strict";
 
-    var newPostSlug = document.getElementById("custom-permalinks-post-slug");
     var originalPermalink = document.getElementById("original-permalink");
-    if (!newPostSlug) {
+
+    if (!event.target) {
         return;
     }
 
-    getPermalink.value = newPostSlug.value;
-    if (newPostSlug.value === "" || newPostSlug.value === originalPermalink.value) {
-        newPostSlug.value = originalPermalink.value;
-        newPostSlug.style.color = "#ddd";
+    getPermalink.value = event.target.value;
+    if (event.target.value === "" || event.target.value === originalPermalink.value) {
+        event.target.value = originalPermalink.value;
+        event.target.style.color = "#ddd";
     }
 }
 
