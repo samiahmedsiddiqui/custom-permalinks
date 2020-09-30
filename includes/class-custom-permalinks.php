@@ -42,7 +42,7 @@ class Custom_Permalinks {
 	}
 
 	/**
-	 * Define constant if not already set.
+	 * Define constant if not set already.
 	 *
 	 * @since 1.8.0
 	 * @access private

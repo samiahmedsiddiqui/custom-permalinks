@@ -168,7 +168,14 @@ class Custom_Permalinks_Form {
 	 * @return void
 	 */
 	public function save_post( $post_id ) {
-		if ( ! isset( $_REQUEST['custom_permalinks_edit'] ) ) {
+		if ( ! isset( $_REQUEST['_custom_permalinks_post_nonce'] )
+			&& ! isset( $_REQUEST['custom_permalinks'] )
+		) {
+			return;
+		}
+
+		$action = 'custom-permalinks_' . $post_id;
+		if ( ! wp_verify_nonce( $_REQUEST['_custom_permalinks_post_nonce'], $action ) ) {
 			return;
 		}
 
@@ -279,6 +286,7 @@ class Custom_Permalinks_Form {
 		$this->get_permalink_form(
 			$permalink,
 			$original_permalink,
+			$post_id,
 			false,
 			$post->post_name
 		);
@@ -395,24 +403,28 @@ class Custom_Permalinks_Form {
 	 *
 	 * @access public
 	 *
-	 * @param object $object Term Object.
+	 * @param object|string $tag Current taxonomy term object for Edit form otherwise
+	 * The taxonomy slug.
 	 *
 	 * @return void
 	 */
-	public function term_options( $object ) {
+	public function term_options( $tag ) {
 		$permalink          = '';
 		$original_permalink = '';
-		if ( is_object( $object ) && isset( $object->term_id ) ) {
+
+		if ( is_object( $tag ) && isset( $tag->term_id ) ) {
 			$cp_frontend = new Custom_Permalinks_Frontend();
-			if ( $object->term_id ) {
-				$permalink          = $cp_frontend->term_permalink( $object->term_id );
+			if ( $tag->term_id ) {
+				$permalink          = $cp_frontend->term_permalink( $tag->term_id );
 				$original_permalink = $cp_frontend->original_term_link(
-					$object->term_id
+					$tag->term_id
 				);
 			}
-		}
 
-		$this->get_permalink_form( $permalink, $original_permalink );
+			$this->get_permalink_form( $permalink, $original_permalink, $tag->term_id );
+		} else {
+			$this->get_permalink_form( $permalink, $original_permalink, $tag );
+		}
 
 		// Move the save button to above this form.
 		wp_enqueue_script( 'jquery' );
@@ -431,21 +443,38 @@ class Custom_Permalinks_Form {
 	 *
 	 * @access private
 	 *
-	 * @param string $permalink Permalink which is created by the plugin.
-	 * @param string $original Permalink which set by WordPress.
-	 * @param bool   $render_containers Shows Post/Term Edit.
-	 * @param string $postname Post Name.
+	 * @param string     $permalink Permalink which is created by the plugin.
+	 * @param string     $original Permalink which set by WordPress.
+	 * @param int|string $id Post ID for Posts, Pages and custom post types, Term ID
+	 * for Taxonomy Edit form and taxonomy slug in case of term add.
+	 * @param bool       $render_containers Shows Post/Term Edit.
+	 * @param string     $postname Post Name.
 	 *
 	 * @return void
 	 */
-	private function get_permalink_form( $permalink, $original = '',
+	private function get_permalink_form( $permalink, $original = '', $id,
 		$render_containers = true, $postname = ''
 	) {
 		$encoded_permalink = htmlspecialchars( urldecode( $permalink ) );
 		$home_url          = trailingslashit( home_url() );
 
-		echo '<input value="true" type="hidden" name="custom_permalinks_edit" />' .
-					'<input value="' . $home_url . '" type="hidden" name="custom_permalinks_home_url" id="custom_permalinks_home_url" />' .
+		if ( $render_containers ) {
+			wp_nonce_field(
+				'custom-permalinks_' . $id,
+				'_custom_permalinks_term_nonce',
+				false,
+				true
+			);
+		} else {
+			wp_nonce_field(
+				'custom-permalinks_' . $id,
+				'_custom_permalinks_post_nonce',
+				false,
+				true
+			);
+		}
+
+		echo '<input value="' . $home_url . '" type="hidden" name="custom_permalinks_home_url" id="custom_permalinks_home_url" />' .
 					'<input value="' . $encoded_permalink . '" type="hidden" name="custom_permalink" id="custom_permalink" />';
 
 		if ( $render_containers ) {
@@ -516,13 +545,24 @@ class Custom_Permalinks_Form {
 	 */
 	public function save_term( $term_id ) {
 		$term = get_term( $term_id );
-		if ( isset( $_REQUEST['custom_permalink'] ) && isset( $term )
-			&& isset( $term->taxonomy )
+
+		if ( ! isset( $_REQUEST['_custom_permalinks_term_nonce'] )
+			&& ! isset( $_REQUEST['custom_permalink'] )
 		) {
+			return;
+		}
+
+		$action1 = 'custom-permalinks_' . $term_id;
+		$action2 = 'custom-permalinks_' . $term->taxonomy;
+		if ( ! wp_verify_nonce( $_REQUEST['_custom_permalinks_term_nonce'], $action1 )
+			&& ! wp_verify_nonce( $_REQUEST['_custom_permalinks_term_nonce'], $action2 )
+		) {
+			return;
+		}
+
+		if ( isset( $term ) && isset( $term->taxonomy ) ) {
 			$taxonomy_name = $term->taxonomy;
-			if ( 'category' === $taxonomy_name
-				|| 'post_tag' === $taxonomy_name
-			) {
+			if ( 'category' === $taxonomy_name || 'post_tag' === $taxonomy_name ) {
 				if ( 'post_tag' === $taxonomy_name ) {
 					$taxonomy_name = 'tag';
 				}
