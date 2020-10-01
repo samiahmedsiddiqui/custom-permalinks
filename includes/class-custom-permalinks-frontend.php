@@ -521,8 +521,11 @@ class Custom_Permalinks_Frontend {
 		}
 
 		$custom_length = strlen( $custom_permalink );
-		if ( substr( $request, 0, $custom_length ) !== $custom_permalink
-			|| $request === $custom_permalink . '/'
+		if ( $custom_permalink
+			&& (
+				substr( $request, 0, $custom_length ) !== $custom_permalink
+				|| $request === $custom_permalink . '/'
+			)
 		) {
 			// Request doesn't match permalink - redirect.
 			$url             = $custom_permalink;
