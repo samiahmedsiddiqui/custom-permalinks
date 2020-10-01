@@ -3,7 +3,7 @@
  * Plugin Name: Custom Permalinks
  * Plugin URI: https://www.custompermalinks.com/
  * Description: Set custom permalinks on a per-post basis
- * Version: 1.7.1
+ * Version: 2.0.0-alpha.1
  * Author: Sami Ahmed Siddiqui
  * Author URI: https://profiles.wordpress.org/sasiddiqui/
  * License: GPLv3
