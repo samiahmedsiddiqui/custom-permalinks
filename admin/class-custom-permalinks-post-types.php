@@ -263,10 +263,7 @@ class Custom_Permalinks_Post_Types {
 					$total_pages
 				);
 				if ( $get_paged > $total_pages ) {
-					$redirect_uri = explode(
-						'&paged=' . $get_paged . '',
-						$request_uri
-					);
+					$redirect_uri = explode( '&paged=' . $get_paged . '', $request_uri );
 
 					wp_safe_redirect( $redirect_uri[0], 301 );
 					exit;
