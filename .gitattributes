@@ -14,6 +14,12 @@ gulpfile.js export-ignore
 # manifest file
 package.json export-ignore
 
+# PHPCS config file
+.phpcs.xml
+
+# PHP Unit test file
+phpunit.xml
+
 # Unminified CSS and JS files
 about-plugins.css export-ignore
 script-form.js export-ignore
