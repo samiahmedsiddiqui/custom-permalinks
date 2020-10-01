@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Custom Permalinks
- * Plugin URI: https://wordpress.org/plugins/custom-permalinks/
+ * Plugin URI: https://www.custompermalinks.com/
  * Description: Set custom permalinks on a per-post basis
  * Version: 1.7.1
  * Author: Sami Ahmed Siddiqui
- * Author URI: https://www.custompermalinks.com/
+ * Author URI: https://profiles.wordpress.org/sasiddiqui/
  * License: GPLv3
  *
  * Text Domain: custom-permalinks
