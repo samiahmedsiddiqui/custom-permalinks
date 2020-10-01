@@ -54,7 +54,7 @@ class Custom_Permalinks_Frontend {
 		add_action( 'template_redirect', array( $this, 'make_redirect' ), 5 );
 
 		add_filter( 'request', array( $this, 'parse_request' ) );
-		add_filter( 'oembed_request_post_id',  array( $this, 'oembed_request' ), 10, 2 );
+		add_filter( 'oembed_request_post_id', array( $this, 'oembed_request' ), 10, 2 );
 		add_filter( 'post_link', array( $this, 'custom_post_link' ), 10, 2 );
 		add_filter( 'post_type_link', array( $this, 'custom_post_link' ), 10, 2 );
 		add_filter( 'page_link', array( $this, 'custom_page_link' ), 10, 2 );
@@ -134,6 +134,56 @@ class Custom_Permalinks_Frontend {
 	}
 
 	/**
+	 * Search a permalink in the posts table and return its result.
+	 *
+	 * @since 2.0.0
+	 * @access private
+	 *
+	 * @param string $requested_url Requested URL.
+	 *
+	 * @return object|null Containing Post ID, Permalink, Post Type, and Post status
+	 *                     if URL matched otherwise returns null.
+	 */
+	private function query_post( $requested_url ) {
+		global $wpdb;
+
+		$sql = $wpdb->prepare(
+			'SELECT p.ID, pm.meta_value, p.post_type, p.post_status ' .
+				" FROM $wpdb->posts AS p INNER JOIN $wpdb->postmeta AS pm ON (pm.post_id = p.ID) " .
+				" WHERE pm.meta_key = 'custom_permalink' " .
+				' AND (pm.meta_value = %s OR pm.meta_value = %s) ' .
+				" AND p.post_status != 'trash' AND p.post_type != 'nav_menu_item' " .
+				" ORDER BY FIELD(post_status,'publish','private','pending','draft','auto-draft','inherit')," .
+			" FIELD(post_type,'post','page') LIMIT 1",
+			$requested_url,
+			$requested_url . '/'
+		);
+
+		$posts = $wpdb->get_results( $sql );
+
+		$remove_like_query = apply_filters( 'cp_remove_like_query', '__true' );
+		if ( ! $posts && '__true' === $remove_like_query ) {
+			$sql = $wpdb->prepare(
+				"SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
+					" LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
+					" meta_key = 'custom_permalink' AND meta_value != '' AND " .
+					' ( LOWER(meta_value) = LEFT(LOWER(%s), LENGTH(meta_value)) OR ' .
+					'   LOWER(meta_value) = LEFT(LOWER(%s), LENGTH(meta_value)) ) ' .
+					"  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
+					' ORDER BY LENGTH(meta_value) DESC, ' .
+					" FIELD(post_status,'publish','private','pending','draft','auto-draft','inherit')," .
+					" FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
+				$requested_url,
+				$requested_url . '/'
+			);
+
+			$posts = $wpdb->get_results( $sql );
+		}
+
+		return $posts;
+	}
+
+	/**
 	 * Filter to rewrite the query if we have a matching post.
 	 *
 	 * @since 0.1.0
@@ -182,39 +232,7 @@ class Custom_Permalinks_Frontend {
 			$request = $cp_form->check_conflicts( $request );
 		}
 		$request_no_slash = preg_replace( '@/+@', '/', trim( $request, '/' ) );
-
-		$sql = $wpdb->prepare(
-			'SELECT p.ID, pm.meta_value, p.post_type, p.post_status ' .
-				" FROM $wpdb->posts AS p INNER JOIN $wpdb->postmeta AS pm ON (pm.post_id = p.ID) " .
-				" WHERE pm.meta_key = 'custom_permalink' " .
-				' AND (pm.meta_value = %s OR pm.meta_value = %s) ' .
-				" AND p.post_status != 'trash' AND p.post_type != 'nav_menu_item' " .
-				" ORDER BY FIELD(post_status,'publish','private','pending','draft','auto-draft','inherit')," .
-			" FIELD(post_type,'post','page') LIMIT 1",
-			$request_no_slash,
-			$request_no_slash . '/'
-		);
-
-		$posts = $wpdb->get_results( $sql );
-
-		$remove_like_query = apply_filters( 'cp_remove_like_query', '__true' );
-		if ( ! $posts && '__true' === $remove_like_query ) {
-			$sql = $wpdb->prepare(
-				"SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
-					" LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
-					" meta_key = 'custom_permalink' AND meta_value != '' AND " .
-					' ( LOWER(meta_value) = LEFT(LOWER(%s), LENGTH(meta_value)) OR ' .
-					'   LOWER(meta_value) = LEFT(LOWER(%s), LENGTH(meta_value)) ) ' .
-					"  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
-					' ORDER BY LENGTH(meta_value) DESC, ' .
-					" FIELD(post_status,'publish','private','pending','draft','auto-draft','inherit')," .
-					" FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
-				$request_no_slash,
-				$request_no_slash . '/'
-			);
-
-			$posts = $wpdb->get_results( $sql );
-		}
+		$posts            = $this->query_post( $request_no_slash );
 
 		if ( $posts ) {
 			/*
@@ -369,7 +387,7 @@ class Custom_Permalinks_Frontend {
 	 * @since 2.0.0
 	 * @access public
 	 *
-	 * @param int $post_id Post ID or 0.
+	 * @param int    $post_id Post ID or 0.
 	 * @param string $oembed_url The requested URL.
 	 *
 	 * @return int Post ID or 0.
@@ -408,39 +426,7 @@ class Custom_Permalinks_Frontend {
 			$request = $cp_form->check_conflicts( $request );
 		}
 		$request_no_slash = preg_replace( '@/+@', '/', trim( $request, '/' ) );
-
-		$sql = $wpdb->prepare(
-			'SELECT p.ID, pm.meta_value, p.post_type, p.post_status ' .
-				" FROM $wpdb->posts AS p INNER JOIN $wpdb->postmeta AS pm ON (pm.post_id = p.ID) " .
-				" WHERE pm.meta_key = 'custom_permalink' " .
-				' AND (pm.meta_value = %s OR pm.meta_value = %s) ' .
-				" AND p.post_status != 'trash' AND p.post_type != 'nav_menu_item' " .
-				" ORDER BY FIELD(post_status,'publish','private','pending','draft','auto-draft','inherit')," .
-			" FIELD(post_type,'post','page') LIMIT 1",
-			$request_no_slash,
-			$request_no_slash . '/'
-		);
-
-		$posts = $wpdb->get_results( $sql );
-
-		$remove_like_query = apply_filters( 'cp_remove_like_query', '__true' );
-		if ( ! $posts && '__true' === $remove_like_query ) {
-			$sql = $wpdb->prepare(
-				"SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
-					" LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
-					" meta_key = 'custom_permalink' AND meta_value != '' AND " .
-					' ( LOWER(meta_value) = LEFT(LOWER(%s), LENGTH(meta_value)) OR ' .
-					'   LOWER(meta_value) = LEFT(LOWER(%s), LENGTH(meta_value)) ) ' .
-					"  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
-					' ORDER BY LENGTH(meta_value) DESC, ' .
-					" FIELD(post_status,'publish','private','pending','draft','auto-draft','inherit')," .
-					" FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
-				$request_no_slash,
-				$request_no_slash . '/'
-			);
-
-			$posts = $wpdb->get_results( $sql );
-		}
+		$posts            = $this->query_post( $request_no_slash );
 
 		if ( $posts && $posts[0]->ID && $posts[0]->ID > 0 ) {
 			$post_id = $posts[0]->ID;
@@ -497,39 +483,7 @@ class Custom_Permalinks_Frontend {
 			$request = $cp_form->check_conflicts( $request );
 		}
 		$request_no_slash = preg_replace( '@/+@', '/', trim( $request, '/' ) );
-
-		$sql = $wpdb->prepare(
-			'SELECT p.ID, pm.meta_value, p.post_type, p.post_status ' .
-				" FROM $wpdb->posts AS p INNER JOIN $wpdb->postmeta AS pm ON (pm.post_id = p.ID) " .
-				" WHERE pm.meta_key = 'custom_permalink' " .
-				' AND (pm.meta_value = %s OR pm.meta_value = %s) ' .
-				" AND p.post_status != 'trash' AND p.post_type != 'nav_menu_item' " .
-				" ORDER BY FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
-			" FIELD(post_type,'post','page') LIMIT 1",
-			$request_no_slash,
-			$request_no_slash . '/'
-		);
-
-		$posts = $wpdb->get_results( $sql );
-
-		$remove_like_query = apply_filters( 'cp_remove_like_query', '__true' );
-		if ( ! $posts && '__false' !== $remove_like_query ) {
-			$sql = $wpdb->prepare(
-				"SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
-					" LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
-					" meta_key = 'custom_permalink' AND meta_value != '' AND " .
-					' ( LOWER(meta_value) = LEFT(LOWER(%s), LENGTH(meta_value)) OR ' .
-					'   LOWER(meta_value) = LEFT(LOWER(%s), LENGTH(meta_value)) ) ' .
-					"  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
-					' ORDER BY LENGTH(meta_value) DESC, ' .
-					" FIELD(post_status,'publish','private','draft','auto-draft','inherit')," .
-					" FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
-				$request_no_slash,
-				$request_no_slash . '/'
-			);
-
-			$posts = $wpdb->get_results( $sql );
-		}
+		$posts            = $this->query_post( $request_no_slash );
 
 		if ( ! isset( $posts[0]->ID ) || ! isset( $posts[0]->meta_value )
 			|| empty( $posts[0]->meta_value )
