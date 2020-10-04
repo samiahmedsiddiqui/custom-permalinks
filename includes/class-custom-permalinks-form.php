@@ -159,6 +159,118 @@ class Custom_Permalinks_Form {
 	}
 
 	/**
+	 * Sanitize given string to make it standard URL. It's a copy of default
+	 * `sanitize_title_with_dashes` function with few changes.
+	 *
+	 * @since 2.0.0
+	 * @access private
+	 *
+	 * @param string $permalink String that needs to be sanitized.
+	 *
+	 * @return string Sanitized permalink.
+	 */
+	private function sanitize_permalink( $permalink ) {
+		$permalink = remove_accents( $permalink );
+		$permalink = wp_strip_all_tags( $permalink );
+		// Preserve escaped octets.
+		$permalink = preg_replace( '|%([a-fA-F0-9][a-fA-F0-9])|', '---$1---', $permalink );
+		// Remove percent signs that are not part of an octet.
+		$permalink = str_replace( '%', '', $permalink );
+		// Restore octets.
+		$permalink = preg_replace( '|---([a-fA-F0-9][a-fA-F0-9])---|', '%$1', $permalink );
+
+		if ( seems_utf8( $permalink ) ) {
+			if ( function_exists( 'mb_strtolower' ) ) {
+				$permalink = mb_strtolower( $permalink, 'UTF-8' );
+			}
+			$permalink = utf8_uri_encode( $permalink );
+		}
+		$permalink = strtolower( $permalink );
+
+		// Convert &nbsp, &ndash, and &mdash to hyphens.
+		$permalink = str_replace( array( '%c2%a0', '%e2%80%93', '%e2%80%94' ), '-', $permalink );
+		// Convert &nbsp, &ndash, and &mdash HTML entities to hyphens.
+		$permalink = str_replace( array( '&nbsp;', '&#160;', '&ndash;', '&#8211;', '&mdash;', '&#8212;' ), '-', $permalink );
+
+		// Strip these characters entirely.
+		$permalink = str_replace(
+			array(
+				// Soft hyphens.
+				'%c2%ad',
+				// &iexcl and &iquest.
+				'%c2%a1',
+				'%c2%bf',
+				// Angle quotes.
+				'%c2%ab',
+				'%c2%bb',
+				'%e2%80%b9',
+				'%e2%80%ba',
+				// Curly quotes.
+				'%e2%80%98',
+				'%e2%80%99',
+				'%e2%80%9c',
+				'%e2%80%9d',
+				'%e2%80%9a',
+				'%e2%80%9b',
+				'%e2%80%9e',
+				'%e2%80%9f',
+				// Bullet.
+				'%e2%80%a2',
+				// Copy, &reg, &deg, HORIZONTAL ELLIPSIS, and &trade.
+				'%c2%a9',
+				'%c2%ae',
+				'%c2%b0',
+				'%e2%80%a6',
+				'%e2%84%a2',
+				// Acute accents.
+				'%c2%b4',
+				'%cb%8a',
+				'%cc%81',
+				'%cd%81',
+				// Grave accent, macron, caron.
+				'%cc%80',
+				'%cc%84',
+				'%cc%8c',
+			),
+			'',
+			$permalink
+		);
+
+		// Convert &times to 'x'.
+		$permalink = str_replace( '%c3%97', 'x', $permalink );
+
+		// Kill entities.
+		$permalink = preg_replace( '/&.+?;/', '', $permalink );
+
+		// Allow Alphanumeric and few symbols only.
+		$permalink = preg_replace( '/[^%a-z0-9 \.\/_-]/', '', $permalink );
+
+		// Allow only dot that are coming before any alphabet.
+		$allow_dot = explode( '.', $permalink );
+		if ( 0 < count( $allow_dot ) ) {
+			$new_perm   = $allow_dot[0];
+			$dot_length = count( $allow_dot );
+			for ( $i = 1; $i < $dot_length; ++$i ) {
+				preg_match( '/^[a-z]/', $allow_dot[ $i ], $check_perm );
+				if ( isset( $check_perm ) && ! empty( $check_perm ) ) {
+					$new_perm .= '.';
+				}
+				$new_perm .= $allow_dot[ $i ];
+			}
+
+			$permalink = $new_perm;
+		}
+
+		$permalink = preg_replace( '/\s+/', '-', $permalink );
+		$permalink = preg_replace( '|-+|', '-', $permalink );
+		$permalink = str_replace( '-/', '/', $permalink );
+		$permalink = str_replace( '/-', '/', $permalink );
+		$permalink = trim( $permalink, '-' );
+
+		return $permalink;
+	}
+
+	/**
 	 * Save per-post options.
 	 *
 	 * @access public
@@ -169,7 +281,7 @@ class Custom_Permalinks_Form {
 	 */
 	public function save_post( $post_id ) {
 		if ( ! isset( $_REQUEST['_custom_permalinks_post_nonce'] )
-			&& ! isset( $_REQUEST['custom_permalinks'] )
+			&& ! isset( $_REQUEST['custom_permalink'] )
 		) {
 			return;
 		}
@@ -182,53 +294,8 @@ class Custom_Permalinks_Form {
 		$cp_frontend   = new Custom_Permalinks_Frontend();
 		$original_link = $cp_frontend->original_post_link( $post_id );
 
-		if ( isset( $_REQUEST['custom_permalink'] )
-			&& $_REQUEST['custom_permalink'] !== $original_link
-		) {
-			$reserved_chars = array(
-				'(',
-				')',
-				'[',
-				']',
-			);
-
-			$unsafe_chars = array(
-				'<',
-				'>',
-				'{',
-				'}',
-				'|',
-				'`',
-				'^',
-				'\\',
-			);
-
-			$permalink = $_REQUEST['custom_permalink'];
-			$permalink = ltrim( $permalink, '/' );
-			$permalink = strtolower( $permalink );
-			$permalink = str_replace( $reserved_chars, '', $permalink );
-			$permalink = str_replace( $unsafe_chars, '', $permalink );
-			$permalink = urlencode( $permalink );
-			// Replace encoded slash input with slash.
-			$permalink = str_replace( '%2F', '/', $permalink );
-
-			$replace_hyphen = array( '%20', '%2B', '+' );
-			$split_path     = explode( '%3F', $permalink );
-			if ( 1 < count( $split_path ) ) {
-				// Replace encoded space and plus input with hyphen.
-				$replaced_path = str_replace( $replace_hyphen, '-', $split_path[0] );
-				$replaced_path = preg_replace( '/(\-+)/', '-', $replaced_path );
-				$permalink     = str_replace(
-					$split_path[0],
-					$replaced_path,
-					$permalink
-				);
-			} else {
-				// Replace encoded space and plus input with hyphen.
-				$permalink = str_replace( $replace_hyphen, '-', $permalink );
-				$permalink = preg_replace( '/(\-+)/', '-', $permalink );
-			}
-
+		if ( $_REQUEST['custom_permalink'] !== $original_link ) {
+			$permalink = $this->sanitize_permalink( $_REQUEST['custom_permalink'] );
 			update_post_meta( $post_id, 'custom_permalink', $permalink );
 		}
 	}
@@ -572,7 +639,7 @@ class Custom_Permalinks_Form {
 
 				$this->delete_term_permalink( $term_id );
 
-				$permalink = str_replace( '%2F', '/', urlencode( $new_permalink ) );
+				$permalink = $this->sanitize_permalink( $new_permalink );
 				$table     = get_option( 'custom_permalink_table' );
 
 				if ( $permalink && ! array_key_exists( $permalink, $table ) ) {
