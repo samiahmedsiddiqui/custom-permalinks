@@ -193,8 +193,16 @@ class Custom_Permalinks_Post_Types {
 			}
 		}
 
-		$count_query = "SELECT COUNT(p.ID) AS total_permalinks FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != '' " . $filter_permalink . '';
-		$count_posts = $wpdb->get_row( $count_query );
+		$count_posts = $wpdb->get_row(
+			$wpdb->prepare(
+				"
+				SELECT COUNT(p.ID) AS total_permalinks FROM $wpdb->posts AS p
+				LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id)
+				WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != ''
+				%s",
+				$filter_permalink
+			)
+		);
 		$post_nonce  = wp_nonce_field(
 			'custom-permalinks-post_' . $user_id,
 			'_custom_permalinks_post_nonce',
@@ -243,17 +251,18 @@ class Custom_Permalinks_Post_Types {
 											__( 'Custom Permalink navigation', 'custom-permalinks' ) .
 										'</h2>';
 
-			$query = $wpdb->prepare(
-				"
-        SELECT p.ID, p.post_title, p.post_type, pm.meta_value
-        FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id)
-        WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != ''
-        %s %s %s",
-				$filter_permalink,
-				$sorting_by,
-				$page_limit
+			$posts = $wpdb->get_results(
+				$wpdb->prepare(
+					"
+					SELECT p.ID, p.post_title, p.post_type, pm.meta_value
+					FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id)
+					WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != ''
+					%s %s %s",
+					$filter_permalink,
+					$sorting_by,
+					$page_limit
+				)
 			);
-			$posts = $wpdb->get_results( $query );
 
 			$total_pages = ceil( $count_posts->total_permalinks / 20 );
 			if ( is_numeric( $get_paged ) && 0 < $get_paged ) {

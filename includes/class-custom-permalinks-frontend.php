@@ -147,24 +147,25 @@ class Custom_Permalinks_Frontend {
 	private function query_post( $requested_url ) {
 		global $wpdb;
 
-		$sql = $wpdb->prepare(
-			'SELECT p.ID, pm.meta_value, p.post_type, p.post_status ' .
+		$posts = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT p.ID, pm.meta_value, p.post_type, p.post_status ' .
 				" FROM $wpdb->posts AS p INNER JOIN $wpdb->postmeta AS pm ON (pm.post_id = p.ID) " .
 				" WHERE pm.meta_key = 'custom_permalink' " .
 				' AND (pm.meta_value = %s OR pm.meta_value = %s) ' .
 				" AND p.post_status != 'trash' AND p.post_type != 'nav_menu_item' " .
 				" ORDER BY FIELD(post_status,'publish','private','pending','draft','auto-draft','inherit')," .
-			" FIELD(post_type,'post','page') LIMIT 1",
-			$requested_url,
-			$requested_url . '/'
+				" FIELD(post_type,'post','page') LIMIT 1",
+				$requested_url,
+				$requested_url . '/'
+			)
 		);
-
-		$posts = $wpdb->get_results( $sql );
 
 		$remove_like_query = apply_filters( 'cp_remove_like_query', '__true' );
 		if ( ! $posts && '__true' === $remove_like_query ) {
-			$sql = $wpdb->prepare(
-				"SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
+			$posts = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
 					" LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
 					" meta_key = 'custom_permalink' AND meta_value != '' AND " .
 					' ( LOWER(meta_value) = LEFT(LOWER(%s), LENGTH(meta_value)) OR ' .
@@ -173,11 +174,10 @@ class Custom_Permalinks_Frontend {
 					' ORDER BY LENGTH(meta_value) DESC, ' .
 					" FIELD(post_status,'publish','private','pending','draft','auto-draft','inherit')," .
 					" FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
-				$requested_url,
-				$requested_url . '/'
+					$requested_url,
+					$requested_url . '/'
+				)
 			);
-
-			$posts = $wpdb->get_results( $sql );
 		}
 
 		return $posts;
