@@ -209,7 +209,7 @@ class Custom_Permalinks_Frontend {
 		$original_url = null;
 
 		// Get request URI, strip parameters and /'s.
-		$url     = parse_url( get_bloginfo( 'url' ) );
+		$url     = wp_parse_url( get_bloginfo( 'url' ) );
 		$url     = isset( $url['path'] ) ? $url['path'] : '';
 		$request = ltrim( substr( $this->request_uri, strlen( $url ) ), '/' );
 		$pos     = strpos( $request, '?' );
@@ -403,7 +403,7 @@ class Custom_Permalinks_Frontend {
 		$oembed_url   = str_replace( home_url(), '', $oembed_url );
 
 		// Get request URI, strip parameters and /'s.
-		$url     = parse_url( get_bloginfo( 'url' ) );
+		$url     = wp_parse_url( get_bloginfo( 'url' ) );
 		$url     = isset( $url['path'] ) ? $url['path'] : '';
 		$request = ltrim( substr( $oembed_url, strlen( $url ) ), '/' );
 		$pos     = strpos( $request, '?' );
@@ -456,7 +456,7 @@ class Custom_Permalinks_Frontend {
 		$original_permalink = '';
 
 		// Get request URI, strip parameters.
-		$url     = parse_url( get_bloginfo( 'url' ) );
+		$url     = wp_parse_url( get_bloginfo( 'url' ) );
 		$url     = isset( $url['path'] ) ? $url['path'] : '';
 		$request = ltrim( substr( $this->request_uri, strlen( $url ) ), '/' );
 		$pos     = strpos( $request, '?' );
@@ -836,7 +836,7 @@ class Custom_Permalinks_Frontend {
 		);
 
 		$trailingslash_string = $url_string;
-		$url                  = parse_url( get_bloginfo( 'url' ) );
+		$url                  = wp_parse_url( get_bloginfo( 'url' ) );
 
 		if ( isset( $url['path'] ) ) {
 			$request = substr( $url_string, strlen( $url['path'] ) );
