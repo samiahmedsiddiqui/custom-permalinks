@@ -119,9 +119,10 @@ class Custom_Permalinks_Post_Types {
 			if ( ! empty( $post_permalinks ) ) {
 				$post_ids = $post_permalinks;
 				if ( is_array( $post_ids ) && 0 < count( $post_ids ) ) {
+					$cp_form = new Custom_Permalinks_Form();
 					foreach ( $post_ids as $post_id ) {
 						if ( is_numeric( $post_id ) ) {
-							delete_metadata( 'post', $post_id, 'custom_permalink' );
+							$cp_form->delete_permalink( $post_id );
 						}
 					}
 				} else {
@@ -193,17 +194,23 @@ class Custom_Permalinks_Post_Types {
 			}
 		}
 
-		$count_posts = $wpdb->get_row(
-			$wpdb->prepare(
-				"
-				SELECT COUNT(p.ID) AS total_permalinks FROM $wpdb->posts AS p
-				LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id)
-				WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != ''
-				%s",
-				$filter_permalink
-			)
-		);
-		$post_nonce  = wp_nonce_field(
+		$count_posts = wp_cache_get( 'total_posts_result', 'custom_permalinks' );
+		if ( ! $count_posts ) {
+			$count_posts = $wpdb->get_row(
+				$wpdb->prepare(
+					"
+					SELECT COUNT(p.ID) AS total_permalinks FROM $wpdb->posts AS p
+					LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id)
+					WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != ''
+					%1s",
+					$filter_permalink
+				)
+			);
+
+			wp_cache_set( 'total_posts_result', $count_posts, 'custom_permalinks' );
+		}
+
+		$post_nonce = wp_nonce_field(
 			'custom-permalinks-post_' . $user_id,
 			'_custom_permalinks_post_nonce',
 			true,
