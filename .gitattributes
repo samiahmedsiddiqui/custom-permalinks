@@ -5,18 +5,12 @@
 *.php text eol=lf
 
 # Remove files for archives generated using `git archive`.
-.editorconfig export-ignore
-.eslintignore export-ignore
-.eslintrc.js export-ignore
-.gitattributes export-ignore
-.gitignore export-ignore
-.phpcs.xml
-.stylelintrc.json export-ignore
+/.*               export-ignore
 about-plugins.css export-ignore
-composer.json export-ignore
-gulpfile.js export-ignore
-package.json export-ignore
-package-lock.json  export-ignore
-phpunit.xml
-README.md export-ignore
-script-form.js export-ignore
+composer.json     export-ignore
+gulpfile.js       export-ignore
+package.json      export-ignore
+package-lock.json export-ignore
+phpunit.xml       export-ignore
+README.md         export-ignore
+script-form.js    export-ignore
