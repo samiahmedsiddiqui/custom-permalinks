@@ -89,6 +89,7 @@ class Custom_Permalinks_Post_Types {
 
 		$error            = '';
 		$filter_options   = '';
+		$filter_permalink = '';
 		$home_url         = home_url();
 		$post_html        = '';
 		$post_action      = filter_input( INPUT_POST, 'action' );
@@ -151,30 +152,15 @@ class Custom_Permalinks_Post_Types {
 										'</h1>' .
 										$error;
 
+		$get_paged      = filter_input( INPUT_GET, 'paged' );
 		$get_order      = filter_input( INPUT_GET, 'order' );
 		$get_order_by   = filter_input( INPUT_GET, 'orderby' );
 		$order_by       = 'asc';
 		$order_by_class = 'desc';
-		$paged          = 1;
-		$query_args     = array(
-			'meta_query' => array(
-				array(
-					'key' => 'custom_permalink',
-					'value' => '',
-					'compare' => '!=',
-				)
-			),
-			'posts_per_page' => 20,
-			'paged'          => $paged,
-			'orderby' => 'ID',
-			'order'   => 'DESC',
-		);
+		$page_limit     = 'LIMIT 0, 20';
 		$search_input   = filter_input( INPUT_GET, 's' );
 		$search_value   = '';
-
-		if ( get_query_var( 'paged' ) ) {
-			$paged = absint( get_query_var( 'paged' ) );
-		}
+		$sorting_by     = 'ORDER By p.ID DESC';
 
 		if ( $search_input
 			&& check_admin_referer(
@@ -182,32 +168,46 @@ class Custom_Permalinks_Post_Types {
 				'_custom_permalinks_post_nonce'
 			)
 		) {
-			$query_args['meta_query']['relation'] = 'AND';
-			array_push( $query_args['meta_query'], array(
-					'key' => 'custom_permalink',
-					'value' => $search_input,
-					'compare' => 'LIKE',
-			));
+			$filter_permalink = 'AND pm.meta_value LIKE "%' . $search_input . '%"';
 			$search_permalink = '&s=' . $search_input . '';
 			$search_value     = ltrim( htmlspecialchars( $search_input ), '/' );
 			$post_html       .= '<span class="subtitle">Search results for "' . $search_value . '"</span>';
 		}
 
+		if ( is_numeric( $get_paged ) && 1 < $get_paged ) {
+			$pager      = 20 * ( $get_paged - 1 );
+			$page_limit = 'LIMIT ' . $pager . ', 20';
+		}
+
 		if ( 'title' === $get_order_by ) {
 			$filter_options .= '<input type="hidden" name="orderby" value="title" />';
 			if ( 'desc' === $get_order ) {
-				$filter_options       .= '<input type="hidden" name="order" value="desc" />';
-				$order_by              = 'asc';
-				$order_by_class        = 'desc';
-				$query_args['order']   = 'DESC';
-				$query_args['orderby'] = 'title';
+				$sorting_by      = 'ORDER By p.post_title DESC';
+				$order_by        = 'asc';
+				$order_by_class  = 'desc';
+				$filter_options .= '<input type="hidden" name="order" value="desc" />';
 			} else {
-				$filter_options       .= '<input type="hidden" name="order" value="asc" />';
-				$order_by              = 'desc';
-				$order_by_class        = 'asc';
-				$query_args['order']   = 'ASC';
-				$query_args['orderby'] = 'title';
+				$sorting_by      = 'ORDER By p.post_title';
+				$order_by        = 'desc';
+				$order_by_class  = 'asc';
+				$filter_options .= '<input type="hidden" name="order" value="asc" />';
 			}
+		}
+
+		$count_posts = wp_cache_get( 'total_posts_result', 'custom_permalinks' );
+		if ( ! $count_posts ) {
+			$count_posts = $wpdb->get_row(
+				$wpdb->prepare(
+					"
+					SELECT COUNT(p.ID) AS total_permalinks FROM $wpdb->posts AS p
+					LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id)
+					WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != ''
+					%1s",
+					$filter_permalink
+				)
+			);
+
+			wp_cache_set( 'total_posts_result', $count_posts, 'custom_permalinks' );
 		}
 
 		$post_nonce = wp_nonce_field(
@@ -248,101 +248,52 @@ class Custom_Permalinks_Post_Types {
 
 		$posts           = 0;
 		$pagination_html = '';
-				$query = new WP_Query( $query_args );
-		print'<pre>';print_r($query);print'</pre>';
-		exit;
+		if ( isset( $count_posts->total_permalinks )
+			&& 0 < $count_posts->total_permalinks
+		) {
+			include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-pager.php';
 
-
-		if ( have_posts() ) :
-//			include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-pager.php';
-
-//			$cp_pager   = new Custom_Permalinks_Pager();
+			$cp_pager   = new Custom_Permalinks_Pager();
 			$post_html .= '<h2 class="screen-reader-text">' .
 											__( 'Custom Permalink navigation', 'custom-permalinks' ) .
 										'</h2>';
-										
-      while( have_posts() ) :
-				the_post();
-				post_html .= '<tr valign="top">' .
-												'<th scope="row" class="check-column">' .
-													'<input type="checkbox" name="permalink[]" value="' . $post->ID . '" />' .
-												'</th>' .
-												'<td>' .
-													'<strong>' .
-													'<a class="row-title" href="' . $site_url . '/wp-admin/post.php?action=edit&post=' . $post->ID . '">' .
-														$post->post_title .
-													'</a>' .
-													'</strong>' .
-												'</td>' .
-												'<td>' . ucwords( $post->post_type ) . '</td>' .
-												'<td>' .
-													'<a href="' . $permalink . '" target="_blank" title="' . __( 'Visit', 'custom-permalinks' ) . ' ' . get_the_title() . '">' .
-													$perm_text .
-													'</a>' .
-												'</td>' .
-											'</tr>';
-      endwhile;
-		endif;
-//		if ( isset( $count_posts->total_permalinks )
-//			&& 0 < $count_posts->total_permalinks
-//		) {
-//
-//
-//			if ( $filter_query ) {
-//				$posts = $wpdb->get_results(
-//					$wpdb->prepare(
-//						"
-//						SELECT p.ID, p.post_title, p.post_type, pm.meta_value
-//						FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id)
-//						WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != ''
-//							AND pm.meta_value LIKE %s ORDER By %s %s %s
-//						",
-//						'%' . $filter_query . '%',
-//						$sort_by,
-//						$sort_from,
-//						$page_limit
-//					)
-//				);
-//			} else {
-//				$posts = $wpdb->get_results(
-//					$wpdb->prepare(
-//						"
-//						SELECT p.ID, p.post_title, p.post_type, pm.meta_value
-//						FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id)
-//						WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != ''
-//						ORDER By %s %s %s
-//						",
-//						$sort_by,
-//						$sort_from,
-//						$page_limit
-//					)
-//				);
-//			}
-//
-//			$total_pages = ceil( $count_posts->total_permalinks / 20 );
-//			if ( is_numeric( $paged ) && 0 < $paged ) {
-//				$pagination_html = $cp_pager->get_pagination(
-//					$count_posts->total_permalinks,
-//					$paged,
-//					$total_pages
-//				);
-//				if ( $paged > $total_pages ) {
-//					$redirect_uri = explode( '&paged=' . $paged . '', $request_uri );
-//
-//					wp_safe_redirect( $redirect_uri[0], 301 );
-//					exit;
-//				}
-//			} elseif ( ! $paged ) {
-//				$pagination_html = $cp_pager->get_pagination(
-//					$count_posts->total_permalinks,
-//					1,
-//					$total_pages
-//				);
-//			}
-//
-//			$post_html .= $pagination_html;
-//		}
 
+			$posts = $wpdb->get_results(
+				$wpdb->prepare(
+					"
+					SELECT p.ID, p.post_title, p.post_type, pm.meta_value
+					FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id)
+					WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != ''
+					%s %s %s",
+					$filter_permalink,
+					$sorting_by,
+					$page_limit
+				)
+			);
+
+			$total_pages = ceil( $count_posts->total_permalinks / 20 );
+			if ( is_numeric( $get_paged ) && 0 < $get_paged ) {
+				$pagination_html = $cp_pager->get_pagination(
+					$count_posts->total_permalinks,
+					$get_paged,
+					$total_pages
+				);
+				if ( $get_paged > $total_pages ) {
+					$redirect_uri = explode( '&paged=' . $get_paged . '', $request_uri );
+
+					wp_safe_redirect( $redirect_uri[0], 301 );
+					exit;
+				}
+			} elseif ( ! $get_paged ) {
+				$pagination_html = $cp_pager->get_pagination(
+					$count_posts->total_permalinks,
+					1,
+					$total_pages
+				);
+			}
+
+			$post_html .= $pagination_html;
+		}
 		$table_navigation = $this->post_nav(
 			$order_by_class,
 			$order_by,
@@ -442,27 +393,3 @@ class Custom_Permalinks_Post_Types {
 		echo $post_html;
 	}
 }
-
-//
-//			$total_pages = ceil( $count_posts->total_permalinks / 20 );
-//			if ( is_numeric( $get_paged ) && 0 < $get_paged ) {
-//				$pagination_html = $cp_pager->get_pagination(
-//					$count_posts->total_permalinks,
-//					$get_paged,
-//					$total_pages
-//				);
-//				if ( $get_paged > $total_pages ) {
-//					$redirect_uri = explode( '&paged=' . $get_paged . '', $request_uri );
-//
-//					wp_safe_redirect( $redirect_uri[0], 301 );
-//					exit;
-//				}
-//			} elseif ( ! $get_paged ) {
-//				$pagination_html = $cp_pager->get_pagination(
-//					$count_posts->total_permalinks,
-//					1,
-//					$total_pages
-//				);
-//			}
-//
-//			$post_html .= $pagination_html;
