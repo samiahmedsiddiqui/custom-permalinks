@@ -63,12 +63,23 @@ module.exports = {
         "lines-between-class-members": "error",
         "max-classes-per-file": "error",
         "max-depth": "error",
-        "max-len": "error",
+        "max-len": [
+            "error",
+            {
+                "code": 120
+            }
+        ],
         "max-lines": "error",
         "max-lines-per-function": "error",
         "max-nested-callbacks": "error",
         "max-params": "error",
-        "max-statements": "error",
+        "max-statements": [
+            "error",
+            30,
+            {
+                "ignoreTopLevelFunctions": true
+            }
+        ],
         "max-statements-per-line": "error",
         "multiline-comment-style": "error",
         "new-cap": "error",
