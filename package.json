@@ -20,7 +20,8 @@
     "gulp": "4.0.2",
     "gulp-clean-css": "4.2.0",
     "gulp-rename": "1.4.0",
-    "gulp-uglify": "3.0.2"
+    "gulp-uglify": "3.0.2",
+    "stylelint-config-wordpress": "^17.0.0"
   },
   "customPermalinks": {
     "pluginVersion": "2.0.0-alpha.1"
