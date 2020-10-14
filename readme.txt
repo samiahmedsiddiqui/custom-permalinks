@@ -173,18 +173,19 @@ This process defines you the steps to follow either you are installing through W
 
 == Changelog ==
 
-= 2.0.0-alpha.1 - Oct 01, 2020 =
+= 2.0.0-alpha.2 =
 
 * Bugs
   * [Bug with AMP plugin](https://wordpress.org/support/topic/bug-with-amp-plugin/)
-  * [conflict with Woocommerce Paid courses](https://wordpress.org/support/topic/oembed-links-not-working/)
   * [oembed links not working](https://wordpress.org/support/topic/oembed-links-not-working/)
-  * Fix creating same permalink on creating `Category` and `Tag`
   * conflict with Woocommerce Paid courses
+  * Fix creating duplicated permalink while creating multiple `Categories` and/or `Tags`
 * Enhancements
-  * Adding Nonce verification to make forms secure
-  * Fixing WPCS issues
+  * Added Query caching to improve performance
+  * Changed Permalink sanitization method (Similar way as WP does)
+  * Added Nonce verification to make forms secure
   * Removed deprecated functions
+  * Applied WPCS Standards
 
 = 1.7.1 - Aug 30, 2020 =
 
