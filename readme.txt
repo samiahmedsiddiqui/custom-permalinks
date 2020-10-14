@@ -3,7 +3,7 @@ Contributors: sasiddiqui, michaeltyson
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Requires at least: 2.6
 Tested up to: 5.5
-Stable tag: 2.0.0-alpha.1
+Stable tag: 2.0.0-alpha.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -18,25 +18,6 @@ Lay out your site the way *you* want it. Set the URL of any post, page, tag or c
 This plugin is only useful for assigning custom permalinks for *individual* posts, pages, tags or categories. It will not apply whole permalink structures or automatically apply a category's custom permalink to the posts within that category.
 
 > If anyone wants the different Structure Tags for their Post types or use symbols in the URLs So, use the [Permalinks Customizer](https://wordpress.org/plugins/permalinks-customizer/) which is a fork of this plugin and contains the enhancement of this plugin.
-
-=== Unsupported Characters ===
-
-Following characters are no longer allowed in the permalinks.
-
-* `<`
-* `>`
-* `{`
-* `}`
-* `|`
-* <code>`</code>
-* `^`
-* `\`
-* `(`
-* `)`
-* `[`
-* `]`
-
-> Permalinks created previously using any of these characters will not be affected in anyway. However, new permalinks will not support the use of these characters as they are not considered to be safe.
 
 == Privacy Policy ==
 
