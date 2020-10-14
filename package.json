@@ -21,7 +21,8 @@
     "gulp-clean-css": "^4.3.0",
     "gulp-rename": "^2.0.0",
     "gulp-uglify": "^3.0.2",
-    "stylelint-config-wordpress": "^17.0.0"
+    "stylelint-config-wordpress": "^17.0.0",
+    "yargs-parser": ">=13.1.2"
   },
   "customPermalinks": {
     "pluginVersion": "2.0.0-alpha.1"
