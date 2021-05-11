@@ -1,4 +1,6 @@
 {
-  "extends": "stylelint-config-wordpress",
-  "ignoreFiles": ["**/*.min.css"]
+  "extends": "@wordpress/stylelint-config",
+  "ignoreFiles": [
+    "**/*.min.css"
+  ]
 }
