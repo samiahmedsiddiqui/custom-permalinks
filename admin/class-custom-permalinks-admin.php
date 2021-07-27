@@ -55,7 +55,7 @@ class Custom_Permalinks_Admin {
 			array( $this, 'post_permalinks_page' ),
 			'dashicons-admin-links'
 		);
-		add_submenu_page(
+		$post_permalinks_hook = add_submenu_page(
 			'cp-post-permalinks',
 			'Post Types Permalinks',
 			'Post Types Permalinks',
@@ -63,7 +63,7 @@ class Custom_Permalinks_Admin {
 			'cp-post-permalinks',
 			array( $this, 'post_permalinks_page' )
 		);
-		add_submenu_page(
+		$taxonomy_permalinks_hook	= add_submenu_page(
 			'cp-post-permalinks',
 			'Taxonomies Permalinks',
 			'Taxonomies Permalinks',
@@ -81,6 +81,14 @@ class Custom_Permalinks_Admin {
 		);
 
 		add_action(
+			'load-' . $post_permalinks_hook,
+			'Custom_Permalinks_Post_Types_Table::instance'
+		);
+		// add_action(
+		// 	'load-' . $taxonomy_permalinks_hook,
+		// 	'Custom_Permalinks_Taxonomies_Table::instance'
+		// );
+		add_action(
 			'admin_print_styles-' . $about_page . '',
 			array( $this, 'add_about_style' )
 		);
@@ -89,7 +97,7 @@ class Custom_Permalinks_Admin {
 	/**
 	 * Add about page style.
 	 *
-	 * @since 1.8.0
+	 * @since 2.0.0
 	 * @access public
 	 *
 	 * @return void
@@ -115,8 +123,7 @@ class Custom_Permalinks_Admin {
 	 * @return void
 	 */
 	public function post_permalinks_page() {
-		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-post-types.php';
-		new Custom_Permalinks_Post_Types();
+		Custom_Permalinks_Post_Types_Table::output();
 
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
 	}
@@ -130,7 +137,6 @@ class Custom_Permalinks_Admin {
 	 * @return void
 	 */
 	public function taxonomy_permalinks_page() {
-		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-taxonomies.php';
 		new Custom_Permalinks_Taxonomies();
 
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
@@ -161,20 +167,20 @@ class Custom_Permalinks_Admin {
 	 */
 	public function admin_footer_text() {
 		$cp_footer_text = __( 'Custom Permalinks version', 'custom-permalinks' ) .
-											' ' . CUSTOM_PERMALINKS_VERSION . ' ' .
-											__( 'by', 'custom-permalinks' ) .
-											' <a href="https://www.yasglobal.com/" target="_blank">' .
-												__( 'Sami Ahmed Siddiqui', 'custom-permalinks' ) .
-											'</a>' .
-											' - ' .
-											'<a href="https://wordpress.org/support/plugin/custom-permalinks" target="_blank">' .
-												__( 'Support forums', 'custom-permalinks' ) .
-											'</a>' .
-											' - ' .
-											'Follow on Twitter:' .
-											' <a href="https://twitter.com/samisiddiqui91" target="_blank">' .
-												__( 'Sami Ahmed Siddiqui', 'custom-permalinks' ) .
-											'</a>';
+		' ' . CUSTOM_PERMALINKS_VERSION . ' ' .
+		__( 'by', 'custom-permalinks' ) .
+		' <a href="https://www.yasglobal.com/" target="_blank">' .
+			__( 'Sami Ahmed Siddiqui', 'custom-permalinks' ) .
+		'</a>' .
+		' - ' .
+		'<a href="https://wordpress.org/support/plugin/custom-permalinks" target="_blank">' .
+			__( 'Support forums', 'custom-permalinks' ) .
+		'</a>' .
+		' - ' .
+		'Follow on Twitter:' .
+		' <a href="https://twitter.com/samisiddiqui91" target="_blank">' .
+			__( 'Sami Ahmed Siddiqui', 'custom-permalinks' ) .
+		'</a>';
 
 		return $cp_footer_text;
 	}
@@ -193,14 +199,14 @@ class Custom_Permalinks_Admin {
 	 */
 	public function settings_link( $links ) {
 		$about_link   = '<a href="admin.php?page=cp-about-plugins" target="_blank">' .
-											__( 'About', 'custom-permalinks' ) .
-										'</a>';
+			__( 'About', 'custom-permalinks' ) .
+		'</a>';
 		$support_link = '<a href="https://www.custompermalinks.com/#pricing-section" target="_blank">' .
-											__( 'Premium Support', 'custom-permalinks' ) .
-										'</a>';
+			__( 'Premium Support', 'custom-permalinks' ) .
+		'</a>';
 		$contact_link = '<a href="https://www.custompermalinks.com/contact-us/" target="_blank">' .
-											__( 'Contact', 'custom-permalinks' ) .
-										'</a>';
+			__( 'Contact', 'custom-permalinks' ) .
+		'</a>';
 
 		array_unshift( $links, $contact_link );
 		array_unshift( $links, $support_link );
@@ -227,9 +233,9 @@ class Custom_Permalinks_Admin {
 			'custom-permalinks'
 		);
 		$cp_privacy = $cp_privacy .
-									' <a href="https://www.custompermalinks.com/contact-us/" target="_blank">' .
-										esc_html__( 'contact us', 'custom-permalinks' ) .
-									'</a>';
+		' <a href="https://www.custompermalinks.com/contact-us/" target="_blank">' .
+			esc_html__( 'contact us', 'custom-permalinks' ) .
+		'</a>';
 
 		wp_add_privacy_policy_content(
 			'Custom Permalinks',

@@ -32,7 +32,7 @@ class Custom_Permalinks {
 	/**
 	 * Define Custom Permalinks Constants.
 	 *
-	 * @since 1.8.0
+	 * @since 2.0.0
 	 * @access private
 	 */
 	private function define_constants() {
@@ -44,7 +44,7 @@ class Custom_Permalinks {
 	/**
 	 * Define constant if not set already.
 	 *
-	 * @since 1.8.0
+	 * @since 2.0.0
 	 * @access private
 	 *
 	 * @param string      $name  Constant name.
@@ -66,6 +66,9 @@ class Custom_Permalinks {
 		include_once CUSTOM_PERMALINKS_PATH . 'includes/class-custom-permalinks-form.php';
 		include_once CUSTOM_PERMALINKS_PATH . 'includes/class-custom-permalinks-frontend.php';
 		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-admin.php';
+		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-post-types.php';
+		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-post-types-table.php';
+		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-taxonomies.php';
 
 		$cp_form = new Custom_Permalinks_Form();
 		$cp_form->init();
@@ -77,7 +80,7 @@ class Custom_Permalinks {
 	/**
 	 * Hook into actions and filters.
 	 *
-	 * @since 1.8.0
+	 * @since 2.0.0
 	 * @access private
 	 */
 	private function init_hooks() {
