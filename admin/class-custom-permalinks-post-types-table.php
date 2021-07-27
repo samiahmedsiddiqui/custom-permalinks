@@ -31,11 +31,13 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	 * @access public
 	 */
 	public function __construct() {
-		parent::__construct( array(
-			'singular' => __( 'Permalink', 'custom-permalinks' ),
-			'plural'   => __( 'Permalinks', 'custom-permalinks' ),
-			'ajax'     => false,
-		) );
+		parent::__construct(
+			array(
+				'singular' => __( 'Permalink', 'custom-permalinks' ),
+				'plural'   => __( 'Permalinks', 'custom-permalinks' ),
+				'ajax'     => false,
+			)
+		);
 
 		// Handle screen options
 		$this->screen_options();
@@ -107,10 +109,10 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	 */
 	public function get_columns() {
 		$columns = array(
-			'cb'         => '<input type="checkbox" />',
-			'title'      => esc_html__( 'Title', 'custom-permalinks' ),
-			'type'       => esc_html__( 'Type', 'custom-permalinks' ),
-			'permalink'  => esc_html__( 'Permalink', 'custom-permalinks' )
+			'cb'        => '<input type="checkbox" />',
+			'title'     => esc_html__( 'Title', 'custom-permalinks' ),
+			'type'      => esc_html__( 'Type', 'custom-permalinks' ),
+			'permalink' => esc_html__( 'Permalink', 'custom-permalinks' ),
 		);
 
 		return $columns;
@@ -191,7 +193,7 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	protected function get_hidden_columns() {
 		$columns = get_user_option( "manage{$this->screen->id}columnshidden" );
 
-		return apply_filters( 'custom_permalinks_post_types_table_hidden_columns', ( array ) $columns );
+		return apply_filters( 'custom_permalinks_post_types_table_hidden_columns', (array) $columns );
 	}
 
 	/**
@@ -312,7 +314,6 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 			$permalink = $cp_frontend->remove_double_slash( $permalink );
 			$perm_text = str_replace( $home_url, '', $permalink );
 
-
 			$permalink = sprintf(
 				'<a href="%s" target="_blank" title="' . esc_html__( 'Visit', 'custom-permalinks' ) . ' ' . $item->post_title . '">%s</a>',
 				$permalink,
@@ -333,7 +334,7 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	 */
 	public function get_bulk_actions() {
 		return array(
-			'delete' => esc_html__( 'Delete Permalinks', 'custom-permalinks' )
+			'delete' => esc_html__( 'Delete Permalinks', 'custom-permalinks' ),
 		);
 	}
 
@@ -382,15 +383,15 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 					$page_args['page'] = 'cp-post-permalinks';
 				}
 
-				if ( ! empty ( $perm_search ) ) {
+				if ( ! empty( $perm_search ) ) {
 					$page_args['s'] = $perm_search;
 				}
 
-				if ( ! empty ( $cp_orderby ) ) {
+				if ( ! empty( $cp_orderby ) ) {
 					$page_args['orderby'] = $cp_orderby;
 				}
 
-				if ( ! empty ( $cp_order ) ) {
+				if ( ! empty( $cp_order ) ) {
 					$page_args['order'] = $cp_order;
 				}
 
@@ -421,11 +422,11 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	protected function display_tablenav( $which ) {
 		?>
 			<div class="tablenav <?php echo esc_attr( $which ); ?>">
-				<?php if ( $this->has_items() ): ?>
+				<?php if ( $this->has_items() ) : ?>
 				<div class="alignleft actions bulkactions">
 					<?php $this->bulk_actions( $which ); ?>
 				</div>
-				<?php
+					<?php
 				endif;
 
 				$this->extra_tablenav( $which );
@@ -450,7 +451,7 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 		$hidden   = $this->get_hidden_columns();
 		$sortable = $this->get_sortable_columns();
 
-		$this->_column_headers = array($columns, $hidden, $sortable);
+		$this->_column_headers = array( $columns, $hidden, $sortable );
 
 		// Process bulk action.
 		$this->process_bulk_action();
@@ -460,11 +461,13 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 		$total_items  = Custom_Permalinks_Post_Types::total_permalinks();
 		$this->items  = Custom_Permalinks_Post_Types::get_permalinks( $per_page, $current_page );
 
-		$this->set_pagination_args( array(
-			'total_items' => $total_items,
-			'per_page'    => $per_page,
-			'total_pages' => ceil( $total_items / $per_page ),
-		) );
+		$this->set_pagination_args(
+			array(
+				'total_items' => $total_items,
+				'per_page'    => $per_page,
+				'total_pages' => ceil( $total_items / $per_page ),
+			)
+		);
 	}
 
 	/**
@@ -479,7 +482,7 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 		$sortable_columns = array(
 			'title'     => array( 'title', false ),
 			'type'      => array( 'type', false ),
-			'permalink' => array( 'permalink', false )
+			'permalink' => array( 'permalink', false ),
 		);
 
 		return $sortable_columns;

@@ -55,7 +55,7 @@ class Custom_Permalinks_Admin {
 			array( $this, 'post_permalinks_page' ),
 			'dashicons-admin-links'
 		);
-		$post_permalinks_hook = add_submenu_page(
+		$post_permalinks_hook     = add_submenu_page(
 			'cp-post-permalinks',
 			'Post Types Permalinks',
 			'Post Types Permalinks',
@@ -63,7 +63,7 @@ class Custom_Permalinks_Admin {
 			'cp-post-permalinks',
 			array( $this, 'post_permalinks_page' )
 		);
-		$taxonomy_permalinks_hook	= add_submenu_page(
+		$taxonomy_permalinks_hook = add_submenu_page(
 			'cp-post-permalinks',
 			'Taxonomies Permalinks',
 			'Taxonomies Permalinks',
@@ -71,7 +71,7 @@ class Custom_Permalinks_Admin {
 			'cp-category-permalinks',
 			array( $this, 'taxonomy_permalinks_page' )
 		);
-		$about_page = add_submenu_page(
+		$about_page               = add_submenu_page(
 			'cp-post-permalinks',
 			'About Custom Permalinks',
 			'About',
@@ -85,8 +85,8 @@ class Custom_Permalinks_Admin {
 			'Custom_Permalinks_Post_Types_Table::instance'
 		);
 		// add_action(
-		// 	'load-' . $taxonomy_permalinks_hook,
-		// 	'Custom_Permalinks_Taxonomies_Table::instance'
+		// 'load-' . $taxonomy_permalinks_hook,
+		// 'Custom_Permalinks_Taxonomies_Table::instance'
 		// );
 		add_action(
 			'admin_print_styles-' . $about_page . '',
