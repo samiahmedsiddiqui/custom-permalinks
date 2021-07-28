@@ -39,7 +39,7 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 			)
 		);
 
-		// Handle screen options
+		// Handle screen options.
 		$this->screen_options();
 	}
 
@@ -70,13 +70,19 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	private function screen_options() {
 		$per_page_option = "{$this->screen->id}_per_page";
 
+		// phpcs:disable WordPress.Security.NonceVerification.Missing
 		// Save screen options if the form has been submitted.
 		if ( isset( $_POST['screen-options-apply'] ) ) {
 			// Save posts per page option.
 			if ( isset( $_POST['wp_screen_options']['value'] ) ) {
-				update_user_option( get_current_user_id(), $per_page_option, $_POST['wp_screen_options']['value'] );
+				update_user_option(
+					get_current_user_id(),
+					$per_page_option,
+					sanitize_text_field( $_POST['wp_screen_options']['value'] )
+				);
 			}
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 		// Add per page option to the screen options.
 		$this->screen->add_option(
@@ -138,7 +144,13 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 			</h1>
 
 			<?php if ( isset( $search_permalink ) && ! empty( $search_permalink ) ) : ?>
-				<span class="subtitle">Search results for: <strong><?php esc_html_e( $search_permalink ); ?></strong></span>
+				<span class="subtitle">
+				<?php
+					esc_html_e( 'Search results for: ', 'custom-permalinks' );
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					printf( '<strong>%s</strong>', $search_permalink );
+				?>
+				</span>
 			<?php endif; ?>
 
 			<hr class="wp-header-end">
@@ -148,13 +160,14 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 					<p>
 					<?php
 					printf(
-						_n(
+						// translators: Placeeholder would bee replaced with the number.
+						_n( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'%s permalink deleted.',
 							'%s permalinks deleted.',
 							$permalink_deleted,
 							'custom-permalinks'
 						),
-						$permalink_deleted
+						esc_html( $permalink_deleted )
 					);
 					?>
 					</p>
@@ -348,16 +361,24 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	 */
 	public function process_bulk_action() {
 		if ( isset( $_REQUEST['_custom_permalinks_post_nonce'] ) ) {
-			$nonce   = esc_attr( $_REQUEST['_custom_permalinks_post_nonce'] );
+			$deleted = 0;
 			$user_id = get_current_user_id();
 
 			// Detect when a bulk action is being triggered.
 			if ( 'delete' === $this->current_action()
-				&& wp_verify_nonce( $nonce, 'custom-permalinks-post_' . $user_id )
+				&& wp_verify_nonce(
+					// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+					$_REQUEST['_custom_permalinks_post_nonce'],
+					'custom-permalinks-post_' . $user_id
+				)
 			) {
-				$deleted        = 0;
-				$del_permalinks = $_REQUEST['permalink'];
-				if ( ! empty( $del_permalinks )
+				if ( isset( $_REQUEST['permalink'] ) ) {
+					// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+					$del_permalinks = $_REQUEST['permalink'];
+				}
+
+				if ( isset( $del_permalinks )
+					&& ! empty( $del_permalinks )
 					&& is_array( $del_permalinks )
 					&& 0 < count( $del_permalinks )
 				) {
@@ -369,43 +390,43 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 						}
 					}
 				}
-
-				$cp_order    = filter_input( INPUT_GET, 'order' );
-				$cp_orderby  = filter_input( INPUT_GET, 'orderby' );
-				$cp_page     = filter_input( INPUT_GET, 'page' );
-				$cp_paged    = filter_input( INPUT_GET, 'paged' );
-				$perm_search = filter_input( INPUT_GET, 's' );
-				$page_args   = array();
-
-				if ( ! empty( $cp_page ) ) {
-					$page_args['page'] = $cp_page;
-				} else {
-					$page_args['page'] = 'cp-post-permalinks';
-				}
-
-				if ( ! empty( $perm_search ) ) {
-					$page_args['s'] = $perm_search;
-				}
-
-				if ( ! empty( $cp_orderby ) ) {
-					$page_args['orderby'] = $cp_orderby;
-				}
-
-				if ( ! empty( $cp_order ) ) {
-					$page_args['order'] = $cp_order;
-				}
-
-				if ( ! empty( $cp_paged ) && is_numeric( $cp_paged ) ) {
-					$page_args['paged'] = $cp_paged;
-				}
-
-				if ( 0 < $deleted ) {
-					$page_args['deleted'] = $deleted;
-				}
-
-				wp_safe_redirect( add_query_arg( $page_args, admin_url( 'admin.php' ) ) );
-				exit;
 			}
+
+			$cp_order    = filter_input( INPUT_GET, 'order' );
+			$cp_orderby  = filter_input( INPUT_GET, 'orderby' );
+			$cp_page     = filter_input( INPUT_GET, 'page' );
+			$cp_paged    = filter_input( INPUT_GET, 'paged' );
+			$perm_search = filter_input( INPUT_GET, 's' );
+			$page_args   = array();
+
+			if ( ! empty( $cp_page ) ) {
+				$page_args['page'] = $cp_page;
+			} else {
+				$page_args['page'] = 'cp-post-permalinks';
+			}
+
+			if ( ! empty( $perm_search ) ) {
+				$page_args['s'] = $perm_search;
+			}
+
+			if ( ! empty( $cp_orderby ) ) {
+				$page_args['orderby'] = $cp_orderby;
+			}
+
+			if ( ! empty( $cp_order ) ) {
+				$page_args['order'] = $cp_order;
+			}
+
+			if ( ! empty( $cp_paged ) && is_numeric( $cp_paged ) ) {
+				$page_args['paged'] = $cp_paged;
+			}
+
+			if ( 0 < $deleted ) {
+				$page_args['deleted'] = $deleted;
+			}
+
+			wp_safe_redirect( add_query_arg( $page_args, admin_url( 'admin.php' ) ) );
+			exit;
 		}
 	}
 
