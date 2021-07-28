@@ -32,12 +32,30 @@ final class Custom_Permalinks_Post_Types {
 				WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != ''
 			";
 
+			// phpcs:disable WordPress.Security.NonceVerification.Recommended
 			// Include search in total results.
 			if ( isset( $_REQUEST['s'] ) && ! empty( $_REQUEST['s'] ) ) {
-				$sql_query .= ' AND ' . $wpdb->prepare( " pm.meta_value LIKE '%%%s%%'", $_REQUEST['s'] );
+				$search_value = ltrim( sanitize_text_field( $_REQUEST['s'] ), '/' );
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$total_posts = $wpdb->get_var(
+					$wpdb->prepare(
+						"SELECT COUNT(p.ID) FROM {$wpdb->posts} AS p
+							LEFT JOIN {$wpdb->postmeta} AS pm ON (p.ID = pm.post_id)
+							WHERE pm.meta_key = 'custom_permalink'
+								AND pm.meta_value != ''
+								AND pm.meta_value LIKE %s",
+						'%' . $wpdb->esc_like( $search_value ) . '%'
+					)
+				);
+				// phpcs:enable WordPress.Security.NonceVerification.Recommended
+			} else {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$total_posts = $wpdb->get_var(
+					"SELECT COUNT(p.ID) FROM {$wpdb->posts} AS p
+						LEFT JOIN {$wpdb->postmeta} AS pm ON (p.ID = pm.post_id)
+						WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != ''"
+				);
 			}
-
-			$total_posts = $wpdb->get_var( $sql_query );
 
 			wp_cache_set( 'total_posts_result', $total_posts, 'custom_permalinks' );
 		}
@@ -64,19 +82,10 @@ final class Custom_Permalinks_Post_Types {
 			$page_offset = ( $page_number - 1 ) * $per_page;
 			$order_by    = 'p.ID';
 			$order       = null;
-			$sql_query   = "
-				SELECT p.ID, p.post_title, p.post_type, pm.meta_value
-					FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id)
-				WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != ''
-			";
 
-			// Include search in total results.
-			if ( isset( $_REQUEST['s'] ) && ! empty( $_REQUEST['s'] ) ) {
-				$sql_query .= ' AND ' . $wpdb->prepare( " pm.meta_value LIKE '%%%s%%'", $_REQUEST['s'] );
-			}
-
+			// phpcs:disable WordPress.Security.NonceVerification.Recommended
 			// Sort the items.
-			switch ( isset( $_REQUEST['orderby'] ) ? strtolower( $_REQUEST['orderby'] ) : '' ) {
+			switch ( isset( $_REQUEST['orderby'] ) ? strtolower( sanitize_text_field( $_REQUEST['orderby'] ) ) : '' ) {
 				case 'title':
 					$order_by = 'p.post_title';
 					break;
@@ -90,7 +99,7 @@ final class Custom_Permalinks_Post_Types {
 					break;
 			}
 
-			switch ( isset( $_REQUEST['order'] ) ? strtolower( $_REQUEST['order'] ) : '' ) {
+			switch ( isset( $_REQUEST['order'] ) ? strtolower( sanitize_text_field( $_REQUEST['order'] ) ) : '' ) {
 				case 'asc':
 					$order = 'ASC';
 					break;
@@ -101,8 +110,43 @@ final class Custom_Permalinks_Post_Types {
 					break;
 			}
 
-			$sql_query .= " ORDER BY $order_by $order LIMIT $page_offset, $per_page";
-			$posts      = $wpdb->get_results( $sql_query );
+			// Include search in total results.
+			if ( isset( $_REQUEST['s'] ) && ! empty( $_REQUEST['s'] ) ) {
+				$search_value = ltrim( sanitize_text_field( $_REQUEST['s'] ), '/' );
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$posts = $wpdb->get_results(
+					$wpdb->prepare(
+						"SELECT p.ID, p.post_title, p.post_type, pm.meta_value
+							FROM {$wpdb->posts} AS p
+						LEFT JOIN {$wpdb->postmeta} AS pm ON (p.ID = pm.post_id)
+						WHERE pm.meta_key = 'custom_permalink'
+							AND pm.meta_value != ''
+							AND pm.meta_value LIKE %s
+						ORDER BY %s %s LIMIT %d, %d",
+						'%' . $wpdb->esc_like( $search_value ) . '%',
+						$order_by,
+						$order,
+						$page_offset,
+						$per_page
+					)
+				);
+			} else {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$posts = $wpdb->get_results(
+					$wpdb->prepare(
+						"SELECT p.ID, p.post_title, p.post_type, pm.meta_value
+							FROM {$wpdb->posts} AS p
+						LEFT JOIN {$wpdb->postmeta} AS pm ON (p.ID = pm.post_id)
+						WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != ''
+						ORDER BY %s %s LIMIT %d, %d",
+						$order_by,
+						$order,
+						$page_offset,
+						$per_page
+					)
+				);
+			}
+			// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 			wp_cache_set( 'post_type_results', $posts, 'custom_permalinks' );
 		}

@@ -68,7 +68,7 @@ class Custom_Permalinks_Admin {
 			'Taxonomies Permalinks',
 			'Taxonomies Permalinks',
 			'cp_view_category_permalinks',
-			'cp-category-permalinks',
+			'cp-taxonomy-permalinks',
 			array( $this, 'taxonomy_permalinks_page' )
 		);
 		$about_page               = add_submenu_page(
@@ -84,10 +84,10 @@ class Custom_Permalinks_Admin {
 			'load-' . $post_permalinks_hook,
 			'Custom_Permalinks_Post_Types_Table::instance'
 		);
-		// add_action(
-		// 'load-' . $taxonomy_permalinks_hook,
-		// 'Custom_Permalinks_Taxonomies_Table::instance'
-		// );
+		add_action(
+			'load-' . $taxonomy_permalinks_hook,
+			'Custom_Permalinks_Taxonomies_Table::instance'
+		);
 		add_action(
 			'admin_print_styles-' . $about_page . '',
 			array( $this, 'add_about_style' )
@@ -137,7 +137,7 @@ class Custom_Permalinks_Admin {
 	 * @return void
 	 */
 	public function taxonomy_permalinks_page() {
-		new Custom_Permalinks_Taxonomies();
+		Custom_Permalinks_Taxonomies_Table::output();
 
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
 	}

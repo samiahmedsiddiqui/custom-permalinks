@@ -668,7 +668,7 @@ class Custom_Permalinks_Form {
 		$table = get_option( 'custom_permalink_table' );
 		if ( $table ) {
 			foreach ( $table as $link => $info ) {
-				if ( $info['id'] === $term_id ) {
+				if ( $info['id'] === (int) $term_id ) {
 					unset( $table[ $link ] );
 					break;
 				}

@@ -69,6 +69,7 @@ class Custom_Permalinks {
 		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-post-types.php';
 		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-post-types-table.php';
 		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-taxonomies.php';
+		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-taxonomies-table.php';
 
 		$cp_form = new Custom_Permalinks_Form();
 		$cp_form->init();

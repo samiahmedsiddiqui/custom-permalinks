@@ -14,9 +14,9 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 }
 
 /**
- * Post Types Permalinks table class.
+ * Taxonomies Permalinks table class.
  */
-final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
+final class Custom_Permalinks_Taxonomies_Table extends WP_List_Table {
 	/**
 	 * Singleton instance variable
 	 *
@@ -25,7 +25,7 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	private static $instance;
 
 	/**
-	 * Initialize the Post Types Permalinks table list.
+	 * Initialize the Taxonomies Permalinks table list.
 	 *
 	 * @since 2.0.0
 	 * @access public
@@ -49,7 +49,7 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	 * @since 2.0.0
 	 * @access public
 	 *
-	 * @return Custom_Permalinks_Post_Types_Table The instance.
+	 * @return Custom_Permalinks_Taxonomies_Table The instance.
 	 */
 	public static function instance() {
 		if ( ! isset( self::$instance ) ) {
@@ -131,16 +131,16 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	 * @access public
 	 */
 	public static function output() {
-		$user_id           = get_current_user_id();
-		$permalink_deleted = filter_input( INPUT_GET, 'deleted' );
-		$search_permalink  = filter_input( INPUT_GET, 's' );
-		$post_types_table  = self::instance();
-		$post_types_table->prepare_items();
+		$user_id              = get_current_user_id();
+		$permalink_deleted    = filter_input( INPUT_GET, 'deleted' );
+		$search_permalink     = filter_input( INPUT_GET, 's' );
+		$taxonomy_types_table = self::instance();
+		$taxonomy_types_table->prepare_items();
 		?>
 
 		<div class="wrap">
 			<h1 class="wp-heading-inline">
-				<?php esc_html_e( 'Post Types Permalinks', 'custom-permalinks' ); ?>
+				<?php esc_html_e( 'Taxonomies Permalinks', 'custom-permalinks' ); ?>
 			</h1>
 
 			<?php if ( isset( $search_permalink ) && ! empty( $search_permalink ) ) : ?>
@@ -174,20 +174,20 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 				</div>
 			<?php endif; ?>
 			<form id="posts-filter" method="GET">
-				<input type="hidden" name="page" value="cp-post-permalinks" />
+				<input type="hidden" name="page" value="cp-taxonomy-permalinks" />
 				<?php
 					wp_nonce_field(
-						'custom-permalinks-post_' . $user_id,
-						'_custom_permalinks_post_nonce'
+						'custom-permalinks-taxonomy_' . $user_id,
+						'_custom_permalinks_taxonomy_nonce'
 					);
-					$post_types_table->search_box(
+					$taxonomy_types_table->search_box(
 						esc_html__(
 							'Search Permalinks',
 							'custom-permalinks'
 						),
 						'search-submit'
 					);
-					$post_types_table->display();
+					$taxonomy_types_table->display();
 				?>
 			</form>
 		</div>
@@ -206,7 +206,7 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	protected function get_hidden_columns() {
 		$columns = get_user_option( "manage{$this->screen->id}columnshidden" );
 
-		return apply_filters( 'custom_permalinks_post_types_table_hidden_columns', (array) $columns );
+		return apply_filters( 'custom_permalinks_taxonomy_table_hidden_columns', (array) $columns );
 	}
 
 	/**
@@ -222,7 +222,7 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	protected function column_cb( $item ) {
 		return sprintf(
 			'<input type="checkbox" name="permalink[]" value="%s" />',
-			$item->ID
+			$item['ID']
 		);
 	}
 
@@ -237,19 +237,29 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	 * @return string Post Title.
 	 */
 	protected function column_title( $item ) {
-		$post_title = 'NOT SET';
+		$edit_link  = '';
+		$term_title = 'NOT SET';
 
-		if ( $item->post_title ) {
-			$post_title = $item->post_title;
+		if ( isset( $item['ID'] ) && isset( $item['type'] ) ) {
+			$taxonomy_type = 'category';
+			if ( 'tag' === $item['type'] ) {
+				$taxonomy_type = 'post_tag';
+			}
+
+			$edit_link = get_edit_term_link( $item['ID'], $taxonomy_type );
+			$term      = get_term( $item['ID'], $taxonomy_type );
+
+			if ( isset( $term ) && isset( $term->name ) && ! empty( $term->name ) ) {
+				$term_title = $term->name;
+			}
 		}
 
-		$edit_link            = get_edit_post_link( $item->ID );
-		$title_with_edit_link = $post_title;
+		$title_with_edit_link = $term_title;
 		if ( ! empty( $edit_link ) ) {
 			$title_with_edit_link = sprintf(
-				'<a href="%s" target="_blank" title="' . esc_html__( 'Edit ', 'custom-permalinks' ) . ' ' . $post_title . '">%s</a>',
+				'<a href="%s" target="_blank" title="' . esc_html__( 'Edit ', 'custom-permalinks' ) . ' ' . $term_title . '">%s</a>',
 				$edit_link,
-				$post_title
+				$term_title
 			);
 		}
 
@@ -264,16 +274,16 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	 *
 	 * @param array $item Single Item.
 	 *
-	 * @return string Post Type.
+	 * @return string Taxonomy Name.
 	 */
 	protected function column_type( $item ) {
-		$post_type_name = 'post';
+		$taxonomy_type = 'category';
 
-		if ( isset( $item->post_type ) ) {
-			$post_type_name = ucwords( $item->post_type );
+		if ( isset( $item['type'] ) ) {
+			$taxonomy_type = ucwords( $item['type'] );
 		}
 
-		return $post_type_name;
+		return $taxonomy_type;
 	}
 
 	/**
@@ -289,11 +299,11 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	protected function column_permalink( $item ) {
 		$permalink = '';
 
-		if ( $item->meta_value ) {
+		if ( $item['permalink'] ) {
 			$cp_frontend      = new Custom_Permalinks_Frontend();
-			$custom_permalink = '/' . $item->meta_value;
+			$custom_permalink = '/' . $item['permalink'];
 			$home_url         = home_url();
-			$post_type        = 'post';
+			$taxonomy_type    = 'category';
 
 			if ( class_exists( 'SitePress' ) ) {
 				$wpml_lang_format = apply_filters(
@@ -307,16 +317,16 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 				}
 			}
 
-			if ( isset( $item->post_type ) ) {
-				$post_type = $item->post_type;
+			if ( 'tag' === $item['type'] ) {
+				$taxonomy_type = 'post_tag';
 			}
 
 			$language_code = apply_filters(
 				'wpml_element_language_code',
 				null,
 				array(
-					'element_id'   => $item->ID,
-					'element_type' => $post_type,
+					'element_id'   => $item['ID'],
+					'element_type' => $taxonomy_type,
 				)
 			);
 
@@ -327,8 +337,16 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 			$permalink = $cp_frontend->remove_double_slash( $permalink );
 			$perm_text = str_replace( $home_url, '', $permalink );
 
+			$term_title = '';
+			if ( isset( $item['ID'] ) && isset( $item['type'] ) ) {
+				$term = get_term( $item['ID'], $item['type'] );
+				if ( isset( $term ) && isset( $term->name ) && ! empty( $term->name ) ) {
+					$term_title = $term->name;
+				}
+			}
+
 			$permalink = sprintf(
-				'<a href="%s" target="_blank" title="' . esc_html__( 'Visit', 'custom-permalinks' ) . ' ' . $item->post_title . '">%s</a>',
+				'<a href="%s" target="_blank" title="' . esc_html__( 'Visit', 'custom-permalinks' ) . ' ' . $term_title . '">%s</a>',
 				$permalink,
 				$perm_text
 			);
@@ -360,7 +378,7 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	 * @return void
 	 */
 	public function process_bulk_action() {
-		if ( isset( $_REQUEST['_custom_permalinks_post_nonce'] ) ) {
+		if ( isset( $_REQUEST['_custom_permalinks_taxonomy_nonce'] ) ) {
 			$deleted = 0;
 			$user_id = get_current_user_id();
 
@@ -368,8 +386,8 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 			if ( 'delete' === $this->current_action()
 				&& wp_verify_nonce(
 					// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-					$_REQUEST['_custom_permalinks_post_nonce'],
-					'custom-permalinks-post_' . $user_id
+					$_REQUEST['_custom_permalinks_taxonomy_nonce'],
+					'custom-permalinks-taxonomy_' . $user_id
 				)
 			) {
 				if ( isset( $_REQUEST['permalink'] ) ) {
@@ -383,17 +401,15 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 					&& 0 < count( $del_permalinks )
 				) {
 					$cp_form = new Custom_Permalinks_Form();
-					foreach ( $del_permalinks as $post_id ) {
-						if ( is_numeric( $post_id ) ) {
-							$cp_form->delete_permalink( $post_id );
+					foreach ( $del_permalinks as $term_id ) {
+						if ( is_numeric( $term_id ) ) {
+							$cp_form->delete_term_permalink( $term_id );
 							++$deleted;
 						}
 					}
 				}
 			}
 
-			$cp_order    = filter_input( INPUT_GET, 'order' );
-			$cp_orderby  = filter_input( INPUT_GET, 'orderby' );
 			$cp_page     = filter_input( INPUT_GET, 'page' );
 			$cp_paged    = filter_input( INPUT_GET, 'paged' );
 			$perm_search = filter_input( INPUT_GET, 's' );
@@ -402,19 +418,11 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 			if ( ! empty( $cp_page ) ) {
 				$page_args['page'] = $cp_page;
 			} else {
-				$page_args['page'] = 'cp-post-permalinks';
+				$page_args['page'] = 'cp-taxonomy-permalinks';
 			}
 
 			if ( ! empty( $perm_search ) ) {
 				$page_args['s'] = $perm_search;
-			}
-
-			if ( ! empty( $cp_orderby ) ) {
-				$page_args['orderby'] = $cp_orderby;
-			}
-
-			if ( ! empty( $cp_order ) ) {
-				$page_args['order'] = $cp_order;
 			}
 
 			if ( ! empty( $cp_paged ) && is_numeric( $cp_paged ) ) {
@@ -470,7 +478,7 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	public function prepare_items() {
 		$columns  = $this->get_columns();
 		$hidden   = $this->get_hidden_columns();
-		$sortable = $this->get_sortable_columns();
+		$sortable = array();
 
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 
@@ -479,8 +487,8 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 
 		$per_page     = $this->get_items_per_page( "{$this->screen->id}_per_page" );
 		$current_page = $this->get_pagenum();
-		$total_items  = Custom_Permalinks_Post_Types::total_permalinks();
-		$this->items  = Custom_Permalinks_Post_Types::get_permalinks( $per_page, $current_page );
+		$total_items  = Custom_Permalinks_Taxonomies::total_permalinks();
+		$this->items  = Custom_Permalinks_Taxonomies::get_permalinks( $per_page, $current_page );
 
 		$this->set_pagination_args(
 			array(
@@ -489,23 +497,5 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 				'total_pages' => ceil( $total_items / $per_page ),
 			)
 		);
-	}
-
-	/**
-	 * Columns to make sortable.
-	 *
-	 * @since 2.0.0
-	 * @access public
-	 *
-	 * @return array Sortable columns list.
-	 */
-	public function get_sortable_columns() {
-		$sortable_columns = array(
-			'title'     => array( 'title', false ),
-			'type'      => array( 'type', false ),
-			'permalink' => array( 'permalink', false ),
-		);
-
-		return $sortable_columns;
 	}
 }
