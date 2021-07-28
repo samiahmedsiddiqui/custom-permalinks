@@ -128,7 +128,8 @@ final class Custom_Permalinks_Post_Types {
 						$order,
 						$page_offset,
 						$per_page
-					)
+					),
+					ARRAY_A
 				);
 			} else {
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
@@ -143,7 +144,8 @@ final class Custom_Permalinks_Post_Types {
 						$order,
 						$page_offset,
 						$per_page
-					)
+					),
+					ARRAY_A
 				);
 			}
 			// phpcs:enable WordPress.Security.NonceVerification.Recommended

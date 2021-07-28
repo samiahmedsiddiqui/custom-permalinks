@@ -222,7 +222,7 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	protected function column_cb( $item ) {
 		return sprintf(
 			'<input type="checkbox" name="permalink[]" value="%s" />',
-			$item->ID
+			$item['ID']
 		);
 	}
 
@@ -239,11 +239,11 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	protected function column_title( $item ) {
 		$post_title = 'NOT SET';
 
-		if ( $item->post_title ) {
-			$post_title = $item->post_title;
+		if ( $item['post_title'] ) {
+			$post_title = $item['post_title'];
 		}
 
-		$edit_link            = get_edit_post_link( $item->ID );
+		$edit_link            = get_edit_post_link( $item['ID'] );
 		$title_with_edit_link = $post_title;
 		if ( ! empty( $edit_link ) ) {
 			$title_with_edit_link = sprintf(
@@ -269,8 +269,8 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	protected function column_type( $item ) {
 		$post_type_name = 'post';
 
-		if ( isset( $item->post_type ) ) {
-			$post_type_name = ucwords( $item->post_type );
+		if ( isset( $item['post_type'] ) ) {
+			$post_type_name = ucwords( $item['post_type'] );
 		}
 
 		return $post_type_name;
@@ -289,9 +289,9 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	protected function column_permalink( $item ) {
 		$permalink = '';
 
-		if ( $item->meta_value ) {
+		if ( $item['meta_value'] ) {
 			$cp_frontend      = new Custom_Permalinks_Frontend();
-			$custom_permalink = '/' . $item->meta_value;
+			$custom_permalink = '/' . $item['meta_value'];
 			$home_url         = home_url();
 			$post_type        = 'post';
 
@@ -307,15 +307,15 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 				}
 			}
 
-			if ( isset( $item->post_type ) ) {
-				$post_type = $item->post_type;
+			if ( isset( $item['post_type'] ) ) {
+				$post_type = $item['post_type'];
 			}
 
 			$language_code = apply_filters(
 				'wpml_element_language_code',
 				null,
 				array(
-					'element_id'   => $item->ID,
+					'element_id'   => $item['ID'],
 					'element_type' => $post_type,
 				)
 			);
@@ -328,7 +328,7 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 			$perm_text = str_replace( $home_url, '', $permalink );
 
 			$permalink = sprintf(
-				'<a href="%s" target="_blank" title="' . esc_html__( 'Visit', 'custom-permalinks' ) . ' ' . $item->post_title . '">%s</a>',
+				'<a href="%s" target="_blank" title="' . esc_html__( 'Visit', 'custom-permalinks' ) . ' ' . $item['post_title'] . '">%s</a>',
 				$permalink,
 				$perm_text
 			);
