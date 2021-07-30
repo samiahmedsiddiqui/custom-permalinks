@@ -253,6 +253,7 @@ class Custom_Permalinks_Form {
 		if ( ! is_bool( $allow_caps ) && ! $allow_caps ) {
 			$permalink = preg_replace( '/[^%a-z0-9 \.\/_-]/', '', $permalink );
 		} else {
+			// Allow Capital letters.
 			$permalink = preg_replace( '/[^%a-zA-Z0-9 \.\/_-]/', '', $permalink );
 		}
 

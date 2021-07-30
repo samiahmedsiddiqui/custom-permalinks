@@ -14,6 +14,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Custom_Permalinks_Frontend {
 	/**
+	 * Make it `true` when `parse_request()` succeeded to make performance better.
+	 *
+	 * @var bool
+	 */
+	private $parse_request_status = false;
+
+	/**
 	 * The query string, if any, via which the page is accessed otherwise empty.
 	 *
 	 * @var string
@@ -321,10 +328,12 @@ class Custom_Permalinks_Frontend {
 			}
 		}
 
+		$this->parse_request_status = false;
 		if ( null !== $original_url ) {
-			$original_url = str_replace( '//', '/', $original_url );
+			$this->parse_request_status = true;
 
-			$pos = strpos( $this->request_uri, '?' );
+			$original_url = str_replace( '//', '/', $original_url );
+			$pos          = strpos( $this->request_uri, '?' );
 			if ( false !== $pos ) {
 				$query_vars = substr( $this->request_uri, $pos + 1 );
 				if ( false === strpos( $original_url, '?' ) ) {
@@ -461,6 +470,14 @@ class Custom_Permalinks_Frontend {
 	 */
 	public function make_redirect() {
 		global $wpdb;
+
+		/*
+		 * If `parse_request()` succeeded then early return to make performance
+		 * better.
+		 */
+		if ( $this->parse_request_status ) {
+			return;
+		}
 
 		if ( isset( $_SERVER['REQUEST_URI'] )
 			&& $_SERVER['REQUEST_URI'] !== $this->request_uri

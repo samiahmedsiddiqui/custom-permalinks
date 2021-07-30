@@ -167,6 +167,7 @@ This process defines you the steps to follow either you are installing through W
   * [Oembed links not working](https://wordpress.org/support/topic/oembed-links-not-working/)
   * [Uncaught (in promise) TypeError: getHomeURL is null](https://wordpress.org/support/topic/uncaught-in-promise-typeerror-gethomeurl-is-null/)
   * [Plugin stop saving upppercase slugs](https://wordpress.org/support/topic/plugin-stop-saving-upppercase-slugs/)
+	* [template_redirect](https://wordpress.org/support/topic/make-redirect/)
   * conflict with WooCommerce Paid courses
   * Fix creating duplicated permalink while creating multiple `Categories` and/or `Tags`
 * Enhancements
