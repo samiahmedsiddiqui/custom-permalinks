@@ -2,7 +2,7 @@
 Contributors: sasiddiqui, michaeltyson
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Requires at least: 2.6
-Tested up to: 5.5
+Tested up to: 5.8
 Stable tag: 2.0.0-alpha.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
@@ -46,9 +46,8 @@ add_filter( 'custom_permalinks_path_info', '__return_true' );
 To disable complete redirects functionality provided by this plugin, add the filter that looks like this:
 
 `
-function yasglobal_avoid_redirect( $permalink )
-{
-    return true;
+function yasglobal_avoid_redirect( $permalink ) {
+  return true;
 }
 add_filter( 'custom_permalinks_avoid_redirect', 'yasglobal_avoid_redirect' );
 `
@@ -58,14 +57,13 @@ add_filter( 'custom_permalinks_avoid_redirect', 'yasglobal_avoid_redirect' );
 To disable any specific redirect to be processed by this plugin, add the filter that looks like this:
 
 `
-function yasglobal_avoid_redirect( $permalink )
-{
-    // Replace 'testing-hello-world/' with the permalink you want to avoid
-    if ( 'testing-hello-world/' === $permalink ) {
-        return true;
-    }
+function yasglobal_avoid_redirect( $permalink ) {
+  // Replace 'testing-hello-world/' with the permalink you want to avoid
+  if ( 'testing-hello-world/' === $permalink ) {
+    return true;
+  }
 
-    return false;
+  return false;
 }
 add_filter( 'custom_permalinks_avoid_redirect', 'yasglobal_avoid_redirect' );
 `
@@ -75,13 +73,12 @@ add_filter( 'custom_permalinks_avoid_redirect', 'yasglobal_avoid_redirect' );
 To exclude any Permalink to be processed by the plugin, add the filter that looks like this:
 
 `
-function yasglobal_xml_sitemap_url( $permalink )
-{
-    if ( false !== strpos( $permalink, 'sitemap.xml' ) ) {
-        return '__true';
-    }
+function yasglobal_xml_sitemap_url( $permalink ) {
+  if ( false !== strpos( $permalink, 'sitemap.xml' ) ) {
+    return '__true';
+  }
 
-    return;
+  return;
 }
 add_filter( 'custom_permalinks_request_ignore', 'yasglobal_xml_sitemap_url' );
 `
@@ -91,14 +88,13 @@ add_filter( 'custom_permalinks_request_ignore', 'yasglobal_xml_sitemap_url' );
 To remove custom permalink **form** from any post type, add the filter that looks like this:
 
 `
-function yasglobal_exclude_post_types( $post_type )
-{
-    // Replace 'custompost' with your post type name
-    if ( 'custompost' === $post_type ) {
-        return '__true';
-    }
+function yasglobal_exclude_post_types( $post_type ) {
+  // Replace 'custompost' with your post type name
+  if ( 'custompost' === $post_type ) {
+    return '__true';
+  }
 
-    return '__false';
+  return '__false';
 }
 add_filter( 'custom_permalinks_exclude_post_type', 'yasglobal_exclude_post_types' );
 `
@@ -108,13 +104,12 @@ add_filter( 'custom_permalinks_exclude_post_type', 'yasglobal_exclude_post_types
 To exclude custom permalink **form**  from any posts (based on ID, Template, etc), add the filter that looks like this:
 
 `
-function yasglobal_exclude_posts( $post )
-{
-    if ( 1557 === $post->ID ) {
-        return true;
-    }
+function yasglobal_exclude_posts( $post ) {
+  if ( 1557 === $post->ID ) {
+    return true;
+  }
 
-    return false;
+  return false;
 }
 add_filter( 'custom_permalinks_exclude_posts', 'yasglobal_exclude_posts' );
 `
@@ -158,13 +153,14 @@ This process defines you the steps to follow either you are installing through W
 
 * Bugs
   * [Bug with AMP plugin](https://wordpress.org/support/topic/bug-with-amp-plugin/)
-  * [oembed links not working](https://wordpress.org/support/topic/oembed-links-not-working/)
-  * conflict with Woocommerce Paid courses
+  * [Oembed links not working](https://wordpress.org/support/topic/oembed-links-not-working/)
+  * conflict with WooCommerce Paid courses
   * Fix creating duplicated permalink while creating multiple `Categories` and/or `Tags`
 * Enhancements
   * Added Query caching to improve performance
   * Changed Permalink sanitization method (Similar way as WP does)
   * Added Nonce verification to make forms secure
+  * Show/Hide column and Pagination features added on Post Type Permalinks and Taxonomies Permalinks page
   * Removed deprecated functions
   * Applied WPCS Standards
 

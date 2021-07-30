@@ -24,6 +24,6 @@
     "yargs-parser": "^20.2.7"
   },
   "customPermalinks": {
-    "pluginVersion": "2.0.0-alpha.1"
+    "pluginVersion": "2.0.0-alpha.2"
   }
 }
