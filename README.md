@@ -1,5 +1,7 @@
 # Custom Permalinks
 
+> :information_source: Incase of found any site breaking issue after upgrading to the latest version then please report the issue on [WordPress Forum](https://wordpress.org/support/plugin/custom-permalinks/) OR [GitHub](https://github.com/samiahmedsiddiqui/custom-permalinks) with complete information to reproduce the issue and move back to the old version. You can download any of the old version from here: https://wordpress.org/plugins/custom-permalinks/advanced/
+
 Lay out your site the way *you* want it. Set the URL of any post, page, tag or category to anything you want. Old permalinks will redirect properly to the new address. Custom Permalinks give you ultimate control over your site structure.
 
 > :warning: *This plugin is not a replacement for WordPress's built-in permalink system*. Check your WordPress administration's "Permalinks" settings page first, to make sure that this doesn't already meet your needs.
@@ -125,7 +127,7 @@ function yasglobal_permalink_before_saving( $permalink, $post_id ) {
   // Check trialing slash in the permalink.
   if ( substr( $permalink, -1 ) !== '/' ) {
     // If permalink doesn't contain trialing slash then add one.
-	  $permalink .= '/';
+    $permalink .= '/';
   }
 
   return $permalink;
@@ -145,17 +147,11 @@ Note: Use `custom_permalinks_like_query` filter if the URLs doesn't works for yo
 
 ## Thanks for the Support
 
-I do not always provide active support for the Custom Permalinks plugin on the
-WordPress.org forums, as I have prioritized the email support. One-on-one email
-support is available to people who bought
-[Custom Permalinks Premium](https://www.custompermalinks.com/#pricing-section) only.
+I do not always provide active support for the Custom Permalinks plugin on the WordPress.org forums, as I have prioritized the email support. One-on-one email support is available to people who bought [Custom Permalinks Premium](https://www.custompermalinks.com/#pricing-section) only.
 
 ## Bug reports
 
-Bug reports for Custom Permalinks are
-[welcomed on GitHub](https://github.com/samiahmedsiddiqui/custom-permalinks).
-Please note GitHub is not a support forum, and issues that aren't properly
-qualified as bugs will be closed.
+Bug reports for Custom Permalinks are [welcomed on GitHub](https://github.com/samiahmedsiddiqui/custom-permalinks). Please note GitHub is not a support forum, and issues that aren't properly qualified as bugs will be closed.
 
 ## Installation
 

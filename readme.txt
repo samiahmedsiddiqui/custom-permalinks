@@ -1,15 +1,16 @@
 === Custom Permalinks ===
 Contributors: sasiddiqui, michaeltyson
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
-Requires at least: 2.6
 Tested up to: 5.8
-Stable tag: 2.0.0-alpha.2
+Stable tag: 2.0.0
 License: GPLv3
-License URI: https://www.gnu.org/licenses/gpl.html
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 Set custom permalinks on a per-post, per-tag or per-category basis.
 
 == Description ==
+
+> Incase of found any site breaking issue after upgrading to the latest version then please report the issue on [WordPress Forum](https://wordpress.org/support/plugin/custom-permalinks/) OR [GitHub](https://github.com/samiahmedsiddiqui/custom-permalinks) with complete information to reproduce the issue and move back to the old version. You can download any of the old version from here: https://wordpress.org/plugins/custom-permalinks/advanced/
 
 Lay out your site the way *you* want it. Set the URL of any post, page, tag or category to anything you want. Old permalinks will redirect properly to the new address. Custom Permalinks give you ultimate control over your site structure.
 
@@ -153,8 +154,7 @@ Note: Use `custom_permalinks_like_query` filter if the URLs doesn't works for yo
 
 === Thanks for the Support ===
 
-I do not always provide active support for the Custom Permalinks plugin on the WordPress.org forums, as I have prioritized the email support.
-One-on-one email support is available to people who bought [Custom Permalinks Premium](https://www.custompermalinks.com/#pricing-section) only.
+I do not always provide active support for the Custom Permalinks plugin on the WordPress.org forums, as I have prioritized the email support. One-on-one email support is available to people who bought [Custom Permalinks Premium](https://www.custompermalinks.com/#pricing-section) only.
 
 === Bug reports ===
 
@@ -177,7 +177,7 @@ This process defines you the steps to follow either you are installing through W
 
 == Changelog ==
 
-= 2.0.0-alpha.2 =
+= 2.0.0 - Jul 30, 2021 =
 
 * Bugs
   * [Bug with AMP plugin](https://wordpress.org/support/topic/bug-with-amp-plugin/)
@@ -200,46 +200,6 @@ This process defines you the steps to follow either you are installing through W
 
   * Bugs
     * Fix PHP notice (start reporting with WordPress 5.5)
-
-= 1.7.0 - Aug 20, 2020 =
-
-  * Bugs
-    * [Paged NextGen Galleries Broken with Custom Permalinks 1.62](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/38)
-    * [custom permalink issue with weglot](https://wordpress.org/support/topic/custom-permalink-issue-with-weglot/)
-    * [Permalinks reverting back to old ones](https://wordpress.org/support/topic/permalinks-reverting-back-to-old-ones/)
-    * [A problem with wrongly deleted permalinks](https://wordpress.org/support/topic/a-problem-with-wrongly-deleted-permalinks/)
-  * Enhancements
-    * [Enhanced security through characters restriction](https://github.com/samiahmedsiddiqui/custom-permalinks#unsupported-characters)
-    * Introduce filter to disable specific redirect(s) or complete functionality
-    * Automatic replacement of upper case letters to lower case
-
-= 1.6.2 - Aug 10, 2020 =
-
-  * Bugs
-    * Forgot to update the version in CSS and JS files in `v1.6.1`
-
-= 1.6.1 - Aug 10, 2020 =
-
-  * Bugs
-    * Avoid caching issue by adding version as suffix in CSS and JS files
-
-= 1.6.0 - Aug 08, 2020 =
-
-  * Bugs
-    * [Undefined index and undefined variable error](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/28)
-    * [count(): Parameter must be an array or an object](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/27)
-    * Fix double slash from the permalink form
-    * [use 'view_item' label for previewing custom post types](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/31)
-    * [Fix PHP 7.4 issues](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/32)
-    * Fix Yoast Canonical double slash issue
-    * [Replacing category_link with term_link](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/34)
-    * [Bug with WPML and Use directory for default language](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/36)
-    * Fix Static Homepage redirect issue
-  * Enhancements
-    * Improved Gutenberg Support
-    * Added compatibility for WPML language switcher
-    * Add filter to exclude Custom Permalinks for certain posts (based on Post IDs, template, etc)
-    * Optimized Code
 
 = Earlier versions =
 
