@@ -42,7 +42,7 @@ To have any kind of query please feel free to [contact us](https://www.customper
 add_filter( 'custom_permalinks_path_info', '__return_true' );
 `
 
-=== Disable redirects ===
+=== Disable Redirects ===
 
 To disable complete redirects functionality provided by this plugin, add the filter that looks like this:
 
@@ -53,7 +53,7 @@ function yasglobal_avoid_redirect( $permalink ) {
 add_filter( 'custom_permalinks_avoid_redirect', 'yasglobal_avoid_redirect' );
 `
 
-=== Disable specific redirects ===
+=== Disable Particular Redirects ===
 
 To disable any specific redirect to be processed by this plugin, add the filter that looks like this:
 
@@ -69,7 +69,7 @@ function yasglobal_avoid_redirect( $permalink ) {
 add_filter( 'custom_permalinks_avoid_redirect', 'yasglobal_avoid_redirect' );
 `
 
-=== Exclude permalink to be processed ===
+=== Exclude Permalink to be processed ===
 
 To exclude any Permalink to be processed by the plugin, add the filter that looks like this:
 
@@ -102,7 +102,7 @@ add_filter( 'custom_permalinks_exclude_post_type', 'yasglobal_exclude_post_types
 
 === Exclude Posts ===
 
-To exclude custom permalink **form**  from any posts (based on ID, Template, etc), add the filter that looks like this:
+To exclude custom permalink **form** from any posts (based on ID, Template, etc), add the filter that looks like this:
 
 `
 function yasglobal_exclude_posts( $post ) {
@@ -117,10 +117,10 @@ add_filter( 'custom_permalinks_exclude_posts', 'yasglobal_exclude_posts' );
 
 === Allow Uppercase Letters ===
 
-To remove upppercase letters/words, please add below-mentioned line in your theme `functions.php`:
+To allow uppercase letters/words, please add below-mentioned line in your theme `functions.php`:
 
 `
-function yasglobal_allow_uppercaps( $post ) {
+function yasglobal_allow_uppercaps() {
   return true;
 }
 add_filter( 'custom_permalinks_allow_caps', 'yasglobal_allow_uppercaps' );
@@ -143,7 +143,7 @@ function yasglobal_permalink_before_saving( $permalink, $post_id ) {
 add_filter( 'custom_permalink_before_saving', 'yasglobal_permalink_before_saving', 10, 2 );
 `
 
-=== Remove `like` query ===
+=== Remove `like` Query ===
 
 To remove `like` query to being work, add below-mentioned line in your theme `functions.php`:
 `
@@ -183,15 +183,15 @@ This process defines you the steps to follow either you are installing through W
   * [Bug with AMP plugin](https://wordpress.org/support/topic/bug-with-amp-plugin/)
   * [Oembed links not working](https://wordpress.org/support/topic/oembed-links-not-working/)
   * [Uncaught (in promise) TypeError: getHomeURL is null](https://wordpress.org/support/topic/uncaught-in-promise-typeerror-gethomeurl-is-null/)
-  * [Plugin stop saving upppercase slugs](https://wordpress.org/support/topic/plugin-stop-saving-upppercase-slugs/)
-	* [template_redirect](https://wordpress.org/support/topic/make-redirect/)
+  * [Plugin stop saving uppercase slugs](https://wordpress.org/support/topic/plugin-stop-saving-upppercase-slugs/)
+  * [template_redirect](https://wordpress.org/support/topic/make-redirect/)
   * conflict with WooCommerce Paid courses
   * Fix creating duplicated permalink while creating multiple `Categories` and/or `Tags`
 * Enhancements
   * Added Query caching to improve performance
   * Changed Permalink sanitization method (Similar way as WP does)
   * Added Nonce verification to make forms secure
-	* [Permalink Filter before saving](https://wordpress.org/support/topic/permalink-filter/)
+  * [Permalink Filter before saving](https://wordpress.org/support/topic/permalink-filter/)
   * Show/Hide column and Pagination features added on Post Type Permalinks and Taxonomies Permalinks page
   * Removed deprecated functions
   * Applied WPCS Standards

@@ -32,10 +32,9 @@ To have any kind of query please feel free to [contact us](https://www.customper
 add_filter( 'custom_permalinks_path_info', '__return_true' );
 ```
 
-### Disable redirects
+### Disable Redirects
 
-To disable complete redirects functionality provided by this plugin, add the filter that looks
-like this:
+To disable complete redirects functionality provided by this plugin, add the filter that looks like this:
 
 ```php
 function yasglobal_avoid_redirect( $permalink ) {
@@ -44,7 +43,7 @@ function yasglobal_avoid_redirect( $permalink ) {
 add_filter( 'custom_permalinks_avoid_redirect', 'yasglobal_avoid_redirect' );
 ```
 
-### Disable specific redirects
+### Disable Particular Redirects
 
 To disable any specific redirect to be processed by this plugin, add the filter that looks like this:
 
@@ -60,7 +59,7 @@ function yasglobal_avoid_redirect( $permalink ) {
 add_filter( 'custom_permalinks_avoid_redirect', 'yasglobal_avoid_redirect' );
 ```
 
-### Exclude permalink to be processed
+### Exclude Permalink to be processed
 
 To exclude any Permalink to be processed by the plugin, add the filter that looks like this:
 
@@ -93,8 +92,7 @@ add_filter( 'custom_permalinks_exclude_post_type', 'yasglobal_exclude_post_types
 
 ### Exclude Posts
 
-To exclude custom permalink **form**  from any posts (based on ID, Template, etc), add the
-filter that looks like this:
+To exclude custom permalink **form** from any posts (based on ID, Template, etc), add the filter that looks like this:
 
 ```php
 function yasglobal_exclude_posts( $post ) {
@@ -109,10 +107,10 @@ add_filter( 'custom_permalinks_exclude_posts', 'yasglobal_exclude_posts' );
 
 ### Allow Uppercase Letters
 
-To remove upppercase letters/words, please add below-mentioned line in your theme `functions.php`:
+To allow uppercase letters/words, please add below-mentioned line in your theme `functions.php`:
 
 ```php
-function yasglobal_allow_uppercaps( $post ) {
+function yasglobal_allow_uppercaps() {
   return true;
 }
 add_filter( 'custom_permalinks_allow_caps', 'yasglobal_allow_uppercaps' );
@@ -135,7 +133,7 @@ function yasglobal_permalink_before_saving( $permalink, $post_id ) {
 add_filter( 'custom_permalink_before_saving', 'yasglobal_permalink_before_saving', 10, 2 );
 ```
 
-### Remove `like` query
+### Remove `like` Query
 
 To remove `like` query to being work, add below-mentioned line in your theme `functions.php`:
 
@@ -155,8 +153,7 @@ Bug reports for Custom Permalinks are [welcomed on GitHub](https://github.com/sa
 
 ## Installation
 
-This process defines you the steps to follow either you are installing through WordPress
-or Manually from FTP.
+This process defines you the steps to follow either you are installing through WordPress or Manually from FTP.
 
 ## From within WordPress
 
