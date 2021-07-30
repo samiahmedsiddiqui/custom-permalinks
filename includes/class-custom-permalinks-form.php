@@ -179,13 +179,20 @@ class Custom_Permalinks_Form {
 		// Restore octets.
 		$permalink = preg_replace( '|---([a-fA-F0-9][a-fA-F0-9])---|', '%$1', $permalink );
 
-		if ( seems_utf8( $permalink ) ) {
-			if ( function_exists( 'mb_strtolower' ) ) {
-				$permalink = mb_strtolower( $permalink, 'UTF-8' );
+		/*
+		 * Add Capability to allow Capital letter (if required). By default, It is
+		 * disabled.
+		 */
+		$allow_caps = apply_filters( 'custom_permalinks_allow_caps', false );
+		if ( ! is_bool( $allow_caps ) && ! $allow_caps ) {
+			if ( seems_utf8( $permalink ) ) {
+				if ( function_exists( 'mb_strtolower' ) ) {
+					$permalink = mb_strtolower( $permalink, 'UTF-8' );
+				}
+				$permalink = utf8_uri_encode( $permalink );
 			}
-			$permalink = utf8_uri_encode( $permalink );
+			$permalink = strtolower( $permalink );
 		}
-		$permalink = strtolower( $permalink );
 
 		// Convert &nbsp, &ndash, and &mdash to hyphens.
 		$permalink = str_replace( array( '%c2%a0', '%e2%80%93', '%e2%80%94' ), '-', $permalink );
@@ -243,7 +250,11 @@ class Custom_Permalinks_Form {
 		$permalink = preg_replace( '/&.+?;/', '', $permalink );
 
 		// Allow Alphanumeric and few symbols only.
-		$permalink = preg_replace( '/[^%a-z0-9 \.\/_-]/', '', $permalink );
+		if ( ! is_bool( $allow_caps ) && ! $allow_caps ) {
+			$permalink = preg_replace( '/[^%a-z0-9 \.\/_-]/', '', $permalink );
+		} else {
+			$permalink = preg_replace( '/[^%a-zA-Z0-9 \.\/_-]/', '', $permalink );
+		}
 
 		// Allow only dot that are coming before any alphabet.
 		$allow_dot = explode( '.', $permalink );

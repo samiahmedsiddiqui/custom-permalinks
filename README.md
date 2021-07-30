@@ -105,10 +105,20 @@ function yasglobal_exclude_posts( $post ) {
 add_filter( 'custom_permalinks_exclude_posts', 'yasglobal_exclude_posts' );
 ```
 
+### Allow Uppercase Letters
+
+To remove upppercase letters/words, pleease add below-mentioned line in your theme `functions.php`:
+
+```php
+function yasglobal_allow_uppercaps( $post ) {
+  return true;
+}
+add_filter( 'custom_permalinks_allow_caps', 'yasglobal_allow_uppercaps' );
+```
+
 ### Remove `like` query
 
-To remove `like` query to being work, add below-mentioned line in your theme
-`functions.php`:
+To remove `like` query to being work, add below-mentioned line in your theme `functions.php`:
 
 ```php
 add_filter( 'cp_remove_like_query', '__return_false' );

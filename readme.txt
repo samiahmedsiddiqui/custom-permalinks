@@ -114,6 +114,17 @@ function yasglobal_exclude_posts( $post ) {
 add_filter( 'custom_permalinks_exclude_posts', 'yasglobal_exclude_posts' );
 `
 
+=== Allow Uppercase Letters ===
+
+To remove upppercase letters/words, pleease add below-mentioned line in your theme `functions.php`:
+
+`
+function yasglobal_allow_uppercaps( $post ) {
+  return true;
+}
+add_filter( 'custom_permalinks_allow_caps', 'yasglobal_allow_uppercaps' );
+`
+
 === Remove `like` query ===
 
 To remove `like` query to being work, add below-mentioned line in your theme `functions.php`:
@@ -154,6 +165,8 @@ This process defines you the steps to follow either you are installing through W
 * Bugs
   * [Bug with AMP plugin](https://wordpress.org/support/topic/bug-with-amp-plugin/)
   * [Oembed links not working](https://wordpress.org/support/topic/oembed-links-not-working/)
+  * [Uncaught (in promise) TypeError: getHomeURL is null](https://wordpress.org/support/topic/uncaught-in-promise-typeerror-gethomeurl-is-null/)
+  * [Plugin stop saving upppercase slugs](https://wordpress.org/support/topic/plugin-stop-saving-upppercase-slugs/)
   * conflict with WooCommerce Paid courses
   * Fix creating duplicated permalink while creating multiple `Categories` and/or `Tags`
 * Enhancements
