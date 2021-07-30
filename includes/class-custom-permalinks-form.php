@@ -307,13 +307,15 @@ class Custom_Permalinks_Form {
 		$cp_frontend   = new Custom_Permalinks_Frontend();
 		$original_link = $cp_frontend->original_post_link( $post_id );
 
-		if ( $_REQUEST['custom_permalink'] !== $original_link ) {
+		if ( ! empty( $_REQUEST['custom_permalink'] )
+			&& $_REQUEST['custom_permalink'] !== $original_link
+		) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$permalink = $this->sanitize_permalink( $_REQUEST['custom_permalink'] );
-			$permalink = apply_filters (
+			$permalink = apply_filters(
 				'custom_permalink_before_saving',
 				$permalink,
-				$post_id,
+				$post_id
 			);
 
 			update_post_meta( $post_id, 'custom_permalink', $permalink );
