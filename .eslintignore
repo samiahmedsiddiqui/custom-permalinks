@@ -1,1 +1,11 @@
+# Composer
+/vendor/
+
+# Gulp files
+gulpfile.js
+
+# Minified files
 *.min.js
+
+# ESLint settings file
+.eslintrc.js

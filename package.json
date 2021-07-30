@@ -9,19 +9,23 @@
     "url": "https://github.com/samiahmedsiddiqui/custom-permalinks/issues"
   },
   "author": "Sami Ahmed Siddiqui",
+  "scripts": {
+    "lint": "npm run lint:css && npm run lint:js",
+    "lint:fix": "npm run lint:css:fix && npm run lint:js:fix",
+    "lint:css": "npx stylelint **/*.css",
+    "lint:css:fix": "npx stylelint **/*.css --fix",
+    "lint:js": "eslint .",
+    "lint:js:fix": "eslint . --fix"
+  },
   "devDependencies": {
-    "@wordpress/stylelint-config": "^19.0.3",
+    "@wordpress/eslint-plugin": "^9.0.6",
+    "@wordpress/stylelint-config": "^19.0.5",
     "del": "^6.0.0",
-    "eslint": "^7.26.0",
-    "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.1.0",
+    "eslint": "^7.30.0",
     "gulp": "^4.0.2",
-    "gulp-clean-css": "^4.3.0",
-    "gulp-rename": "^2.0.0",
-    "gulp-uglify": "^3.0.2",
-    "yargs-parser": "^20.2.7"
+    "gulp-clean-css": "4.3.0",
+    "gulp-rename": "2.0.0",
+    "gulp-uglify": "3.0.2"
   },
   "customPermalinks": {
     "pluginVersion": "2.0.0-alpha.2"
