@@ -107,13 +107,30 @@ add_filter( 'custom_permalinks_exclude_posts', 'yasglobal_exclude_posts' );
 
 ### Allow Uppercase Letters
 
-To remove upppercase letters/words, pleease add below-mentioned line in your theme `functions.php`:
+To remove upppercase letters/words, please add below-mentioned line in your theme `functions.php`:
 
 ```php
 function yasglobal_allow_uppercaps( $post ) {
   return true;
 }
 add_filter( 'custom_permalinks_allow_caps', 'yasglobal_allow_uppercaps' );
+```
+
+### Manipulate Permalink Before Saving
+
+To make changes in permalink before saving, please use `custom_permalink_before_saving` filter. Here is an example to see how it works.
+
+```php
+function yasglobal_permalink_before_saving( $permalink, $post_id ) {
+  // Check trialing slash in the permalink.
+  if ( substr( $permalink, -1 ) !== '/' ) {
+    // If permalink doesn't contain trialing slash then add one.
+	  $permalink .= '/';
+  }
+
+  return $permalink;
+}
+add_filter( 'custom_permalink_before_saving', 'yasglobal_permalink_before_saving', 10, 2 );
 ```
 
 ### Remove `like` query
