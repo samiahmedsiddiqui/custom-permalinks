@@ -44,10 +44,12 @@ class Custom_Permalinks_Frontend {
 	 */
 	public function init() {
 		if ( isset( $_SERVER['QUERY_STRING'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$this->query_string_uri = $_SERVER['QUERY_STRING'];
 		}
 
 		if ( isset( $_SERVER['REQUEST_URI'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$this->request_uri = $_SERVER['REQUEST_URI'];
 		}
 
@@ -105,7 +107,7 @@ class Custom_Permalinks_Frontend {
 	 * @since 1.6.0
 	 * @access public
 	 *
-	 * @param string $permalink Custom Permalink.
+	 * @param string $permalink     Custom Permalink.
 	 * @param string $language_code The language to convert the url into.
 	 *
 	 * @return string permalink with language information.
@@ -151,6 +153,7 @@ class Custom_Permalinks_Frontend {
 		$posts      = wp_cache_get( $cache_name, 'custom_permalinks' );
 
 		if ( ! $posts ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$posts = $wpdb->get_results(
 				$wpdb->prepare(
 					'SELECT p.ID, pm.meta_value, p.post_type, p.post_status ' .
@@ -167,6 +170,7 @@ class Custom_Permalinks_Frontend {
 
 			$remove_like_query = apply_filters( 'cp_remove_like_query', '__true' );
 			if ( ! $posts && '__true' === $remove_like_query ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 				$posts = $wpdb->get_results(
 					$wpdb->prepare(
 						"SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
@@ -206,6 +210,7 @@ class Custom_Permalinks_Frontend {
 		if ( isset( $_SERVER['REQUEST_URI'] )
 			&& $_SERVER['REQUEST_URI'] !== $this->request_uri
 		) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$this->request_uri = $_SERVER['REQUEST_URI'];
 		}
 
@@ -352,15 +357,19 @@ class Custom_Permalinks_Frontend {
 			$old_values  = array();
 			$query_array = array();
 			if ( isset( $_SERVER['QUERY_STRING'] ) ) {
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				parse_str( $_SERVER['QUERY_STRING'], $query_array );
 			}
 
 			if ( is_array( $query_array ) && count( $query_array ) > 0 ) {
 				foreach ( $query_array as $key => $value ) {
 					$old_values[ $key ] = '';
+					// phpcs:disable WordPress.Security.NonceVerification.Recommended
 					if ( isset( $_REQUEST[ $key ] ) ) {
+						// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 						$old_values[ $key ] = $_REQUEST[ $key ];
 					}
+					// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 					$_GET[ $key ]     = $value;
 					$_REQUEST[ $key ] = $value;
@@ -394,7 +403,7 @@ class Custom_Permalinks_Frontend {
 	 * @since 2.0.0
 	 * @access public
 	 *
-	 * @param int    $post_id Post ID or 0.
+	 * @param int    $post_id    Post ID or 0.
 	 * @param string $oembed_url The requested URL.
 	 *
 	 * @return int Post ID or 0.
@@ -456,6 +465,7 @@ class Custom_Permalinks_Frontend {
 		if ( isset( $_SERVER['REQUEST_URI'] )
 			&& $_SERVER['REQUEST_URI'] !== $this->request_uri
 		) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$this->request_uri = $_SERVER['REQUEST_URI'];
 		}
 
@@ -622,7 +632,7 @@ class Custom_Permalinks_Frontend {
 	 * @access public
 	 *
 	 * @param string $permalink Default WordPress Permalink of Page.
-	 * @param int    $page Page ID.
+	 * @param int    $page      Page ID.
 	 *
 	 * @return string customized Page Permalink.
 	 */
@@ -671,7 +681,7 @@ class Custom_Permalinks_Frontend {
 	 * @access public
 	 *
 	 * @param string $permalink Term link URL.
-	 * @param object $term Term object.
+	 * @param object $term      Term object.
 	 *
 	 * @return string customized Term Permalink.
 	 */

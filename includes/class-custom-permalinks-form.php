@@ -287,6 +287,7 @@ class Custom_Permalinks_Form {
 		}
 
 		$action = 'custom-permalinks_' . $post_id;
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		if ( ! wp_verify_nonce( $_REQUEST['_custom_permalinks_post_nonce'], $action ) ) {
 			return;
 		}
@@ -295,6 +296,7 @@ class Custom_Permalinks_Form {
 		$original_link = $cp_frontend->original_post_link( $post_id );
 
 		if ( $_REQUEST['custom_permalink'] !== $original_link ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$permalink = $this->sanitize_permalink( $_REQUEST['custom_permalink'] );
 			update_post_meta( $post_id, 'custom_permalink', $permalink );
 		}
@@ -320,7 +322,7 @@ class Custom_Permalinks_Form {
 	 * @access private
 	 *
 	 * @param object $post WP Post Object.
-	 * @param bool   $meta_box Show whether calls from clasic WordPress or Gutenberg.
+	 * @param bool   $meta_box Show whether calls from classic WordPress or Gutenberg.
 	 *
 	 * @return string Permalink Form HTML.
 	 */
@@ -451,6 +453,7 @@ class Custom_Permalinks_Form {
 
 		$output_content = $this->get_permalink_html( $post, true );
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $output_content;
 	}
 
@@ -459,8 +462,8 @@ class Custom_Permalinks_Form {
 	 *
 	 * @access public
 	 *
-	 * @param object|string $tag Current taxonomy term object for Edit form otherwise
-	 * The taxonomy slug.
+	 * @param object|string $tag Current taxonomy term object for Edit form
+	 *                           otherwise the taxonomy slug.
 	 *
 	 * @return void
 	 */
@@ -500,11 +503,12 @@ class Custom_Permalinks_Form {
 	 * @access private
 	 *
 	 * @param string     $permalink Permalink which is created by the plugin.
-	 * @param string     $original Permalink which set by WordPress.
-	 * @param int|string $id Post ID for Posts, Pages and custom post types, Term ID
-	 * for Taxonomy Edit form and taxonomy slug in case of term add.
+	 * @param string     $original  Permalink which set by WordPress.
+	 * @param int|string $id        Post ID for Posts, Pages and custom post
+	 *                              types, Term ID for Taxonomy Edit form and
+	 *                              taxonomy slug in case of term add.
 	 * @param bool       $render_containers Shows Post/Term Edit.
-	 * @param string     $postname Post Name.
+	 * @param string     $postname          Post Name.
 	 *
 	 * @return void
 	 */
@@ -530,14 +534,16 @@ class Custom_Permalinks_Form {
 			);
 		}
 
+		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '<input value="' . $home_url . '" type="hidden" name="custom_permalinks_home_url" id="custom_permalinks_home_url" />' .
-					'<input value="' . $encoded_permalink . '" type="hidden" name="custom_permalink" id="custom_permalink" />';
+		'<input value="' . $encoded_permalink . '" type="hidden" name="custom_permalink" id="custom_permalink" />';
+		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		if ( $render_containers ) {
 			echo '<table class="form-table" id="custom_permalink_form">' .
-						'<tr>' .
-							'<th scope="row">' . __( 'Custom Permalink', 'custom-permalinks' ) . '</th>' .
-							'<td>';
+				'<tr>' .
+					'<th scope="row">' . esc_html__( 'Custom Permalink', 'custom-permalinks' ) . '</th>' .
+					'<td>';
 		}
 		if ( '' === $permalink ) {
 			$original = $this->check_conflicts( $original );
@@ -571,21 +577,23 @@ class Custom_Permalinks_Form {
 			$field_style .= ' color: #ddd;';
 		}
 
+		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $home_url .
-			'<span id="editable-post-name" title="Click to edit this part of the permalink">' .
+		'<span id="editable-post-name" title="Click to edit this part of the permalink">' .
 			$postname_html .
 			'<input type="hidden" id="original-permalink" value="' . $original_encoded_url . '" />' .
 			'<input type="text" id="custom-permalinks-post-slug" class="text" value="' . $post_slug . '" style="' . $field_style . '" />' .
-			'</span>';
+		'</span>';
+		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		if ( $render_containers ) {
 			echo '<br />' .
-						'<small>' .
-							esc_html__( 'Leave blank to disable', 'custom-permalinks' ) .
-						'</small>' .
-						'</td>' .
-						'</tr>' .
-						'</table>';
+			'<small>' .
+				esc_html__( 'Leave blank to disable', 'custom-permalinks' ) .
+			'</small>' .
+			'</td>' .
+			'</tr>' .
+			'</table>';
 		}
 	}
 
@@ -610,11 +618,13 @@ class Custom_Permalinks_Form {
 
 		$action1 = 'custom-permalinks_' . $term_id;
 		$action2 = 'custom-permalinks_' . $term->taxonomy;
+		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		if ( ! wp_verify_nonce( $_REQUEST['_custom_permalinks_term_nonce'], $action1 )
 			&& ! wp_verify_nonce( $_REQUEST['_custom_permalinks_term_nonce'], $action2 )
 		) {
 			return;
 		}
+		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 		if ( isset( $term ) && isset( $term->taxonomy ) ) {
 			$taxonomy_name = $term->taxonomy;
@@ -624,6 +634,7 @@ class Custom_Permalinks_Form {
 				}
 
 				$new_permalink = ltrim(
+					// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 					stripcslashes( $_REQUEST['custom_permalink'] ),
 					'/'
 				);
@@ -819,7 +830,7 @@ class Custom_Permalinks_Form {
 	 * @access public
 	 *
 	 * @param int $prev_homepage_id Page ID of previously set Front Page.
-	 * @param int $new_homepage_id Page ID of current Front Page.
+	 * @param int $new_homepage_id  Page ID of current Front Page.
 	 *
 	 * @return void
 	 */
