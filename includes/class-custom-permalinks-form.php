@@ -165,19 +165,36 @@ class Custom_Permalinks_Form {
 	 * @since 2.0.0
 	 * @access private
 	 *
-	 * @param string $permalink String that needs to be sanitized.
+	 * @param string      $permalink     String that needs to be sanitized.
+	 * @param string|null $language_code Language code.
 	 *
 	 * @return string Sanitized permalink.
 	 */
-	private function sanitize_permalink( $permalink ) {
+	private function sanitize_permalink( $permalink, $language_code ) {
 		/*
 		 * Add Capability to allow Accents letter (if required). By default, It is
 		 * disabled.
 		 */
-		$allow_accents = apply_filters( 'custom_permalinks_allow_accents', false );
-		if ( ! is_bool( $allow_accents )
-			|| ( is_bool( $allow_accents ) && ! $allow_accents )
-		) {
+		$check_accents_filter = apply_filters( 'custom_permalinks_allow_accents', false );
+
+		/*
+		 * Add Capability to allow Capital letter (if required). By default, It is
+		 * disabled.
+		 */
+		$check_caps_filter = apply_filters( 'custom_permalinks_allow_caps', false );
+
+		$allow_accents = false;
+		$allow_caps    = false;
+
+		if ( is_bool( $check_accents_filter ) && $check_accents_filter ) {
+			$allow_accents = $check_accents_filter;
+		}
+
+		if ( is_bool( $check_caps_filter ) && $check_caps_filter ) {
+			$allow_caps = $check_caps_filter;
+		}
+
+		if ( ! $allow_accents ) {
 			$permalink = remove_accents( $permalink );
 		}
 
@@ -189,26 +206,18 @@ class Custom_Permalinks_Form {
 		// Restore octets.
 		$permalink = preg_replace( '|---([a-fA-F0-9][a-fA-F0-9])---|', '%$1', $permalink );
 
-		/*
-		 * Add Capability to allow Capital letter (if required). By default, It is
-		 * disabled.
-		 */
-		$allow_caps = apply_filters( 'custom_permalinks_allow_caps', false );
-
 		if ( seems_utf8( $permalink ) ) {
-			if ( function_exists( 'mb_strtolower' ) ) {
-				if ( ! is_bool( $allow_caps )
-					|| ( is_bool( $allow_caps ) && ! $allow_caps )
-				) {
-					$permalink = mb_strtolower( $permalink, 'UTF-8' );
+			if ( ! $allow_accents ) {
+				if ( function_exists( 'mb_strtolower' ) ) {
+					if ( ! $allow_caps ) {
+						$permalink = mb_strtolower( $permalink, 'UTF-8' );
+					}
 				}
+				$permalink = utf8_uri_encode( $permalink );
 			}
-			$permalink = utf8_uri_encode( $permalink );
 		}
 
-		if ( ! is_bool( $allow_caps )
-			|| ( is_bool( $allow_caps ) && ! $allow_caps )
-		) {
+		if ( ! $allow_caps ) {
 			$permalink = strtolower( $permalink );
 		}
 
@@ -261,17 +270,15 @@ class Custom_Permalinks_Form {
 			$permalink
 		);
 
-		// Convert &times to 'x'.
+			// Convert &times to 'x'.
 		$permalink = str_replace( '%c3%97', 'x', $permalink );
-
 		// Kill entities.
 		$permalink = preg_replace( '/&.+?;/', '', $permalink );
 
-		$language_code = get_locale();
 		// Avoid removing characters of other languages like persian etc.
 		if ( 'en' === $language_code || strpos( $language_code, 'en_' ) === 0 ) {
 			// Allow Alphanumeric and few symbols only.
-			if ( ! is_bool( $allow_caps ) && ! $allow_caps ) {
+			if ( ! $allow_caps ) {
 				$permalink = preg_replace( '/[^%a-z0-9 \.\/_-]/', '', $permalink );
 			} else {
 				// Allow Capital letters.
@@ -350,11 +357,12 @@ class Custom_Permalinks_Form {
 	 *
 	 * @access public
 	 *
-	 * @param int $post_id Post ID.
+	 * @param int     $post_id Post ID.
+	 * @param WP_Post $post    Post object.
 	 *
 	 * @return void
 	 */
-	public function save_post( $post_id ) {
+	public function save_post( $post_id, $post ) {
 		if ( ! isset( $_REQUEST['_custom_permalinks_post_nonce'] )
 			&& ! isset( $_REQUEST['custom_permalink'] )
 		) {
@@ -373,8 +381,21 @@ class Custom_Permalinks_Form {
 		if ( ! empty( $_REQUEST['custom_permalink'] )
 			&& $_REQUEST['custom_permalink'] !== $original_link
 		) {
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$permalink = $this->sanitize_permalink( $_REQUEST['custom_permalink'] );
+			$language_code = get_locale();
+			$language_code = apply_filters(
+				'wpml_element_language_code',
+				null,
+				array(
+					'element_id'   => $post_id,
+					'element_type' => $post->post_type,
+				)
+			);
+
+			$permalink = $this->sanitize_permalink(
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+				$_REQUEST['custom_permalink'],
+				$language_code
+			);
 			$permalink = apply_filters(
 				'custom_permalink_before_saving',
 				$permalink,
@@ -733,7 +754,24 @@ class Custom_Permalinks_Form {
 
 				$this->delete_term_permalink( $term_id );
 
-				$permalink = $this->sanitize_permalink( $new_permalink );
+				$language_code = get_locale();
+				if ( isset( $term->term_taxonomy_id ) ) {
+					$term_type = 'category';
+					if ( isset( $term->taxonomy ) ) {
+						$term_type = $term->taxonomy;
+					}
+
+					$language_code = apply_filters(
+						'wpml_element_language_code',
+						null,
+						array(
+							'element_id'   => $term->term_taxonomy_id,
+							'element_type' => $term_type,
+						)
+					);
+				}
+
+				$permalink = $this->sanitize_permalink( $new_permalink, $language_code );
 				$table     = get_option( 'custom_permalink_table' );
 
 				if ( $permalink && ! array_key_exists( $permalink, $table ) ) {
