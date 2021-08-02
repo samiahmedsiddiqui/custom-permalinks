@@ -105,6 +105,17 @@ function yasglobal_exclude_posts( $post ) {
 add_filter( 'custom_permalinks_exclude_posts', 'yasglobal_exclude_posts' );
 ```
 
+### Allow Accents Letters
+
+To allow accents letters, please add below-mentioned line in your theme `functions.php`:
+
+```php
+function yasglobal_permalink_allow_accents() {
+  return true;
+}
+add_filter( 'custom_permalinks_allow_accents', 'yasglobal_permalink_allow_accents' );
+```
+
 ### Allow Uppercase Letters
 
 To allow uppercase letters/words, please add below-mentioned line in your theme `functions.php`:

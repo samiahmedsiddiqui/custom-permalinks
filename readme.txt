@@ -1,8 +1,8 @@
 === Custom Permalinks ===
-Contributors: sasiddiqui, michaeltyson
+Contributors: sasiddiqui
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Tested up to: 5.8
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -115,6 +115,17 @@ function yasglobal_exclude_posts( $post ) {
 add_filter( 'custom_permalinks_exclude_posts', 'yasglobal_exclude_posts' );
 `
 
+=== Allow Accents Letters ===
+
+To allow accents letters, please add below-mentioned line in your theme `functions.php`:
+
+`
+function yasglobal_permalink_allow_accents() {
+  return true;
+}
+add_filter( 'custom_permalinks_allow_accents', 'yasglobal_permalink_allow_accents' );
+`
+
 === Allow Uppercase Letters ===
 
 To allow uppercase letters/words, please add below-mentioned line in your theme `functions.php`:
@@ -176,6 +187,12 @@ This process defines you the steps to follow either you are installing through W
 2. Activate Custom Permalinks through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 2.0.1 - Aug 02, 2021 =
+
+* Bugs
+  * [Plugin not save persian alphabet](https://wordpress.org/support/topic/plugin-not-save-persian-alphabet/)
+  * [404 error when post/page custom permalink is part of category custom permalink](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/49)
 
 = 2.0.0 - Jul 30, 2021 =
 
