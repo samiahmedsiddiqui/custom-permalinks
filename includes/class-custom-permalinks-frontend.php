@@ -250,16 +250,19 @@ class Custom_Permalinks_Frontend {
 			$cp_form = new Custom_Permalinks_Form();
 			$request = $cp_form->check_conflicts( $request );
 		}
-		$request_no_slash = preg_replace( '@/+@', '/', trim( $request, '/' ) );
-		$posts            = $this->query_post( $request_no_slash );
+
+		$request_no_slash  = preg_replace( '@/+@', '/', trim( $request, '/' ) );
+		$posts             = $this->query_post( $request_no_slash );
+		$permalink_matched = false;
 
 		if ( $posts ) {
 			/*
-			 * A post matches our request. Preserve this url for later
-			 * if it's the same as the permalink (no extra stuff).
+			 * A post matches our request. Preserve this url for later use. If it's
+			 * the same as the permalink (no extra stuff).
 			 */
 			if ( trim( $posts[0]->meta_value, '/' ) === $request_no_slash ) {
 				$this->registered_url = $request;
+				$permalink_matched    = true;
 			}
 
 			if ( 'draft' === $posts[0]->post_status ) {
@@ -296,34 +299,43 @@ class Custom_Permalinks_Frontend {
 			}
 		}
 
-		if ( null === $original_url ) {
+		if ( null === $original_url
+			|| ( null !== $original_url && ! $permalink_matched )
+		) {
 			// See if any terms have a matching permalink.
 			$table = get_option( 'custom_permalink_table' );
-			if ( ! $table ) {
-				return $query;
-			}
-
-			foreach ( array_keys( $table ) as $permalink ) {
-				$perm_length = strlen( $permalink );
-				if ( substr( $request_no_slash, 0, $perm_length ) === $permalink
-					|| substr( $request_no_slash . '/', 0, $perm_length ) === $permalink
-				) {
-					$term = $table[ $permalink ];
-
-					/*
-					 * Preserve this url for later if it's the same as the
-					 * permalink (no extra stuff)
-					 */
-					if ( trim( $permalink, '/' ) === $request_no_slash ) {
-						$this->registered_url = $request;
+			if ( $table ) {
+				$term_permalink = false;
+				foreach ( array_keys( $table ) as $permalink ) {
+					$perm_length = strlen( $permalink );
+					if ( ! $term_permalink
+						&& null !== $original_url
+						&& trim( $permalink, '/' ) !== $request_no_slash
+					) {
+						continue;
 					}
 
-					$term_link    = $this->original_term_link( $term['id'] );
-					$original_url = str_replace(
-						trim( $permalink, '/' ),
-						$term_link,
-						trim( $request, '/' )
-					);
+					if ( substr( $request_no_slash, 0, $perm_length ) === $permalink
+						|| substr( $request_no_slash . '/', 0, $perm_length ) === $permalink
+					) {
+						$term           = $table[ $permalink ];
+						$term_permalink = true;
+
+						/*
+						* Preserve this url for later if it's the same as the
+						* permalink (no extra stuff).
+						*/
+						if ( trim( $permalink, '/' ) === $request_no_slash ) {
+							$this->registered_url = $request;
+						}
+
+						$term_link    = $this->original_term_link( $term['id'] );
+						$original_url = str_replace(
+							trim( $permalink, '/' ),
+							$term_link,
+							trim( $request, '/' )
+						);
+					}
 				}
 			}
 		}
