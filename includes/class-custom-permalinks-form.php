@@ -170,7 +170,17 @@ class Custom_Permalinks_Form {
 	 * @return string Sanitized permalink.
 	 */
 	private function sanitize_permalink( $permalink ) {
-		$permalink = remove_accents( $permalink );
+		/*
+		 * Add Capability to allow Accents letter (if required). By default, It is
+		 * disabled.
+		 */
+		$allow_accents = apply_filters( 'custom_permalinks_allow_accents', false );
+		if ( ! is_bool( $allow_accents )
+			|| ( is_bool( $allow_accents ) && ! $allow_accents )
+		) {
+			$permalink = remove_accents( $permalink );
+		}
+
 		$permalink = wp_strip_all_tags( $permalink );
 		// Preserve escaped octets.
 		$permalink = preg_replace( '|%([a-fA-F0-9][a-fA-F0-9])|', '---$1---', $permalink );
@@ -184,13 +194,21 @@ class Custom_Permalinks_Form {
 		 * disabled.
 		 */
 		$allow_caps = apply_filters( 'custom_permalinks_allow_caps', false );
-		if ( ! is_bool( $allow_caps ) && ! $allow_caps ) {
-			if ( seems_utf8( $permalink ) ) {
-				if ( function_exists( 'mb_strtolower' ) ) {
+
+		if ( seems_utf8( $permalink ) ) {
+			if ( function_exists( 'mb_strtolower' ) ) {
+				if ( ! is_bool( $allow_caps )
+					|| ( is_bool( $allow_caps ) && ! $allow_caps )
+				) {
 					$permalink = mb_strtolower( $permalink, 'UTF-8' );
 				}
-				$permalink = utf8_uri_encode( $permalink );
 			}
+			$permalink = utf8_uri_encode( $permalink );
+		}
+
+		if ( ! is_bool( $allow_caps )
+			|| ( is_bool( $allow_caps ) && ! $allow_caps )
+		) {
 			$permalink = strtolower( $permalink );
 		}
 
@@ -249,12 +267,57 @@ class Custom_Permalinks_Form {
 		// Kill entities.
 		$permalink = preg_replace( '/&.+?;/', '', $permalink );
 
-		// Allow Alphanumeric and few symbols only.
-		if ( ! is_bool( $allow_caps ) && ! $allow_caps ) {
-			$permalink = preg_replace( '/[^%a-z0-9 \.\/_-]/', '', $permalink );
+		$language_code = get_locale();
+		// Avoid removing characters of other languages like persian etc.
+		if ( 'en' === $language_code || strpos( $language_code, 'en_' ) === 0 ) {
+			// Allow Alphanumeric and few symbols only.
+			if ( ! is_bool( $allow_caps ) && ! $allow_caps ) {
+				$permalink = preg_replace( '/[^%a-z0-9 \.\/_-]/', '', $permalink );
+			} else {
+				// Allow Capital letters.
+				$permalink = preg_replace( '/[^%a-zA-Z0-9 \.\/_-]/', '', $permalink );
+			}
 		} else {
-			// Allow Capital letters.
-			$permalink = preg_replace( '/[^%a-zA-Z0-9 \.\/_-]/', '', $permalink );
+			$reserved_chars = array(
+				'(',
+				')',
+				'[',
+				']',
+			);
+			$unsafe_chars   = array(
+				'<',
+				'>',
+				'{',
+				'}',
+				'|',
+				'`',
+				'^',
+				'\\',
+			);
+
+			$permalink = str_replace( $reserved_chars, '', $permalink );
+			$permalink = str_replace( $unsafe_chars, '', $permalink );
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.urlencode_urlencode
+			$permalink = urlencode( $permalink );
+			// Replace encoded slash input with slash.
+			$permalink = str_replace( '%2F', '/', $permalink );
+
+			$replace_hyphen = array( '%20', '%2B', '+' );
+			$split_path     = explode( '%3F', $permalink );
+			if ( 1 < count( $split_path ) ) {
+				// Replace encoded space and plus input with hyphen.
+				$replaced_path = str_replace( $replace_hyphen, '-', $split_path[0] );
+				$replaced_path = preg_replace( '/(\-+)/', '-', $replaced_path );
+				$permalink     = str_replace(
+					$split_path[0],
+					$replaced_path,
+					$permalink
+				);
+			} else {
+				// Replace encoded space and plus input with hyphen.
+				$permalink = str_replace( $replace_hyphen, '-', $permalink );
+				$permalink = preg_replace( '/(\-+)/', '-', $permalink );
+			}
 		}
 
 		// Allow only dot that are coming before any alphabet.
