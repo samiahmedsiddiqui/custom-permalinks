@@ -202,14 +202,54 @@ class Custom_Permalinks_Frontend {
 	}
 
 	/**
+	 * Check conditions if it matches then return true to stop processing the
+	 * particular query like for sitemaps.
+	 *
+	 * @since 2.1.0
+	 * @access private
+	 *
+	 * @param array $query Requested Query.
+	 *
+	 * @return bool Whether to process the query or not.
+	 */
+	private function exclude_query_proccess( $query ) {
+		$exclude = false;
+
+		/*
+		 * Return Query for Sitemap pages.
+		 */
+		if ( isset( $query )
+			&& (
+				( isset( $query['sitemap'] ) && ! empty( $query['sitemap'] ) )
+				|| (
+					isset( $query['seopress_sitemap'] )
+					&& ! empty( $query['seopress_sitemap'] )
+				)
+				|| (
+					isset( $query['seopress_cpt'] )
+					&& ! empty( $query['seopress_cpt'] )
+				)
+				|| (
+					isset( $query['seopress_sitemap_xsl'] )
+					&& 1 === (int) $query['seopress_sitemap_xsl']
+				)
+			)
+		) {
+			$exclude = true;
+		}
+
+		return $exclude;
+	}
+
+	/**
 	 * Filter to rewrite the query if we have a matching post.
 	 *
 	 * @since 0.1.0
 	 * @access public
 	 *
-	 * @param string $query Requested URL.
+	 * @param array $query The array of requested query variables.
 	 *
-	 * @return string the URL which has to be parsed.
+	 * @return array the URL which has to be parsed.
 	 */
 	public function parse_request( $query ) {
 		global $wpdb;
@@ -222,8 +262,18 @@ class Custom_Permalinks_Frontend {
 		}
 
 		/*
-		 * First, search for a matching custom permalink, and if found
-		 * generate the corresponding original URL.
+		 * Return Query for Sitemap pages.
+		 */
+		$stop_query = $this->exclude_query_proccess( $query );
+		if ( $stop_query ) {
+			// Making it true to avoid redirect if query doesn't needs to be processed.
+			$this->parse_request_status = true;
+			return $query;
+		}
+
+		/*
+		 * First, search for a matching custom permalink, and if found generate the
+		 * corresponding original URL.
 		 */
 		$original_url = null;
 
