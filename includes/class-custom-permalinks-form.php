@@ -616,7 +616,7 @@ class Custom_Permalinks_Form {
 	 *
 	 * @return void
 	 */
-	private function get_permalink_form( $permalink, $original = '', $id,
+	private function get_permalink_form( $permalink, $original, $id,
 		$render_containers = true, $postname = ''
 	) {
 		$encoded_permalink = htmlspecialchars( urldecode( $permalink ) );

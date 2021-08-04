@@ -119,7 +119,7 @@ class Custom_Permalinks_Frontend {
 	 *
 	 * @return string permalink with language information.
 	 */
-	public function wpml_permalink_filter( $permalink = '', $language_code ) {
+	public function wpml_permalink_filter( $permalink, $language_code ) {
 		$custom_permalink   = $permalink;
 		$trailing_permalink = trailingslashit( home_url() ) . $custom_permalink;
 		if ( $language_code ) {
