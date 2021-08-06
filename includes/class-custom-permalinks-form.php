@@ -270,10 +270,14 @@ class Custom_Permalinks_Form {
 			$permalink
 		);
 
-			// Convert &times to 'x'.
+		// Convert &times to 'x'.
 		$permalink = str_replace( '%c3%97', 'x', $permalink );
 		// Kill entities.
 		$permalink = preg_replace( '/&.+?;/', '', $permalink );
+
+		if ( empty( $language_code ) ) {
+			$language_code = get_locale();
+		}
 
 		// Avoid removing characters of other languages like persian etc.
 		if ( 'en' === $language_code || strpos( $language_code, 'en_' ) === 0 ) {
@@ -381,7 +385,6 @@ class Custom_Permalinks_Form {
 		if ( ! empty( $_REQUEST['custom_permalink'] )
 			&& $_REQUEST['custom_permalink'] !== $original_link
 		) {
-			$language_code = get_locale();
 			$language_code = apply_filters(
 				'wpml_element_language_code',
 				null,
@@ -754,7 +757,7 @@ class Custom_Permalinks_Form {
 
 				$this->delete_term_permalink( $term_id );
 
-				$language_code = get_locale();
+				$language_code = '';
 				if ( isset( $term->term_taxonomy_id ) ) {
 					$term_type = 'category';
 					if ( isset( $term->taxonomy ) ) {
