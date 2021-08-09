@@ -18,7 +18,7 @@ class Custom_Permalinks {
 	 *
 	 * @var string
 	 */
-	public $version = '2.0.1';
+	public $version = '2.1.0';
 
 	/**
 	 * Class constructor.

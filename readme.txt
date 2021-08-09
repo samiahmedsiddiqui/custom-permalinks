@@ -2,7 +2,7 @@
 Contributors: sasiddiqui
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Tested up to: 5.8
-Stable tag: 2.0.1
+Stable tag: 2.1.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -188,10 +188,17 @@ This process defines you the steps to follow either you are installing through W
 
 == Changelog ==
 
-= 2.0.1 - Aug 02, 2021 =
+= 2.1.0 - Aug 09, 2021 =
 
 * Bugs
   * [Plugin not save persian alphabet](https://wordpress.org/support/topic/plugin-not-save-persian-alphabet/)
+	* Fix PHP Error on Deactivating the plugin
+* Enhancements
+  * Exclude processing for sitemap URLs
+
+= 2.0.1 - Aug 02, 2021 =
+
+* Bugs
   * [404 error when post/page custom permalink is part of category custom permalink](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/49)
 
 = 2.0.0 - Jul 30, 2021 =
@@ -212,11 +219,6 @@ This process defines you the steps to follow either you are installing through W
   * Show/Hide column and Pagination features added on Post Type Permalinks and Taxonomies Permalinks page
   * Removed deprecated functions
   * Applied WPCS Standards
-
-= 1.7.1 - Aug 30, 2020 =
-
-  * Bugs
-    * Fix PHP notice (start reporting with WordPress 5.5)
 
 = Earlier versions =
 

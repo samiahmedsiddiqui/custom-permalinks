@@ -2,6 +2,11 @@
 
 This file contains only old changelog. See readme.txt for newer versions.
 
+= 1.7.1 - Aug 30, 2020 =
+
+  * Bugs
+    * Fix PHP notice (start reporting with WordPress 5.5)
+
 = 1.7.0 - Aug 20, 2020 =
 
   * Bugs
