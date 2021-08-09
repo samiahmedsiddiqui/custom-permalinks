@@ -192,7 +192,7 @@ This process defines you the steps to follow either you are installing through W
 
 * Bugs
   * [Plugin not save persian alphabet](https://wordpress.org/support/topic/plugin-not-save-persian-alphabet/)
-	* Fix PHP Error on Deactivating the plugin
+  * Fix PHP Error on Deactivating the plugin
 * Enhancements
   * Exclude processing for sitemap URLs
 
