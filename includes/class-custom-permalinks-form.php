@@ -198,6 +198,10 @@ class Custom_Permalinks_Form {
 			$permalink = remove_accents( $permalink );
 		}
 
+		if ( empty( $language_code ) ) {
+			$language_code = get_locale();
+		}
+
 		$permalink = wp_strip_all_tags( $permalink );
 		// Preserve escaped octets.
 		$permalink = preg_replace( '|%([a-fA-F0-9][a-fA-F0-9])|', '---$1---', $permalink );
@@ -206,14 +210,16 @@ class Custom_Permalinks_Form {
 		// Restore octets.
 		$permalink = preg_replace( '|---([a-fA-F0-9][a-fA-F0-9])---|', '%$1', $permalink );
 
-		if ( seems_utf8( $permalink ) ) {
-			if ( ! $allow_accents ) {
-				if ( function_exists( 'mb_strtolower' ) ) {
-					if ( ! $allow_caps ) {
-						$permalink = mb_strtolower( $permalink, 'UTF-8' );
+		if ( 'en' === $language_code || strpos( $language_code, 'en_' ) === 0 ) {
+			if ( seems_utf8( $permalink ) ) {
+				if ( ! $allow_accents ) {
+					if ( function_exists( 'mb_strtolower' ) ) {
+						if ( ! $allow_caps ) {
+							$permalink = mb_strtolower( $permalink, 'UTF-8' );
+						}
 					}
+					$permalink = utf8_uri_encode( $permalink );
 				}
-				$permalink = utf8_uri_encode( $permalink );
 			}
 		}
 
@@ -274,10 +280,6 @@ class Custom_Permalinks_Form {
 		$permalink = str_replace( '%c3%97', 'x', $permalink );
 		// Kill entities.
 		$permalink = preg_replace( '/&.+?;/', '', $permalink );
-
-		if ( empty( $language_code ) ) {
-			$language_code = get_locale();
-		}
 
 		// Avoid removing characters of other languages like persian etc.
 		if ( 'en' === $language_code || strpos( $language_code, 'en_' ) === 0 ) {
