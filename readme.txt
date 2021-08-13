@@ -2,7 +2,7 @@
 Contributors: sasiddiqui
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Tested up to: 5.8
-Stable tag: 2.1.0
+Stable tag: 2.2.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -187,6 +187,13 @@ This process defines you the steps to follow either you are installing through W
 2. Activate Custom Permalinks through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 2.2.0 - Aug 13, 2021 =
+
+* Bugs
+  * Show decoded permalink in meta box
+* Enhancements
+  * Update script to fix linting issues and use updated permalink to view the post/page.
 
 = 2.1.0 - Aug 09, 2021 =
 
