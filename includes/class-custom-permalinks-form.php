@@ -904,6 +904,10 @@ class Custom_Permalinks_Form {
 
 					$all_permalinks['preview_permalink'] = $view_post_link;
 				}
+			} else {
+				$all_permalinks['custom_permalink'] = htmlspecialchars( urldecode(
+					$all_permalinks['custom_permalink']
+				) );
 			}
 
 			$cp_frontend = new Custom_Permalinks_Frontend();
