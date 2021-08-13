@@ -1,184 +1,269 @@
-(function () {
-    "use strict";
+( function () {
+	'use strict';
 
-    var editPost = "";
-    var isSaving = "";
-    var lastIsSaving = false;
+	let editPost = '';
+	let isSaving = '';
+	let lastIsSaving = false;
 
-    /**
-     * Change color of edit box on focus.
-     */
-    function focusPermalinkField (event) {
-        if (event.target) {
-            event.target.style.color = "#000";
-        }
-    }
+	/**
+	 * Change color of edit box on focus.
+	 *
+	 * @param {Object} event Event Listener Object.
+	 */
+	function focusPermalinkField( event ) {
+		if ( event.target ) {
+			event.target.style.color = '#000';
+		}
+	}
 
-    /**
-     * Change color of edit box on blur.
-     */
-    function blurPermalinkField (event) {
-        var originalPermalink = document.getElementById("original-permalink");
+	/**
+	 * Change color of edit box on blur.
+	 *
+	 * @param {Object} event Event Listener Object.
+	 */
+	function blurPermalinkField( event ) {
+		if ( ! event.target ) {
+			return;
+		}
 
-        if (!event.target) {
-            return;
-        }
+		const originalPermalink = document.getElementById(
+			'original-permalink'
+		);
 
-        document.getElementById("custom_permalink").value = event.target.value;
-        if (event.target.value === "" || event.target.value === originalPermalink.value) {
-            event.target.value = originalPermalink.value;
-            event.target.style.color = "#ddd";
-        }
-    }
+		document.getElementById( 'custom_permalink' ).value =
+			event.target.value;
+		if (
+			event.target.value === '' ||
+			event.target.value === originalPermalink.value
+		) {
+			event.target.value = originalPermalink.value;
+			event.target.style.color = '#ddd';
+		}
+	}
 
-    /**
-     * Update Permalink Value in View Button and hidden fields.
-     */
-    function updateFetchedPermalink (setPermlinks) {
-        var getHomeURL = document.getElementById("custom_permalinks_home_url");
-        var permalinkAdd = document.getElementById("custom-permalinks-add");
-        var viewPermalink = "";
+	/**
+	 * Update Permalink Value in View Button and hidden fields.
+	 *
+	 * @param {Object} setPermlinks
+	 */
+	function updateFetchedPermalink( setPermlinks ) {
+		const getHomeURL = document.getElementById(
+			'custom_permalinks_home_url'
+		);
+		const permalinkAdd = document.getElementById( 'custom-permalinks-add' );
+		let viewPermalink = '';
+		let replaceOldPermalink = '';
 
-        document.getElementById("custom_permalink").value = setPermlinks.custom_permalink;
-        if (setPermlinks.custom_permalink === "") {
-            // eslint-disable-next-line camelcase
-            setPermlinks.custom_permalink = setPermlinks.original_permalink;
-        }
+		document.getElementById( 'custom_permalink' ).value =
+			setPermlinks.custom_permalink;
+		if ( setPermlinks.custom_permalink === '' ) {
+			// eslint-disable-next-line camelcase
+			setPermlinks.custom_permalink = setPermlinks.original_permalink;
+		}
 
-        if (setPermlinks.preview_permalink) {
-            viewPermalink = getHomeURL.value + setPermlinks.preview_permalink;
-        } else {
-            viewPermalink = getHomeURL.value + setPermlinks.custom_permalink;
-        }
+		if ( setPermlinks.preview_permalink ) {
+			viewPermalink = getHomeURL.value + setPermlinks.preview_permalink;
+		} else {
+			viewPermalink = getHomeURL.value + setPermlinks.custom_permalink;
+		}
 
-        document.getElementById("custom-permalinks-post-slug").value = setPermlinks.custom_permalink;
-        document.getElementById("original-permalink").value = setPermlinks.original_permalink;
+		document.getElementById( 'custom-permalinks-post-slug' ).value =
+			setPermlinks.custom_permalink;
+		document.getElementById( 'original-permalink' ).value =
+			setPermlinks.original_permalink;
 
-        if (document.querySelector("#view-post-btn a")) {
-            document.querySelector("#view-post-btn a").href = viewPermalink;
-        }
+		if ( document.querySelector( '#view-post-btn a' ) ) {
+			replaceOldPermalink = document.querySelector( '#view-post-btn a' )
+				.href;
 
-        if (document.querySelector("a.editor-post-preview")) {
-            document.querySelector("a.editor-post-preview").href = viewPermalink;
-        }
+			// Cannot be removed as replaceOldPermalink can be empty.
+			document.querySelector( '#view-post-btn a' ).href = viewPermalink;
+		}
 
-        if (permalinkAdd && permalinkAdd.value === "add") {
-            document.getElementById("custom-permalinks-edit-box").style.display = "";
-        }
+		if ( document.querySelector( 'a.editor-post-preview' ) ) {
+			// Cannot be removed as replaceOldPermalink can be empty.
+			document.querySelector(
+				'a.editor-post-preview'
+			).href = viewPermalink;
+		}
 
-        if (document.querySelector(".components-notice__content a")) {
-            document.querySelector(".components-notice__content a").href = "/" + setPermlinks.custom_permalink;
-        }
-    }
+		// Only works when replaceOldPermalink is not empty.
+		if ( replaceOldPermalink !== '' ) {
+			replaceOldPermalink = replaceOldPermalink.replace( /\//g, '/' );
+			let loopInit = 0;
 
-    /**
-     * Fetch updated permalink via REST API.
-     */
-    function fetchUpdates () {
-        var defaultPerm = document.getElementsByClassName("edit-post-post-link__preview-label");
-        var getHomeURL = document.getElementById("custom_permalinks_home_url");
-        var postId = "";
-        var xhttp = "";
+			const incrementNumber = 1;
+			const oldPermalinks = document.querySelectorAll( 'body a' );
+			const replaceRegex = new RegExp( replaceOldPermalink, 'g' );
+			const totalOldLinks = oldPermalinks.length;
 
-        if (!editPost || !wpApiSettings || !wpApiSettings.nonce) {
-            return;
-        }
+			while ( loopInit < totalOldLinks ) {
+				if (
+					oldPermalinks[ loopInit ] &&
+					oldPermalinks[ loopInit ].href
+				) {
+					oldPermalinks[ loopInit ].href = oldPermalinks[
+						loopInit
+					].href.replace( replaceRegex, viewPermalink );
+				}
 
-        if (defaultPerm && defaultPerm[0]) {
-            defaultPerm[0].parentNode.classList.add("cp-permalink-hidden");
-        }
+				loopInit += incrementNumber;
+			}
+		}
 
-        isSaving = editPost.isSavingMetaBoxes();
-        if (isSaving !== lastIsSaving && !isSaving) {
-            postId = wp.data.select("core/editor").getEditedPostAttribute("id");
-            xhttp = new XMLHttpRequest();
+		if ( permalinkAdd && permalinkAdd.value === 'add' ) {
+			document.getElementById(
+				'custom-permalinks-edit-box'
+			).style.display = '';
+		}
 
-            lastIsSaving = isSaving;
-            xhttp.onreadystatechange = function () {
-                var xhttpReadyState = 4;
-                var xhttpStatus = 200;
+		if ( document.querySelector( '.components-notice__content a' ) ) {
+			document.querySelector( '.components-notice__content a' ).href =
+				'/' + setPermlinks.custom_permalink;
+		}
+	}
 
-                if (xhttp.readyState === xhttpReadyState &&
-                    xhttp.status === xhttpStatus) {
-                    updateFetchedPermalink(JSON.parse(xhttp.responseText));
-                }
-            };
+	/**
+	 * Fetch updated permalink via REST API.
+	 */
+	function fetchUpdates() {
+		if ( ! editPost || ! wpApiSettings || ! wpApiSettings.nonce ) {
+			return;
+		}
 
-            xhttp.open(
-                "GET",
-                getHomeURL.value + "wp-json/custom-permalinks/v1/get-permalink/" + postId,
-                true
-            );
-            xhttp.setRequestHeader("Cache-Control", "private, max-age=0, no-cache");
-            xhttp.setRequestHeader("X-WP-NONCE", wpApiSettings.nonce);
+		const defaultPerm = document.getElementsByClassName(
+			'edit-post-post-link__preview-label'
+		);
+		const getHomeURL = document.getElementById(
+			'custom_permalinks_home_url'
+		);
+		let postId = '';
+		let xhttp = '';
 
-            xhttp.send();
-        }
+		if ( defaultPerm && defaultPerm[ 0 ] ) {
+			defaultPerm[ 0 ].parentNode.classList.add( 'cp-permalink-hidden' );
+		}
 
-        lastIsSaving = isSaving;
-    }
+		isSaving = editPost.isSavingMetaBoxes();
+		if ( isSaving !== lastIsSaving && ! isSaving ) {
+			postId = wp.data
+				.select( 'core/editor' )
+				.getEditedPostAttribute( 'id' );
+			xhttp = new XMLHttpRequest();
 
-    /**
-     * Hide default Permalink metabox
-     */
-    function hideDefaultPermalink () {
-        var defaultPerm = document.getElementsByClassName("edit-post-post-link__preview-label");
+			lastIsSaving = isSaving;
+			xhttp.onreadystatechange = function () {
+				const xhttpReadyState = 4;
+				const xhttpStatus = 200;
 
-        if (defaultPerm && defaultPerm[0]) {
-            defaultPerm[0].parentNode.classList.add("cp-permalink-hidden");
-        }
-    }
+				if (
+					xhttp.readyState === xhttpReadyState &&
+					xhttp.status === xhttpStatus
+				) {
+					updateFetchedPermalink( JSON.parse( xhttp.responseText ) );
+				}
+			};
 
-    function permalinkContentLoaded () {
-        var defaultPerm = document.getElementsByClassName("edit-post-post-link__preview-label");
-        var incrementNumber = 1;
-        var loopInit = 0;
-        var permalinkAdd = "";
-        var permalinkEdit = document.getElementById("custom-permalinks-edit-box");
-        var postSlug = document.getElementById("custom-permalinks-post-slug");
-        var sidebar = "";
-        var totalTabs = 0;
+			xhttp.open(
+				'GET',
+				getHomeURL.value +
+					'wp-json/custom-permalinks/v1/get-permalink/' +
+					postId,
+				true
+			);
+			xhttp.setRequestHeader(
+				'Cache-Control',
+				'private, max-age=0, no-cache'
+			);
+			xhttp.setRequestHeader( 'X-WP-NONCE', wpApiSettings.nonce );
 
-        if (postSlug) {
-            postSlug.addEventListener("focus", focusPermalinkField);
-            postSlug.addEventListener("blur", blurPermalinkField);
-        }
+			xhttp.send();
+		}
 
-        if (permalinkEdit) {
-            if (document.querySelector("#custom-permalinks-edit-box .inside").innerHTML.trim() === "") {
-                permalinkEdit.style.display = "none";
-            }
-        }
+		lastIsSaving = isSaving;
+	}
 
-        if (wp.data) {
-            permalinkAdd = document.getElementById("custom-permalinks-add");
-            sidebar = document.querySelectorAll(".edit-post-sidebar .components-panel__header");
+	/**
+	 * Hide default Permalink metabox
+	 */
+	function hideDefaultPermalink() {
+		const defaultPerm = document.getElementsByClassName(
+			'edit-post-post-link__preview-label'
+		);
 
-            if (sidebar && sidebar.length) {
-                totalTabs = sidebar.length;
-            }
+		if ( defaultPerm && defaultPerm[ 0 ] ) {
+			defaultPerm[ 0 ].parentNode.classList.add( 'cp-permalink-hidden' );
+		}
+	}
 
-            if (permalinkAdd && permalinkAdd.value === "add") {
-                permalinkEdit.style.display = "none";
-            }
+	function permalinkContentLoaded() {
+		const defaultPerm = document.getElementsByClassName(
+			'edit-post-post-link__preview-label'
+		);
+		const incrementNumber = 1;
+		let loopInit = 0;
+		let permalinkAdd = '';
+		const permalinkEdit = document.getElementById(
+			'custom-permalinks-edit-box'
+		);
+		const postSlug = document.getElementById(
+			'custom-permalinks-post-slug'
+		);
+		let sidebar = '';
+		let totalTabs = 0;
 
-            editPost = wp.data.select("core/edit-post");
-            wp.data.subscribe(fetchUpdates);
+		if ( postSlug ) {
+			postSlug.addEventListener( 'focus', focusPermalinkField );
+			postSlug.addEventListener( 'blur', blurPermalinkField );
+		}
 
-            if (defaultPerm && defaultPerm[0]) {
-                defaultPerm[0].parentNode.classList.add("cp-permalink-hidden");
-            }
+		if ( permalinkEdit ) {
+			if (
+				document
+					.querySelector( '#custom-permalinks-edit-box .inside' )
+					.innerHTML.trim() === ''
+			) {
+				permalinkEdit.style.display = 'none';
+			}
+		}
 
-            if (permalinkEdit.classList.contains("closed")) {
-                permalinkEdit.classList.remove("closed");
-            }
+		if ( wp.data ) {
+			permalinkAdd = document.getElementById( 'custom-permalinks-add' );
+			sidebar = document.querySelectorAll(
+				'.edit-post-sidebar .components-panel__header'
+			);
 
-            while (loopInit < totalTabs) {
-                sidebar[loopInit].addEventListener("click", hideDefaultPermalink);
-                loopInit += incrementNumber;
-            }
-        }
-    }
+			if ( sidebar && sidebar.length ) {
+				totalTabs = sidebar.length;
+			}
 
-    document.addEventListener("DOMContentLoaded", permalinkContentLoaded);
-}());
+			if ( permalinkAdd && permalinkAdd.value === 'add' ) {
+				permalinkEdit.style.display = 'none';
+			}
+
+			editPost = wp.data.select( 'core/edit-post' );
+			wp.data.subscribe( fetchUpdates );
+
+			if ( defaultPerm && defaultPerm[ 0 ] ) {
+				defaultPerm[ 0 ].parentNode.classList.add(
+					'cp-permalink-hidden'
+				);
+			}
+
+			if ( permalinkEdit.classList.contains( 'closed' ) ) {
+				permalinkEdit.classList.remove( 'closed' );
+			}
+
+			while ( loopInit < totalTabs ) {
+				sidebar[ loopInit ].addEventListener(
+					'click',
+					hideDefaultPermalink
+				);
+				loopInit += incrementNumber;
+			}
+		}
+	}
+
+	/* eslint-disable @wordpress/no-global-event-listener */
+	document.addEventListener( 'DOMContentLoaded', permalinkContentLoaded );
+} )();
