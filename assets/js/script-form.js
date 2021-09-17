@@ -145,7 +145,7 @@
 		}
 
 		isSaving = editPost.isSavingMetaBoxes();
-		if ( isSaving !== lastIsSaving && ! isSaving ) {
+		if ( isSaving !== lastIsSaving && !isSaving && getHomeURL ) {
 			postId = wp.data
 				.select( 'core/editor' )
 				.getEditedPostAttribute( 'id' );
