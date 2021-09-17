@@ -188,6 +188,11 @@ This process defines you the steps to follow either you are installing through W
 
 == Changelog ==
 
+= 2.2.1 =
+
+* Bugs
+  * [is_numeric warning in plugin API](https://wordpress.org/support/topic/is_numeric-error-for-plugin-api/)
+
 = 2.2.0 - Aug 13, 2021 =
 
 * Bugs

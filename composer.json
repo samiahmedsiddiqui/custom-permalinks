@@ -41,5 +41,5 @@
     "phpcs-errors-summary": "@check-cs-summary -n",
     "phpcbf": "phpcbf"
   },
-  "prefer-stable" : true
+  "prefer-stable": true
 }

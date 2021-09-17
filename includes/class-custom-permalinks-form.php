@@ -945,7 +945,9 @@ class Custom_Permalinks_Form {
 				'callback'            => array( $this, 'refresh_meta_form' ),
 				'args'                => array(
 					'id' => array(
-						'validate_callback' => 'is_numeric',
+						'validate_callback' => function( $pid ) {
+							return is_numeric( $pid );
+						},
 					),
 				),
 				'permission_callback' => function () {
