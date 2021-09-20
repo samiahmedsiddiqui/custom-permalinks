@@ -304,6 +304,7 @@ class Custom_Permalinks_Frontend {
 		$request_no_slash  = preg_replace( '@/+@', '/', trim( $request, '/' ) );
 		$posts             = $this->query_post( $request_no_slash );
 		$permalink_matched = false;
+		$found_permalink   = '';
 
 		if ( $posts ) {
 			/*
@@ -315,6 +316,7 @@ class Custom_Permalinks_Frontend {
 				$permalink_matched    = true;
 			}
 
+			$found_permalink = $posts[0]->meta_value;
 			if ( 'draft' === $posts[0]->post_status ) {
 				if ( 'page' === $posts[0]->post_type ) {
 					$original_url = '?page_id=' . $posts[0]->ID;
@@ -372,15 +374,16 @@ class Custom_Permalinks_Frontend {
 						$term_permalink = true;
 
 						/*
-						* Preserve this url for later if it's the same as the
-						* permalink (no extra stuff).
-						*/
+						 * Preserve this url for later if it's the same as the
+						 * permalink (no extra stuff).
+						 */
 						if ( trim( $permalink, '/' ) === $request_no_slash ) {
 							$this->registered_url = $request;
 						}
 
-						$term_link    = $this->original_term_link( $term['id'] );
-						$original_url = str_replace(
+						$found_permalink = $permalink;
+						$term_link       = $this->original_term_link( $term['id'] );
+						$original_url    = str_replace(
 							trim( $permalink, '/' ),
 							$term_link,
 							trim( $request, '/' )
@@ -393,6 +396,15 @@ class Custom_Permalinks_Frontend {
 		$this->parse_request_status = false;
 		if ( null !== $original_url ) {
 			$this->parse_request_status = true;
+
+			/*
+			 * Allow redirect function to work if permalink is not exactly macthed
+			 * with the requested url. Like requested URL doesn't contain trailing
+			 * slash but permalink has trailing slash etc.
+			 */
+			if ( ! empty( $found_permalink ) && $found_permalink !== $request ) {
+				$this->parse_request_status = false;
+			}
 
 			$original_url = str_replace( '//', '/', $original_url );
 			$pos          = strpos( $this->request_uri, '?' );
@@ -407,8 +419,8 @@ class Custom_Permalinks_Frontend {
 
 			/*
 			 * Now we have the original URL, run this back through WP->parse_request,
-			 * in order to parse parameters properly.
-			 * We set $_SERVER variables to fool the function.
+			 * in order to parse parameters properly. We set `$_SERVER` variables to
+			 * fool the function.
 			 */
 			$_SERVER['REQUEST_URI'] = '/' . ltrim( $original_url, '/' );
 			$path_info              = apply_filters(
