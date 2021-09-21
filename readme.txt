@@ -192,7 +192,8 @@ This process defines you the steps to follow either you are installing through W
 
 * Bugs
   * [is_numeric warning in plugin API](https://wordpress.org/support/topic/is_numeric-error-for-plugin-api/)
-  * [Redirect issues: trailing slash](https://wordpress.org/support/topic/trailing-slash-9/)
+  * [Missing default WP redirect from URLs with no ending trailing slash](https://wordpress.org/support/topic/missing-default-wp-redirect-from-urls-with-no-ending-trailing-slash/)
+  * [trailing slash](https://wordpress.org/support/topic/trailing-slash-9/)
   * Fixed JS Error on updating Static page
 * Enhancements
   * Allow dot in the permalink

@@ -333,22 +333,6 @@ class Custom_Permalinks_Form {
 			}
 		}
 
-		// Allow only dot that are coming before any alphabet.
-		$allow_dot = explode( '.', $permalink );
-		if ( 0 < count( $allow_dot ) ) {
-			$new_perm   = $allow_dot[0];
-			$dot_length = count( $allow_dot );
-			for ( $i = 1; $i < $dot_length; ++$i ) {
-				preg_match( '/^[a-z]/', $allow_dot[ $i ], $check_perm );
-				if ( isset( $check_perm ) && ! empty( $check_perm ) ) {
-					$new_perm .= '.';
-				}
-				$new_perm .= $allow_dot[ $i ];
-			}
-
-			$permalink = $new_perm;
-		}
-
 		$permalink = preg_replace( '/\s+/', '-', $permalink );
 		$permalink = preg_replace( '|-+|', '-', $permalink );
 		$permalink = str_replace( '-/', '/', $permalink );
