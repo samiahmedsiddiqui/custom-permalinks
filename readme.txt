@@ -2,7 +2,7 @@
 Contributors: sasiddiqui
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Tested up to: 5.8
-Stable tag: 2.2.0
+Stable tag: 2.3.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -188,7 +188,7 @@ This process defines you the steps to follow either you are installing through W
 
 == Changelog ==
 
-= 2.3.0 =
+= 2.3.0 - Sep 21, 2021 =
 
 * Bugs
   * [is_numeric warning in plugin API](https://wordpress.org/support/topic/is_numeric-error-for-plugin-api/)
@@ -196,7 +196,7 @@ This process defines you the steps to follow either you are installing through W
   * [trailing slash](https://wordpress.org/support/topic/trailing-slash-9/)
   * Fixed JS Error on updating Static page
 * Enhancements
-  * Allow dot in the permalink
+  * Allow period in the permalink
 
 = 2.2.0 - Aug 13, 2021 =
 

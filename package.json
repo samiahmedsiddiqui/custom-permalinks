@@ -28,6 +28,6 @@
 		"gulp-uglify": "3.0.2"
 	},
 	"customPermalinks": {
-		"pluginVersion": "2.2.0"
+		"pluginVersion": "2.3.0"
 	}
 }
