@@ -188,17 +188,21 @@ This process defines you the steps to follow either you are installing through W
 
 == Changelog ==
 
-= 2.2.1 =
+= 2.3.0 =
 
 * Bugs
   * [is_numeric warning in plugin API](https://wordpress.org/support/topic/is_numeric-error-for-plugin-api/)
+  * [Redirect issues: trailing slash](https://wordpress.org/support/topic/trailing-slash-9/)
+  * Fixed JS Error on updating Static page
+* Enhancements
+  * Allow dot in the permalink
 
 = 2.2.0 - Aug 13, 2021 =
 
 * Bugs
   * Show decoded permalink in meta box
 * Enhancements
-  * Update script to fix linting issues and use updated permalink to view the post/page.
+  * Update script to fix linting issues and use updated permalink to view the post/page
 
 = 2.1.0 - Aug 09, 2021 =
 

@@ -398,9 +398,10 @@ class Custom_Permalinks_Frontend {
 			$this->parse_request_status = true;
 
 			/*
-			 * Allow redirect function to work if permalink is not exactly macthed
-			 * with the requested url. Like requested URL doesn't contain trailing
-			 * slash but permalink has trailing slash etc.
+			 * Allow redirect function to work if permalink is not exactly matched
+			 * with the requested url. Like Trailing slash (Requested URL doesn't
+			 * contain trailing slash but permalink has trailing slash or vice versa)
+			 * and letter-case issue etc.
 			 */
 			if ( ! empty( $found_permalink ) && $found_permalink !== $request ) {
 				$this->parse_request_status = false;
