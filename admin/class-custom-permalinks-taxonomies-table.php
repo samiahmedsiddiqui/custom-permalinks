@@ -148,7 +148,7 @@ final class Custom_Permalinks_Taxonomies_Table extends WP_List_Table {
 				<?php
 					esc_html_e( 'Search results for: ', 'custom-permalinks' );
 					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					printf( '<strong>%s</strong>', $search_permalink );
+					printf( '<strong>%s</strong>', esc_html( $search_permalink ) );
 				?>
 				</span>
 			<?php endif; ?>
