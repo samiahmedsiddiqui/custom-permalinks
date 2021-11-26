@@ -194,7 +194,7 @@ class Custom_Permalinks_Admin {
 	 *
 	 * @param array $links Contains the Plugin Basic Link (Activate/Deactivate/Delete).
 	 *
-	 * @return array Plugin Basic Links and added some custome link for Settings,
+	 * @return array Plugin Basic Links and added some customer link for Settings,
 	 * Contact, and About.
 	 */
 	public function settings_link( $links ) {

@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class that passes custom link, parse the requested url and redirect.
+ * Class that passes custom link, parse the requested URL and redirect.
  */
 class Custom_Permalinks_Frontend {
 	/**
@@ -28,7 +28,7 @@ class Custom_Permalinks_Frontend {
 	private $query_string_uri = '';
 
 	/**
-	 * Preserve the url for later use in parse_request.
+	 * Preserve the URL for later use in parse_request.
 	 *
 	 * @var string
 	 */
@@ -115,7 +115,7 @@ class Custom_Permalinks_Frontend {
 	 * @access public
 	 *
 	 * @param string $permalink     Custom Permalink.
-	 * @param string $language_code The language to convert the url into.
+	 * @param string $language_code The language to convert the URL into.
 	 *
 	 * @return string permalink with language information.
 	 */
@@ -308,7 +308,7 @@ class Custom_Permalinks_Frontend {
 
 		if ( $posts ) {
 			/*
-			 * A post matches our request. Preserve this url for later use. If it's
+			 * A post matches our request. Preserve this URL for later use. If it's
 			 * the same as the permalink (no extra stuff).
 			 */
 			if ( trim( $posts[0]->meta_value, '/' ) === $request_no_slash ) {
@@ -374,7 +374,7 @@ class Custom_Permalinks_Frontend {
 						$term_permalink = true;
 
 						/*
-						 * Preserve this url for later if it's the same as the
+						 * Preserve this URL for later if it's the same as the
 						 * permalink (no extra stuff).
 						 */
 						if ( trim( $permalink, '/' ) === $request_no_slash ) {
@@ -399,7 +399,7 @@ class Custom_Permalinks_Frontend {
 
 			/*
 			 * Allow redirect function to work if permalink is not exactly matched
-			 * with the requested url. Like Trailing slash (Requested URL doesn't
+			 * with the requested URL. Like Trailing slash (Requested URL doesn't
 			 * contain trailing slash but permalink has trailing slash or vice versa)
 			 * and letter-case issue etc.
 			 */
@@ -643,7 +643,7 @@ class Custom_Permalinks_Frontend {
 			if ( substr( $request, 0, $original_length ) === $original_permalink
 				&& trim( $request, '/' ) !== trim( $original_permalink, '/' )
 			) {
-				// This is the original link; we can use this url to derive the new one.
+				// This is the original link; we can use this URL to derive the new one.
 				$url = preg_replace(
 					'@//*@',
 					'/',
