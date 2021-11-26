@@ -2,6 +2,45 @@
 
 This file contains only old changelog. See readme.txt for newer versions.
 
+= 2.2.0 - Aug 13, 2021 =
+
+* Bugs
+  * Show decoded permalink in meta box
+* Enhancements
+  * Update script to fix linting issues and use updated permalink to view the post/page
+
+= 2.1.0 - Aug 09, 2021 =
+
+* Bugs
+  * [Plugin not save persian alphabet](https://wordpress.org/support/topic/plugin-not-save-persian-alphabet/)
+  * Fix PHP Error on Deactivating the plugin
+* Enhancements
+  * Exclude processing for sitemap URLs
+
+= 2.0.1 - Aug 02, 2021 =
+
+* Bugs
+  * [404 error when post/page custom permalink is part of category custom permalink](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/49)
+
+= 2.0.0 - Jul 30, 2021 =
+
+* Bugs
+  * [Bug with AMP plugin](https://wordpress.org/support/topic/bug-with-amp-plugin/)
+  * [Oembed links not working](https://wordpress.org/support/topic/oembed-links-not-working/)
+  * [Uncaught (in promise) TypeError: getHomeURL is null](https://wordpress.org/support/topic/uncaught-in-promise-typeerror-gethomeurl-is-null/)
+  * [Plugin stop saving uppercase slugs](https://wordpress.org/support/topic/plugin-stop-saving-upppercase-slugs/)
+  * [template_redirect](https://wordpress.org/support/topic/make-redirect/)
+  * conflict with WooCommerce Paid courses
+  * Fix creating duplicated permalink while creating multiple `Categories` and/or `Tags`
+* Enhancements
+  * Added Query caching to improve performance
+  * Changed Permalink sanitization method (Similar way as WP does)
+  * Added Nonce verification to make forms secure
+  * [Permalink Filter before saving](https://wordpress.org/support/topic/permalink-filter/)
+  * Show/Hide column and Pagination features added on Post Type Permalinks and Taxonomies Permalinks page
+  * Removed deprecated functions
+  * Applied WPCS Standards
+
 = 1.7.1 - Aug 30, 2020 =
 
   * Bugs

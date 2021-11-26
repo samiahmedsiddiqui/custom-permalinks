@@ -2,7 +2,7 @@
 Contributors: sasiddiqui
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Tested up to: 5.8
-Stable tag: 2.3.0
+Stable tag: 2.4.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -137,6 +137,17 @@ function yasglobal_allow_uppercaps() {
 add_filter( 'custom_permalinks_allow_caps', 'yasglobal_allow_uppercaps' );
 `
 
+=== Allow Redundant Hyphens ===
+
+To allow redundant hyphens, please add below-mentioned line in your theme `functions.php`:
+
+`
+function yasglobal_redundant_hyphens() {
+  return true;
+}
+add_filter( 'custom_permalinks_redundant_hyphens', 'yasglobal_redundant_hyphens' );
+`
+
 === Manipulate Permalink Before Saving ===
 
 To make changes in permalink before saving, please use `custom_permalink_before_saving` filter. Here is an example to see how it works.
@@ -188,6 +199,16 @@ This process defines you the steps to follow either you are installing through W
 
 == Changelog ==
 
+= 2.4.0 - Nov 26, 2021 =
+
+* Bugs
+  * [filter for leading special characters](https://wordpress.org/support/topic/filter-for-leading-special-characters/)
+  * [“search Permalinks” button doesn’t work. (part2)](https://wordpress.org/support/topic/search-permalinks-button-doesnt-work-part2/)
+  * [PHP 8 errors on first visit of Taxonomy Permalinks tab](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/59)
+  * [Notice: Undefined variable: site_url in custom-permalinks/admin/class-custom-permalinks-post-types-table.php on line 306](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/56)
+* Enhancements
+  * [Pending Post Preview Link](https://wordpress.org/support/topic/pending-post-preview-link/)
+
 = 2.3.0 - Sep 21, 2021 =
 
 * Bugs
@@ -197,45 +218,6 @@ This process defines you the steps to follow either you are installing through W
   * Fixed JS Error on updating Static page
 * Enhancements
   * Allow period in the permalink
-
-= 2.2.0 - Aug 13, 2021 =
-
-* Bugs
-  * Show decoded permalink in meta box
-* Enhancements
-  * Update script to fix linting issues and use updated permalink to view the post/page
-
-= 2.1.0 - Aug 09, 2021 =
-
-* Bugs
-  * [Plugin not save persian alphabet](https://wordpress.org/support/topic/plugin-not-save-persian-alphabet/)
-  * Fix PHP Error on Deactivating the plugin
-* Enhancements
-  * Exclude processing for sitemap URLs
-
-= 2.0.1 - Aug 02, 2021 =
-
-* Bugs
-  * [404 error when post/page custom permalink is part of category custom permalink](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/49)
-
-= 2.0.0 - Jul 30, 2021 =
-
-* Bugs
-  * [Bug with AMP plugin](https://wordpress.org/support/topic/bug-with-amp-plugin/)
-  * [Oembed links not working](https://wordpress.org/support/topic/oembed-links-not-working/)
-  * [Uncaught (in promise) TypeError: getHomeURL is null](https://wordpress.org/support/topic/uncaught-in-promise-typeerror-gethomeurl-is-null/)
-  * [Plugin stop saving uppercase slugs](https://wordpress.org/support/topic/plugin-stop-saving-upppercase-slugs/)
-  * [template_redirect](https://wordpress.org/support/topic/make-redirect/)
-  * conflict with WooCommerce Paid courses
-  * Fix creating duplicated permalink while creating multiple `Categories` and/or `Tags`
-* Enhancements
-  * Added Query caching to improve performance
-  * Changed Permalink sanitization method (Similar way as WP does)
-  * Added Nonce verification to make forms secure
-  * [Permalink Filter before saving](https://wordpress.org/support/topic/permalink-filter/)
-  * Show/Hide column and Pagination features added on Post Type Permalinks and Taxonomies Permalinks page
-  * Removed deprecated functions
-  * Applied WPCS Standards
 
 = Earlier versions =
 
