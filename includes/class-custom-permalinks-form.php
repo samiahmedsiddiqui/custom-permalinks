@@ -337,7 +337,16 @@ class Custom_Permalinks_Form {
 		$permalink = preg_replace( '|-+|', '-', $permalink );
 		$permalink = str_replace( '-/', '/', $permalink );
 		$permalink = str_replace( '/-', '/', $permalink );
-		$permalink = trim( $permalink, '-' );
+
+		/*
+		 * Avoid trimming hyphens if filter returns `false`.
+		 *
+		 * @since 2.4.0
+		 */
+		$trim_hyphen = apply_filters( 'custom_permalinks_redundant_hyphens', false );
+		if ( ! is_bool( $trim_hyphen ) || ! $trim_hyphen ) {
+			$permalink = trim( $permalink, '-' );
+		}
 
 		return $permalink;
 	}

@@ -127,6 +127,17 @@ function yasglobal_allow_uppercaps() {
 add_filter( 'custom_permalinks_allow_caps', 'yasglobal_allow_uppercaps' );
 ```
 
+### Allow Redundant Hyphens
+
+To allow redundant hyphens, please add below-mentioned line in your theme `functions.php`:
+
+```php
+function yasglobal_redundant_hyphens() {
+  return true;
+}
+add_filter( 'custom_permalinks_redundant_hyphens', 'yasglobal_redundant_hyphens' );
+```
+
 ### Manipulate Permalink Before Saving
 
 To make changes in permalink before saving, please use `custom_permalink_before_saving` filter. Here is an example to see how it works.
