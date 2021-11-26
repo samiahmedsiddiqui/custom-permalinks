@@ -317,7 +317,9 @@ class Custom_Permalinks_Frontend {
 			}
 
 			$found_permalink = $posts[0]->meta_value;
-			if ( 'draft' === $posts[0]->post_status ) {
+			if ( 'draft' === $posts[0]->post_status
+				|| 'pending' === $posts[0]->post_status
+			) {
 				if ( 'page' === $posts[0]->post_type ) {
 					$original_url = '?page_id=' . $posts[0]->ID;
 				} else {

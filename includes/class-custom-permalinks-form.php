@@ -461,7 +461,9 @@ class Custom_Permalinks_Form {
 			if ( isset( $permalink ) && ! empty( $permalink ) ) {
 				$view_post_link = $home_url . $permalink;
 			} else {
-				if ( 'draft' === $post->post_status ) {
+				if ( 'draft' === $post->post_status
+					|| 'pending' === $post->post_status
+				) {
 					$view_post      = 'Preview';
 					$view_post_link = $home_url . '?';
 					if ( 'page' === $post->post_type ) {
@@ -879,7 +881,9 @@ class Custom_Permalinks_Form {
 			);
 
 			if ( ! $all_permalinks['custom_permalink'] ) {
-				if ( 'draft' === $post->post_status ) {
+				if ( 'draft' === $post->post_status
+					|| 'pending' === $post->post_status
+				) {
 					$view_post_link = '?';
 					if ( 'page' === $post->post_type ) {
 						$view_post_link .= 'page_id';
