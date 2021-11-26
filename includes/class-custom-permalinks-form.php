@@ -763,6 +763,10 @@ class Custom_Permalinks_Form {
 				$permalink = $this->sanitize_permalink( $new_permalink, $language_code );
 				$table     = get_option( 'custom_permalink_table' );
 
+				if ( ! is_array( $table ) ) {
+					$table = array();
+				}
+
 				if ( $permalink && ! array_key_exists( $permalink, $table ) ) {
 					$table[ $permalink ] = array(
 						'id'   => $term_id,
