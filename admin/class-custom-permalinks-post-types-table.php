@@ -303,7 +303,7 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 				);
 
 				if ( 1 === intval( $wpml_lang_format ) ) {
-					$home_url = $site_url;
+					$home_url = site_url();
 				}
 			}
 
