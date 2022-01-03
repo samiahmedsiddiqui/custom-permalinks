@@ -401,6 +401,11 @@ class Custom_Permalinks_Form {
 			);
 
 			update_post_meta( $post_id, 'custom_permalink', $permalink );
+			if ( null !== $language_code ) {
+				update_post_meta( $post_id, 'custom_permalink_language', $language_code );
+			} else {
+				delete_metadata( 'post', $post_id, 'custom_permalink_language' );
+			}
 		}
 	}
 

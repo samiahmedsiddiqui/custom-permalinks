@@ -202,6 +202,73 @@ class Custom_Permalinks_Frontend {
 	}
 
 	/**
+	 * Search a permalink in the posts table with respect to WPML language for
+	 * different domain per language.
+	 *
+	 * @since 2.5.0
+	 * @access private
+	 *
+	 * @param string $requested_url Requested URL.
+	 * @param string $language_code Language code.
+	 *
+	 * @return object|null Containing Post ID, Permalink, Post Type, and Post status
+	 *                     if URL matched otherwise returns null.
+	 */
+	private function query_post_language( $requested_url, $language_code = null ) {
+		global $wpdb;
+
+		$cache_name   = 'cp$' . $language_code . '_' . str_replace( '/', '-', $requested_url ) . '_#cp';
+		$matched_post = wp_cache_get( $cache_name, 'custom_permalinks' );
+
+		if ( null === $language_code ) {
+			return null;
+		}
+
+		if ( ! $matched_post ) {
+			$matched_post = array();
+
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+			$posts = $wpdb->get_results(
+				$wpdb->prepare(
+					'SELECT p.ID, pm.meta_value, p.post_type, p.post_status ' .
+					" FROM $wpdb->posts AS p INNER JOIN $wpdb->postmeta AS pm ON (pm.post_id = p.ID) " .
+					" WHERE pm.meta_key = 'custom_permalink' " .
+					' AND (pm.meta_value = %s OR pm.meta_value = %s) ' .
+					" AND p.post_status != 'trash' AND p.post_type != 'nav_menu_item' " .
+					" ORDER BY FIELD(post_status,'publish','private','pending','draft','auto-draft','inherit')," .
+					" FIELD(post_type,'post','page')",
+					$requested_url,
+					$requested_url . '/'
+				)
+			);
+
+			if ( ! empty( $posts ) ) {
+				foreach ( $posts as $check_data ) {
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+					$post_lang = $wpdb->get_row(
+						$wpdb->prepare(
+							"SELECT * FROM $wpdb->postmeta AS pm " .
+							" WHERE pm.meta_key = 'custom_permalink_language' " .
+							' AND pm.post_id = %d AND pm.meta_value = %s',
+							$check_data->ID,
+							$language_code
+						)
+					);
+
+					if ( $post_lang ) {
+						$matched_post[] = $check_data;
+						break;
+					}
+				}
+			}
+		}
+
+		wp_cache_set( $cache_name, $matched_post, 'custom_permalinks' );
+
+		return $matched_post;
+	}
+
+	/**
 	 * Check conditions if it matches then return true to stop processing the
 	 * particular query like for sitemaps.
 	 *
@@ -301,10 +368,40 @@ class Custom_Permalinks_Frontend {
 			$request = $cp_form->check_conflicts( $request );
 		}
 
-		$request_no_slash  = preg_replace( '@/+@', '/', trim( $request, '/' ) );
-		$posts             = $this->query_post( $request_no_slash );
-		$permalink_matched = false;
+		$current_language  = '';
+		$different_domain  = false;
 		$found_permalink   = '';
+		$permalink_matched = false;
+		$request_no_slash  = preg_replace( '@/+@', '/', trim( $request, '/' ) );
+
+		if ( class_exists( 'SitePress' ) ) {
+			$wpml_lang_format = apply_filters(
+				'wpml_setting',
+				0,
+				'language_negotiation_type'
+			);
+
+			// Different domain per language.
+			if ( 2 === intval( $wpml_lang_format ) ) {
+				$current_language = apply_filters( 'wpml_current_language', null );
+				$different_domain = true;
+			}
+		}
+
+		// Different domain per language.
+		if ( class_exists( 'SitePress' )
+			&& $different_domain
+			&& ! empty( $current_language )
+		) {
+			$posts = $this->query_post_language( $request_no_slash, $current_language );
+
+			// Backward compatibility.
+			if ( ! $posts ) {
+				$posts = $this->query_post( $request_no_slash );
+			}
+		} else {
+			$posts = $this->query_post( $request_no_slash );
+		}
 
 		if ( $posts ) {
 			/*
@@ -705,6 +802,7 @@ class Custom_Permalinks_Frontend {
 					'language_negotiation_type'
 				);
 
+				// Different languages in directories.
 				if ( 1 === intval( $wpml_lang_format ) ) {
 					$get_original_url = $this->original_post_link( $post->ID );
 					$permalink        = $this->remove_double_slash( $permalink );
@@ -754,6 +852,7 @@ class Custom_Permalinks_Frontend {
 					'language_negotiation_type'
 				);
 
+				// Different languages in directories.
 				if ( 1 === intval( $wpml_lang_format ) ) {
 					$get_original_url = $this->original_page_link( $page );
 					$permalink        = $this->remove_double_slash( $permalink );
@@ -815,6 +914,7 @@ class Custom_Permalinks_Frontend {
 						'language_negotiation_type'
 					);
 
+					// Different languages in directories.
 					if ( 1 === intval( $wpml_lang_format ) ) {
 						$get_original_url = $this->original_term_link(
 							$term->term_id
