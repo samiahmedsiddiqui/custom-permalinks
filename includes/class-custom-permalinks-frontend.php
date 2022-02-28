@@ -57,7 +57,7 @@ class Custom_Permalinks_Frontend {
 
 		if ( isset( $_SERVER['REQUEST_URI'] ) ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$this->request_uri = $_SERVER['REQUEST_URI'];
+			$this->request_uri = urldecode($_SERVER['REQUEST_URI']);
 		}
 
 		add_action( 'template_redirect', array( $this, 'make_redirect' ), 5 );
