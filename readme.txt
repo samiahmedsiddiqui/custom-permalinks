@@ -1,7 +1,7 @@
 === Custom Permalinks ===
 Contributors: sasiddiqui
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
-Tested up to: 5.8
+Tested up to: 6.0
 Stable tag: 2.4.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
