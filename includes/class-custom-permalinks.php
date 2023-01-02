@@ -95,11 +95,6 @@ class Custom_Permalinks {
 			array( 'Custom_Permalinks', 'activate_details' )
 		);
 
-		register_deactivation_hook(
-			CUSTOM_PERMALINKS_FILE,
-			array( 'Custom_Permalinks', 'deactivate_details' )
-		);
-
 		add_action( 'plugins_loaded', array( $this, 'check_loaded_plugins' ) );
 	}
 
@@ -133,28 +128,13 @@ class Custom_Permalinks {
 	}
 
 	/**
-	 * Sent details when plugin gets activated / updated ans set installed
-	 * version in options table.
+	 * Set installed version in options table.
 	 *
 	 * @since 1.6.1
 	 * @access public
 	 */
 	public static function activate_details() {
-		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-updates.php';
-		new Custom_Permalinks_Updates( 'activate' );
-
 		update_option( 'custom_permalinks_plugin_version', CUSTOM_PERMALINKS_VERSION );
-	}
-
-	/**
-	 * Sent details when plugin gets deactivated.
-	 *
-	 * @since 1.6.1
-	 * @access public
-	 */
-	public static function deactivate_details() {
-		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-updates.php';
-		new Custom_Permalinks_Updates( 'deactivate' );
 	}
 
 	/**
