@@ -1,8 +1,8 @@
 === Custom Permalinks ===
 Contributors: sasiddiqui
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
-Tested up to: 6.0
-Stable tag: 2.4.0
+Tested up to: 6.1
+Stable tag: 2.5.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -199,6 +199,13 @@ This process defines you the steps to follow either you are installing through W
 
 == Changelog ==
 
+= 2.5.0 - Jan 02, 2023 =
+
+* Bugs
+  * [Retreiving info from installed plugin (GDPR)](https://wordpress.org/support/topic/retreiving-info-from-installed-plugin-gdpr/)
+* Enhancement
+	* Same permalink with WPML different domain
+
 = 2.4.0 - Nov 26, 2021 =
 
 * Bugs
@@ -208,16 +215,6 @@ This process defines you the steps to follow either you are installing through W
   * [Notice: Undefined variable: site_url in custom-permalinks/admin/class-custom-permalinks-post-types-table.php on line 306](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/56)
 * Enhancements
   * [Pending Post Preview Link](https://wordpress.org/support/topic/pending-post-preview-link/)
-
-= 2.3.0 - Sep 21, 2021 =
-
-* Bugs
-  * [is_numeric warning in plugin API](https://wordpress.org/support/topic/is_numeric-error-for-plugin-api/)
-  * [Missing default WP redirect from URLs with no ending trailing slash](https://wordpress.org/support/topic/missing-default-wp-redirect-from-urls-with-no-ending-trailing-slash/)
-  * [trailing slash](https://wordpress.org/support/topic/trailing-slash-9/)
-  * Fixed JS Error on updating Static page
-* Enhancements
-  * Allow period in the permalink
 
 = Earlier versions =
 

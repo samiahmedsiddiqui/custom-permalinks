@@ -2,6 +2,16 @@
 
 This file contains only old changelog. See readme.txt for newer versions.
 
+= 2.3.0 - Sep 21, 2021 =
+
+* Bugs
+  * [is_numeric warning in plugin API](https://wordpress.org/support/topic/is_numeric-error-for-plugin-api/)
+  * [Missing default WP redirect from URLs with no ending trailing slash](https://wordpress.org/support/topic/missing-default-wp-redirect-from-urls-with-no-ending-trailing-slash/)
+  * [trailing slash](https://wordpress.org/support/topic/trailing-slash-9/)
+  * Fixed JS Error on updating Static page
+* Enhancements
+  * Allow period in the permalink
+
 = 2.2.0 - Aug 13, 2021 =
 
 * Bugs
