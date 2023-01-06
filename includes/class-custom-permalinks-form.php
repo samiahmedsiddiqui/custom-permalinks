@@ -369,10 +369,12 @@ class Custom_Permalinks_Form {
 		}
 
 		$action = 'custom-permalinks_' . $post_id;
+		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		if ( ! wp_verify_nonce( $_REQUEST['_custom_permalinks_post_nonce'], $action ) ) {
 			return;
 		}
+		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 
 		$cp_frontend   = new Custom_Permalinks_Frontend();
 		$original_link = $cp_frontend->original_post_link( $post_id );
@@ -391,7 +393,7 @@ class Custom_Permalinks_Form {
 
 			$permalink = $this->sanitize_permalink(
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-				$_REQUEST['custom_permalink'],
+				wp_unslash( $_REQUEST['custom_permalink'] ),
 				$language_code
 			);
 			$permalink = apply_filters(
@@ -728,12 +730,14 @@ class Custom_Permalinks_Form {
 		$action1 = 'custom-permalinks_' . $term_id;
 		$action2 = 'custom-permalinks_' . $term->taxonomy;
 		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 		if ( ! wp_verify_nonce( $_REQUEST['_custom_permalinks_term_nonce'], $action1 )
 			&& ! wp_verify_nonce( $_REQUEST['_custom_permalinks_term_nonce'], $action2 )
 		) {
 			return;
 		}
 		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 
 		if ( isset( $term ) && isset( $term->taxonomy ) ) {
 			$taxonomy_name = $term->taxonomy;
@@ -742,11 +746,15 @@ class Custom_Permalinks_Form {
 					$taxonomy_name = 'tag';
 				}
 
+				// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+				// phpcs:disable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 				$new_permalink = ltrim(
-					// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 					stripcslashes( $_REQUEST['custom_permalink'] ),
 					'/'
 				);
+				// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+				// phpcs:enable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+
 				if ( empty( $new_permalink ) || '' === $new_permalink ) {
 					return;
 				}

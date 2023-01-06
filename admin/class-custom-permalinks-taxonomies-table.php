@@ -78,7 +78,7 @@ final class Custom_Permalinks_Taxonomies_Table extends WP_List_Table {
 				update_user_option(
 					get_current_user_id(),
 					$per_page_option,
-					sanitize_text_field( $_POST['wp_screen_options']['value'] )
+					sanitize_text_field( wp_unslash( $_POST['wp_screen_options']['value'] ) )
 				);
 			}
 		}
@@ -383,16 +383,16 @@ final class Custom_Permalinks_Taxonomies_Table extends WP_List_Table {
 			$user_id = get_current_user_id();
 
 			// Detect when a bulk action is being triggered.
+			// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			if ( 'delete' === $this->current_action()
 				&& wp_verify_nonce(
-					// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+					// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 					$_REQUEST['_custom_permalinks_taxonomy_nonce'],
 					'custom-permalinks-taxonomy_' . $user_id
 				)
 			) {
 				if ( isset( $_REQUEST['permalink'] ) ) {
-					// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-					$del_permalinks = $_REQUEST['permalink'];
+					$del_permalinks = wp_unslash( $_REQUEST['permalink'] );
 				}
 
 				if ( isset( $del_permalinks )
@@ -409,6 +409,7 @@ final class Custom_Permalinks_Taxonomies_Table extends WP_List_Table {
 					}
 				}
 			}
+			// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 			$cp_page     = filter_input( INPUT_GET, 'page' );
 			$cp_paged    = filter_input( INPUT_GET, 'paged' );

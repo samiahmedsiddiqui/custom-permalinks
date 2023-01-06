@@ -47,7 +47,10 @@ final class Custom_Permalinks_Taxonomies {
 				// phpcs:disable WordPress.Security.NonceVerification.Recommended
 				// Include search in total results.
 				if ( isset( $_REQUEST['s'] ) && ! empty( $_REQUEST['s'] ) ) {
-					$search_value = ltrim( sanitize_text_field( $_REQUEST['s'] ), '/' );
+					$search_value = ltrim(
+						sanitize_text_field( wp_unslash( $_REQUEST['s'] ) ),
+						'/'
+					);
 					$search_value = str_replace( '/', '\/', $search_value );
 					foreach ( $taxonomy_table as $key => $value ) {
 						if ( preg_match( '/' . $search_value . '/', $key ) ) {
@@ -92,7 +95,7 @@ final class Custom_Permalinks_Taxonomies {
 				// phpcs:disable WordPress.Security.NonceVerification.Recommended
 				// Include search in total results.
 				if ( isset( $_REQUEST['s'] ) && ! empty( $_REQUEST['s'] ) ) {
-					$search_value = ltrim( sanitize_text_field( $_REQUEST['s'] ), '/' );
+					$search_value = ltrim( sanitize_text_field( wp_unslash( $_REQUEST['s'] ) ), '/' );
 					$search_value = str_replace( '/', '\/', $search_value );
 					foreach ( $taxonomy_table as $key => $value ) {
 						if ( preg_match( '/' . $search_value . '/', $key ) ) {

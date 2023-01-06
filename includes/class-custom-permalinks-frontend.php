@@ -52,12 +52,12 @@ class Custom_Permalinks_Frontend {
 	public function init() {
 		if ( isset( $_SERVER['QUERY_STRING'] ) ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$this->query_string_uri = $_SERVER['QUERY_STRING'];
+			$this->query_string_uri = wp_unslash( $_SERVER['QUERY_STRING'] );
 		}
 
 		if ( isset( $_SERVER['REQUEST_URI'] ) ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$this->request_uri = $_SERVER['REQUEST_URI'];
+			$this->request_uri = wp_unslash( $_SERVER['REQUEST_URI'] );
 		}
 
 		add_action( 'template_redirect', array( $this, 'make_redirect' ), 5 );
@@ -325,7 +325,7 @@ class Custom_Permalinks_Frontend {
 			&& $_SERVER['REQUEST_URI'] !== $this->request_uri
 		) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$this->request_uri = $_SERVER['REQUEST_URI'];
+			$this->request_uri = wp_unslash( $_SERVER['REQUEST_URI'] );
 		}
 
 		/*
@@ -541,7 +541,7 @@ class Custom_Permalinks_Frontend {
 			$query_array = array();
 			if ( isset( $_SERVER['QUERY_STRING'] ) ) {
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-				parse_str( $_SERVER['QUERY_STRING'], $query_array );
+				parse_str( wp_unslash( $_SERVER['QUERY_STRING'] ), $query_array );
 			}
 
 			if ( is_array( $query_array ) && count( $query_array ) > 0 ) {
@@ -550,7 +550,7 @@ class Custom_Permalinks_Frontend {
 					// phpcs:disable WordPress.Security.NonceVerification.Recommended
 					if ( isset( $_REQUEST[ $key ] ) ) {
 						// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-						$old_values[ $key ] = $_REQUEST[ $key ];
+						$old_values[ $key ] = wp_unslash( $_REQUEST[ $key ] );
 					}
 					// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
@@ -657,7 +657,7 @@ class Custom_Permalinks_Frontend {
 			&& $_SERVER['REQUEST_URI'] !== $this->request_uri
 		) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$this->request_uri = $_SERVER['REQUEST_URI'];
+			$this->request_uri = wp_unslash( $_SERVER['REQUEST_URI'] );
 		}
 
 		$custom_permalink   = '';

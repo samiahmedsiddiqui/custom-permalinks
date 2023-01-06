@@ -254,9 +254,8 @@ class Custom_Permalinks_Admin {
 	 * @return void
 	 */
 	public function allow_redirection() {
-		if ( isset( $_REQUEST['_custom_permalinks_post_nonce'] ) ||
-			isset( $_REQUEST['_custom_permalinks_taxonomy_nonce'] )
-		) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( isset( $_REQUEST['_custom_permalinks_post_nonce'], $_REQUEST['_custom_permalinks_taxonomy_nonce'] ) ) {
 			ob_start();
 		}
 	}

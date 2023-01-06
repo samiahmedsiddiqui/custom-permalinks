@@ -35,7 +35,12 @@ final class Custom_Permalinks_Post_Types {
 			// phpcs:disable WordPress.Security.NonceVerification.Recommended
 			// Include search in total results.
 			if ( isset( $_REQUEST['s'] ) && ! empty( $_REQUEST['s'] ) ) {
-				$search_value = ltrim( sanitize_text_field( $_REQUEST['s'] ), '/' );
+				$search_value = ltrim(
+					sanitize_text_field(
+						wp_unslash( $_REQUEST['s'] )
+					),
+					'/'
+				);
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 				$total_posts = $wpdb->get_var(
 					$wpdb->prepare(
@@ -85,7 +90,7 @@ final class Custom_Permalinks_Post_Types {
 
 			// phpcs:disable WordPress.Security.NonceVerification.Recommended
 			// Sort the items.
-			switch ( isset( $_REQUEST['orderby'] ) ? strtolower( sanitize_text_field( $_REQUEST['orderby'] ) ) : '' ) {
+			switch ( isset( $_REQUEST['orderby'] ) ? strtolower( sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ) ) ) : '' ) {
 				case 'title':
 					$order_by = 'p.post_title';
 					break;
@@ -99,7 +104,7 @@ final class Custom_Permalinks_Post_Types {
 					break;
 			}
 
-			switch ( isset( $_REQUEST['order'] ) ? strtolower( sanitize_text_field( $_REQUEST['order'] ) ) : '' ) {
+			switch ( isset( $_REQUEST['order'] ) ? strtolower( sanitize_text_field( wp_unslash( $_REQUEST['order'] ) ) ) : '' ) {
 				case 'asc':
 					$order = 'ASC';
 					break;
@@ -111,8 +116,9 @@ final class Custom_Permalinks_Post_Types {
 			}
 
 			// Include search in total results.
+			// phpcs:disable WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 			if ( isset( $_REQUEST['s'] ) && ! empty( $_REQUEST['s'] ) ) {
-				$search_value = ltrim( sanitize_text_field( $_REQUEST['s'] ), '/' );
+				$search_value = ltrim( sanitize_text_field( wp_unslash( $_REQUEST['s'] ) ), '/' );
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 				$posts = $wpdb->get_results(
 					$wpdb->prepare(
@@ -122,7 +128,7 @@ final class Custom_Permalinks_Post_Types {
 						WHERE pm.meta_key = 'custom_permalink'
 							AND pm.meta_value != ''
 							AND pm.meta_value LIKE %s
-						ORDER BY %s %s LIMIT %d, %d",
+						ORDER BY %2s %3s LIMIT %d, %d",
 						'%' . $wpdb->esc_like( $search_value ) . '%',
 						$order_by,
 						$order,
@@ -139,7 +145,7 @@ final class Custom_Permalinks_Post_Types {
 							FROM {$wpdb->posts} AS p
 						LEFT JOIN {$wpdb->postmeta} AS pm ON (p.ID = pm.post_id)
 						WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != ''
-						ORDER BY %s %s LIMIT %d, %d",
+						ORDER BY %1s %2s LIMIT %d, %d",
 						$order_by,
 						$order,
 						$page_offset,
@@ -148,6 +154,7 @@ final class Custom_Permalinks_Post_Types {
 					ARRAY_A
 				);
 			}
+			// phpcs:disable WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 			// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 			wp_cache_set( 'post_type_results', $posts, 'custom_permalinks' );

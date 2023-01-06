@@ -26,8 +26,6 @@
 
 		<!-- Run against the WordPress ruleset. -->
     <rule ref="WordPress">
-			<!-- exclude name="WordPress.Security.ValidatedSanitizedInput.InputNotSanitized" / -->
-			<exclude name="WordPress.Security.ValidatedSanitizedInput.MissingUnslash" />
 		</rule>
 
 		<!-- Check for cross-version support for PHP 5.4 and higher. -->
