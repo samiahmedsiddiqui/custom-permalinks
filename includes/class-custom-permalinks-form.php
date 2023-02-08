@@ -425,23 +425,20 @@ class Custom_Permalinks_Form {
 	}
 
 	/**
-	 * Result Permalink HTML Form for classic editor and Gutenberg.
+	 * Result Permalink HTML Form for classic editor.
 	 *
 	 * @since 1.6.0
 	 * @access private
 	 *
 	 * @param object $post WP Post Object.
-	 * @param bool   $meta_box Show whether calls from classic WordPress or Gutenberg.
 	 *
 	 * @return string Permalink Form HTML.
 	 */
-	private function get_permalink_html( $post, $meta_box = false ) {
-		$post_id   = $post->ID;
-		$permalink = get_post_meta( $post_id, 'custom_permalink', true );
-
-		ob_start();
-
+	private function get_permalink_html( $post ) {
 		$cp_frontend = new Custom_Permalinks_Frontend();
+		$post_id     = $post->ID;
+		$permalink   = get_post_meta( $post_id, 'custom_permalink', true );
+
 		if ( 'page' === $post->post_type ) {
 			$original_permalink = $cp_frontend->original_page_link( $post_id );
 			$view_post          = __( 'View Page', 'custom-permalinks' );
@@ -461,6 +458,9 @@ class Custom_Permalinks_Form {
 			$original_permalink = $cp_frontend->original_post_link( $post_id );
 			$view_post          = __( 'View', 'custom-permalinks' ) . $post_type_name;
 		}
+
+		ob_start();
+
 		$this->get_permalink_form(
 			$permalink,
 			$original_permalink,
@@ -496,14 +496,92 @@ class Custom_Permalinks_Form {
 			}
 
 			$content .= ' <span id="view-post-btn">' .
-										'<a href="' . $view_post_link . '" class="button button-medium" target="_blank">' . $view_post . '</a>' .
-									'</span><br>';
-			if ( true === $meta_box ) {
-				$content .= '<style>.editor-post-permalink,.cp-permalink-hidden{display:none;}</style>';
-			}
+				'<a href="' . $view_post_link . '" class="button button-medium" target="_blank">' . $view_post . '</a>' .
+			'</span><br>';
 		}
 
 		return '<strong>' . __( 'Permalink:', 'custom-permalinks' ) . '</strong> ' . $content;
+	}
+
+	/**
+	 * Result Permalink HTML Form for Gutenberg.
+	 *
+	 * @since 2.6.0
+	 * @access private
+	 *
+	 * @param object $post WP Post Object.
+	 *
+	 * @return void.
+	 */
+	private function get_permalink_meta_html( $post ) {
+		$cp_frontend = new Custom_Permalinks_Frontend();
+		$post_id     = $post->ID;
+		$permalink   = get_post_meta( $post_id, 'custom_permalink', true );
+
+		if ( 'page' === $post->post_type ) {
+			$original_permalink = $cp_frontend->original_page_link( $post_id );
+			$view_post          = __( 'View Page', 'custom-permalinks' );
+		} else {
+			$post_type_name   = '';
+			$post_type_object = get_post_type_object( $post->post_type );
+			if ( is_object( $post_type_object ) && isset( $post_type_object->labels )
+				&& isset( $post_type_object->labels->singular_name )
+			) {
+				$post_type_name = ' ' . $post_type_object->labels->singular_name;
+			} elseif ( is_object( $post_type_object )
+				&& isset( $post_type_object->label )
+			) {
+				$post_type_name = ' ' . $post_type_object->label;
+			}
+
+			$original_permalink = $cp_frontend->original_post_link( $post_id );
+			$view_post          = __( 'View', 'custom-permalinks' ) . $post_type_name;
+		}
+
+		echo '<strong>' . esc_html__( 'Permalink:', 'custom-permalinks' ) . '</strong> ';
+
+		$this->get_permalink_form(
+			$permalink,
+			$original_permalink,
+			$post_id,
+			false,
+			$post->post_name
+		);
+
+		if ( 'trash' !== $post->post_status ) {
+			$home_url = trailingslashit( home_url() );
+			if ( isset( $permalink ) && ! empty( $permalink ) ) {
+				$view_post_link = $home_url . $permalink;
+			} else {
+				if ( 'draft' === $post->post_status
+					|| 'pending' === $post->post_status
+				) {
+					$view_post      = 'Preview';
+					$view_post_link = $home_url . '?';
+					if ( 'page' === $post->post_type ) {
+						$view_post_link .= 'page_id';
+					} elseif ( 'post' === $post->post_type ) {
+						$view_post_link .= 'p';
+					} else {
+						$view_post_link .= 'post_type=' . $post->post_type . '&p';
+					}
+					$view_post_link .= '=' . $post_id . '&preview=true';
+				} else {
+					$view_post_link = $home_url . $original_permalink;
+				}
+			}
+			?>
+
+			<span id="view-post-btn">
+				<a href="<?php echo esc_url( $view_post_link ); ?>" class="button button-medium" target="_blank">
+					<?php echo esc_html( $view_post ); ?>
+				</a>
+			</span>
+			<br>
+			<style>.editor-post-permalink,.cp-permalink-hidden{display:none;}</style>
+
+			<?php
+		}
 	}
 
 	/**
@@ -525,9 +603,7 @@ class Custom_Permalinks_Form {
 			return $html;
 		}
 
-		$output_content = $this->get_permalink_html( $post );
-
-		return $output_content;
+		return $this->get_permalink_html( $post );
 	}
 
 	/**
@@ -562,10 +638,7 @@ class Custom_Permalinks_Form {
 			echo '<input value="add" type="hidden" name="custom-permalinks-add" id="custom-permalinks-add" />';
 		}
 
-		$output_content = $this->get_permalink_html( $post, true );
-
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo $output_content;
+		$this->get_permalink_meta_html( $post, true );
 	}
 
 	/**
@@ -644,18 +717,23 @@ class Custom_Permalinks_Form {
 				true
 			);
 		}
+		?>
 
-		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo '<input value="' . $home_url . '" type="hidden" name="custom_permalinks_home_url" id="custom_permalinks_home_url" />' .
-		'<input value="' . $encoded_permalink . '" type="hidden" name="custom_permalink" id="custom_permalink" />';
-		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+		<input value="<?php echo esc_url( $home_url ); ?>" type="hidden" name="custom_permalinks_home_url" id="custom_permalinks_home_url" />
+		<input value="<?php echo esc_url( $encoded_permalink ); ?>" type="hidden" name="custom_permalink" id="custom_permalink" />
 
-		if ( $render_containers ) {
-			echo '<table class="form-table" id="custom_permalink_form">' .
-				'<tr>' .
-					'<th scope="row">' . esc_html__( 'Custom Permalink', 'custom-permalinks' ) . '</th>' .
-					'<td>';
-		}
+		<?php
+		if ( $render_containers ) :
+			?>
+			<table class="form-table" id="custom_permalink_form">
+				<tr>
+					<th scope="row">
+						<?php esc_html_e( 'Custom Permalink', 'custom-permalinks' ); ?>
+					</th>
+					<td>
+			<?php
+		endif;
+
 		if ( '' === $permalink ) {
 			$original = $this->check_conflicts( $original );
 		}
@@ -678,34 +756,40 @@ class Custom_Permalinks_Form {
 			CUSTOM_PERMALINKS_VERSION,
 			true
 		);
-		$postname_html = '';
-		if ( isset( $postname ) && '' !== $postname ) {
-			$postname_html = '<input type="hidden" id="new-post-slug" class="text" value="' . $postname . '" />';
-		}
+
+		echo esc_url( $home_url ) .
+		'<span id="editable-post-name" title="Click to edit this part of the permalink">';
+
+		if ( isset( $postname ) && '' !== $postname ) :
+			?>
+
+			<input type="hidden" id="new-post-slug" class="text" value="<?php echo esc_attr( $postname ); ?>" />
+
+			<?php
+		endif;
 
 		$field_style = 'width: 250px;';
 		if ( ! $permalink ) {
 			$field_style .= ' color: #ddd;';
 		}
+		?>
 
-		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo $home_url .
-		'<span id="editable-post-name" title="Click to edit this part of the permalink">' .
-			$postname_html .
-			'<input type="hidden" id="original-permalink" value="' . $original_encoded_url . '" />' .
-			'<input type="text" id="custom-permalinks-post-slug" class="text" value="' . $post_slug . '" style="' . $field_style . '" />' .
-		'</span>';
-		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+		<input type="hidden" id="original-permalink" value="<?php echo esc_url( $original_encoded_url ); ?>" />
+		<input type="text" id="custom-permalinks-post-slug" class="text" value="<?php echo esc_attr( $post_slug ); ?>" style="<?php echo esc_attr( $field_style ); ?>" />
+		</span>
 
-		if ( $render_containers ) {
-			echo '<br />' .
-			'<small>' .
-				esc_html__( 'Leave blank to disable', 'custom-permalinks' ) .
-			'</small>' .
-			'</td>' .
-			'</tr>' .
-			'</table>';
-		}
+		<?php
+		if ( $render_containers ) :
+			?>
+			<br />
+			<small>
+				<?php esc_html_e( 'Leave blank to disable', 'custom-permalinks' ); ?>
+			</small>
+			</td>
+			</tr>
+			</table>
+			<?php
+		endif;
 	}
 
 	/**

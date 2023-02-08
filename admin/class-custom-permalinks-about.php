@@ -76,8 +76,7 @@ class Custom_Permalinks_About {
 				</div>
 
 				<div class="float">
-					<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-					<img src="<?php echo $img_src . '/custom-permalinks.svg'; ?>" alt="<?php esc_html_e( 'Custom Permalinks', 'custom-permalinks' ); ?>" title="<?php esc_html_e( 'Custom Permalinks', 'custom-permalinks' ); ?>" />
+					<img src="<?php echo esc_url( $img_src . '/custom-permalinks.svg' ); ?>" alt="<?php esc_html_e( 'Custom Permalinks', 'custom-permalinks' ); ?>" title="<?php esc_html_e( 'Custom Permalinks', 'custom-permalinks' ); ?>" />
 				</div>
 
 				<div class="product">
@@ -95,8 +94,7 @@ class Custom_Permalinks_About {
 
 				<div class="box recommended">
 					<div class="img">
-						<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-						<img src="<?php echo $img_src . '/prevent-xss-vulnerability.png'; ?>" alt="<?php esc_html_e( 'Prevent XSS Vulnerability', 'custom-permalinks' ); ?>" title="<?php esc_html_e( 'Prevent XSS Vulnerability', 'custom-permalinks' ); ?>" style="transform:scale(1.5)" />
+						<img src="<?php echo esc_url( $img_src . '/prevent-xss-vulnerability.png' ); ?>" alt="<?php esc_html_e( 'Prevent XSS Vulnerability', 'custom-permalinks' ); ?>" title="<?php esc_html_e( 'Prevent XSS Vulnerability', 'custom-permalinks' ); ?>" style="transform:scale(1.5)" />
 					</div>
 
 					<h3>
@@ -119,8 +117,7 @@ class Custom_Permalinks_About {
 
 				<div class="box recommended">
 					<div class="img">
-						<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-						<img src="<?php echo $img_src . '/http-auth.svg'; ?>" alt="<?php esc_html_e( 'HTTP Auth', 'custom-permalinks' ); ?>" title="<?php esc_html_e( 'HTTP Auth', 'custom-permalinks' ); ?>" />
+						<img src="<?php echo esc_url( $img_src . '/http-auth.svg' ); ?>" alt="<?php esc_html_e( 'HTTP Auth', 'custom-permalinks' ); ?>" title="<?php esc_html_e( 'HTTP Auth', 'custom-permalinks' ); ?>" />
 					</div>
 
 					<h3>
@@ -141,8 +138,7 @@ class Custom_Permalinks_About {
 
 				<div class="box">
 					<div class="img">
-						<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-						<img src="<?php echo $img_src . '/make-paths-relative.svg'; ?>" alt="<?php esc_html_e( 'Make Paths Relative', 'custom-permalinks' ); ?>" title="<?php esc_html_e( 'Make Paths Relative', 'custom-permalinks' ); ?>" />
+						<img src="<?php echo esc_url( $img_src . '/make-paths-relative.svg' ); ?>" alt="<?php esc_html_e( 'Make Paths Relative', 'custom-permalinks' ); ?>" title="<?php esc_html_e( 'Make Paths Relative', 'custom-permalinks' ); ?>" />
 					</div>
 
 					<h3>
@@ -163,8 +159,7 @@ class Custom_Permalinks_About {
 
 				<div class="box">
 					<div class="img">
-						<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-						<img src="<?php echo $img_src . '/schema-for-article.svg'; ?>" alt="<?php esc_html_e( 'SCHEMA for Article', 'custom-permalinks' ); ?>" title="<?php esc_html_e( 'SCHEMA for Article', 'custom-permalinks' ); ?>" />
+						<img src="<?php echo esc_url( $img_src . '/schema-for-article.svg' ); ?>" alt="<?php esc_html_e( 'SCHEMA for Article', 'custom-permalinks' ); ?>" title="<?php esc_html_e( 'SCHEMA for Article', 'custom-permalinks' ); ?>" />
 					</div>
 
 					<h3>
@@ -185,8 +180,7 @@ class Custom_Permalinks_About {
 
 				<div class="box">
 					<div class="img">
-						<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-						<img src="<?php echo $img_src . '/remove-links-and-scripts.svg'; ?>" alt="<?php esc_html_e( 'Remove Links and Scripts', 'custom-permalinks' ); ?>" title="<?php esc_html_e( 'Remove Links and Scripts', 'custom-permalinks' ); ?>" />
+						<img src="<?php echo esc_url( $img_src . '/remove-links-and-scripts.svg' ); ?>" alt="<?php esc_html_e( 'Remove Links and Scripts', 'custom-permalinks' ); ?>" title="<?php esc_html_e( 'Remove Links and Scripts', 'custom-permalinks' ); ?>" />
 					</div>
 
 					<h3>
@@ -207,8 +201,7 @@ class Custom_Permalinks_About {
 
 				<div class="box">
 					<div class="img">
-						<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-						<img src="<?php echo $img_src . '/media-post-permalink.png'; ?>" style="transform:scale(1.5)" alt="<?php esc_html_e( 'Media Post Permalink', 'custom-permalinks' ); ?>" title="<?php esc_html_e( 'Media Post Permalink', 'custom-permalinks' ); ?>" />
+						<img src="<?php echo esc_url( $img_src . '/media-post-permalink.png' ); ?>" style="transform:scale(1.5)" alt="<?php esc_html_e( 'Media Post Permalink', 'custom-permalinks' ); ?>" title="<?php esc_html_e( 'Media Post Permalink', 'custom-permalinks' ); ?>" />
 					</div>
 
 					<h3>
@@ -229,8 +222,7 @@ class Custom_Permalinks_About {
 
 				<div class="box">
 					<div class="img">
-						<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-						<img src="<?php echo $img_src . '/json-structuring-markup.svg'; ?>" alt="<?php esc_html_e( 'JSON Structuring Markup', 'custom-permalinks' ); ?>" title="<?php esc_html_e( 'JSON Structuring Markup', 'custom-permalinks' ); ?>" />
+						<img src="<?php echo esc_url( $img_src . '/json-structuring-markup.svg' ); ?>" alt="<?php esc_html_e( 'JSON Structuring Markup', 'custom-permalinks' ); ?>" title="<?php esc_html_e( 'JSON Structuring Markup', 'custom-permalinks' ); ?>" />
 					</div>
 
 					<h3>

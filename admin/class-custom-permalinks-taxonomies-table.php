@@ -147,7 +147,6 @@ final class Custom_Permalinks_Taxonomies_Table extends WP_List_Table {
 				<span class="subtitle">
 				<?php
 					esc_html_e( 'Search results for: ', 'custom-permalinks' );
-					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					printf( '<strong>%s</strong>', esc_html( $search_permalink ) );
 				?>
 				</span>
@@ -159,16 +158,12 @@ final class Custom_Permalinks_Taxonomies_Table extends WP_List_Table {
 				<div id="message" class="updated notice is-dismissible">
 					<p>
 					<?php
-					printf(
-						// translators: Placeholder would bee replaced with the number.
-						_n( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-							'%s permalink deleted.',
-							'%s permalinks deleted.',
-							$permalink_deleted,
-							'custom-permalinks'
-						),
-						esc_html( $permalink_deleted )
-					);
+					$delete_msg = '1 permalink deleted.';
+					if ( 1 < $permalink_deleted ) {
+						$delete_msg = $permalink_deleted . ' permalinks deleted.';
+					}
+
+					echo esc_html( $delete_msg );
 					?>
 					</p>
 				</div>
