@@ -51,13 +51,15 @@ class Custom_Permalinks_Frontend {
 	 */
 	public function init() {
 		if ( isset( $_SERVER['QUERY_STRING'] ) ) {
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$this->query_string_uri = wp_unslash( $_SERVER['QUERY_STRING'] );
+			$this->query_string_uri = sanitize_text_field(
+				wp_unslash( $_SERVER['QUERY_STRING'] )
+			);
 		}
 
 		if ( isset( $_SERVER['REQUEST_URI'] ) ) {
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$this->request_uri = wp_unslash( $_SERVER['REQUEST_URI'] );
+			$this->request_uri = sanitize_text_field(
+				wp_unslash( $_SERVER['REQUEST_URI'] )
+			);
 		}
 
 		add_action( 'template_redirect', array( $this, 'make_redirect' ), 5 );
