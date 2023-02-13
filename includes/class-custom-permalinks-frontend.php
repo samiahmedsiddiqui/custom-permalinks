@@ -51,13 +51,13 @@ class Custom_Permalinks_Frontend {
 	 */
 	public function init() {
 		if ( isset( $_SERVER['QUERY_STRING'] ) ) {
-			$this->query_string_uri = sanitize_text_field(
+			$this->query_string_uri = sanitize_url(
 				wp_unslash( $_SERVER['QUERY_STRING'] )
 			);
 		}
 
 		if ( isset( $_SERVER['REQUEST_URI'] ) ) {
-			$this->request_uri = sanitize_text_field(
+			$this->request_uri = sanitize_url(
 				wp_unslash( $_SERVER['REQUEST_URI'] )
 			);
 		}
@@ -326,8 +326,9 @@ class Custom_Permalinks_Frontend {
 		if ( isset( $_SERVER['REQUEST_URI'] )
 			&& $_SERVER['REQUEST_URI'] !== $this->request_uri
 		) {
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$this->request_uri = wp_unslash( $_SERVER['REQUEST_URI'] );
+			$this->request_uri = sanitize_url(
+				wp_unslash( $_SERVER['REQUEST_URI'] )
+			);
 		}
 
 		/*
@@ -658,8 +659,9 @@ class Custom_Permalinks_Frontend {
 		if ( isset( $_SERVER['REQUEST_URI'] )
 			&& $_SERVER['REQUEST_URI'] !== $this->request_uri
 		) {
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$this->request_uri = wp_unslash( $_SERVER['REQUEST_URI'] );
+			$this->request_uri = sanitize_url(
+				wp_unslash( $_SERVER['REQUEST_URI'] )
+			);
 		}
 
 		$custom_permalink   = '';
