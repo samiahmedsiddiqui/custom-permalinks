@@ -774,7 +774,7 @@ class Custom_Permalinks_Form {
 		}
 		?>
 
-		<input type="hidden" id="original-permalink" value="<?php echo esc_url( $original_encoded_url ); ?>" />
+		<input type="hidden" id="original-permalink" value="<?php echo esc_attr( $original_encoded_url ); ?>" />
 		<input type="text" id="custom-permalinks-post-slug" class="text" value="<?php echo esc_attr( $post_slug ); ?>" style="<?php echo esc_attr( $field_style ); ?>" />
 		</span>
 
