@@ -720,7 +720,7 @@ class Custom_Permalinks_Form {
 		?>
 
 		<input value="<?php echo esc_url( $home_url ); ?>" type="hidden" name="custom_permalinks_home_url" id="custom_permalinks_home_url" />
-		<input value="<?php echo esc_url( $encoded_permalink ); ?>" type="hidden" name="custom_permalink" id="custom_permalink" />
+		<input value="<?php echo esc_attr( $encoded_permalink ); ?>" type="hidden" name="custom_permalink" id="custom_permalink" />
 
 		<?php
 		if ( $render_containers ) :
