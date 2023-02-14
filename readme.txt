@@ -2,7 +2,7 @@
 Contributors: sasiddiqui
 Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
 Tested up to: 6.1
-Stable tag: 2.5.0
+Stable tag: 2.5.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -17,8 +17,6 @@ Lay out your site the way *you* want it. Set the URL of any post, page, tag or c
 > Be warned: *This plugin is not a replacement for WordPress's built-in permalink system*. Check your WordPress administration's "Permalinks" settings page first, to make sure that this doesn't already meet your needs.
 
 This plugin is only useful for assigning custom permalinks for *individual* posts, pages, tags or categories. It will not apply whole permalink structures or automatically apply a category's custom permalink to the posts within that category.
-
-> If anyone wants the different Structure Tags for their Post types or use symbols in the URLs So, use the [Permalinks Customizer](https://wordpress.org/plugins/permalinks-customizer/) which is a fork of this plugin and contains the enhancement of this plugin.
 
 == Privacy Policy ==
 
@@ -198,6 +196,11 @@ This process defines you the steps to follow either you are installing through W
 2. Activate Custom Permalinks through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 2.5.1 - Feb 14, 2023 =
+
+* Bug
+  * [“http//” is added in front of permalinks](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/71)
 
 = 2.5.0 - Jan 02, 2023 =
 
