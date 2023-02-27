@@ -18,20 +18,6 @@ Lay out your site the way *you* want it. Set the URL of any post, page, tag or c
 
 This plugin is only useful for assigning custom permalinks for *individual* posts, pages, tags or categories. It will not apply whole permalink structures or automatically apply a category's custom permalink to the posts within that category.
 
-== Privacy Policy ==
-
-This plugin only collects the following information.
-
-1. Administration Email Address (Only the email that is set in the WordPress setting)
-2. Plugin version
-3. Site Title
-4. WordPress Address (URL)
-5. WordPress version
-
-All this information gets collected when the plugin is installed or updated.
-
-To have any kind of query please feel free to [contact us](https://www.custompermalinks.com/contact-us/).
-
 == Filters ==
 
 === Add `PATH_INFO` in `$_SERVER` Variable ===
