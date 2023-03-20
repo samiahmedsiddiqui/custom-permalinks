@@ -54,22 +54,11 @@ class Custom_Permalinks_About {
 						?>
 					</p>
 					<p>
-						<?php
-						esc_html_e(
-							'To support future development and to help make it even better please leave a',
+						<?php printf(
+						__(
+							'To support future development and to help make it even better please leave a <a href="%1$s" title="%2$s" target="_blank">5-star</a> rating with a nice message to me :)',
 							'custom-permalinks'
-						);
-						?>
-						<a href="https://wordpress.org/support/plugin/custom-permalinks/reviews/?rate=5#new-post" title="Custom Permalinks Rating" target="_blank">
-						<?php
-						esc_html_e( '5-star', 'custom-permalinks' );
-						?>
-						</a>
-						<?php
-						esc_html_e(
-							'rating with a nice message to me :)',
-							'custom-permalinks'
-						);
+						),'https://wordpress.org/support/plugin/custom-permalinks/reviews/?rate=5#new-post',__('Custom Permalinks Rating', 'custom-permalinks'));
 						?>
 						</p>
 					</div>
