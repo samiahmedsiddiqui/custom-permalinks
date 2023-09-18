@@ -3,7 +3,7 @@
  * Plugin Name: Custom Permalinks
  * Plugin URI: https://www.custompermalinks.com/
  * Description: Set custom permalinks on a per-post basis.
- * Version: 2.5.2
+ * Version: 2.5.3
  * Requires at least: 2.6
  * Requires PHP: 5.6
  * Author: Sami Ahmed Siddiqui
