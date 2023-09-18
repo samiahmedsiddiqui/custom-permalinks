@@ -429,25 +429,25 @@ class Custom_Permalinks_Frontend {
 				$post_meta = trim( strtolower( $posts[0]->meta_value ), '/' );
 				if ( 'page' === $posts[0]->post_type ) {
 					$get_original_url = $this->original_page_link( $posts[0]->ID );
-					$original_url     = preg_replace(
-						'@/+@',
-						'/',
-						str_replace(
-							$post_meta,
-							$get_original_url,
-							strtolower( $request_no_slash )
-						)
+					$original_url = preg_replace(
+					    '@/+@',
+					    '/',
+					    preg_replace(
+					        '@' . $post_meta . '(/|$)@',
+					        $get_original_url . '$1',
+					        strtolower($request_no_slash)
+				    	)
 					);
 				} else {
 					$get_original_url = $this->original_post_link( $posts[0]->ID );
-					$original_url     = preg_replace(
-						'@/+@',
-						'/',
-						str_replace(
-							$post_meta,
-							$get_original_url,
-							strtolower( $request_no_slash )
-						)
+					$original_url = preg_replace(
+					    '@/+@',
+					    '/',
+					    preg_replace(
+					        '@' . $post_meta . '(/|$)@',
+					        $get_original_url . '$1',
+					        strtolower($request_no_slash)
+					    )
 					);
 				}
 			}
@@ -485,10 +485,10 @@ class Custom_Permalinks_Frontend {
 
 						$found_permalink = $permalink;
 						$term_link       = $this->original_term_link( $term['id'] );
-						$original_url    = str_replace(
-							trim( $permalink, '/' ),
-							$term_link,
-							trim( $request, '/' )
+						$original_url = preg_replace(
+						    '@' . trim($permalink, '/') . '(/|$)@',
+						    $term_link . '$1',
+						    trim($request, '/')
 						);
 					}
 				}
