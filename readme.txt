@@ -1,6 +1,6 @@
 === Custom Permalinks ===
 Contributors: sasiddiqui
-Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
+Tags: permalink, url, link, address, redirect, custom post type
 Tested up to: 6.1
 Stable tag: 2.5.2
 License: GPLv3

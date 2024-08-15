@@ -26,12 +26,9 @@
 			return;
 		}
 
-		const originalPermalink = document.getElementById(
-			'original-permalink'
-		);
+		const originalPermalink = document.getElementById('original-permalink');
 
-		document.getElementById('custom_permalink').value =
-			event.target.value;
+		document.getElementById('custom_permalink').value = event.target.value;
 		if (
 			event.target.value === '' ||
 			event.target.value === originalPermalink.value
@@ -73,8 +70,8 @@
 			setPermlinks.original_permalink;
 
 		if (document.querySelector('#view-post-btn a')) {
-			replaceOldPermalink = document.querySelector('#view-post-btn a')
-				.href;
+			replaceOldPermalink =
+				document.querySelector('#view-post-btn a').href;
 
 			// Cannot be removed as replaceOldPermalink can be empty.
 			document.querySelector('#view-post-btn a').href = viewPermalink;
@@ -82,9 +79,8 @@
 
 		if (document.querySelector('a.editor-post-preview')) {
 			// Cannot be removed as replaceOldPermalink can be empty.
-			document.querySelector(
-				'a.editor-post-preview'
-			).href = viewPermalink;
+			document.querySelector('a.editor-post-preview').href =
+				viewPermalink;
 		}
 
 		// Only works when replaceOldPermalink is not empty.
@@ -98,10 +94,7 @@
 			const totalOldLinks = oldPermalinks.length;
 
 			while (loopInit < totalOldLinks) {
-				if (
-					oldPermalinks[loopInit] &&
-					oldPermalinks[loopInit].href
-				) {
+				if (oldPermalinks[loopInit] && oldPermalinks[loopInit].href) {
 					oldPermalinks[loopInit].href = oldPermalinks[
 						loopInit
 					].href.replace(replaceRegex, viewPermalink);
@@ -134,9 +127,7 @@
 		const defaultPerm = document.getElementsByClassName(
 			'edit-post-post-link__preview-label'
 		);
-		const geBaseURL = document.getElementById(
-			'custom_permalinks_base_url'
-		);
+		const geBaseURL = document.getElementById('custom_permalinks_base_url');
 		let postId = '';
 		let xhttp = '';
 
@@ -146,9 +137,7 @@
 
 		isSaving = editPost.isSavingMetaBoxes();
 		if (isSaving !== lastIsSaving && !isSaving && geBaseURL) {
-			postId = wp.data
-				.select('core/editor')
-				.getEditedPostAttribute('id');
+			postId = wp.data.select('core/editor').getEditedPostAttribute('id');
 			xhttp = new XMLHttpRequest();
 
 			lastIsSaving = isSaving;
@@ -167,8 +156,8 @@
 			xhttp.open(
 				'GET',
 				geBaseURL.value +
-				'wp-json/custom-permalinks/v1/get-permalink/' +
-				postId,
+					'wp-json/custom-permalinks/v1/get-permalink/' +
+					postId,
 				true
 			);
 			xhttp.setRequestHeader(
@@ -206,9 +195,7 @@
 		const permalinkEdit = document.getElementById(
 			'custom-permalinks-edit-box'
 		);
-		const postSlug = document.getElementById(
-			'custom-permalinks-post-slug'
-		);
+		const postSlug = document.getElementById('custom-permalinks-post-slug');
 		let sidebar = '';
 		let totalTabs = 0;
 
@@ -245,9 +232,7 @@
 			wp.data.subscribe(fetchUpdates);
 
 			if (defaultPerm && defaultPerm[0]) {
-				defaultPerm[0].parentNode.classList.add(
-					'cp-permalink-hidden'
-				);
+				defaultPerm[0].parentNode.classList.add('cp-permalink-hidden');
 			}
 
 			if (permalinkEdit.classList.contains('closed')) {
@@ -264,6 +249,5 @@
 		}
 	}
 
-	/* eslint-disable @wordpress/no-global-event-listener */
 	document.addEventListener('DOMContentLoaded', permalinkContentLoaded);
 })();

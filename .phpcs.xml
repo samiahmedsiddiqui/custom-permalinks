@@ -25,10 +25,17 @@
     <rule ref="PHPCompatibilityWP"/>
 
 		<!-- Run against the WordPress ruleset. -->
-    <rule ref="WordPress">
+    <rule ref="WordPress" />
+
+		<rule ref="WordPress.WP.Capabilities">
+			<properties>
+				<property name="custom_capabilities" type="array">
+					<element value="cp_view_post_permalinks" />
+					<element value="cp_view_category_permalinks" />
+				</property>
+			</properties>
 		</rule>
 
-		<!-- Check for cross-version support for PHP 5.4 and higher. -->
-    <config name="testVersion" value="5.4-"/>
-
+		<!-- Check for cross-version support for PHP 7.0 and higher. -->
+    <config name="testVersion" value="7.0-"/>
 </ruleset>

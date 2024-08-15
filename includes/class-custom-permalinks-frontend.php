@@ -801,8 +801,7 @@ class Custom_Permalinks_Frontend {
 				$custom_permalink,
 				$language_code
 			);
-		} else {
-			if ( class_exists( 'SitePress' ) ) {
+		} elseif ( class_exists( 'SitePress' ) ) {
 				$wpml_lang_format = apply_filters(
 					'wpml_setting',
 					0,
@@ -810,12 +809,11 @@ class Custom_Permalinks_Frontend {
 				);
 
 				// Different languages in directories.
-				if ( 1 === intval( $wpml_lang_format ) ) {
-					$get_original_url = $this->original_post_link( $post->ID );
-					$permalink        = $this->remove_double_slash( $permalink );
-					if ( strlen( $get_original_url ) === strlen( $permalink ) ) {
-						$permalink = $get_original_url;
-					}
+			if ( 1 === intval( $wpml_lang_format ) ) {
+				$get_original_url = $this->original_post_link( $post->ID );
+				$permalink        = $this->remove_double_slash( $permalink );
+				if ( strlen( $get_original_url ) === strlen( $permalink ) ) {
+					$permalink = $get_original_url;
 				}
 			}
 		}
@@ -851,8 +849,7 @@ class Custom_Permalinks_Frontend {
 				$custom_permalink,
 				$language_code
 			);
-		} else {
-			if ( class_exists( 'SitePress' ) ) {
+		} elseif ( class_exists( 'SitePress' ) ) {
 				$wpml_lang_format = apply_filters(
 					'wpml_setting',
 					0,
@@ -860,12 +857,11 @@ class Custom_Permalinks_Frontend {
 				);
 
 				// Different languages in directories.
-				if ( 1 === intval( $wpml_lang_format ) ) {
-					$get_original_url = $this->original_page_link( $page );
-					$permalink        = $this->remove_double_slash( $permalink );
-					if ( strlen( $get_original_url ) === strlen( $permalink ) ) {
-						$permalink = $get_original_url;
-					}
+			if ( 1 === intval( $wpml_lang_format ) ) {
+				$get_original_url = $this->original_page_link( $page );
+				$permalink        = $this->remove_double_slash( $permalink );
+				if ( strlen( $get_original_url ) === strlen( $permalink ) ) {
+					$permalink = $get_original_url;
 				}
 			}
 		}
