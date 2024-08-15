@@ -389,13 +389,16 @@ class Custom_Permalinks_Frontend {
 				$current_language = apply_filters( 'wpml_current_language', null );
 				$different_domain = true;
 			}
+		} elseif ( defined( 'POLYLANG_VERSION' ) ) {
+			$polylang_config = get_option( 'polylang' );
+			if ( 1 === $polylang_config['force_lang'] ) {
+				$current_language = pll_current_language();
+				$different_domain = true;
+			}
 		}
 
 		// Different domain per language.
-		if ( class_exists( 'SitePress' )
-			&& $different_domain
-			&& ! empty( $current_language )
-		) {
+		if ( $different_domain && ! empty( $current_language ) ) {
 			$posts = $this->query_post_language( $request_no_slash, $current_language );
 
 			// Backward compatibility.

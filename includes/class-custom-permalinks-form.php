@@ -474,6 +474,10 @@ class Custom_Permalinks_Form {
 
 		if ( 'trash' !== $post->post_status ) {
 			$home_url = trailingslashit( home_url() );
+			if ( defined( 'POLYLANG_VERSION' ) ) {
+				$home_url = trailingslashit( pll_home_url() );
+			}
+
 			if ( isset( $permalink ) && ! empty( $permalink ) ) {
 				$view_post_link = $home_url . $permalink;
 			} else {
@@ -550,6 +554,10 @@ class Custom_Permalinks_Form {
 
 		if ( 'trash' !== $post->post_status ) {
 			$home_url = trailingslashit( home_url() );
+			if ( defined( 'POLYLANG_VERSION' ) ) {
+				$home_url = trailingslashit( pll_home_url() );
+			}
+
 			if ( isset( $permalink ) && ! empty( $permalink ) ) {
 				$view_post_link = $home_url . $permalink;
 			} else {
@@ -699,8 +707,13 @@ class Custom_Permalinks_Form {
 	private function get_permalink_form( $permalink, $original, $id,
 		$render_containers = true, $postname = ''
 	) {
+		$base_url          = trailingslashit( home_url() );
 		$encoded_permalink = htmlspecialchars( urldecode( $permalink ) );
 		$home_url          = trailingslashit( home_url() );
+
+		if ( defined( 'POLYLANG_VERSION' ) ) {
+			$home_url = trailingslashit( pll_home_url() );
+		}
 
 		if ( $render_containers ) {
 			wp_nonce_field(
@@ -719,6 +732,7 @@ class Custom_Permalinks_Form {
 		}
 		?>
 
+		<input value="<?php echo esc_url( $base_url ); ?>" type="hidden" name="custom_permalinks_base_url" id="custom_permalinks_base_url" />
 		<input value="<?php echo esc_url( $home_url ); ?>" type="hidden" name="custom_permalinks_home_url" id="custom_permalinks_home_url" />
 		<input value="<?php echo esc_attr( $encoded_permalink ); ?>" type="hidden" name="custom_permalink" id="custom_permalink" />
 
@@ -749,7 +763,8 @@ class Custom_Permalinks_Form {
 		wp_enqueue_script(
 			'custom-permalinks-form',
 			plugins_url(
-				'/assets/js/script-form' . $this->js_file_suffix,
+				// '/assets/js/script-form' . $this->js_file_suffix,
+				'/assets/js/script-form.js',
 				CUSTOM_PERMALINKS_FILE
 			),
 			array(),
@@ -978,12 +993,9 @@ class Custom_Permalinks_Form {
 	 */
 	public function refresh_meta_form( $data ) {
 		if ( isset( $data['id'] ) && is_numeric( $data['id'] ) ) {
-			$post                               = get_post( $data['id'] );
-			$all_permalinks                     = array();
-			$all_permalinks['custom_permalink'] = get_post_meta(
-				$data['id'],
-				'custom_permalink',
-				true
+			$post           = get_post( $data['id'] );
+			$all_permalinks = array(
+				'custom_permalink' => get_post_meta( $data['id'], 'custom_permalink', true ),
 			);
 
 			if ( ! $all_permalinks['custom_permalink'] ) {
