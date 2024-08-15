@@ -1,7 +1,7 @@
 {
 	"name": "custom-permalinks",
 	"description": "Development files for the Custom Permalinks plugin.",
-	"version": "2.5.2",
+	"version": "2.6.0",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/samiahmedsiddiqui/custom-permalinks.git"
