@@ -14,7 +14,6 @@ name: PHP coding standards
 
 jobs:
   phpcs:
-    name: Run coding standards checks
     runs-on: ubuntu-latest
 
     strategy:
@@ -24,7 +23,7 @@ jobs:
     permissions:
       contents: read
 
-    name: PHP ${{ matrix.php-versions }}
+    name: Run coding standards checks on ${{ matrix.php-versions }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
