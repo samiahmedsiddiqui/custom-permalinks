@@ -3,22 +3,28 @@
 ##
 name: PHP coding standards
 
-on:
-  workflow_call:
-    inputs:
-      php-version:
-        description: 'The PHP version to use.'
-        required: false
-        type: 'string'
-        default: 'latest'
+# on:
+#   workflow_call:
+#     inputs:
+#       php-version:
+#         description: 'The PHP version to use.'
+#         required: false
+#         type: 'string'
+#         default: 'latest'
 
 jobs:
   phpcs:
     name: Run coding standards checks
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-versions: ['7.0', '7.4', '8.0', '8.1', '8.2', '8.3']
+
     permissions:
       contents: read
 
+    name: PHP ${{ matrix.php-versions }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -28,8 +34,10 @@ jobs:
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: ${{ inputs.php-version }}
+        php-version: ${{ matrix.php-versions }}
         tools: cs2pr
+      env:
+        runner: self-hosted
 
     - name: Install Composer dependencies
       run: composer install
