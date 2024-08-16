@@ -49,8 +49,8 @@ class Custom_Permalinks_Admin {
 	 */
 	public function admin_menu() {
 		add_menu_page(
-			'Custom Permalinks',
-			'Custom Permalinks',
+			_x( 'Custom Permalinks', 'Menu Item', 'custom-permalinks' ),
+			_x( 'Custom Permalinks', 'Menu Item', 'custom-permalinks' ),
 			'cp_view_post_permalinks',
 			'cp-post-permalinks',
 			array( $this, 'post_permalinks_page' ),
@@ -58,24 +58,24 @@ class Custom_Permalinks_Admin {
 		);
 		$post_permalinks_hook     = add_submenu_page(
 			'cp-post-permalinks',
-			'Post Types Permalinks',
-			'Post Types Permalinks',
+			__( 'Post Types Permalinks', 'custom-permalinks' ),
+			__( 'Post Types Permalinks', 'custom-permalinks' ),
 			'cp_view_post_permalinks',
 			'cp-post-permalinks',
 			array( $this, 'post_permalinks_page' )
 		);
 		$taxonomy_permalinks_hook = add_submenu_page(
 			'cp-post-permalinks',
-			'Taxonomies Permalinks',
-			'Taxonomies Permalinks',
+			__( 'Taxonomies Permalinks', 'custom-permalinks' ),
+			__( 'Taxonomies Permalinks', 'custom-permalinks' ),
 			'cp_view_category_permalinks',
 			'cp-taxonomy-permalinks',
 			array( $this, 'taxonomy_permalinks_page' )
 		);
 		$about_page               = add_submenu_page(
 			'cp-post-permalinks',
-			'About Custom Permalinks',
-			'About',
+			__( 'About Custom Permalinks', 'custom-permalinks' ),
+			__( 'About', 'custom-permalinks' ),
 			'install_plugins',
 			'cp-about-plugins',
 			array( $this, 'about_plugin' )
