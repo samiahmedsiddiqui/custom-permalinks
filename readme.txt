@@ -1,8 +1,8 @@
 === Custom Permalinks ===
 Contributors: sasiddiqui
-Tags: permalink, url, link, address, custom, redirect, custom post type, GDPR, GDPR Compliant
-Tested up to: 6.1
-Stable tag: 2.5.2
+Tags: permalink, url, link, address, redirect, custom post type
+Tested up to: 6.6
+Stable tag: 2.6.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -182,6 +182,11 @@ This process defines you the steps to follow either you are installing through W
 2. Activate Custom Permalinks through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 2.6.0 - Aug 15, 2024 =
+
+* Feature Additions:
+  * Compatibility with PolyLang Plugin
 
 = 2.5.2 - Feb 14, 2023 =
 

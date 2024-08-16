@@ -3,9 +3,9 @@
  * Plugin Name: Custom Permalinks
  * Plugin URI: https://www.custompermalinks.com/
  * Description: Set custom permalinks on a per-post basis.
- * Version: 2.5.2
+ * Version: 2.6.0
  * Requires at least: 2.6
- * Requires PHP: 5.6
+ * Requires PHP: 7.0
  * Author: Sami Ahmed Siddiqui
  * Author URI: https://www.linkedin.com/in/sami-ahmed-siddiqui/
  * License: GPLv3
@@ -19,7 +19,7 @@
 
 /**
  *  Custom Permalinks - Update Permalinks of Post/Pages and Categories
- *  Copyright 2008-2023 Sami Ahmed Siddiqui <sami.siddiqui@yasglobal.com>
+ *  Copyright 2008-2024 Sami Ahmed Siddiqui <sami.siddiqui@yasglobal.com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

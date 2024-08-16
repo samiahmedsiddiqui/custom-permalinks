@@ -145,17 +145,17 @@ class Custom_Permalinks_Form {
 	 * @since 1.4.0
 	 * @access public
 	 *
-	 * @param bool   $protected Whether the key is protected or not.
+	 * @param bool   $is_protected Whether the key is protected or not.
 	 * @param string $meta_key Meta key.
 	 *
 	 * @return bool `true` for the custom_permalink key.
 	 */
-	public function protect_meta( $protected, $meta_key ) {
+	public function protect_meta( $is_protected, $meta_key ) {
 		if ( 'custom_permalink' === $meta_key ) {
-			$protected = true;
+			$is_protected = true;
 		}
 
-		return $protected;
+		return $is_protected;
 	}
 
 	/**
@@ -474,25 +474,28 @@ class Custom_Permalinks_Form {
 
 		if ( 'trash' !== $post->post_status ) {
 			$home_url = trailingslashit( home_url() );
+			if ( defined( 'POLYLANG_VERSION' ) ) {
+				$home_url = trailingslashit( pll_home_url() );
+			}
+
 			if ( isset( $permalink ) && ! empty( $permalink ) ) {
 				$view_post_link = $home_url . $permalink;
-			} else {
-				if ( 'draft' === $post->post_status
+			} elseif ( 'draft' === $post->post_status
 					|| 'pending' === $post->post_status
 				) {
+
 					$view_post      = 'Preview';
 					$view_post_link = $home_url . '?';
-					if ( 'page' === $post->post_type ) {
-						$view_post_link .= 'page_id';
-					} elseif ( 'post' === $post->post_type ) {
-						$view_post_link .= 'p';
-					} else {
-						$view_post_link .= 'post_type=' . $post->post_type . '&p';
-					}
-					$view_post_link .= '=' . $post_id . '&preview=true';
+				if ( 'page' === $post->post_type ) {
+					$view_post_link .= 'page_id';
+				} elseif ( 'post' === $post->post_type ) {
+					$view_post_link .= 'p';
 				} else {
-					$view_post_link = $home_url . $original_permalink;
+					$view_post_link .= 'post_type=' . $post->post_type . '&p';
 				}
+					$view_post_link .= '=' . $post_id . '&preview=true';
+			} else {
+				$view_post_link = $home_url . $original_permalink;
 			}
 
 			$content .= ' <span id="view-post-btn">' .
@@ -550,25 +553,28 @@ class Custom_Permalinks_Form {
 
 		if ( 'trash' !== $post->post_status ) {
 			$home_url = trailingslashit( home_url() );
+			if ( defined( 'POLYLANG_VERSION' ) ) {
+				$home_url = trailingslashit( pll_home_url() );
+			}
+
 			if ( isset( $permalink ) && ! empty( $permalink ) ) {
 				$view_post_link = $home_url . $permalink;
-			} else {
-				if ( 'draft' === $post->post_status
+			} elseif ( 'draft' === $post->post_status
 					|| 'pending' === $post->post_status
 				) {
+
 					$view_post      = 'Preview';
 					$view_post_link = $home_url . '?';
-					if ( 'page' === $post->post_type ) {
-						$view_post_link .= 'page_id';
-					} elseif ( 'post' === $post->post_type ) {
-						$view_post_link .= 'p';
-					} else {
-						$view_post_link .= 'post_type=' . $post->post_type . '&p';
-					}
-					$view_post_link .= '=' . $post_id . '&preview=true';
+				if ( 'page' === $post->post_type ) {
+					$view_post_link .= 'page_id';
+				} elseif ( 'post' === $post->post_type ) {
+					$view_post_link .= 'p';
 				} else {
-					$view_post_link = $home_url . $original_permalink;
+					$view_post_link .= 'post_type=' . $post->post_type . '&p';
 				}
+					$view_post_link .= '=' . $post_id . '&preview=true';
+			} else {
+				$view_post_link = $home_url . $original_permalink;
 			}
 			?>
 
@@ -696,11 +702,20 @@ class Custom_Permalinks_Form {
 	 *
 	 * @return void
 	 */
-	private function get_permalink_form( $permalink, $original, $id,
-		$render_containers = true, $postname = ''
+	private function get_permalink_form(
+		$permalink,
+		$original,
+		$id,
+		$render_containers = true,
+		$postname = ''
 	) {
+		$base_url          = trailingslashit( home_url() );
 		$encoded_permalink = htmlspecialchars( urldecode( $permalink ) );
 		$home_url          = trailingslashit( home_url() );
+
+		if ( defined( 'POLYLANG_VERSION' ) ) {
+			$home_url = trailingslashit( pll_home_url() );
+		}
 
 		if ( $render_containers ) {
 			wp_nonce_field(
@@ -719,6 +734,7 @@ class Custom_Permalinks_Form {
 		}
 		?>
 
+		<input value="<?php echo esc_url( $base_url ); ?>" type="hidden" name="custom_permalinks_base_url" id="custom_permalinks_base_url" />
 		<input value="<?php echo esc_url( $home_url ); ?>" type="hidden" name="custom_permalinks_home_url" id="custom_permalinks_home_url" />
 		<input value="<?php echo esc_attr( $encoded_permalink ); ?>" type="hidden" name="custom_permalink" id="custom_permalink" />
 
@@ -978,12 +994,9 @@ class Custom_Permalinks_Form {
 	 */
 	public function refresh_meta_form( $data ) {
 		if ( isset( $data['id'] ) && is_numeric( $data['id'] ) ) {
-			$post                               = get_post( $data['id'] );
-			$all_permalinks                     = array();
-			$all_permalinks['custom_permalink'] = get_post_meta(
-				$data['id'],
-				'custom_permalink',
-				true
+			$post           = get_post( $data['id'] );
+			$all_permalinks = array(
+				'custom_permalink' => get_post_meta( $data['id'], 'custom_permalink', true ),
 			);
 
 			if ( ! $all_permalinks['custom_permalink'] ) {
@@ -1043,7 +1056,7 @@ class Custom_Permalinks_Form {
 				'callback'            => array( $this, 'refresh_meta_form' ),
 				'args'                => array(
 					'id' => array(
-						'validate_callback' => function( $pid ) {
+						'validate_callback' => function ( $pid ) {
 							return is_numeric( $pid );
 						},
 					),

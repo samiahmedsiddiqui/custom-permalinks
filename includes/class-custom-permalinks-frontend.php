@@ -389,13 +389,16 @@ class Custom_Permalinks_Frontend {
 				$current_language = apply_filters( 'wpml_current_language', null );
 				$different_domain = true;
 			}
+		} elseif ( defined( 'POLYLANG_VERSION' ) ) {
+			$polylang_config = get_option( 'polylang' );
+			if ( 1 === $polylang_config['force_lang'] ) {
+				$current_language = pll_current_language();
+				$different_domain = true;
+			}
 		}
 
 		// Different domain per language.
-		if ( class_exists( 'SitePress' )
-			&& $different_domain
-			&& ! empty( $current_language )
-		) {
+		if ( $different_domain && ! empty( $current_language ) ) {
 			$posts = $this->query_post_language( $request_no_slash, $current_language );
 
 			// Backward compatibility.
@@ -676,6 +679,10 @@ class Custom_Permalinks_Frontend {
 			$request = substr( $request, 0, $pos );
 		}
 
+		if ( ! $request ) {
+			return;
+		}
+
 		/*
 		 * Disable redirects to be processed if filter returns `true`.
 		 *
@@ -694,6 +701,7 @@ class Custom_Permalinks_Frontend {
 			$cp_form = new Custom_Permalinks_Form();
 			$request = $cp_form->check_conflicts( $request );
 		}
+
 		$request_no_slash = preg_replace( '@/+@', '/', trim( $request, '/' ) );
 		$posts            = $this->query_post( $request_no_slash );
 
@@ -798,8 +806,7 @@ class Custom_Permalinks_Frontend {
 				$custom_permalink,
 				$language_code
 			);
-		} else {
-			if ( class_exists( 'SitePress' ) ) {
+		} elseif ( class_exists( 'SitePress' ) ) {
 				$wpml_lang_format = apply_filters(
 					'wpml_setting',
 					0,
@@ -807,12 +814,11 @@ class Custom_Permalinks_Frontend {
 				);
 
 				// Different languages in directories.
-				if ( 1 === intval( $wpml_lang_format ) ) {
-					$get_original_url = $this->original_post_link( $post->ID );
-					$permalink        = $this->remove_double_slash( $permalink );
-					if ( strlen( $get_original_url ) === strlen( $permalink ) ) {
-						$permalink = $get_original_url;
-					}
+			if ( 1 === intval( $wpml_lang_format ) ) {
+				$get_original_url = $this->original_post_link( $post->ID );
+				$permalink        = $this->remove_double_slash( $permalink );
+				if ( strlen( $get_original_url ) === strlen( $permalink ) ) {
+					$permalink = $get_original_url;
 				}
 			}
 		}
@@ -848,8 +854,7 @@ class Custom_Permalinks_Frontend {
 				$custom_permalink,
 				$language_code
 			);
-		} else {
-			if ( class_exists( 'SitePress' ) ) {
+		} elseif ( class_exists( 'SitePress' ) ) {
 				$wpml_lang_format = apply_filters(
 					'wpml_setting',
 					0,
@@ -857,12 +862,11 @@ class Custom_Permalinks_Frontend {
 				);
 
 				// Different languages in directories.
-				if ( 1 === intval( $wpml_lang_format ) ) {
-					$get_original_url = $this->original_page_link( $page );
-					$permalink        = $this->remove_double_slash( $permalink );
-					if ( strlen( $get_original_url ) === strlen( $permalink ) ) {
-						$permalink = $get_original_url;
-					}
+			if ( 1 === intval( $wpml_lang_format ) ) {
+				$get_original_url = $this->original_page_link( $page );
+				$permalink        = $this->remove_double_slash( $permalink );
+				if ( strlen( $get_original_url ) === strlen( $permalink ) ) {
+					$permalink = $get_original_url;
 				}
 			}
 		}

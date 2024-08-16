@@ -282,52 +282,13 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	 * @return string Post Permalink.
 	 */
 	protected function column_permalink( $item ) {
-		$permalink = '';
+		$page_url = get_permalink( $item['ID'] );
 
-		if ( $item['meta_value'] ) {
-			$cp_frontend      = new Custom_Permalinks_Frontend();
-			$custom_permalink = '/' . $item['meta_value'];
-			$home_url         = home_url();
-			$post_type        = 'post';
-
-			if ( class_exists( 'SitePress' ) ) {
-				$wpml_lang_format = apply_filters(
-					'wpml_setting',
-					0,
-					'language_negotiation_type'
-				);
-
-				if ( 1 === intval( $wpml_lang_format ) ) {
-					$home_url = site_url();
-				}
-			}
-
-			if ( isset( $item['post_type'] ) ) {
-				$post_type = $item['post_type'];
-			}
-
-			$language_code = apply_filters(
-				'wpml_element_language_code',
-				null,
-				array(
-					'element_id'   => $item['ID'],
-					'element_type' => $post_type,
-				)
-			);
-
-			$permalink = $cp_frontend->wpml_permalink_filter(
-				$custom_permalink,
-				$language_code
-			);
-			$permalink = $cp_frontend->remove_double_slash( $permalink );
-			$perm_text = str_replace( $home_url, '', $permalink );
-
-			$permalink = sprintf(
-				'<a href="%s" target="_blank" title="' . esc_html__( 'Visit', 'custom-permalinks' ) . ' ' . $item['post_title'] . '">%s</a>',
-				$permalink,
-				$perm_text
-			);
-		}
+		$permalink = sprintf(
+			'<a href="%s" target="_blank" title="' . esc_html__( 'Visit', 'custom-permalinks' ) . ' ' . $item['post_title'] . '">%s</a>',
+			$page_url,
+			$page_url
+		);
 
 		return $permalink;
 	}

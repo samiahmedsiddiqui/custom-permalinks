@@ -122,8 +122,7 @@ final class Custom_Permalinks_Post_Types {
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 				$posts = $wpdb->get_results(
 					$wpdb->prepare(
-						"SELECT p.ID, p.post_title, p.post_type, pm.meta_value
-							FROM {$wpdb->posts} AS p
+						"SELECT p.ID, p.post_title, p.post_type FROM {$wpdb->posts} AS p
 						LEFT JOIN {$wpdb->postmeta} AS pm ON (p.ID = pm.post_id)
 						WHERE pm.meta_key = 'custom_permalink'
 							AND pm.meta_value != ''
@@ -141,8 +140,7 @@ final class Custom_Permalinks_Post_Types {
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 				$posts = $wpdb->get_results(
 					$wpdb->prepare(
-						"SELECT p.ID, p.post_title, p.post_type, pm.meta_value
-							FROM {$wpdb->posts} AS p
+						"SELECT p.ID, p.post_title, p.post_type FROM {$wpdb->posts} AS p
 						LEFT JOIN {$wpdb->postmeta} AS pm ON (p.ID = pm.post_id)
 						WHERE pm.meta_key = 'custom_permalink' AND pm.meta_value != ''
 						ORDER BY %1s %2s LIMIT %d, %d",
