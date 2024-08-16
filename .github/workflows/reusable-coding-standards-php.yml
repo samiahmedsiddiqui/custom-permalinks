@@ -3,14 +3,8 @@
 ##
 name: PHP coding standards
 
-# on:
-#   workflow_call:
-#     inputs:
-#       php-version:
-#         description: 'The PHP version to use.'
-#         required: false
-#         type: 'string'
-#         default: 'latest'
+on:
+  workflow_call:
 
 jobs:
   phpcs:
