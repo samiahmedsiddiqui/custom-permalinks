@@ -19,7 +19,6 @@ on:
       - 'phpcs.xml.dist'
       # Changes to workflow files should always verify all workflows are successful.
       - '.github/workflows/*.yml'
-  workflow_dispatch:
 
 # Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:
@@ -32,7 +31,7 @@ concurrency:
 # Any needed permissions should be configured at the job level.
 permissions: {}
 
-on:
+jobs:
   # Runs the PHP coding standards checks.
   phpcs:
     name: PHP coding standards
