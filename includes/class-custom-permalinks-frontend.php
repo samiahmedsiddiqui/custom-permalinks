@@ -679,6 +679,10 @@ class Custom_Permalinks_Frontend {
 			$request = substr( $request, 0, $pos );
 		}
 
+		if ( ! $request ) {
+			return;
+		}
+
 		/*
 		 * Disable redirects to be processed if filter returns `true`.
 		 *
@@ -697,6 +701,7 @@ class Custom_Permalinks_Frontend {
 			$cp_form = new Custom_Permalinks_Form();
 			$request = $cp_form->check_conflicts( $request );
 		}
+
 		$request_no_slash = preg_replace( '@/+@', '/', trim( $request, '/' ) );
 		$posts            = $this->query_post( $request_no_slash );
 
