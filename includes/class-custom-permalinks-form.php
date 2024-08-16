@@ -754,12 +754,15 @@ class Custom_Permalinks_Form {
 			$original = $this->check_conflicts( $original );
 		}
 
-		if ( $permalink ) {
-			$post_slug            = htmlspecialchars( urldecode( $permalink ) );
+		$original_encoded_url = '';
+		if ( $original ) {
 			$original_encoded_url = htmlspecialchars( urldecode( $original ) );
+		}
+
+		if ( $permalink ) {
+			$post_slug = htmlspecialchars( urldecode( $permalink ) );
 		} else {
-			$post_slug            = htmlspecialchars( urldecode( $original ) );
-			$original_encoded_url = $post_slug;
+			$post_slug = $original_encoded_url;
 		}
 
 		wp_enqueue_script(
