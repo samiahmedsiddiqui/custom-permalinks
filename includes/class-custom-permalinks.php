@@ -20,6 +20,7 @@ class Custom_Permalinks {
 	 */
 	public $version = '2.6.0';
 
+
 	/**
 	 * Class constructor.
 	 */
@@ -92,10 +93,10 @@ class Custom_Permalinks {
 
 		register_activation_hook(
 			CUSTOM_PERMALINKS_FILE,
-			array( 'Custom_Permalinks', 'activate_details' )
+			array( 'Custom_Permalinks', 'activate_details')
 		);
 
-		add_action( 'plugins_loaded', array( $this, 'check_loaded_plugins' ) );
+		add_action( 'plugins_loaded', array( $this, 'check_loaded_plugins'  ) );
 	}
 
 	/**
