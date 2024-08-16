@@ -1,0 +1,46 @@
+##
+# A reusable workflow that checks the JavaScript coding standards.
+##
+name: JavaScript coding standards
+
+on:
+  workflow_call:
+
+jobs:
+  eslint:
+    name: Run coding standards checks
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Log debug information
+        run: |
+          npm --version
+          node --version
+          git --version
+
+      - name: Install npm Dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint:js
+
+      - name: Ensure version-controlled files are not modified or deleted
+        run: git diff --exit-code

@@ -1,0 +1,49 @@
+##
+# A reusable workflow that checks the PHP coding standards.
+##
+name: PHP coding standards
+
+on:
+  workflow_call:
+    inputs:
+      php-version:
+        description: 'The PHP version to use.'
+        required: false
+        type: 'string'
+        default: 'latest'
+
+jobs:
+  phpcs:
+    name: Run coding standards checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ inputs.php-version }}
+        tools: cs2pr
+
+    - name: Install Composer dependencies
+      run: composer install
+
+    - name: Make Composer packages available globally
+      run: echo "${PWD}/vendor/bin" >> $GITHUB_PATH
+
+    - name: Run PHPCS on all files
+      id: phpcs
+      run: phpcs -n --report-full --cache=./.cache/phpcs-src.json --report-checkstyle=./.cache/phpcs-report.xml
+
+    - name: Show PHPCS results in PR
+      if: ${{ always() && steps.phpcs.outcome == 'failure' }}
+      run: cs2pr ./.cache/phpcs-report.xml
+
+    - name: Ensure version-controlled files are not modified or deleted
+      run: git diff --exit-code
