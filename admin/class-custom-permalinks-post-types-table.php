@@ -239,12 +239,13 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 		}
 
 		$edit_link            = get_edit_post_link( $item['ID'] );
-		$title_with_edit_link = $post_title;
+		$title_with_edit_link = esc_html( $post_title );
 		if ( ! empty( $edit_link ) ) {
 			$title_with_edit_link = sprintf(
-				'<a href="%s" target="_blank" title="' . esc_html__( 'Edit ', 'custom-permalinks' ) . ' ' . $post_title . '">%s</a>',
+				'<a href="%1s" target="_blank" title="' . esc_attr__( 'Edit', 'custom-permalinks' ) . ' %2s">%3s</a>',
 				$edit_link,
-				$post_title
+				esc_attr( $post_title ),
+				$title_with_edit_link
 			);
 		}
 

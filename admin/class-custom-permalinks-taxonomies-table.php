@@ -249,12 +249,13 @@ final class Custom_Permalinks_Taxonomies_Table extends WP_List_Table {
 			}
 		}
 
-		$title_with_edit_link = $term_title;
+		$title_with_edit_link = esc_html( $term_title );
 		if ( ! empty( $edit_link ) ) {
 			$title_with_edit_link = sprintf(
-				'<a href="%s" target="_blank" title="' . esc_html__( 'Edit ', 'custom-permalinks' ) . ' ' . $term_title . '">%s</a>',
+				'<a href="%1s" target="_blank" title="' . esc_attr__( 'Edit', 'custom-permalinks' ) . ' %2s">%3s</a>',
 				$edit_link,
-				$term_title
+				esc_attr( $term_title ),
+				$title_with_edit_link
 			);
 		}
 
