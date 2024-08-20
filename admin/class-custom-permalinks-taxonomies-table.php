@@ -235,26 +235,22 @@ final class Custom_Permalinks_Taxonomies_Table extends WP_List_Table {
 		$edit_link  = '';
 		$term_title = 'NOT SET';
 
-		if ( isset( $item['ID'] ) && isset( $item['type'] ) ) {
-			$taxonomy_type = 'category';
-			if ( 'tag' === $item['type'] ) {
-				$taxonomy_type = 'post_tag';
-			}
+		if ( isset( $item['ID'] ) ) {
+			$edit_link = get_edit_term_link( $item['ID'] );
+			$term      = get_term( $item['ID'] );
 
-			$edit_link = get_edit_term_link( $item['ID'], $taxonomy_type );
-			$term      = get_term( $item['ID'], $taxonomy_type );
-
-			if ( isset( $term ) && isset( $term->name ) && ! empty( $term->name ) ) {
+			if ( isset( $term, $term->name ) && ! empty( $term->name ) ) {
 				$term_title = $term->name;
 			}
 		}
 
-		$title_with_edit_link = $term_title;
+		$title_with_edit_link = esc_html( $term_title );
 		if ( ! empty( $edit_link ) ) {
 			$title_with_edit_link = sprintf(
-				'<a href="%s" target="_blank" title="' . esc_html__( 'Edit ', 'custom-permalinks' ) . ' ' . $term_title . '">%s</a>',
-				$edit_link,
-				$term_title
+				'<a href="%1s" target="_blank" title="%2s">%3s</a>',
+				esc_url( $edit_link ),
+				esc_attr__( 'Edit', 'custom-permalinks' ) . ' ' . esc_attr( $term_title ),
+				$title_with_edit_link
 			);
 		}
 
@@ -312,6 +308,7 @@ final class Custom_Permalinks_Taxonomies_Table extends WP_List_Table {
 				}
 			}
 
+			$taxonomy_type = $item['type'];
 			if ( 'tag' === $item['type'] ) {
 				$taxonomy_type = 'post_tag';
 			}
@@ -333,17 +330,18 @@ final class Custom_Permalinks_Taxonomies_Table extends WP_List_Table {
 			$perm_text = str_replace( $home_url, '', $permalink );
 
 			$term_title = '';
-			if ( isset( $item['ID'] ) && isset( $item['type'] ) ) {
-				$term = get_term( $item['ID'], $item['type'] );
-				if ( isset( $term ) && isset( $term->name ) && ! empty( $term->name ) ) {
+			if ( isset( $item['ID'] ) ) {
+				$term = get_term( $item['ID'] );
+				if ( isset( $term, $term->name ) && ! empty( $term->name ) ) {
 					$term_title = $term->name;
 				}
 			}
 
 			$permalink = sprintf(
-				'<a href="%s" target="_blank" title="' . esc_html__( 'Visit', 'custom-permalinks' ) . ' ' . $term_title . '">%s</a>',
-				$permalink,
-				$perm_text
+				'<a href="%1s" target="_blank" title="%2s">%3s</a>',
+				esc_url( $permalink ),
+				esc_attr__( 'Visit', 'custom-permalinks' ) . ' ' . esc_attr( $term_title ),
+				esc_html( $perm_text )
 			);
 		}
 

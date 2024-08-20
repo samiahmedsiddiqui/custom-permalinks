@@ -239,12 +239,13 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 		}
 
 		$edit_link            = get_edit_post_link( $item['ID'] );
-		$title_with_edit_link = $post_title;
+		$title_with_edit_link = esc_html( $post_title );
 		if ( ! empty( $edit_link ) ) {
 			$title_with_edit_link = sprintf(
-				'<a href="%s" target="_blank" title="' . esc_html__( 'Edit ', 'custom-permalinks' ) . ' ' . $post_title . '">%s</a>',
-				$edit_link,
-				$post_title
+				'<a href="%1s" target="_blank" title="%2s">%3s</a>',
+				esc_url( $edit_link ),
+				esc_attr__( 'Edit', 'custom-permalinks' ) . ' ' . esc_attr( $post_title ),
+				$title_with_edit_link
 			);
 		}
 
@@ -283,10 +284,12 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	 */
 	protected function column_permalink( $item ) {
 		$page_url = get_permalink( $item['ID'] );
+		$page_url = esc_url( $page_url );
 
 		$permalink = sprintf(
-			'<a href="%s" target="_blank" title="' . esc_html__( 'Visit', 'custom-permalinks' ) . ' ' . $item['post_title'] . '">%s</a>',
+			'<a href="%1s" target="_blank" title="%2s">%3s</a>',
 			$page_url,
+			esc_attr__( 'Visit', 'custom-permalinks' ) . ' ' . esc_attr( $item['post_title'] ),
 			$page_url
 		);
 
