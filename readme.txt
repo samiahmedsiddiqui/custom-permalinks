@@ -2,7 +2,7 @@
 Contributors: sasiddiqui
 Tags: permalink, url, link, address, redirect, custom post type
 Tested up to: 6.6
-Stable tag: 2.6.0
+Stable tag: 2.7.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -182,6 +182,15 @@ This process defines you the steps to follow either you are installing through W
 2. Activate Custom Permalinks through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 2.7.0 - Aug 20, 2024 =
+
+* Bug
+  * [Passing null to parameter string is deprecated](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/86)
+  * [Fix PHP warning with empty permalink on new page/post](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/87)
+	* [Authenticated(Editor+) Stored Cross-Site Scripting](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/96)
+* Enhancement:
+	* [Improve I18N](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/72)
 
 = 2.6.0 - Aug 15, 2024 =
 
