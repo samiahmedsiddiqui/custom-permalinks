@@ -964,7 +964,9 @@ class Custom_Permalinks_Frontend {
 			$post_name,
 			$permalink
 		);
-		$permalink                     = ltrim( str_replace( home_url(), '', $permalink ), '/' );
+
+		$home_url = defined( 'POLYLANG_VERSION' ) ? trailingslashit( pll_home_url() ) : home_url();
+		$permalink                     = ltrim( str_replace( $home_url, '', $permalink ), '/' );
 
 		add_filter( 'post_link', array( $this, 'custom_post_link' ), 10, 3 );
 		add_filter( 'post_type_link', array( $this, 'custom_post_link' ), 10, 2 );
