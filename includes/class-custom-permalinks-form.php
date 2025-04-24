@@ -474,18 +474,17 @@ class Custom_Permalinks_Form {
 
 		if ( 'trash' !== $post->post_status ) {
 			$home_url = trailingslashit( home_url() );
-			if ( defined( 'POLYLANG_VERSION' ) ) {
-				$home_url = trailingslashit( pll_home_url() );
-			}
-
 			if ( isset( $permalink ) && ! empty( $permalink ) ) {
+				if ( defined( 'POLYLANG_VERSION' ) ) {
+					$home_url = trailingslashit( pll_home_url() );
+				}
+
 				$view_post_link = $home_url . $permalink;
 			} elseif ( 'draft' === $post->post_status
-					|| 'pending' === $post->post_status
-				) {
-
-					$view_post      = 'Preview';
-					$view_post_link = $home_url . '?';
+				|| 'pending' === $post->post_status
+			) {
+				$view_post      = 'Preview';
+				$view_post_link = $home_url . '?';
 				if ( 'page' === $post->post_type ) {
 					$view_post_link .= 'page_id';
 				} elseif ( 'post' === $post->post_type ) {
@@ -493,7 +492,8 @@ class Custom_Permalinks_Form {
 				} else {
 					$view_post_link .= 'post_type=' . $post->post_type . '&p';
 				}
-					$view_post_link .= '=' . $post_id . '&preview=true';
+
+				$view_post_link .= '=' . $post_id . '&preview=true';
 			} else {
 				$view_post_link = $home_url . $original_permalink;
 			}
@@ -553,18 +553,17 @@ class Custom_Permalinks_Form {
 
 		if ( 'trash' !== $post->post_status ) {
 			$home_url = trailingslashit( home_url() );
-			if ( defined( 'POLYLANG_VERSION' ) ) {
-				$home_url = trailingslashit( pll_home_url() );
-			}
-
 			if ( isset( $permalink ) && ! empty( $permalink ) ) {
+				if ( defined( 'POLYLANG_VERSION' ) ) {
+					$home_url = trailingslashit( pll_home_url() );
+				}
+
 				$view_post_link = $home_url . $permalink;
 			} elseif ( 'draft' === $post->post_status
-					|| 'pending' === $post->post_status
-				) {
-
-					$view_post      = 'Preview';
-					$view_post_link = $home_url . '?';
+				|| 'pending' === $post->post_status
+			) {
+				$view_post      = 'Preview';
+				$view_post_link = $home_url . '?';
 				if ( 'page' === $post->post_type ) {
 					$view_post_link .= 'page_id';
 				} elseif ( 'post' === $post->post_type ) {
