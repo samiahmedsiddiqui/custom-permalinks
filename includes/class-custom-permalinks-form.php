@@ -958,7 +958,7 @@ class Custom_Permalinks_Form {
 				 * Check if `hide_default` is `true` and the current language is not
 				 * the default. Otherwise remove the lang code from the URL.
 				 */
-				if ( 1 === $polylang_config['hide_default'] ) {
+				if ( true === $polylang_config['hide_default'] || 1 === $polylang_config['hide_default'] ) {
 					$current_language = '';
 					if ( function_exists( 'pll_current_language' ) ) {
 						// Get current language.
