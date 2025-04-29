@@ -79,9 +79,6 @@ class Custom_Permalinks_Form {
 	 * return bool false Whether to show Custom Permalink form or not.
 	 */
 	private function exclude_custom_permalinks( $post ) {
-		$args               = array(
-			'public' => true,
-		);
 		$exclude_post_types = apply_filters(
 			'custom_permalinks_exclude_post_type',
 			$post->post_type
@@ -96,7 +93,22 @@ class Custom_Permalinks_Form {
 			'custom_permalinks_exclude_posts',
 			$post
 		);
-		$public_post_types = get_post_types( $args, 'objects' );
+		$post_types        = get_post_types(
+			array(
+				'public' => true,
+			),
+			'objects'
+		);
+		$public_post_types = array();
+
+		foreach ( $post_types as $post_type_name => $single ) {
+			// Check conditions for accessible single post URLs.
+			if ( 'page' === $post_type_name || 'post' === $post_type_name ) {
+				$public_post_types[ $post_type_name ] = $single;
+			} elseif ( $single->publicly_queryable && $single->rewrite ) {
+				$public_post_types[ $post_type_name ] = $single;
+			}
+		}
 
 		if ( isset( $this->permalink_metabox ) && 1 === $this->permalink_metabox ) {
 			$check_availability = true;
