@@ -1,8 +1,8 @@
 === Custom Permalinks ===
 Contributors: sasiddiqui
 Tags: permalink, url, link, address, redirect, custom post type
-Tested up to: 6.6
-Stable tag: 2.7.0
+Tested up to: 6.8
+Stable tag: 2.8.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -182,6 +182,14 @@ This process defines you the steps to follow either you are installing through W
 2. Activate Custom Permalinks through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 2.8.0 - Apr 29, 2025 =
+
+* Bug:
+  * Resolved pagination issue with custom permalinks (now supports /page/{number} format correctly).
+* Enhancements:
+	* Added compatibility with Polylang 3.7.
+	* Metabox is now hidden for post types that are not publicly queryable.
 
 = 2.7.0 - Aug 20, 2024 =
 
