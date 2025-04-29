@@ -119,6 +119,8 @@ class Custom_Permalinks_Frontend {
 	/**
 	 * Removes the trailing /page/{number} segment from a URL if it exists.
 	 *
+	 * @since 2.8.0
+	 *
 	 * @param string $url URL that may contain a pagination segment.
 	 *
 	 * @return string Cleaned URL without the trailing /page/{number}.
