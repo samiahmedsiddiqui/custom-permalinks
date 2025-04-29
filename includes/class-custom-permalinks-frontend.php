@@ -42,6 +42,13 @@ class Custom_Permalinks_Frontend {
 	private $request_uri = '';
 
 	/**
+	 * Whether the URI contains /page/{number} or not. Default false.
+	 *
+	 * @var int
+	 */
+	private $is_paged = 0;
+
+	/**
 	 * Initialize WordPress Hooks.
 	 *
 	 * @since 1.2.0
@@ -107,6 +114,37 @@ class Custom_Permalinks_Frontend {
 		$permalink = $protocol . $permalink;
 
 		return $permalink;
+	}
+
+	/**
+	 * Removes the trailing /page/{number} segment from a URL if it exists.
+	 *
+	 * @param string $url URL that may contain a pagination segment.
+	 *
+	 * @return string Cleaned URL without the trailing /page/{number}.
+	 */
+	public function remove_page_number( $url ) {
+		if ( ! is_string( $url ) ) {
+			return $url;
+		}
+
+		if ( preg_match( '/\/page\/(\d+)\/?$/', $url, $matches ) ) {
+			$has_trailing_slash = false;
+			if ( '/' === substr( $url, -1 ) ) {
+				$has_trailing_slash = true;
+			}
+
+			if ( isset( $matches[1] ) && 1 < $matches[1] ) {
+				$this->is_paged = (int) $matches[1];
+			}
+
+			$url = preg_replace( '/\/page\/\d+\/?$/', '', $url );
+			if ( $has_trailing_slash && '/' !== substr( $url, -1 ) ) {
+				$url .= '/';
+			}
+		}
+
+		return $url;
 	}
 
 	/**
@@ -356,12 +394,12 @@ class Custom_Permalinks_Frontend {
 			$request = substr( $request, 0, $pos );
 		}
 
+		$request = $this->remove_page_number( $request );
 		if ( ! $request ) {
 			return $query;
 		}
 
 		$ignore = apply_filters( 'custom_permalinks_request_ignore', $request );
-
 		if ( '__true' === $ignore ) {
 			return $query;
 		}
@@ -571,8 +609,13 @@ class Custom_Permalinks_Frontend {
 			if ( isset( $wp->matched_rule ) ) {
 				$wp->matched_rule = null;
 			}
+
 			$wp->parse_request();
 			$query = $wp->query_vars;
+			if ( 0 < $this->is_paged ) {
+				$query['paged'] = $this->is_paged;
+			}
+
 			add_filter( 'request', array( $this, 'parse_request' ) );
 
 			// Restore values.
@@ -679,6 +722,7 @@ class Custom_Permalinks_Frontend {
 			$request = substr( $request, 0, $pos );
 		}
 
+		$request = $this->remove_page_number( $request );
 		if ( ! $request ) {
 			return;
 		}
@@ -767,7 +811,7 @@ class Custom_Permalinks_Frontend {
 				$url = preg_replace( '@([^?]*)&@', '\1?', $url );
 			}
 
-			// Append any query compenent.
+			// Append any query component.
 			$url .= strstr( $this->request_uri, '?' );
 
 			wp_safe_redirect( home_url() . '/' . $url, 301 );
