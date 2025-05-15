@@ -201,7 +201,7 @@ class Custom_Permalinks_Frontend {
 		$cache_name = 'cp$_' . str_replace( '/', '-', $requested_url ) . '_#cp';
 		$posts      = wp_cache_get( $cache_name, 'custom_permalinks' );
 
-		if ( ! $posts ) {
+		if ( false === $posts ) {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$posts = $wpdb->get_results(
 				$wpdb->prepare(
@@ -266,7 +266,7 @@ class Custom_Permalinks_Frontend {
 			return null;
 		}
 
-		if ( ! $matched_post ) {
+		if ( false === $matched_post ) {
 			$matched_post = array();
 
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
