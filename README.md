@@ -8,7 +8,64 @@ Lay out your site the way *you* want it. Set the URL of any post, page, tag or c
 
 This plugin is only useful for assigning custom permalinks for *individual* posts, pages, tags or categories. It will not apply whole permalink structures or automatically apply a category's custom permalink to the posts within that category.
 
+## Custom Permalinks Settings
+
+You can configure the plugin by navigating to the **Custom Permalinks** menu from the WordPress Dashboard.
+
+## Structure Tags
+
+You can find all the available tags which are currently supported by the **Custom Permalinks**.
+
+### Default Tags for Post Types
+
+Below mentioned tags are provided by the **WordPress**. These tags can be used on Default **WordPress Permalink Settings Page** as well as **Custom Permalinks Settings page**.
+
+| Tag Name | Description |
+| ----------- | ------------- |
+| %year% | The year of the post in four digits, eg: 2025 |
+| %monthnum% | Month the post was published, in two digits, eg: 01 |
+| %day% | Day the post was published in two digits, eg: 02 |
+| %hour% | Hour of the day, the post was published, eg: 15 |
+| %minute% | Minute of the hour, the post was published, eg: 43 |
+| %second% | Second of the minute, the post was published, eg: 33 |
+| %post_id% | The unique ID of the post, eg: 123 |
+| %postname% | A sanitized version of the title of the post (post slug field on Edit Post/Page panel). <br><br>Eg: “This Is A Great Post!” becomes this-is-a-great-post in the URI. |
+| %category% | A sanitized version of the category name (category slug field on New/Edit Category panel). <br><br>Nested sub-categories appear as nested directories in the URI. |
+| %author% | A sanitized version of the post author’s name. |
+
+### Custom Tags for Post Types
+
+Below mentioned tags are provided by the **Custom Permalinks for Post Types**. These tags can not be used on the Default **WordPress Permalink Settings Page**.
+
+| Tag Name | Description |
+| ----------- | ------------- |
+| %parent_postname% | This tag is similar as `%postname%`. <br><br>Only the difference is that it prepends the **Immediate Parent Page post slug** with the **actual page post slug** in the URI *if any parent page is selected*. |
+| %all_parents_postname% | This tag is similar as `%postname%`. <br><br>Only the difference is that it prepends all the **Parents Page post slugs** with the **actual page post slug** in the URI *if any parent page is selected*. |
+| &lt;%ctax_custom_taxonomy%&gt; | A sanitized version of the custom taxonomy where the taxonomy name is `custom_taxonomy`. Replace the `custom_taxonomy` with your appropriate created taxonomy name. <br><br>If you want to provide the default slug which is used when the category/taxonomy doesn't be selected so, make sure to provide default name/slug which looks like this: `<%ctax_custom_taxonomy??sales%>`. Value which is written between the `??` and `%>` is used as default slug. |
+| &lt;%ctaxparents_custom_taxonomy%&gt; | This tag is similar as `<%ctax_custom_taxonomy%>`. <br><br>Only the difference is that it appends all the **Parents Slug** in the URI if any parent category/tag is selected. |
+| %author_firstname% | A sanitized version of the post author’s first name. If author first name is not available then it uses the author's name. |
+| %author_lastname% | A sanitized version of the post author’s last name. If author last name is not available then it uses the author's name. |
+| %custom_permalinks_posttype_tag% | Permits a theme or plugin developer define the tag value using a [filter](#set-custom-value-in-posttype-permalink) |
+
 ## Filters
+
+### Set Custom value in Post Type Permalink
+
+This filter allow to replace the custom tag with your desired value. It can be any custom field value or anything else.
+
+```
+/**
+ * set the text which replace the custom tag from the permalink.
+ *
+ * @param object $post The post object.
+ *
+ * @return string text which can be replaced with the custom tag.
+ */
+function yasglobal_custom_posttype_tag( $post ) {
+  return sanitize_title( $post->post_title ) . '-from-sami';
+}
+add_filter( 'custom_permalinks_posttype_tag', 'yasglobal_custom_posttype_tag', 10, 1 );
+```
 
 ### Add `PATH_INFO` in `$_SERVER` Variable
 

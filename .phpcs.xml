@@ -32,6 +32,7 @@
 				<property name="custom_capabilities" type="array">
 					<element value="cp_view_post_permalinks" />
 					<element value="cp_view_category_permalinks" />
+					<element value="custom_permalinks_post_settings" />
 				</property>
 			</properties>
 		</rule>
