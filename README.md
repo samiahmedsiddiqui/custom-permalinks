@@ -10,15 +10,11 @@ This plugin is only useful for assigning custom permalinks for *individual* post
 
 ## Custom Permalinks Settings
 
-You can configure the plugin by navigating to the **Custom Permalinks** menu from the WordPress Dashboard.
+You can configure the plugin by navigating to the **Settings** under **Custom Permalinks** menu from the WordPress Dashboard.
 
-## Structure Tags
+### Available Tags
 
 You can find all the available tags which are currently supported by the **Custom Permalinks**.
-
-### Default Tags for Post Types
-
-Below mentioned tags are provided by the **WordPress**. These tags can be used on Default **WordPress Permalink Settings Page** as well as **Custom Permalinks Settings page**.
 
 | Tag Name | Description |
 | ----------- | ------------- |
@@ -32,20 +28,12 @@ Below mentioned tags are provided by the **WordPress**. These tags can be used o
 | %postname% | A sanitized version of the title of the post (post slug field on Edit Post/Page panel). <br><br>Eg: “This Is A Great Post!” becomes this-is-a-great-post in the URI. |
 | %category% | A sanitized version of the category name (category slug field on New/Edit Category panel). <br><br>Nested sub-categories appear as nested directories in the URI. |
 | %author% | A sanitized version of the post author’s name. |
-
-### Custom Tags for Post Types
-
-Below mentioned tags are provided by the **Custom Permalinks for Post Types**. These tags can not be used on the Default **WordPress Permalink Settings Page**.
-
-| Tag Name | Description |
-| ----------- | ------------- |
-| %parent_postname% | This tag is similar as `%postname%`. <br><br>Only the difference is that it prepends the **Immediate Parent Page post slug** with the **actual page post slug** in the URI *if any parent page is selected*. |
-| %all_parents_postname% | This tag is similar as `%postname%`. <br><br>Only the difference is that it prepends all the **Parents Page post slugs** with the **actual page post slug** in the URI *if any parent page is selected*. |
-| &lt;%ctax_custom_taxonomy%&gt; | A sanitized version of the custom taxonomy where the taxonomy name is `custom_taxonomy`. Replace the `custom_taxonomy` with your appropriate created taxonomy name. <br><br>If you want to provide the default slug which is used when the category/taxonomy doesn't be selected so, make sure to provide default name/slug which looks like this: `<%ctax_custom_taxonomy??sales%>`. Value which is written between the `??` and `%>` is used as default slug. |
-| &lt;%ctaxparents_custom_taxonomy%&gt; | This tag is similar as `<%ctax_custom_taxonomy%>`. <br><br>Only the difference is that it appends all the **Parents Slug** in the URI if any parent category/tag is selected. |
-| %author_firstname% | A sanitized version of the post author’s first name. If author first name is not available then it uses the author's name. |
-| %author_lastname% | A sanitized version of the post author’s last name. If author last name is not available then it uses the author's name. |
-| %custom_permalinks_posttype_tag% | Permits a theme or plugin developer define the tag value using a [filter](#set-custom-value-in-posttype-permalink) |
+| `%parent_postname%` | This tag is similar as `%postname%`. <br><br>Only the difference is that it prepends the **Immediate Parent Page post slug** with the **actual page post slug** in the URI *if any parent page is selected*. |
+| `%parents_postnames%` | This tag is similar as `%postname%`. <br><br>Only the difference is that it prepends all the **Parents Page post slugs** with the **actual page post slug** in the URI *if any parent page is selected*. |
+| `%ctax_TAXONOMY_NAME%` | A sanitized version of the custom taxonomy name where the **TAXONOMY_NAME** needs to be replaced with the actual taxonomy name. <br><br>If you want to provide the default slug which is used when the category/taxonomy doesn't be selected so, make sure to provide default name/slug which looks like this: `<%ctax_typey??sales%>`. Value which is written between the `??` and `%>` is used as default slug. |
+| `%ctax_parent_TAXONOMY_NAME%` | This tag is similar as `<%ctax_TAXONOMY_NAME%>`. <br><br>Only the difference is that it prepends the **Immediate Parent Slug** in the URI *if any parent category/tag is selected*. |
+| `%ctax_parents_TAXONOMY_NAME%` | This tag is similar as `<%ctax_TAXONOMY_NAME%>`. <br><br>Only the difference is that it prepends all the **Parents Slug** in the URI *if any parent category/tag is selected*. |
+| `%custom_permalinks_posttype_tag%` | Permits a theme or plugin developer define the tag value using a [filter](#set-custom-value-in-posttype-permalink) |
 
 ## Filters
 

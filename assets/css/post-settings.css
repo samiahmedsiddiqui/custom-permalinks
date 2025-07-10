@@ -1,0 +1,21 @@
+form#custom-permalinks-post-settings .form-table input.post-settings-input.error {
+	border-color: #f00;
+}
+
+form#custom-permalinks-post-settings .permalink-tags ul.avaliable-tag {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
+	margin: 0;
+}
+
+form#custom-permalinks-post-settings p.submit {
+	float: left;
+	padding: 0 20px 0 0;
+}
+
+form#custom-permalinks-post-settings .form-table td.pd-b-0,
+form#custom-permalinks-post-settings .form-table th.pd-b-0 {
+	padding-top: 0;
+	padding-bottom: 0;
+}
