@@ -69,7 +69,7 @@ class Custom_Permalinks_Form {
 	}
 
 	/**
-	 * Initialize WordPress Hooks.
+	 * Check whether the permalink can be customized/generates on this post or not.
 	 *
 	 * @since 1.6.0
 	 * @access private
@@ -78,7 +78,7 @@ class Custom_Permalinks_Form {
 	 *
 	 * return bool false Whether to show Custom Permalink form or not.
 	 */
-	private function exclude_custom_permalinks( $post ) {
+	private function is_permalink_customizable( $post ) {
 		$exclude_post_types = apply_filters(
 			'custom_permalinks_exclude_post_type',
 			$post->post_type
@@ -370,29 +370,79 @@ class Custom_Permalinks_Form {
 	 *
 	 * @param int     $post_id Post ID.
 	 * @param WP_Post $post    Post object.
-	 *
-	 * @return void
+	 * @param bool    $update  Whether this is an existing post being updated or not.
 	 */
-	public function save_post( $post_id, $post ) {
-		if ( ! isset( $_REQUEST['_custom_permalinks_post_nonce'] )
-			&& ! isset( $_REQUEST['custom_permalink'] )
-		) {
-			return;
+	public function save_post( $post_id, $post, $update ) {
+		/*
+		 * Enable permalink regeneration on creating new post if permalink structure
+		 * is defined for the post type.
+		 */
+		if ( ! $update ) {
+			$permalink_structure = '';
+			$post_types_settings = get_option( 'custom_permalinks_post_types_settings', array() );
+
+			if ( isset( $post_types_settings[ $post->post_type ] ) ) {
+				$permalink_structure = $post_types_settings[ $post->post_type ];
+			}
+
+			/*
+			 * Permalink structure is not defined in the Plugin Settings.
+			 */
+			if ( ! empty( $permalink_structure ) ) {
+				/*
+				 * custom_permalink_regenerate_status = 0 means Permalink will be
+				 * generated again on updating the post.
+				 */
+				update_post_meta( $post_id, 'custom_permalink_regenerate_status', 0 );
+			}
 		}
 
-		$action = 'custom-permalinks_' . $post_id;
-		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		if ( ! wp_verify_nonce( $_REQUEST['_custom_permalinks_post_nonce'], $action ) ) {
-			return;
+		if ( isset( $_REQUEST['_custom_permalinks_post_nonce'] )
+			&& isset( $_REQUEST['custom_permalink'] )
+		) {
+			$action = 'custom-permalinks_' . $post_id;
+			// phpcs:disable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			if ( ! wp_verify_nonce( $_REQUEST['_custom_permalinks_post_nonce'], $action ) ) {
+				return;
+			}
+			// phpcs:enable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 		}
-		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+
+		if ( 'inherit' === $post->post_status ) {
+			$post_parent_id = $post->post_parent;
+			if ( ! empty( $post_parent_id ) ) {
+				$post_id = $post_parent_id;
+				$post    = get_post( $post_parent_id );
+			}
+		}
+
+		$url        = get_post_meta( $post_id, 'custom_permalink', true );
+		$is_refresh = get_post_meta( $post_id, 'custom_permalink_regenerate_status', true );
+
+		/*
+		 * Make sure that the post saved from quick edit form so, just make the
+		 * $_REQUEST['custom_permalink'] same as $url to regenerate permalink
+		 * if applicable.
+		 */
+		if ( ! isset( $_REQUEST['custom_permalink'] ) ) {
+			$_REQUEST['custom_permalink'] = $url;
+		}
+
+		$is_regenerated = false;
+		if ( 'trash' !== $post->post_status
+			&& $url === $_REQUEST['custom_permalink']
+			&& 0 === (int) $is_refresh
+		) {
+			$cp_post_permalinks = new Custom_Permalinks_Generate_Post_Permalinks();
+			$is_regenerated     = $cp_post_permalinks->generate( $post_id, $post );
+		}
 
 		$cp_frontend   = new Custom_Permalinks_Frontend();
 		$original_link = $cp_frontend->original_post_link( $post_id );
-
 		if ( ! empty( $_REQUEST['custom_permalink'] )
 			&& $_REQUEST['custom_permalink'] !== $original_link
+			&& $_REQUEST['custom_permalink'] !== $url
 		) {
 			$language_code = apply_filters(
 				'wpml_element_language_code',
@@ -415,6 +465,16 @@ class Custom_Permalinks_Form {
 			);
 
 			update_post_meta( $post_id, 'custom_permalink', $permalink );
+
+			// If true means it triggers from the regeneration code so don't override it.
+			if ( ! $is_regenerated ) {
+				/*
+				 * custom_permalink_regenerate_status = 1 means Permalink won't be
+				 * generated again on updating the post (Once, user changed it).
+				 */
+				update_post_meta( $post_id, 'custom_permalink_regenerate_status', 1 );
+			}
+
 			if ( null !== $language_code ) {
 				update_post_meta( $post_id, 'custom_permalink_language', $language_code );
 			} else {
@@ -614,9 +674,9 @@ class Custom_Permalinks_Form {
 	public function sample_permalink_html( $html, $post_id ) {
 		$post = get_post( $post_id );
 
-		$disable_cp              = $this->exclude_custom_permalinks( $post );
+		$is_customizable         = $this->is_permalink_customizable( $post );
 		$this->permalink_metabox = 1;
-		if ( $disable_cp ) {
+		if ( $is_customizable ) {
 			return $html;
 		}
 
@@ -634,8 +694,8 @@ class Custom_Permalinks_Form {
 	 * @return void
 	 */
 	public function meta_edit_form( $post ) {
-		$disable_cp = $this->exclude_custom_permalinks( $post );
-		if ( $disable_cp ) {
+		$is_customizable = $this->is_permalink_customizable( $post );
+		if ( $is_customizable ) {
 			wp_enqueue_script(
 				'custom-permalinks-form',
 				plugins_url(

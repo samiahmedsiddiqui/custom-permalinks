@@ -44,15 +44,15 @@
 	 */
 	document.querySelectorAll(tagButtonSelector).forEach(function (button) {
 		button.addEventListener('click', function () {
+			const activeInput = document.querySelector(
+				'.active-row ' + inputSelector
+			);
+
 			if (!activeInput) {
 				return;
 			}
 
 			const tag = this.textContent.trim();
-			const activeInput = document.querySelector(
-				'.active-row ' + inputSelector
-			);
-
 			let value = activeInput.value;
 
 			// Normalize slashes before we begin.

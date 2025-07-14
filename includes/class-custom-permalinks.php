@@ -64,6 +64,7 @@ class Custom_Permalinks {
 	 */
 	private function includes() {
 		include_once CUSTOM_PERMALINKS_PATH . 'includes/class-custom-permalinks-form.php';
+		include_once CUSTOM_PERMALINKS_PATH . 'includes/class-custom-permalinks-generate-post-permalinks.php';
 		include_once CUSTOM_PERMALINKS_PATH . 'includes/class-custom-permalinks-frontend.php';
 		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-admin.php';
 		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-post-types-settings.php';
