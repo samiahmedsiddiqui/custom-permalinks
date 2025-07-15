@@ -346,7 +346,7 @@ class Custom_Permalinks_Form {
 		}
 
 		$permalink = preg_replace( '/\s+/', '-', $permalink );
-		$permalink = preg_replace( '|-+|', '-', $permalink );
+		$permalink = preg_replace( '/(\-+)/', '-', $permalink );
 		$permalink = str_replace( '-/', '/', $permalink );
 		$permalink = str_replace( '/-', '/', $permalink );
 
@@ -465,6 +465,7 @@ class Custom_Permalinks_Form {
 				$permalink,
 				$post_id
 			);
+			$permalink = $this->check_permalink_exists( $post_id, $permalink );
 
 			update_post_meta( $post_id, 'custom_permalink', $permalink );
 
@@ -480,6 +481,69 @@ class Custom_Permalinks_Form {
 				delete_metadata( 'post', $post_id, 'custom_permalink_language' );
 			}
 		}
+	}
+
+	/**
+	 * Check whether the permalink exists or not. If exists append unique number
+	 * at the end of it to prevent making duplicate permalinks.
+	 *
+	 * @since 3.0.0
+	 * @access private
+	 *
+	 * @param int    $post_id   Post ID.
+	 * @param string $permalink Permalink which is going to be set.
+	 *
+	 * @return string
+	 */
+	private function check_permalink_exists( $post_id, $permalink ) {
+		global $wpdb;
+
+		$trailing_slash = substr( $permalink, -1 );
+		if ( '/' === $trailing_slash ) {
+			$permalink = rtrim( $permalink, '/' );
+		}
+
+		$append_number  = 1;
+		$init_permalink = $permalink;
+		while ( 1 ) {
+			// First, check permalink before appending number.
+			if ( 1 < $append_number ) {
+				$permalink = $init_permalink . '-' . $append_number;
+			}
+
+			// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+			$check_exist_url = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(post_id) FROM $wpdb->postmeta AS pm
+					INNER JOIN $wpdb->posts AS p ON (p.ID = pm.post_id)
+					WHERE post_id != %d
+						AND meta_key = 'custom_permalink'
+						AND post_status != 'inherit'
+						AND (meta_value = %s OR meta_value = %s)",
+					$post_id,
+					$permalink,
+					$permalink . '/'
+				)
+			);
+			// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
+
+			if ( empty( $check_exist_url ) ) {
+				break;
+			}
+
+			++$append_number;
+		}
+
+		if ( '/' === $trailing_slash ) {
+			$permalink = $permalink . '/';
+		}
+
+		if ( 0 === strpos( $permalink, '/' ) ) {
+			$permalink = substr( $permalink, 1 );
+		}
+
+		return $permalink;
 	}
 
 	/**

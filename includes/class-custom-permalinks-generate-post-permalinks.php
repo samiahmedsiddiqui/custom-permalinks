@@ -34,49 +34,16 @@ final class Custom_Permalinks_Generate_Post_Permalinks {
 			);
 		}
 
-		/*
-		 * Permalink structure is not defined in the Plugin Settings.
-		 */
+		// Return if permalink structure is not defined in the Plugin Settings.
 		if ( empty( $permalink_structure ) ) {
 			return false;
 		}
 
-		$set_permalink = $this->replace_post_type_tags(
+		$_REQUEST['custom_permalink'] = $this->replace_post_type_tags(
 			$post_id,
 			$post,
 			$permalink_structure
 		);
-
-		$trailing_slash = substr( $set_permalink, -1 );
-		if ( '/' === $trailing_slash ) {
-			$set_permalink = rtrim( $set_permalink, '/' );
-		}
-		$permalink       = $set_permalink;
-		$check_exist_url = $this->check_permalink_exists( $post_id, $permalink );
-		if ( ! empty( $check_exist_url ) ) {
-			$i = 2;
-			while ( 1 ) {
-				$permalink       = $set_permalink . '-' . $i;
-				$check_exist_url = $this->check_permalink_exists( $post_id, $permalink );
-				if ( empty( $check_exist_url ) ) {
-					break;
-				}
-
-				++$i;
-			}
-		}
-
-		if ( '/' === $trailing_slash ) {
-			$permalink = $permalink . '/';
-		}
-
-		if ( 0 === strpos( $permalink, '/' ) ) {
-			$permalink = substr( $permalink, 1 );
-		}
-
-		$permalink                    = preg_replace( '/(\/+)/', '/', $permalink );
-		$permalink                    = preg_replace( '/(\-+)/', '-', $permalink );
-		$_REQUEST['custom_permalink'] = $permalink;
 
 		if ( 'publish' === $post->post_status ) {
 			// Delete to prevent generating permalink on updating the post.
@@ -374,39 +341,5 @@ final class Custom_Permalinks_Generate_Post_Permalinks {
 			)
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
-	}
-
-	/**
-	 * Check whether the permalink already exists or not.
-	 *
-	 * @since 3.0.0
-	 * @access private
-	 *
-	 * @param int    $post_id   Post ID.
-	 * @param string $permalink Permalink which is going to be set.
-	 *
-	 * @return string|null
-	 */
-	private function check_permalink_exists( $post_id, $permalink ) {
-		global $wpdb;
-
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-		$check_exist_url = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(post_id) FROM $wpdb->postmeta AS pm
-				INNER JOIN $wpdb->posts AS p ON (p.ID = pm.post_id)
-				WHERE post_id != %d
-					AND meta_key = 'custom_permalink'
-					AND post_status != 'inherit'
-					AND (meta_value = %s OR meta_value = %s)",
-				$post_id,
-				$permalink,
-				$permalink . '/'
-			)
-		);
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
-
-		return $check_exist_url;
 	}
 }
