@@ -79,17 +79,11 @@ final class Custom_Permalinks_Generate_Post_Permalinks {
 		$_REQUEST['custom_permalink'] = $permalink;
 
 		if ( 'publish' === $post->post_status ) {
-			/*
-			 * custom_permalink_regenerate_status = 1 means Permalink won't be
-			 * generated again on updating the post.
-			 */
-			update_post_meta( $post_id, 'custom_permalink_regenerate_status', 1 );
+			// Delete to prevent generating permalink on updating the post.
+			delete_post_meta( $post_id, 'custom_permalink_regenerate_status' );
 		} else {
-			/*
-			 * custom_permalink_regenerate_status = 0 means Permalink will be
-			 * generated again on updating the post.
-			 */
-			update_post_meta( $post_id, 'custom_permalink_regenerate_status', 0 );
+			// Make it 1 to keep generating permalink on updating the post.
+			update_post_meta( $post_id, 'custom_permalink_regenerate_status', 1 );
 		}
 
 		return true;

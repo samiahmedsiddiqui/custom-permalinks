@@ -389,11 +389,8 @@ class Custom_Permalinks_Form {
 			 * Permalink structure is not defined in the Plugin Settings.
 			 */
 			if ( ! empty( $permalink_structure ) ) {
-				/*
-				 * custom_permalink_regenerate_status = 0 means Permalink will be
-				 * generated again on updating the post.
-				 */
-				update_post_meta( $post_id, 'custom_permalink_regenerate_status', 0 );
+				// Make it 0 to keep generating permalink on updating the post.
+				update_post_meta( $post_id, 'custom_permalink_regenerate_status', 1 );
 			}
 		}
 
@@ -420,6 +417,11 @@ class Custom_Permalinks_Form {
 		$url        = get_post_meta( $post_id, 'custom_permalink', true );
 		$is_refresh = get_post_meta( $post_id, 'custom_permalink_regenerate_status', true );
 
+		// Make it 0 if not exist.
+		if ( empty( $is_refresh ) ) {
+			$is_refresh = 0;
+		}
+
 		/*
 		 * Make sure that the post saved from quick edit form so, just make the
 		 * $_REQUEST['custom_permalink'] same as $url to regenerate permalink
@@ -432,7 +434,7 @@ class Custom_Permalinks_Form {
 		$is_regenerated = false;
 		if ( 'trash' !== $post->post_status
 			&& $url === $_REQUEST['custom_permalink']
-			&& 0 === (int) $is_refresh
+			&& 1 === (int) $is_refresh
 		) {
 			$cp_post_permalinks = new Custom_Permalinks_Generate_Post_Permalinks();
 			$is_regenerated     = $cp_post_permalinks->generate( $post_id, $post );
@@ -468,11 +470,8 @@ class Custom_Permalinks_Form {
 
 			// If true means it triggers from the regeneration code so don't override it.
 			if ( ! $is_regenerated ) {
-				/*
-				 * custom_permalink_regenerate_status = 1 means Permalink won't be
-				 * generated again on updating the post (Once, user changed it).
-				 */
-				update_post_meta( $post_id, 'custom_permalink_regenerate_status', 1 );
+				// Delete to prevent generating permalink on updating the post.
+				delete_post_meta( $post_id, 'custom_permalink_regenerate_status' );
 			}
 
 			if ( null !== $language_code ) {
