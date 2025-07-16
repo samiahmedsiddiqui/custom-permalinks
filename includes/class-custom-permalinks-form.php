@@ -528,8 +528,12 @@ class Custom_Permalinks_Form {
 			);
 			// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
 
+			// Check URL should not be duplicated in any post Permalink.
 			if ( empty( $check_exist_url ) ) {
-				break;
+				$existing_post_id = url_to_postid( $permalink );
+				if ( 0 === $existing_post_id || $post_id === $existing_post_id ) {
+					break;
+				}
 			}
 
 			++$append_number;
