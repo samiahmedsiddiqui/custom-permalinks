@@ -1,219 +1,196 @@
 # Custom Permalinks
 
-> :information_source: In case of found any site breaking issue after upgrading to the latest version then please report the issue on [WordPress Forum](https://wordpress.org/support/plugin/custom-permalinks/) OR [GitHub](https://github.com/samiahmedsiddiqui/custom-permalinks) with complete information to reproduce the issue and move back to the old version. You can download any of the old version from here: https://wordpress.org/plugins/custom-permalinks/advanced/
+You want to take control of your WordPress site's URLs? The **Custom Permalinks** plugin gives you the power to set unique, custom URLs for any post, page, tag, or category. This means you can design your site's structure exactly how you envision it, rather than being limited by WordPress's default settings.
 
-Lay out your site the way *you* want it. Set the URL of any post, page, tag or category to anything you want. Old permalinks will redirect properly to the new address. Custom Permalinks give you ultimate control over your site structure.
+## Key Features
 
-> :warning: *This plugin is not a replacement for WordPress's built-in permalink system*. Check your WordPress administration's "Permalinks" settings page first, to make sure that this doesn't already meet your needs.
+* **Individual Permalink Control**: Assign unique URLs to any post, page, tag, or category.
+* **Site Structure Control**: Gain ultimate control over how your site's URLs are organized.
+* **Post Type Permalink Structures (v3.0.0+)**: Define custom permalink structures for each public Post Type using predefined tags, automatically generating URLs upon content creation. You can still manually edit any permalink. If left empty, default settings will apply.
 
-This plugin is only useful for assigning custom permalinks for *individual* posts, pages, tags or categories. It will not apply whole permalink structures or automatically apply a category's custom permalink to the posts within that category.
+## Getting Started: Plugin Settings
 
-## Custom Permalinks Settings
+You can configure Custom Permalinks by navigating to **Settings \> Custom Permalinks** in your WordPress Dashboard.
 
-You can configure the plugin by navigating to the **Settings** under **Custom Permalinks** menu from the WordPress Dashboard.
+### Available Tags for Permalink Structures
 
-### Available Tags
-
-You can find all the available tags which are currently supported by the **Custom Permalinks**.
+When setting up your custom permalink structures, you can use a variety of tags that will dynamically populate the URL. Here's a breakdown of what's available:
 
 | Tag Name | Description |
 | ----------- | ------------- |
-| %year% | The year of the post in four digits, eg: 2025 |
-| %monthnum% | Month the post was published, in two digits, eg: 01 |
-| %day% | Day the post was published in two digits, eg: 02 |
-| %hour% | Hour of the day, the post was published, eg: 15 |
-| %minute% | Minute of the hour, the post was published, eg: 43 |
-| %second% | Second of the minute, the post was published, eg: 33 |
-| %post_id% | The unique ID of the post, eg: 123 |
-| %postname% | A sanitized version of the title of the post (post slug field on Edit Post/Page panel). <br><br>Eg: “This Is A Great Post!” becomes this-is-a-great-post in the URI. |
-| %category% | A sanitized version of the category name (category slug field on New/Edit Category panel). <br><br>Nested sub-categories appear as nested directories in the URI. |
-| %author% | A sanitized version of the post author’s name. |
-| %title% | Title of the post. let's say the title is "This Is A Great Post!" so, it becomes this-is-a-great-post in the URI. This tag is similar as `%postname%` but `%postname%` set once but you can change  title of the post at any time and it applies automatically on permalink until the post is published or permalink is manually changed. |
-| `%parent_postname%` | This tag is similar as `%postname%` but rather than adding current page post slug it uses the immediate parent post slug *if any parent page is selected*. |
-| `%parents_postnames%` | This tag is similar as `%postname%` but rather than adding current page post slug it uses all the parents post slug *if any parent page is selected*. |
-| `%ctax_TAXONOMY_NAME%` | A sanitized version of the custom taxonomy name where the **TAXONOMY_NAME** needs to be replaced with the actual taxonomy name. <br><br>If you want to provide the default slug which is used when the category/taxonomy doesn't be selected so, make sure to provide default name/slug which looks like this: `<%ctax_typey??sales%>`. Value which is written between the `??` and `%>` is used as default slug. |
-| `%ctax_parent_TAXONOMY_NAME%` | This tag is similar as `<%ctax_TAXONOMY_NAME%>`. <br><br>Only the difference is that it prepends the **Immediate Parent Slug** in the URI *if any parent category/tag is selected*. |
-| `%ctax_parents_TAXONOMY_NAME%` | This tag is similar as `<%ctax_TAXONOMY_NAME%>`. <br><br>Only the difference is that it prepends all the **Parents Slug** in the URI *if any parent category/tag is selected*. |
-| `%custom_permalinks_posttype_tag%` | Permits a theme or plugin developer define the tag value using a [filter](#set-custom-value-in-posttype-permalink) |
+| `%year%` | The year of the post in four digits, eg: 2025 |
+| `%monthnum%` | Month the post was published, in two digits, eg: 01 |
+| `%day%` | Day the post was published in two digits, eg: 02 |
+| `%hour%` | Hour of the day, the post was published, eg: 15 |
+| `%minute%` | Minute of the hour, the post was published, eg: 43 |
+| `%second%` | Second of the minute, the post was published, eg: 33 |
+| `%post_id%` | The unique ID of the post, eg: 123 |
+| `%category%` | A clean version of the category name (its slug). Nested sub-categories will appear as nested directories in the URL. |
+| `%author%` | A sanitized version of the post author’s name. |
+| `%postname%` | A clean version of the post or page title (its slug). For example, "This Is A Great Post\!" becomes `this-is-a-great-post` in the URL. |
+| `%parent_postname%` | Similar to `%postname%`, but uses the immediate parent page's slug if a parent is selected. |
+| `%parents_postnames%` | Similar to `%postname%`, but includes all parent page slugs if parents are selected. |
+| `%title%` | The title of the post, converted to a slug. For example, "This Is A Great Post\!" becomes `this-is-a-great-post`. Unlike `%postname%` which is set once, `%title%` automatically updates in the permalink if the post title changes (unless the post is published or the permalink is manually edited). |
+| `%ctax_TAXONOMY_NAME%` | A clean version of a custom taxonomy's name. Replace `TAXONOMY_NAME` with the actual taxonomy name. You can also provide a default slug for when no category/taxonomy is selected by using `??` (e.g., `%ctax_type??sales%` will use "sales" as a default). |
+| `%ctax_parent_TAXONOMY_NAME%` | Similar to `%ctax_TAXONOMY_NAME%`, but includes the immediate parent category/tag slug in the URL if a parent is selected. |
+| `%ctax_parents_TAXONOMY_NAME%` | Similar to `%ctax_TAXONOMY_NAME%`, but includes all parent category/tag slugs in the URL if parents are selected. |
+| `%custom_permalinks_posttype_tag%` | This tag allows developers to define its value using a filter. |
 
-## Filters
+**Important Note:** For new posts, Custom Permalinks will keep updating the permalink while the post is in draft mode, assuming a structure is defined in the plugin settings. Once the post is published or its permalink is manually updated, the plugin will stop automatic updates for that specific post.
 
-### Set Custom value in Post Type Permalink
+## Advanced Customization: Filters
 
-This filter allow to replace the custom tag with your desired value. It can be any custom field value or anything else.
+Custom Permalinks provides several filters for developers to fine-tune its behavior.
 
-```
-/**
- * set the text which replace the custom tag from the permalink.
- *
- * @param object $post The post object.
- *
- * @return string text which can be replaced with the custom tag.
- */
-function yasglobal_custom_posttype_tag( $post ) {
-  return sanitize_title( $post->post_title ) . '-from-sami';
-}
-add_filter( 'custom_permalinks_posttype_tag', 'yasglobal_custom_posttype_tag', 10, 1 );
-```
+  * **Set Custom Value in Post Type Permalink (`custom_permalinks_posttype_tag`):** Replace the `%custom_permalinks_posttype_tag%` with your own custom value (e.g., from a custom field).
 
-### Add `PATH_INFO` in `$_SERVER` Variable
+    ```php
+    /**
+     * Append custom string in the URL.
+     *
+     * @param object $post The post object.
+     *
+     * @return string text which can be replaced with the custom tag.
+     */
+    function yasglobal_custom_posttype_tag( $post ) {
+      return sanitize_title( $post->post_title ) . '-from-sami';
+    }
+    add_filter( 'custom_permalinks_posttype_tag', 'yasglobal_custom_posttype_tag', 10, 1 );
+    ```
 
-```php
-add_filter( 'custom_permalinks_path_info', '__return_true' );
-```
+  * **Add `PATH_INFO` in `$_SERVER` Variable (`custom_permalinks_path_info`):**
 
-### Disable Redirects
+    ```php
+    add_filter( 'custom_permalinks_path_info', '__return_true' );
+    ```
 
-To disable complete redirects functionality provided by this plugin, add the filter that looks like this:
+  * **Disable All Redirects (`custom_permalinks_avoid_redirect`):**
 
-```php
-function yasglobal_avoid_redirect( $permalink ) {
-  return true;
-}
-add_filter( 'custom_permalinks_avoid_redirect', 'yasglobal_avoid_redirect' );
-```
+    ```php
+    function yasglobal_avoid_redirect( $permalink ) {
+      return true;
+    }
+    add_filter( 'custom_permalinks_avoid_redirect', 'yasglobal_avoid_redirect' );
+    ```
 
-### Disable Particular Redirects
+  * **Disable Specific Redirects (`custom_permalinks_avoid_redirect`):** Prevent a particular permalink from being redirected.
 
-To disable any specific redirect to be processed by this plugin, add the filter that looks like this:
+    ```php
+    function yasglobal_avoid_redirect( $permalink ) {
+      // Replace 'testing-hello-world/' with the permalink you want to avoid
+      if ( 'testing-hello-world/' === $permalink ) {
+        return true;
+      }
+      return false;
+    }
+    add_filter( 'custom_permalinks_avoid_redirect', 'yasglobal_avoid_redirect' );
+    ```
 
-```php
-function yasglobal_avoid_redirect( $permalink ) {
-  // Replace 'testing-hello-world/' with the permalink you want to avoid
-  if ( 'testing-hello-world/' === $permalink ) {
-    return true;
-  }
+  * **Exclude Permalink from Processing (`custom_permalinks_request_ignore`):** Skip processing for certain permalinks (useful for XML sitemaps, etc.).
 
-  return false;
-}
-add_filter( 'custom_permalinks_avoid_redirect', 'yasglobal_avoid_redirect' );
-```
+    ```php
+    function yasglobal_xml_sitemap_url( $permalink ) {
+      if ( false !== strpos( $permalink, 'sitemap.xml' ) ) {
+        return '__true';
+      }
+      return;
+    }
+    add_filter( 'custom_permalinks_request_ignore', 'yasglobal_xml_sitemap_url' );
+    ```
 
-### Exclude Permalink to be processed
+  * **Exclude Post Type from Custom Permalink Form (`custom_permalinks_exclude_post_type`):** Remove the custom permalink form from a specific post type.
 
-To exclude any Permalink to be processed by the plugin, add the filter that looks like this:
+    ```php
+    function yasglobal_exclude_post_types( $post_type ) {
+      // Replace 'custompost' with your post type name
+      if ( 'custompost' === $post_type ) {
+        return '__true';
+      }
+      return '__false';
+    }
+    add_filter( 'custom_permalinks_exclude_post_type', 'yasglobal_exclude_post_types' );
+    ```
 
-```php
-function yasglobal_xml_sitemap_url( $permalink ) {
-  if ( false !== strpos( $permalink, 'sitemap.xml' ) ) {
-    return '__true';
-  }
+  * **Exclude Specific Posts from Custom Permalink Form (`custom_permalinks_exclude_posts`):** Remove the custom permalink form from individual posts based on criteria like ID.
 
-  return;
-}
-add_filter( 'custom_permalinks_request_ignore', 'yasglobal_xml_sitemap_url' );
-```
+    ```php
+    function yasglobal_exclude_posts( $post ) {
+      if ( 1557 === $post->ID ) {
+        return true;
+      }
+      return false;
+    }
+    add_filter( 'custom_permalinks_exclude_posts', 'yasglobal_exclude_posts' );
+    ```
 
-### Exclude Post Type
+  * **Allow Accented Letters in Permalinks (`custom_permalinks_allow_accents`):**
 
-To remove custom permalink **form** from any post type, add the filter that looks like this:
+    ```php
+    function yasglobal_permalink_allow_accents() {
+      return true;
+    }
+    add_filter( 'custom_permalinks_allow_accents', 'yasglobal_permalink_allow_accents' );
+    ```
 
-```php
-function yasglobal_exclude_post_types( $post_type ) {
-  // Replace 'custompost' with your post type name
-  if ( 'custompost' === $post_type ) {
-    return '__true';
-  }
+  * **Allow Uppercase Letters in Permalinks (`custom_permalinks_allow_caps`):**
 
-  return '__false';
-}
-add_filter( 'custom_permalinks_exclude_post_type', 'yasglobal_exclude_post_types' );
-```
+    ```php
+    function yasglobal_allow_uppercaps() {
+      return true;
+    }
+    add_filter( 'custom_permalinks_allow_caps', 'yasglobal_allow_uppercaps' );
+    ```
 
-### Exclude Posts
+  * **Allow Redundant Hyphens in Permalinks (`custom_permalinks_redundant_hyphens`):**
 
-To exclude custom permalink **form** from any posts (based on ID, Template, etc), add the filter that looks like this:
+    ```php
+    function yasglobal_redundant_hyphens() {
+      return true;
+    }
+    add_filter( 'custom_permalinks_redundant_hyphens', 'yasglobal_redundant_hyphens' );
+    ```
 
-```php
-function yasglobal_exclude_posts( $post ) {
-  if ( 1557 === $post->ID ) {
-    return true;
-  }
+  * **Manipulate Permalink Before Saving (`custom_permalink_before_saving`):** Make changes to a permalink before it's saved (e.g., ensure a trailing slash).
 
-  return false;
-}
-add_filter( 'custom_permalinks_exclude_posts', 'yasglobal_exclude_posts' );
-```
+    ```php
+    function yasglobal_permalink_before_saving( $permalink, $post_id ) {
+      // Check trialing slash in the permalink.
+      if ( '/' !== substr( $permalink, -1 ) ) {
+        // If permalink doesn't contain trialing slash then add one.
+        $permalink .= '/';
+      }
+      return $permalink;
+    }
+    add_filter( 'custom_permalink_before_saving', 'yasglobal_permalink_before_saving', 10, 2 );
+    ```
 
-### Allow Accents Letters
+  * **Remove `like` Query (`cp_remove_like_query`):** Disable the `like` query functionality.
 
-To allow accents letters, please add below-mentioned line in your theme `functions.php`:
+    ```php
+    add_filter( 'cp_remove_like_query', '__return_false' );
+    ```
 
-```php
-function yasglobal_permalink_allow_accents() {
-  return true;
-}
-add_filter( 'custom_permalinks_allow_accents', 'yasglobal_permalink_allow_accents' );
-```
+    *Note: Use `custom_permalinks_like_query` if URLs don't work after upgrading to v1.2.9.*
 
-### Allow Uppercase Letters
+## Need Help or Found a Bug?
 
-To allow uppercase letters/words, please add below-mentioned line in your theme `functions.php`:
+  * **Support:** For one-on-one email support, consider purchasing [Custom Permalinks Premium](https://www.custompermalinks.com/#pricing-section). While some basic support may be provided on the WordPress.org forums, email support is prioritized for premium users.
+  * **Bug Reports:** If you encounter a bug, please report it on [GitHub](https://github.com/samiahmedsiddiqui/custom-permalinks). Make sure to provide complete information to reproduce the issue. GitHub is for bug reports, not general support questions.
 
-```php
-function yasglobal_allow_uppercaps() {
-  return true;
-}
-add_filter( 'custom_permalinks_allow_caps', 'yasglobal_allow_uppercaps' );
-```
-
-### Allow Redundant Hyphens
-
-To allow redundant hyphens, please add below-mentioned line in your theme `functions.php`:
-
-```php
-function yasglobal_redundant_hyphens() {
-  return true;
-}
-add_filter( 'custom_permalinks_redundant_hyphens', 'yasglobal_redundant_hyphens' );
-```
-
-### Manipulate Permalink Before Saving
-
-To make changes in permalink before saving, please use `custom_permalink_before_saving` filter. Here is an example to see how it works.
-
-```php
-function yasglobal_permalink_before_saving( $permalink, $post_id ) {
-  // Check trialing slash in the permalink.
-  if ( substr( $permalink, -1 ) !== '/' ) {
-    // If permalink doesn't contain trialing slash then add one.
-    $permalink .= '/';
-  }
-
-  return $permalink;
-}
-add_filter( 'custom_permalink_before_saving', 'yasglobal_permalink_before_saving', 10, 2 );
-```
-
-### Remove `like` Query
-
-To remove `like` query to being work, add below-mentioned line in your theme `functions.php`:
-
-```php
-add_filter( 'cp_remove_like_query', '__return_false' );
-```
-
-Note: Use `custom_permalinks_like_query` filter if the URLs doesn't works for you after upgrading to `v1.2.9`.
-
-## Thanks for the Support
-
-I do not always provide active support for the Custom Permalinks plugin on the WordPress.org forums, as I have prioritized the email support. One-on-one email support is available to people who bought [Custom Permalinks Premium](https://www.custompermalinks.com/#pricing-section) only.
-
-## Bug reports
-
-Bug reports for Custom Permalinks are [welcomed on GitHub](https://github.com/samiahmedsiddiqui/custom-permalinks). Please note GitHub is not a support forum, and issues that aren't properly qualified as bugs will be closed.
+If you experience any site-breaking issues after upgrading, please report them on the [WordPress Forum](https://wordpress.org/support/plugin/custom-permalinks/) or [GitHub](https://github.com/samiahmedsiddiqui/custom-permalinks) with detailed information. You can always revert to an older version by downloading it from [https://wordpress.org/plugins/custom-permalinks/advanced/](https://wordpress.org/plugins/custom-permalinks/advanced/).
 
 ## Installation
 
-This process defines you the steps to follow either you are installing through WordPress or Manually from FTP.
+You have two ways to install Custom Permalinks:
 
-## From within WordPress
+#### From within WordPress
 
-1.  Visit 'Plugins > Add New'
-2.  Search for Custom Permalinks
-3.  Activate Custom Permalinks from your Plugins page.
+1.  Go to **Plugins \> Add New** in your WordPress dashboard.
+2.  Search for "Custom Permalinks".
+3.  Click "Install Now" and then "Activate" the plugin from your Plugins page.
 
-## Manually
+#### Manually via FTP
 
-1.  Upload the `custom-permalinks` folder to the `/wp-content/plugins/` directory
-2.  Activate Custom Permalinks through the 'Plugins' menu in WordPress
+1.  Download the `custom-permalinks` folder.
+2.  Upload the `custom-permalinks` folder to your `/wp-content/plugins/` directory.
+3.  Activate Custom Permalinks through the "Plugins" menu in your WordPress dashboard.
