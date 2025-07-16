@@ -913,12 +913,12 @@ class Custom_Permalinks_Form {
 			CUSTOM_PERMALINKS_VERSION,
 			true
 		);
+		?>
 
-		echo esc_url( $home_url ) .
-		'<span id="editable-post-name" title="Click to edit this part of the permalink">';
+		<span id="uneditable-permalink"><?php echo esc_url( $home_url ); ?></span>
+		<span id="editable-post-name" title="Click to edit this part of the permalink">
 
-		if ( isset( $postname ) && '' !== $postname ) :
-			?>
+		<?php if ( isset( $postname ) && '' !== $postname ) : ?>
 
 			<input type="hidden" id="new-post-slug" class="text" value="<?php echo esc_attr( $postname ); ?>" />
 

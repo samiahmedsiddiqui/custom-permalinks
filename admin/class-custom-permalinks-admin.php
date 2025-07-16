@@ -21,13 +21,25 @@ class Custom_Permalinks_Admin {
 	private $css_file_suffix = '.min.css';
 
 	/**
+	 * Css file suffix extension.
+	 *
+	 * @var string
+	 */
+	private $js_file_suffix = '.min.css';
+
+	/**
 	 * Initializes WordPress hooks.
 	 */
 	public function __construct() {
 		/*
-		 * Css file suffix (version number with extension).
+		 * CSS file suffix (version number with extension).
 		 */
 		$this->css_file_suffix = '-' . CUSTOM_PERMALINKS_VERSION . '.min.css';
+
+		/*
+		 * JS file suffix (version number with extension).
+		 */
+		$this->js_file_suffix = '-' . CUSTOM_PERMALINKS_VERSION . '.min.js';
 
 		add_action( 'admin_init', array( $this, 'privacy_policy' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
@@ -110,11 +122,25 @@ class Custom_Permalinks_Admin {
 	/**
 	 * Add post settings page style.
 	 *
-	 * @since 2.0.0
+	 * @since 3.0.0
 	 */
 	public function add_post_settings_style() {
+		wp_enqueue_script(
+			'custom-permalinks-post-settings',
+			plugins_url(
+				'/assets/js/post-settings' . $this->js_file_suffix,
+				CUSTOM_PERMALINKS_FILE
+			),
+			array(),
+			CUSTOM_PERMALINKS_VERSION,
+			array(
+				'strategy'  => 'async',
+				'in_footer' => true,
+			)
+		);
+
 		wp_enqueue_style(
-			'custom-permalinks-post-settings-style',
+			'custom-permalinks-post-settings',
 			plugins_url(
 				'/assets/css/post-settings' . $this->css_file_suffix,
 				CUSTOM_PERMALINKS_FILE

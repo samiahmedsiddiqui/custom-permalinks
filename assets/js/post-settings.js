@@ -11,7 +11,7 @@
 	function updateButtonStatesForInput(input) {
 		const value = input.value;
 		document.querySelectorAll(tagButtonSelector).forEach(function (button) {
-			let tag = button.textContent.trim();
+			let tag = button.getAttribute('data-name');
 			if (value.includes(tag)) {
 				button.classList.add('active');
 			} else if (tag.startsWith('%ctax_')) {
@@ -28,15 +28,10 @@
 	}
 
 	/**
-	 * Add 'active-row' to first TR with a post_type input.
+	 * Initial state update for first input.
 	 */
 	if (firstInput) {
-		const firstRow = firstInput.closest('tr');
-		const tagRow = document.querySelector('.permalink-tags');
-		if (firstRow && tagRow) {
-			firstRow.classList.add('active-row');
-			firstRow.parentNode.insertBefore(tagRow, firstRow.nextSibling);
-		}
+		updateButtonStatesForInput(firstInput);
 	}
 
 	/**
@@ -52,7 +47,7 @@
 				return;
 			}
 
-			const tag = this.textContent.trim();
+			const tag = this.getAttribute('data-name');
 			let value = activeInput.value;
 
 			// Normalize slashes before we begin.
@@ -73,7 +68,11 @@
 
 			// Clean up double slashes and trim leading/trailing.
 			value = value.replace(/\/+/g, '/').replace(/^\/|\/$/g, '');
-			activeInput.value = value + '/';
+			if (value === '') {
+				activeInput.value = '';
+			} else {
+				activeInput.value = value + '/';
+			}
 		});
 	});
 
@@ -98,11 +97,4 @@
 			updateButtonStatesForInput(this);
 		});
 	});
-
-	/**
-	 * Initial state update for first input.
-	 */
-	if (firstInput) {
-		updateButtonStatesForInput(firstInput);
-	}
 })();

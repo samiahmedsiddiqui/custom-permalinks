@@ -43,9 +43,9 @@ class Custom_Permalinks_Post_Types_Settings {
 				$key   = sanitize_text_field( $key );
 				$value = sanitize_text_field( $value );
 
-				if ( false !== strpos( $value, '%ctax_TAXONOMY_NAME%' )
-					|| false !== strpos( $value, '%ctax_parent_TAXONOMY_NAME%' )
-					|| false !== strpos( $value, '%ctax_parents_TAXONOMY_NAME%' )
+				if ( false !== strpos( $value, 'ctax_TAXONOMY_NAME' )
+					|| false !== strpos( $value, 'ctax_parent_TAXONOMY_NAME' )
+					|| false !== strpos( $value, 'ctax_parents_TAXONOMY_NAME' )
 				) {
 					$settings_error[] = $key;
 				}
@@ -160,6 +160,12 @@ class Custom_Permalinks_Post_Types_Settings {
 						}
 
 						++$post_types_count;
+
+						$tr_class = '';
+						if ( 1 === $post_types_count ) {
+							$tr_class = 'active-row';
+						}
+
 						$post_setting = '';
 						if ( isset( $post_types_settings[ $post_type_name ] ) ) {
 							$post_setting = $post_types_settings[ $post_type_name ];
@@ -171,7 +177,7 @@ class Custom_Permalinks_Post_Types_Settings {
 						}
 						?>
 
-						<tr valign="top">
+						<tr valign="top" class="<?php echo esc_attr( $tr_class ); ?>">
 							<th scope="row"><?php echo esc_html( $single->labels->name ); ?></th>
 							<td>
 								<?php echo esc_url( site_url() ); ?>/
@@ -184,22 +190,23 @@ class Custom_Permalinks_Post_Types_Settings {
 								<th class="pd-b-0" scope="row">Available tags:</th>
 								<td class="pd-b-0">
 									<ul role="list" class="avaliable-tag">
-										<li><button type="button" class="button button-secondary">%year%</button></li>
-										<li><button type="button" class="button button-secondary">%monthnum%</button></li>
-										<li><button type="button" class="button button-secondary">%day%</button></li>
-										<li><button type="button" class="button button-secondary">%hour%</button></li>
-										<li><button type="button" class="button button-secondary">%minute%</button></li>
-										<li><button type="button" class="button button-secondary">%second%</button></li>
-										<li><button type="button" class="button button-secondary">%post_id%</button></li>
-										<li><button type="button" class="button button-secondary">%postname%</button></li>
-										<li><button type="button" class="button button-secondary">%category%</button></li>
-										<li><button type="button" class="button button-secondary">%author%</button></li>
-										<li><button type="button" class="button button-secondary">%parent_postname%</button></li>
-										<li><button type="button" class="button button-secondary">%parents_postnames%</button></li>
-										<li><button type="button" class="button button-secondary">%ctax_TAXONOMY_NAME%</button></li>
-										<li><button type="button" class="button button-secondary">%ctax_parent_TAXONOMY_NAME%</button></li>
-										<li><button type="button" class="button button-secondary">%ctax_parents_TAXONOMY_NAME%</button></li>
-										<li><button type="button" class="button button-secondary">%custom_permalinks_posttype_tag%</button></li>
+										<li><button type="button" class="button button-secondary" data-name="%year%">year</button></li>
+										<li><button type="button" class="button button-secondary" data-name="%monthnum%">monthnum</button></li>
+										<li><button type="button" class="button button-secondary" data-name="%day%">day</button></li>
+										<li><button type="button" class="button button-secondary" data-name="%hour%">hour</button></li>
+										<li><button type="button" class="button button-secondary" data-name="%minute%">minute</button></li>
+										<li><button type="button" class="button button-secondary" data-name="%second%">second</button></li>
+										<li><button type="button" class="button button-secondary" data-name="%post_id%">post_id</button></li>
+										<li><button type="button" class="button button-secondary" data-name="%category%">category</button></li>
+										<li><button type="button" class="button button-secondary" data-name="%author%">author</button></li>
+										<li><button type="button" class="button button-secondary" data-name="%postname%">postname</button></li>
+										<li><button type="button" class="button button-secondary" data-name="%parent_postname%">parent_postname</button></li>
+										<li><button type="button" class="button button-secondary" data-name="%parents_postnames%">parents_postnames</button></li>
+										<li><button type="button" class="button button-secondary" data-name="%title%">title</button></li>
+										<li><button type="button" class="button button-secondary" data-name="%ctax_TAXONOMY_NAME%">ctax_TAXONOMY_NAME</button></li>
+										<li><button type="button" class="button button-secondary" data-name="%ctax_parent_TAXONOMY_NAME%">ctax_parent_TAXONOMY_NAME</button></li>
+										<li><button type="button" class="button button-secondary" data-name="%ctax_parents_TAXONOMY_NAME%">ctax_parents_TAXONOMY_NAME</button></li>
+										<li><button type="button" class="button button-secondary" data-name="%custom_permalinks_posttype_tag%">custom_permalinks_posttype_tag</button></li>
 									</ul>
 								</td>
 							</tr>
