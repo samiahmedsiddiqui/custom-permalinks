@@ -389,9 +389,13 @@ class Custom_Permalinks_Form {
 			 * Permalink structure is not defined in the Plugin Settings.
 			 */
 			if ( ! empty( $permalink_structure ) ) {
-				// Make it 0 to keep generating permalink on updating the post.
+				// Make it 1 to keep generating permalink on updating the post.
 				update_post_meta( $post_id, 'custom_permalink_regenerate_status', 1 );
 			}
+		}
+
+		if ( 'auto-draft' === sanitize_title( $post->post_title ) ) {
+			return;
 		}
 
 		if ( isset( $_REQUEST['_custom_permalinks_post_nonce'] )
