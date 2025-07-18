@@ -21,6 +21,13 @@
 				} else {
 					button.classList.remove('active');
 				}
+			} else if (tag.startsWith('%custom_permalinks_')) {
+				tag = tag.replace('TAG_NAME%', '');
+				if (value.includes(tag)) {
+					button.classList.add('active');
+				} else {
+					button.classList.remove('active');
+				}
 			} else {
 				button.classList.remove('active');
 			}
