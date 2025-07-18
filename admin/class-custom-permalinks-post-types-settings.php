@@ -26,13 +26,15 @@ class Custom_Permalinks_Post_Types_Settings {
 	 */
 	private function post_settings() {
 		$current_user_id      = get_current_user_id();
-		$message              = '';
+		$custom_tag_error     = array();
+		$notifications        = array();
 		$message_type         = 'updated';
 		$nonce_action         = 'custom-permalinks_post_types_settings_' . $current_user_id;
 		$nonce_name           = '_custom-permalinks_post_types_settings';
 		$saved_data           = filter_input_array( INPUT_POST );
 		$settings_error       = array();
 		$tags_page_url        = 'https://github.com/samiahmedsiddiqui/custom-permalinks#available-tags';
+		$taxonomy_error       = array();
 		$update_post_settings = array();
 
 		if ( isset( $saved_data[ $nonce_name ] )
@@ -48,6 +50,10 @@ class Custom_Permalinks_Post_Types_Settings {
 					|| false !== strpos( $value, 'ctax_parents_TAXONOMY_NAME' )
 				) {
 					$settings_error[] = $key;
+					$taxonomy_error[] = $key;
+				} elseif ( false !== strpos( $value, 'custom_permalinks_TAG_NAME' ) ) {
+					$custom_tag_error[] = $key;
+					$settings_error[]   = $key;
 				}
 
 				$update_post_settings[ $key ] = str_replace( '//', '/', $value );
@@ -55,10 +61,16 @@ class Custom_Permalinks_Post_Types_Settings {
 
 			if ( ! empty( $settings_error ) ) {
 				$message_type = 'error';
-				if ( 1 === count( $settings_error ) ) {
-					$message = __( 'UPDATE FAILED: Replace "TAXONOMY_NAME" with the valid taxonomy name in the highlighted input field.', 'custom-permalinks' );
-				} else {
-					$message = __( 'UPDATE FAILED: Replace "TAXONOMY_NAME" with the valid taxonomy name in the highlighted input fields.', 'custom-permalinks' );
+				if ( 1 === count( $taxonomy_error ) ) {
+					$notifications[] = __( 'UPDATE FAILED: Replace "TAXONOMY_NAME" with the valid taxonomy name in the highlighted input field.', 'custom-permalinks' );
+				} elseif ( 1 < count( $taxonomy_error ) ) {
+					$notifications[] = __( 'UPDATE FAILED: Replace "TAXONOMY_NAME" with the valid taxonomy name in the highlighted input fields.', 'custom-permalinks' );
+				}
+
+				if ( 1 === count( $custom_tag_error ) ) {
+					$notifications[] = __( 'UPDATE FAILED: Replace "TAG_NAME" with the valid tag name (string) in the highlighted input field.', 'custom-permalinks' );
+				} elseif ( 1 < count( $custom_tag_error ) ) {
+					$notifications[] = __( 'UPDATE FAILED: Replace "TAG_NAME" with the valid tag name (string) in the highlighted input fields.', 'custom-permalinks' );
 				}
 			} else {
 				$is_updated = update_option( 'custom_permalinks_post_types_settings', $update_post_settings, false );
@@ -66,9 +78,9 @@ class Custom_Permalinks_Post_Types_Settings {
 					// Remove rewrite rules and then recreate rewrite rules.
 					flush_rewrite_rules();
 
-					$message = __( 'Post Types Permalinks Settings are updated and cache cleared.', 'custom-permalinks' );
+					$notifications[] = __( 'Post Types Permalinks Settings are updated and cache cleared.', 'custom-permalinks' );
 				} else {
-					$message = __( 'Post Types Permalinks Settings are updated.', 'custom-permalinks' );
+					$notifications[] = __( 'Post Types Permalinks Settings are updated.', 'custom-permalinks' );
 				}
 			}
 		}
@@ -85,11 +97,19 @@ class Custom_Permalinks_Post_Types_Settings {
 				<?php esc_html_e( 'Post Types Permalinks Settings', 'custom-permalinks' ); ?>
 			</h1>
 
-			<?php if ( ! empty( $message ) ) : ?>
-				<div id="message" class="<?php echo esc_attr( $message_type ); ?> notice notice-success is-dismissible">
-					<p><?php echo esc_html( $message ); ?></p>
-				</div>
-			<?php endif; ?>
+			<?php
+			if ( ! empty( $notifications ) ) :
+				foreach ( $notifications as $notify ) :
+					?>
+
+					<div id="message" class="<?php echo esc_attr( $message_type ); ?> notice notice-success is-dismissible">
+						<p><?php echo esc_html( $notify ); ?></p>
+					</div>
+
+					<?php
+				endforeach;
+			endif;
+			?>
 
 			<div class="notice notice-info">
 				<p>
@@ -206,7 +226,7 @@ class Custom_Permalinks_Post_Types_Settings {
 										<li><button type="button" class="button button-secondary" data-name="%ctax_TAXONOMY_NAME%">ctax_TAXONOMY_NAME</button></li>
 										<li><button type="button" class="button button-secondary" data-name="%ctax_parent_TAXONOMY_NAME%">ctax_parent_TAXONOMY_NAME</button></li>
 										<li><button type="button" class="button button-secondary" data-name="%ctax_parents_TAXONOMY_NAME%">ctax_parents_TAXONOMY_NAME</button></li>
-										<li><button type="button" class="button button-secondary" data-name="%custom_permalinks_posttype_tag%">custom_permalinks_posttype_tag</button></li>
+										<li><button type="button" class="button button-secondary" data-name="%custom_permalinks_TAG_NAME%">custom_permalinks_TAG_NAME</button></li>
 									</ul>
 								</td>
 							</tr>

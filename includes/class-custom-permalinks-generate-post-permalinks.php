@@ -140,11 +140,16 @@ final class Custom_Permalinks_Generate_Post_Permalinks {
 			}
 		}
 
-		// Handle custom tag.
-		if ( false !== strpos( $replace_tag, '%custom_permalinks_posttype_tag%' ) ) {
-			$custom_tag  = apply_filters( 'custom_permalinks_posttype_tag', $post );
-			$custom_tag  = wp_strip_all_tags( $custom_tag );
-			$replace_tag = str_replace( '%custom_permalinks_posttype_tag%', $custom_tag, $replace_tag );
+		// Handle custom tags.
+		if ( false !== strpos( $replace_tag, '%custom_permalinks_' ) ) {
+			preg_match_all( '/%custom_permalinks_([^%]+)%/', $replace_tag, $matches );
+			if ( isset( $matches[1] ) ) {
+				foreach ( $matches[1] as $match ) {
+					$custom_tag_value = apply_filters( 'custom_permalinks_post_permalink_tag', $match, $post->post_type, $post );
+					$custom_tag_value = wp_strip_all_tags( $custom_tag_value );
+					$replace_tag      = str_replace( "%custom_permalinks_{$match}%", $custom_tag_value, $replace_tag );
+				}
+			}
 		}
 
 		return $replace_tag;

@@ -34,7 +34,7 @@ When setting up your custom permalink structures, you can use a variety of tags 
 | `%ctax_TAXONOMY_NAME%` | A clean version of a custom taxonomy's name. Replace `TAXONOMY_NAME` with the actual taxonomy name. You can also provide a default slug for when no category/taxonomy is selected by using `??` (e.g., `%ctax_type??sales%` will use "sales" as a default). |
 | `%ctax_parent_TAXONOMY_NAME%` | Similar to `%ctax_TAXONOMY_NAME%`, but includes the immediate parent category/tag slug in the URL if a parent is selected. |
 | `%ctax_parents_TAXONOMY_NAME%` | Similar to `%ctax_TAXONOMY_NAME%`, but includes all parent category/tag slugs in the URL if parents are selected. |
-| `%custom_permalinks_posttype_tag%` | This tag allows developers to define its value using a filter. |
+| `%custom_permalinks_TAG_NAME%` | Developers have the flexibility to define their own custom tags(replace `_TAG_NAME` with your desired name). To ensure these tags resolve to the correct permalinks, simply apply the `custom_permalinks_post_permalink_tag` filter. |
 
 **Important Note:** For new posts, Custom Permalinks will keep updating the permalink while the post is in draft mode, assuming a structure is defined in the plugin settings. Once the post is published or its permalink is manually updated, the plugin will stop automatic updates for that specific post.
 
@@ -42,21 +42,48 @@ When setting up your custom permalink structures, you can use a variety of tags 
 
 Custom Permalinks provides several filters for developers to fine-tune its behavior.
 
-  * **Set Custom Value in Post Type Permalink (`custom_permalinks_posttype_tag`):** Replace the `%custom_permalinks_posttype_tag%` with your own custom value (e.g., from a custom field).
+  * **Setting a Custom Value in Your Post Type Permalink**
+
+		Let's say you have a custom post type named "Press" and you want to include the year and month from an ACF (Advanced Custom Fields) date field directly in its permalink.
+
+		If your post type's permalink structure is `about/newsroom/press-releases/%custom_permalinks_year%/%custom_permalinks_month%/%postname%/`, here's how you can achieve that with a custom value:
 
     ```php
     /**
-     * Append custom string in the URL.
-     *
-     * @param object $post The post object.
-     *
-     * @return string text which can be replaced with the custom tag.
-     */
-    function yasglobal_custom_posttype_tag( $post ) {
-      return sanitize_title( $post->post_title ) . '-from-sami';
-    }
-    add_filter( 'custom_permalinks_posttype_tag', 'yasglobal_custom_posttype_tag', 10, 1 );
+		 * Add ACF field year and month in the permalink of the "Press" post type.
+		 *
+		 * @param string $custom_tag Custom tag name.
+		 * @param string $post_type  Post type from where it is called.
+		 * @param object $post       The post object.
+		 *
+		 * @return string Custom tag value which needs to be used.
+		 */
+		function yasglobal_post_permalink_tag( $custom_tag, $post_type, $post ) {
+			$custom_tag_value = $custom_tag;
+			if ( 'press' === $post_type &&
+				( 'year' === $custom_tag || 'month' === $custom_tag )
+			) {
+				// Replace the field name 'press_date'.
+				$press_date = get_field( 'press_date', $post->ID );
+				if ( ! empty( $press_date ) ) {
+					$date = new DateTime( $press_date );
+				} else {
+					$date = new DateTime( $post->post_date );
+				}
+
+				if ( 'year' === $custom_tag ) {
+					$custom_tag_value = $date->format( 'Y' );
+				} else {
+					$custom_tag_value = $date->format( 'm' );
+				}
+			}
+
+			return $custom_tag_value;
+		}
+		add_filter( 'custom_permalinks_post_permalink_tag', 'yasglobal_post_permalink_tag', 10, 3 );
     ```
+
+		You will use the `custom_permalinks_post_permalink_tag` filter. This allows you to dynamically insert values into your permalink structure. For instance, to get the year and month from your ACF date field and insert them where `%custom_permalinks_year%` and `%custom_permalinks_month%` are, you would add custom code (likely in your theme's functions.php file or a custom plugin) to retrieve those values and return them for the respective permalink tags.
 
   * **Add `PATH_INFO` in `$_SERVER` Variable (`custom_permalinks_path_info`):**
 
