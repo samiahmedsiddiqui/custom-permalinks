@@ -21,11 +21,11 @@ class Custom_Permalinks_Admin {
 	private $css_file_suffix = '.min.css';
 
 	/**
-	 * Css file suffix extension.
+	 * JS file suffix extension.
 	 *
 	 * @var string
 	 */
-	private $js_file_suffix = '.min.css';
+	private $js_file_suffix = '.min.js';
 
 	/**
 	 * Initializes WordPress hooks.

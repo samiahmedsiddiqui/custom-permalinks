@@ -458,18 +458,24 @@ class Custom_Permalinks_Form {
 					'element_type' => $post->post_type,
 				)
 			);
+			if ( null !== $language_code ) {
+				update_post_meta( $post_id, 'custom_permalink_language', $language_code );
+			} else {
+				delete_metadata( 'post', $post_id, 'custom_permalink_language' );
+			}
 
 			$permalink = $this->sanitize_permalink(
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				wp_unslash( $_REQUEST['custom_permalink'] ),
 				$language_code
 			);
+			$permalink = $this->check_permalink_exists( $post_id, $permalink, $language_code );
 			$permalink = apply_filters(
 				'custom_permalink_before_saving',
 				$permalink,
-				$post_id
+				$post_id,
+				$language_code
 			);
-			$permalink = $this->check_permalink_exists( $post_id, $permalink );
 
 			update_post_meta( $post_id, 'custom_permalink', $permalink );
 
@@ -477,12 +483,6 @@ class Custom_Permalinks_Form {
 			if ( ! $is_regenerated ) {
 				// Delete to prevent generating permalink on updating the post.
 				delete_post_meta( $post_id, 'custom_permalink_regenerate_status' );
-			}
-
-			if ( null !== $language_code ) {
-				update_post_meta( $post_id, 'custom_permalink_language', $language_code );
-			} else {
-				delete_metadata( 'post', $post_id, 'custom_permalink_language' );
 			}
 		}
 	}
@@ -494,12 +494,13 @@ class Custom_Permalinks_Form {
 	 * @since 3.0.0
 	 * @access private
 	 *
-	 * @param int    $post_id   Post ID.
-	 * @param string $permalink Permalink which is going to be set.
+	 * @param int    $post_id       Post ID.
+	 * @param string $permalink     Permalink which is going to be set.
+	 * @param string $language_code Page Language if multi-langauge is enabled.
 	 *
 	 * @return string
 	 */
-	private function check_permalink_exists( $post_id, $permalink ) {
+	private function check_permalink_exists( $post_id, $permalink, $language_code ) {
 		global $wpdb;
 
 		$trailing_slash = substr( $permalink, -1 );
@@ -515,22 +516,50 @@ class Custom_Permalinks_Form {
 				$permalink = $init_permalink . '-' . $append_number;
 			}
 
-			// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-			$check_exist_url = $wpdb->get_var(
-				$wpdb->prepare(
-					"SELECT COUNT(post_id) FROM $wpdb->postmeta AS pm
-					INNER JOIN $wpdb->posts AS p ON (p.ID = pm.post_id)
-					WHERE post_id != %d
-						AND meta_key = 'custom_permalink'
-						AND post_status != 'inherit'
-						AND (meta_value = %s OR meta_value = %s)",
-					$post_id,
-					$permalink,
-					$permalink . '/'
-				)
-			);
-			// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
+			if ( null !== $language_code ) {
+				// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$existing_url_ids = $wpdb->get_col(
+					$wpdb->prepare(
+						"SELECT pm.`post_id` FROM $wpdb->postmeta AS pm
+						INNER JOIN $wpdb->posts AS p ON (p.`ID` = pm.`post_id`)
+						WHERE pm.`post_id` != %d
+							AND pm.`meta_key` = 'custom_permalink'
+							AND p.`post_status` != 'inherit'
+							AND (pm.`meta_value` = %s OR pm.`meta_value` = %s)",
+						$post_id,
+						$permalink,
+						$permalink . '/'
+					)
+				);
+				// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
+
+				$check_exist_url = null;
+				foreach ( $existing_url_ids as $existing_url_id ) {
+					$existing_url_lang = get_post_meta( $existing_url_id, 'custom_permalink_language', true );
+					if ( $existing_url_lang === $language_code ) {
+						$check_exist_url = 1;
+						break;
+					}
+				}
+			} else {
+				// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$check_exist_url = $wpdb->get_var(
+					$wpdb->prepare(
+						"SELECT COUNT(pm.`post_id`) FROM $wpdb->postmeta AS pm
+						INNER JOIN $wpdb->posts AS p ON (p.`ID` = pm.`post_id`)
+						WHERE pm.`post_id` != %d
+							AND pm.`meta_key` = 'custom_permalink'
+							AND p.`post_status` != 'inherit'
+							AND (pm.`meta_value` = %s OR pm.`meta_value` = %s)",
+						$post_id,
+						$permalink,
+						$permalink . '/'
+					)
+				);
+				// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
+			}
 
 			// Check URL should not be duplicated in any post Permalink.
 			if ( empty( $check_exist_url ) ) {
