@@ -180,7 +180,7 @@ Custom Permalinks provides several filters for developers to fine-tune its behav
   * **Manipulate Permalink Before Saving (`custom_permalink_before_saving`):** Make changes to a permalink before it's saved (e.g., ensure a trailing slash).
 
     ```php
-    function yasglobal_permalink_before_saving( $permalink, $post_id ) {
+    function yasglobal_permalink_before_saving( $permalink, $post_id, $language_code ) {
       // Check trialing slash in the permalink.
       if ( '/' !== substr( $permalink, -1 ) ) {
         // If permalink doesn't contain trialing slash then add one.
@@ -188,7 +188,7 @@ Custom Permalinks provides several filters for developers to fine-tune its behav
       }
       return $permalink;
     }
-    add_filter( 'custom_permalink_before_saving', 'yasglobal_permalink_before_saving', 10, 2 );
+    add_filter( 'custom_permalink_before_saving', 'yasglobal_permalink_before_saving', 10, 3 );
     ```
 
   * **Remove `like` Query (`cp_remove_like_query`):** Disable the `like` query functionality.
