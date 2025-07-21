@@ -69,7 +69,7 @@ class Custom_Permalinks_Form {
 	}
 
 	/**
-	 * Initialize WordPress Hooks.
+	 * Check whether the permalink can be customized/generates on this post or not.
 	 *
 	 * @since 1.6.0
 	 * @access private
@@ -78,7 +78,7 @@ class Custom_Permalinks_Form {
 	 *
 	 * return bool false Whether to show Custom Permalink form or not.
 	 */
-	private function exclude_custom_permalinks( $post ) {
+	private function is_permalink_customizable( $post ) {
 		$exclude_post_types = apply_filters(
 			'custom_permalinks_exclude_post_type',
 			$post->post_type
@@ -346,7 +346,7 @@ class Custom_Permalinks_Form {
 		}
 
 		$permalink = preg_replace( '/\s+/', '-', $permalink );
-		$permalink = preg_replace( '|-+|', '-', $permalink );
+		$permalink = preg_replace( '/(\-+)/', '-', $permalink );
 		$permalink = str_replace( '-/', '/', $permalink );
 		$permalink = str_replace( '/-', '/', $permalink );
 
@@ -370,29 +370,85 @@ class Custom_Permalinks_Form {
 	 *
 	 * @param int     $post_id Post ID.
 	 * @param WP_Post $post    Post object.
-	 *
-	 * @return void
+	 * @param bool    $update  Whether this is an existing post being updated or not.
 	 */
-	public function save_post( $post_id, $post ) {
-		if ( ! isset( $_REQUEST['_custom_permalinks_post_nonce'] )
-			&& ! isset( $_REQUEST['custom_permalink'] )
-		) {
+	public function save_post( $post_id, $post, $update ) {
+		/*
+		 * Enable permalink regeneration on creating new post if permalink structure
+		 * is defined for the post type.
+		 */
+		if ( ! $update ) {
+			$permalink_structure = '';
+			$post_types_settings = get_option( 'custom_permalinks_post_types_settings', array() );
+
+			if ( isset( $post_types_settings[ $post->post_type ] ) ) {
+				$permalink_structure = $post_types_settings[ $post->post_type ];
+			}
+
+			/*
+			 * Permalink structure is not defined in the Plugin Settings.
+			 */
+			if ( ! empty( $permalink_structure ) ) {
+				// Make it 1 to keep generating permalink on updating the post.
+				update_post_meta( $post_id, 'custom_permalink_regenerate_status', 1 );
+			}
+		}
+
+		if ( 'auto-draft' === sanitize_title( $post->post_title ) ) {
 			return;
 		}
 
-		$action = 'custom-permalinks_' . $post_id;
-		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		if ( ! wp_verify_nonce( $_REQUEST['_custom_permalinks_post_nonce'], $action ) ) {
-			return;
+		if ( isset( $_REQUEST['_custom_permalinks_post_nonce'] )
+			&& isset( $_REQUEST['custom_permalink'] )
+		) {
+			$action = 'custom-permalinks_' . $post_id;
+			// phpcs:disable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			if ( ! wp_verify_nonce( $_REQUEST['_custom_permalinks_post_nonce'], $action ) ) {
+				return;
+			}
+			// phpcs:enable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 		}
-		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+
+		if ( 'inherit' === $post->post_status ) {
+			$post_parent_id = $post->post_parent;
+			if ( ! empty( $post_parent_id ) ) {
+				$post_id = $post_parent_id;
+				$post    = get_post( $post_parent_id );
+			}
+		}
+
+		$url        = get_post_meta( $post_id, 'custom_permalink', true );
+		$is_refresh = get_post_meta( $post_id, 'custom_permalink_regenerate_status', true );
+
+		// Make it 0 if not exist.
+		if ( empty( $is_refresh ) ) {
+			$is_refresh = 0;
+		}
+
+		/*
+		 * Make sure that the post saved from quick edit form so, just make the
+		 * $_REQUEST['custom_permalink'] same as $url to regenerate permalink
+		 * if applicable.
+		 */
+		if ( ! isset( $_REQUEST['custom_permalink'] ) ) {
+			$_REQUEST['custom_permalink'] = $url;
+		}
+
+		$is_regenerated = false;
+		if ( 'trash' !== $post->post_status
+			&& $url === $_REQUEST['custom_permalink']
+			&& 1 === (int) $is_refresh
+		) {
+			$cp_post_permalinks = new Custom_Permalinks_Generate_Post_Permalinks();
+			$is_regenerated     = $cp_post_permalinks->generate( $post_id, $post );
+		}
 
 		$cp_frontend   = new Custom_Permalinks_Frontend();
 		$original_link = $cp_frontend->original_post_link( $post_id );
-
 		if ( ! empty( $_REQUEST['custom_permalink'] )
 			&& $_REQUEST['custom_permalink'] !== $original_link
+			&& $_REQUEST['custom_permalink'] !== $url
 		) {
 			$language_code = apply_filters(
 				'wpml_element_language_code',
@@ -402,25 +458,129 @@ class Custom_Permalinks_Form {
 					'element_type' => $post->post_type,
 				)
 			);
+			if ( null !== $language_code ) {
+				update_post_meta( $post_id, 'custom_permalink_language', $language_code );
+			} else {
+				delete_metadata( 'post', $post_id, 'custom_permalink_language' );
+			}
 
 			$permalink = $this->sanitize_permalink(
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				wp_unslash( $_REQUEST['custom_permalink'] ),
 				$language_code
 			);
+			$permalink = $this->check_permalink_exists( $post_id, $permalink, $language_code );
 			$permalink = apply_filters(
 				'custom_permalink_before_saving',
 				$permalink,
-				$post_id
+				$post_id,
+				$language_code
 			);
 
 			update_post_meta( $post_id, 'custom_permalink', $permalink );
-			if ( null !== $language_code ) {
-				update_post_meta( $post_id, 'custom_permalink_language', $language_code );
-			} else {
-				delete_metadata( 'post', $post_id, 'custom_permalink_language' );
+
+			// If true means it triggers from the regeneration code so don't override it.
+			if ( ! $is_regenerated ) {
+				// Delete to prevent generating permalink on updating the post.
+				delete_post_meta( $post_id, 'custom_permalink_regenerate_status' );
 			}
 		}
+	}
+
+	/**
+	 * Check whether the permalink exists or not. If exists append unique number
+	 * at the end of it to prevent making duplicate permalinks.
+	 *
+	 * @since 3.0.0
+	 * @access private
+	 *
+	 * @param int    $post_id       Post ID.
+	 * @param string $permalink     Permalink which is going to be set.
+	 * @param string $language_code Page Language if multi-langauge is enabled.
+	 *
+	 * @return string
+	 */
+	private function check_permalink_exists( $post_id, $permalink, $language_code ) {
+		global $wpdb;
+
+		$trailing_slash = substr( $permalink, -1 );
+		if ( '/' === $trailing_slash ) {
+			$permalink = rtrim( $permalink, '/' );
+		}
+
+		$append_number  = 1;
+		$init_permalink = $permalink;
+		while ( 1 ) {
+			// First, check permalink before appending number.
+			if ( 1 < $append_number ) {
+				$permalink = $init_permalink . '-' . $append_number;
+			}
+
+			if ( null !== $language_code ) {
+				// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$existing_url_ids = $wpdb->get_col(
+					$wpdb->prepare(
+						"SELECT pm.`post_id` FROM $wpdb->postmeta AS pm
+						INNER JOIN $wpdb->posts AS p ON (p.`ID` = pm.`post_id`)
+						WHERE pm.`post_id` != %d
+							AND pm.`meta_key` = 'custom_permalink'
+							AND p.`post_status` != 'inherit'
+							AND (pm.`meta_value` = %s OR pm.`meta_value` = %s)",
+						$post_id,
+						$permalink,
+						$permalink . '/'
+					)
+				);
+				// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
+
+				$check_exist_url = null;
+				foreach ( $existing_url_ids as $existing_url_id ) {
+					$existing_url_lang = get_post_meta( $existing_url_id, 'custom_permalink_language', true );
+					if ( $existing_url_lang === $language_code ) {
+						$check_exist_url = 1;
+						break;
+					}
+				}
+			} else {
+				// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$check_exist_url = $wpdb->get_var(
+					$wpdb->prepare(
+						"SELECT COUNT(pm.`post_id`) FROM $wpdb->postmeta AS pm
+						INNER JOIN $wpdb->posts AS p ON (p.`ID` = pm.`post_id`)
+						WHERE pm.`post_id` != %d
+							AND pm.`meta_key` = 'custom_permalink'
+							AND p.`post_status` != 'inherit'
+							AND (pm.`meta_value` = %s OR pm.`meta_value` = %s)",
+						$post_id,
+						$permalink,
+						$permalink . '/'
+					)
+				);
+				// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
+			}
+
+			// Check URL should not be duplicated in any post Permalink.
+			if ( empty( $check_exist_url ) ) {
+				$existing_post_id = url_to_postid( $permalink );
+				if ( 0 === $existing_post_id || $post_id === $existing_post_id ) {
+					break;
+				}
+			}
+
+			++$append_number;
+		}
+
+		if ( '/' === $trailing_slash ) {
+			$permalink = $permalink . '/';
+		}
+
+		if ( 0 === strpos( $permalink, '/' ) ) {
+			$permalink = substr( $permalink, 1 );
+		}
+
+		return $permalink;
 	}
 
 	/**
@@ -614,9 +774,9 @@ class Custom_Permalinks_Form {
 	public function sample_permalink_html( $html, $post_id ) {
 		$post = get_post( $post_id );
 
-		$disable_cp              = $this->exclude_custom_permalinks( $post );
+		$is_customizable         = $this->is_permalink_customizable( $post );
 		$this->permalink_metabox = 1;
-		if ( $disable_cp ) {
+		if ( $is_customizable ) {
 			return $html;
 		}
 
@@ -634,8 +794,8 @@ class Custom_Permalinks_Form {
 	 * @return void
 	 */
 	public function meta_edit_form( $post ) {
-		$disable_cp = $this->exclude_custom_permalinks( $post );
-		if ( $disable_cp ) {
+		$is_customizable = $this->is_permalink_customizable( $post );
+		if ( $is_customizable ) {
 			wp_enqueue_script(
 				'custom-permalinks-form',
 				plugins_url(
@@ -786,12 +946,12 @@ class Custom_Permalinks_Form {
 			CUSTOM_PERMALINKS_VERSION,
 			true
 		);
+		?>
 
-		echo esc_url( $home_url ) .
-		'<span id="editable-post-name" title="Click to edit this part of the permalink">';
+		<span id="uneditable-permalink"><?php echo esc_url( $home_url ); ?></span>
+		<span id="editable-post-name" title="Click to edit this part of the permalink">
 
-		if ( isset( $postname ) && '' !== $postname ) :
-			?>
+		<?php if ( isset( $postname ) && '' !== $postname ) : ?>
 
 			<input type="hidden" id="new-post-slug" class="text" value="<?php echo esc_attr( $postname ); ?>" />
 

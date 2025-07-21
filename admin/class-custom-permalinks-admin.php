@@ -21,13 +21,25 @@ class Custom_Permalinks_Admin {
 	private $css_file_suffix = '.min.css';
 
 	/**
+	 * JS file suffix extension.
+	 *
+	 * @var string
+	 */
+	private $js_file_suffix = '.min.js';
+
+	/**
 	 * Initializes WordPress hooks.
 	 */
 	public function __construct() {
 		/*
-		 * Css file suffix (version number with extension).
+		 * CSS file suffix (version number with extension).
 		 */
 		$this->css_file_suffix = '-' . CUSTOM_PERMALINKS_VERSION . '.min.css';
+
+		/*
+		 * JS file suffix (version number with extension).
+		 */
+		$this->js_file_suffix = '-' . CUSTOM_PERMALINKS_VERSION . '.min.js';
 
 		add_action( 'admin_init', array( $this, 'privacy_policy' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
@@ -72,6 +84,14 @@ class Custom_Permalinks_Admin {
 			'cp-taxonomy-permalinks',
 			array( $this, 'taxonomy_permalinks_page' )
 		);
+		$post_settings_page       = add_submenu_page(
+			'cp-post-permalinks',
+			__( 'Post Types Settings', 'custom-permalinks' ),
+			__( 'Post Types Settings', 'custom-permalinks' ),
+			'custom_permalinks_post_settings',
+			'custom-permalinks-post-settings',
+			array( $this, 'post_settings_page' )
+		);
 		$about_page               = add_submenu_page(
 			'cp-post-permalinks',
 			__( 'About Custom Permalinks', 'custom-permalinks' ),
@@ -90,8 +110,43 @@ class Custom_Permalinks_Admin {
 			'Custom_Permalinks_Taxonomies_Table::instance'
 		);
 		add_action(
+			'admin_print_styles-' . $post_settings_page,
+			array( $this, 'add_post_settings_style' )
+		);
+		add_action(
 			'admin_print_styles-' . $about_page . '',
 			array( $this, 'add_about_style' )
+		);
+	}
+
+	/**
+	 * Add post settings page style.
+	 *
+	 * @since 3.0.0
+	 */
+	public function add_post_settings_style() {
+		wp_enqueue_script(
+			'custom-permalinks-post-settings',
+			plugins_url(
+				'/assets/js/post-settings' . $this->js_file_suffix,
+				CUSTOM_PERMALINKS_FILE
+			),
+			array(),
+			CUSTOM_PERMALINKS_VERSION,
+			array(
+				'strategy'  => 'async',
+				'in_footer' => true,
+			)
+		);
+
+		wp_enqueue_style(
+			'custom-permalinks-post-settings',
+			plugins_url(
+				'/assets/css/post-settings' . $this->css_file_suffix,
+				CUSTOM_PERMALINKS_FILE
+			),
+			array(),
+			CUSTOM_PERMALINKS_VERSION
 		);
 	}
 
@@ -139,6 +194,17 @@ class Custom_Permalinks_Admin {
 	 */
 	public function taxonomy_permalinks_page() {
 		Custom_Permalinks_Taxonomies_Table::output();
+
+		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
+	}
+
+	/**
+	 * Calls another Function which shows the Post Types Settings Page.
+	 *
+	 * @since 3.0.0
+	 */
+	public function post_settings_page() {
+		new Custom_Permalinks_Post_Types_Settings();
 
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ), 1 );
 	}

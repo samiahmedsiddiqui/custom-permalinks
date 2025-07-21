@@ -64,8 +64,10 @@ class Custom_Permalinks {
 	 */
 	private function includes() {
 		include_once CUSTOM_PERMALINKS_PATH . 'includes/class-custom-permalinks-form.php';
+		include_once CUSTOM_PERMALINKS_PATH . 'includes/class-custom-permalinks-generate-post-permalinks.php';
 		include_once CUSTOM_PERMALINKS_PATH . 'includes/class-custom-permalinks-frontend.php';
 		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-admin.php';
+		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-post-types-settings.php';
 		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-post-types.php';
 		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-post-types-table.php';
 		include_once CUSTOM_PERMALINKS_PATH . 'admin/class-custom-permalinks-taxonomies.php';
@@ -106,11 +108,11 @@ class Custom_Permalinks {
 	 * @access public
 	 */
 	public static function add_roles() {
-		$admin_role      = get_role( 'administrator' );
-		$cp_role         = get_role( 'custom_permalinks_manager' );
-		$current_version = get_option( 'custom_permalinks_plugin_version', -1 );
+		$admin_role = get_role( 'administrator' );
+		$cp_role    = get_role( 'custom_permalinks_manager' );
 
 		if ( ! empty( $admin_role ) ) {
+			$admin_role->add_cap( 'custom_permalinks_post_settings' );
 			$admin_role->add_cap( 'cp_view_post_permalinks' );
 			$admin_role->add_cap( 'cp_view_category_permalinks' );
 		}
@@ -120,8 +122,9 @@ class Custom_Permalinks {
 				'custom_permalinks_manager',
 				__( 'Custom Permalinks Manager' ),
 				array(
-					'cp_view_post_permalinks'     => true,
-					'cp_view_category_permalinks' => true,
+					'custom_permalinks_post_settings' => true,
+					'cp_view_post_permalinks'         => true,
+					'cp_view_category_permalinks'     => true,
 				)
 			);
 		}
