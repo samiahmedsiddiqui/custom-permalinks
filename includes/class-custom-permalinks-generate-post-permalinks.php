@@ -302,8 +302,21 @@ final class Custom_Permalinks_Generate_Post_Permalinks {
 			if ( 'all' === $parent_type ) {
 				$parents = get_ancestors( $selected->term_id, $taxonomy, 'taxonomy' );
 				if ( ! empty( $parents ) ) {
-					$slugs = array_map( fn( $pid ) => get_term( $pid )->slug ?? '', array_reverse( $parents ) );
-					$slug  = implode( '/', $slugs ) . '/' . $slug;
+					$reversed_parents = array_reverse( $parents );
+					$parents_slugs    = array_map(
+						function ( $pid ) {
+							$term      = get_term( $pid );
+							$term_slug = '';
+							if ( is_object( $term, $term->slug ) ) {
+								$term_slug = $term->slug;
+							}
+
+							return $term_slug;
+						},
+						$reversed_parents
+					);
+
+					$slug = implode( '/', $parents_slugs ) . '/' . $slug;
 				}
 			} elseif ( 'immediate' === $parent_type ) {
 				$parent = get_term( $selected->parent );
