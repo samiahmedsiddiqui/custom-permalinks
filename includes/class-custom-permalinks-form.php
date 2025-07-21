@@ -43,6 +43,7 @@ class Custom_Permalinks_Form {
 
 		add_action( 'add_meta_boxes', array( $this, 'permalink_edit_box' ) );
 		add_action( 'save_post', array( $this, 'save_post' ), 10, 3 );
+		add_action( 'pmxi_saved_post', array( $this, 'pmxi_post_permalink' ), 10, 3 );
 		add_action( 'delete_post', array( $this, 'delete_permalink' ), 10 );
 		add_action( 'category_add_form', array( $this, 'term_options' ) );
 		add_action( 'category_edit_form', array( $this, 'term_options' ) );
@@ -364,6 +365,102 @@ class Custom_Permalinks_Form {
 	}
 
 	/**
+	 * Check whether the permalink exists or not. If exists append unique number
+	 * at the end of it to prevent making duplicate permalinks.
+	 *
+	 * @since 3.0.0
+	 * @access private
+	 *
+	 * @param int    $post_id       Post ID.
+	 * @param string $permalink     Permalink which is going to be set.
+	 * @param string $language_code Page Language if multi-langauge is enabled.
+	 *
+	 * @return string
+	 */
+	private function check_permalink_exists( $post_id, $permalink, $language_code ) {
+		global $wpdb;
+
+		$trailing_slash = substr( $permalink, -1 );
+		if ( '/' === $trailing_slash ) {
+			$permalink = rtrim( $permalink, '/' );
+		}
+
+		$append_number  = 1;
+		$init_permalink = $permalink;
+		while ( 1 ) {
+			// First, check permalink before appending number.
+			if ( 1 < $append_number ) {
+				$permalink = $init_permalink . '-' . $append_number;
+			}
+
+			if ( null !== $language_code ) {
+				// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$existing_url_ids = $wpdb->get_col(
+					$wpdb->prepare(
+						"SELECT pm.`post_id` FROM $wpdb->postmeta AS pm
+						INNER JOIN $wpdb->posts AS p ON (p.`ID` = pm.`post_id`)
+						WHERE pm.`post_id` != %d
+							AND pm.`meta_key` = 'custom_permalink'
+							AND p.`post_status` != 'inherit'
+							AND (pm.`meta_value` = %s OR pm.`meta_value` = %s)",
+						$post_id,
+						$permalink,
+						$permalink . '/'
+					)
+				);
+				// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
+
+				$check_exist_url = null;
+				foreach ( $existing_url_ids as $existing_url_id ) {
+					$existing_url_lang = get_post_meta( $existing_url_id, 'custom_permalink_language', true );
+					if ( $existing_url_lang === $language_code ) {
+						$check_exist_url = 1;
+						break;
+					}
+				}
+			} else {
+				// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$check_exist_url = $wpdb->get_var(
+					$wpdb->prepare(
+						"SELECT COUNT(pm.`post_id`) FROM $wpdb->postmeta AS pm
+						INNER JOIN $wpdb->posts AS p ON (p.`ID` = pm.`post_id`)
+						WHERE pm.`post_id` != %d
+							AND pm.`meta_key` = 'custom_permalink'
+							AND p.`post_status` != 'inherit'
+							AND (pm.`meta_value` = %s OR pm.`meta_value` = %s)",
+						$post_id,
+						$permalink,
+						$permalink . '/'
+					)
+				);
+				// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
+			}
+
+			// Check URL should not be duplicated in any post Permalink.
+			if ( empty( $check_exist_url ) ) {
+				$existing_post_id = url_to_postid( $permalink );
+				if ( 0 === $existing_post_id || $post_id === $existing_post_id ) {
+					break;
+				}
+			}
+
+			++$append_number;
+		}
+
+		if ( '/' === $trailing_slash ) {
+			$permalink = $permalink . '/';
+		}
+
+		if ( 0 === strpos( $permalink, '/' ) ) {
+			$permalink = substr( $permalink, 1 );
+		}
+
+		return $permalink;
+	}
+
+	/**
 	 * Save per-post options.
 	 *
 	 * @access public
@@ -488,99 +585,27 @@ class Custom_Permalinks_Form {
 	}
 
 	/**
-	 * Check whether the permalink exists or not. If exists append unique number
-	 * at the end of it to prevent making duplicate permalinks.
+	 * This action fires when WP All Import saves a post of any type. The
 	 *
 	 * @since 3.0.0
-	 * @access private
+	 * @access public
 	 *
-	 * @param int    $post_id       Post ID.
-	 * @param string $permalink     Permalink which is going to be set.
-	 * @param string $language_code Page Language if multi-langauge is enabled.
+	 * @param int              $post_id   The ID of the item (post/user/taxonomy) saved or updated.
+	 * @param SimpleXMLElement $xml_node  The libxml resource of the current XML element.
+	 * @param bool             $is_update Returns 0 for new item 1 for updated item.
 	 *
-	 * @return string
+	 * @return void
 	 */
-	private function check_permalink_exists( $post_id, $permalink, $language_code ) {
-		global $wpdb;
-
-		$trailing_slash = substr( $permalink, -1 );
-		if ( '/' === $trailing_slash ) {
-			$permalink = rtrim( $permalink, '/' );
-		}
-
-		$append_number  = 1;
-		$init_permalink = $permalink;
-		while ( 1 ) {
-			// First, check permalink before appending number.
-			if ( 1 < $append_number ) {
-				$permalink = $init_permalink . '-' . $append_number;
+	public function pmxi_post_permalink( $post_id, $xml_node, $is_update ) {
+		$post = get_post( $post_id );
+		if ( is_object( $post, $post->post_type ) ) {
+			$updated = false;
+			if ( 1 === $is_update ) {
+				$updated = true;
 			}
 
-			if ( null !== $language_code ) {
-				// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-				$existing_url_ids = $wpdb->get_col(
-					$wpdb->prepare(
-						"SELECT pm.`post_id` FROM $wpdb->postmeta AS pm
-						INNER JOIN $wpdb->posts AS p ON (p.`ID` = pm.`post_id`)
-						WHERE pm.`post_id` != %d
-							AND pm.`meta_key` = 'custom_permalink'
-							AND p.`post_status` != 'inherit'
-							AND (pm.`meta_value` = %s OR pm.`meta_value` = %s)",
-						$post_id,
-						$permalink,
-						$permalink . '/'
-					)
-				);
-				// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
-
-				$check_exist_url = null;
-				foreach ( $existing_url_ids as $existing_url_id ) {
-					$existing_url_lang = get_post_meta( $existing_url_id, 'custom_permalink_language', true );
-					if ( $existing_url_lang === $language_code ) {
-						$check_exist_url = 1;
-						break;
-					}
-				}
-			} else {
-				// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-				$check_exist_url = $wpdb->get_var(
-					$wpdb->prepare(
-						"SELECT COUNT(pm.`post_id`) FROM $wpdb->postmeta AS pm
-						INNER JOIN $wpdb->posts AS p ON (p.`ID` = pm.`post_id`)
-						WHERE pm.`post_id` != %d
-							AND pm.`meta_key` = 'custom_permalink'
-							AND p.`post_status` != 'inherit'
-							AND (pm.`meta_value` = %s OR pm.`meta_value` = %s)",
-						$post_id,
-						$permalink,
-						$permalink . '/'
-					)
-				);
-				// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
-			}
-
-			// Check URL should not be duplicated in any post Permalink.
-			if ( empty( $check_exist_url ) ) {
-				$existing_post_id = url_to_postid( $permalink );
-				if ( 0 === $existing_post_id || $post_id === $existing_post_id ) {
-					break;
-				}
-			}
-
-			++$append_number;
+			$this->save_post( $post_id, $post, $updated );
 		}
-
-		if ( '/' === $trailing_slash ) {
-			$permalink = $permalink . '/';
-		}
-
-		if ( 0 === strpos( $permalink, '/' ) ) {
-			$permalink = substr( $permalink, 1 );
-		}
-
-		return $permalink;
 	}
 
 	/**
