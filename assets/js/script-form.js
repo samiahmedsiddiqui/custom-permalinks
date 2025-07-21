@@ -156,8 +156,8 @@
 			xhttp.open(
 				'GET',
 				geBaseURL.value +
-				'wp-json/custom-permalinks/v1/get-permalink/' +
-				postId,
+					'wp-json/custom-permalinks/v1/get-permalink/' +
+					postId,
 				true
 			);
 			xhttp.setRequestHeader(
