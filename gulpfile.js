@@ -29,21 +29,21 @@ async function deleteMinFiles() {
 }
 
 function minifyCss() {
-  return src(['assets/**/*.css', '!assets/**/*/*.min.css'])
+  return src(['assets/css/src/*.css', '!assets/css/src/*.min.css'])
     .pipe(cleanCSS({ compatibility: 'ie8' }))
     .pipe(rename(function (path) {
       path.extname = '-' + pluginVersion + '.min.css';
     }))
-    .pipe(dest('./assets'));
+    .pipe(dest('./assets/css'));
 }
 
 function minifyJs() {
-  return src(['assets/**/*.js', '!assets/**/*/*.min.js'])
+  return src(['assets/js/src/*.js', '!assets/js/src/*.min.js'])
     .pipe(uglify())
     .pipe(rename(function (path) {
       path.extname = '-' + pluginVersion + '.min.js';
     }))
-    .pipe(dest('./assets'));
+    .pipe(dest('./assets/js'));
 }
 
 exports.build = parallel(deleteMinFiles, minifyCss, minifyJs);
