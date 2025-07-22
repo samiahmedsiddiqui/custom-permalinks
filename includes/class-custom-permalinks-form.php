@@ -469,9 +469,12 @@ class Custom_Permalinks_Form {
 	/**
 	 * Clear post permalink cache if exists.
 	 *
+	 * @since 3.0.0
+	 * @access private
+	 *
 	 * @param string $cached_permalink Permalink for which cache needs to be cleared.
 	 */
-	public function clear_post_permalink_cache( $cached_permalink ) {
+	private function clear_post_permalink_cache( $cached_permalink ) {
 		if ( ! empty( $cached_permalink ) ) {
 			$cache_name   = 'cp$_' . str_replace( '/', '-', $cached_permalink ) . '_#cp';
 			$cache_exists = wp_cache_get( $cache_name, 'custom_permalinks' );
