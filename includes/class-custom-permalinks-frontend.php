@@ -237,7 +237,8 @@ class Custom_Permalinks_Frontend {
 				);
 			}
 
-			wp_cache_set( $cache_name, $posts, 'custom_permalinks' );
+			// Cache permalink for 24 hours.
+			wp_cache_set( $cache_name, $posts, 'custom_permalinks', 86400 );
 		}
 
 		return $posts;
@@ -305,7 +306,8 @@ class Custom_Permalinks_Frontend {
 			}
 		}
 
-		wp_cache_set( $cache_name, $matched_post, 'custom_permalinks' );
+		// Cache permalink for 24 hours.
+		wp_cache_set( $cache_name, $matched_post, 'custom_permalinks', 86400 );
 
 		return $matched_post;
 	}

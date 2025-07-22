@@ -38,7 +38,7 @@ final class Custom_Permalinks_Taxonomies {
 	 */
 	public static function total_permalinks() {
 		$total_taxonomies = wp_cache_get( 'total_taxonomies_result', 'custom_permalinks' );
-		if ( ! $total_taxonomies ) {
+		if ( false === $total_taxonomies ) {
 			$search_taxonomy  = array();
 			$taxonomy_table   = get_option( 'custom_permalink_table' );
 			$total_taxonomies = 0;
@@ -65,7 +65,7 @@ final class Custom_Permalinks_Taxonomies {
 				$total_taxonomies = count( $taxonomy_table );
 			}
 
-			wp_cache_set( 'total_taxonomies_result', $total_taxonomies, 'custom_permalinks' );
+			wp_cache_set( 'total_taxonomies_result', $total_taxonomies, 'custom_permalinks', 60 );
 		}
 
 		return $total_taxonomies;
@@ -84,7 +84,7 @@ final class Custom_Permalinks_Taxonomies {
 	 */
 	public static function get_permalinks( $per_page = 20, $page_number = 1 ) {
 		$taxonomies = wp_cache_get( 'taxonomies_results', 'custom_permalinks' );
-		if ( ! $taxonomies ) {
+		if ( false === $taxonomies ) {
 			$page_offset     = ( $page_number - 1 ) * $per_page;
 			$taxonomy_table  = get_option( 'custom_permalink_table' );
 			$all_taxonomies  = $taxonomy_table;
@@ -129,7 +129,7 @@ final class Custom_Permalinks_Taxonomies {
 				}
 			}
 
-			wp_cache_set( 'taxonomies_results', $taxonomies, 'custom_permalinks' );
+			wp_cache_set( 'taxonomies_results', $taxonomies, 'custom_permalinks', 60 );
 		}
 
 		return $taxonomies;

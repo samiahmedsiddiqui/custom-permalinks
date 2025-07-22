@@ -461,6 +461,21 @@ class Custom_Permalinks_Form {
 	}
 
 	/**
+	 * Clear post permalink cache if exists.
+	 *
+	 * @param string $cached_permalink Permalink for which cache needs to be cleared.
+	 */
+	public function clear_post_permalink_cache( $cached_permalink ) {
+		if ( ! empty( $cached_permalink ) ) {
+			$cache_name   = 'cp$_' . str_replace( '/', '-', $cached_permalink ) . '_#cp';
+			$cache_exists = wp_cache_get( $cache_name, 'custom_permalinks' );
+			if ( false !== $cache_exists ) {
+				wp_cache_delete( $cache_name, 'custom_permalinks' );
+			}
+		}
+	}
+
+	/**
 	 * Save per-post options.
 	 *
 	 * @access public
@@ -515,8 +530,8 @@ class Custom_Permalinks_Form {
 			}
 		}
 
-		$url        = get_post_meta( $post_id, 'custom_permalink', true );
-		$is_refresh = get_post_meta( $post_id, 'custom_permalink_regenerate_status', true );
+		$current_permalink = get_post_meta( $post_id, 'custom_permalink', true );
+		$is_refresh        = get_post_meta( $post_id, 'custom_permalink_regenerate_status', true );
 
 		// Make it 0 if not exist.
 		if ( empty( $is_refresh ) ) {
@@ -525,16 +540,16 @@ class Custom_Permalinks_Form {
 
 		/*
 		 * Make sure that the post saved from quick edit form so, just make the
-		 * $_REQUEST['custom_permalink'] same as $url to regenerate permalink
+		 * $_REQUEST['custom_permalink'] same as $current_permalink to regenerate permalink
 		 * if applicable.
 		 */
 		if ( ! isset( $_REQUEST['custom_permalink'] ) ) {
-			$_REQUEST['custom_permalink'] = $url;
+			$_REQUEST['custom_permalink'] = $current_permalink;
 		}
 
 		$is_regenerated = false;
 		if ( 'trash' !== $post->post_status
-			&& $url === $_REQUEST['custom_permalink']
+			&& $current_permalink === $_REQUEST['custom_permalink']
 			&& 1 === (int) $is_refresh
 		) {
 			$cp_post_permalinks = new Custom_Permalinks_Generate_Post_Permalinks();
@@ -545,7 +560,7 @@ class Custom_Permalinks_Form {
 		$original_link = $cp_frontend->original_post_link( $post_id );
 		if ( ! empty( $_REQUEST['custom_permalink'] )
 			&& $_REQUEST['custom_permalink'] !== $original_link
-			&& $_REQUEST['custom_permalink'] !== $url
+			&& $_REQUEST['custom_permalink'] !== $current_permalink
 		) {
 			$language_code = apply_filters(
 				'wpml_element_language_code',
@@ -575,6 +590,10 @@ class Custom_Permalinks_Form {
 			);
 
 			update_post_meta( $post_id, 'custom_permalink', $permalink );
+
+			// Clear cache for the previous and updated permalink.
+			$this->clear_post_permalink_cache( $current_permalink );
+			$this->clear_post_permalink_cache( $permalink );
 
 			// If true means it triggers from the regeneration code so don't override it.
 			if ( ! $is_regenerated ) {
@@ -618,6 +637,10 @@ class Custom_Permalinks_Form {
 	 * @return void
 	 */
 	public function delete_permalink( $post_id ) {
+		// Clear cache for the deleting post.
+		$permalink = get_post_meta( $post_id, 'custom_permalink', true );
+		$this->clear_post_permalink_cache( $permalink );
+
 		delete_metadata( 'post', $post_id, 'custom_permalink' );
 	}
 
