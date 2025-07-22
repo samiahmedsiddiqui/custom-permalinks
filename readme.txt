@@ -87,7 +87,7 @@ This release of Custom Permalinks brings significant enhancements to post type p
 
 **Added**
 
-  * **Post Type Permalink Structures:** Introduced robust functionality to define custom permalink structures for each public Post Type directly within the plugin settings. This allows for automatic URL generation based on predefined tags upon content creation, offering greater flexibility while still allowing manual edits.
+	* **Post Type Permalink Structures:** Introduced robust functionality to define custom permalink structures for each public Post Type directly within the plugin settings. This allows for automatic URL generation based on predefined tags upon content creation, offering greater flexibility while still allowing manual edits.
 	* **New Available Permalink Tags:** Expanded the list of dynamic tags that can be used in permalink structures, including:
 		* `%parent_postname%`: For immediate parent page slugs.
 		* `%parents_postnames%`: For all parent page slugs.
