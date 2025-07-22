@@ -87,23 +87,23 @@ This release of Custom Permalinks brings significant enhancements to post type p
 
 **Added**
 
-	* **Post Type Permalink Structures:** Introduced robust functionality to define custom permalink structures for each public Post Type directly within the plugin settings. This allows for automatic URL generation based on predefined tags upon content creation, offering greater flexibility while still allowing manual edits.
-	* **New Available Permalink Tags:** Expanded the list of dynamic tags that can be used in permalink structures, including:
-		* `%parent_postname%`: For immediate parent page slugs.
-		* `%parents_postnames%`: For all parent page slugs.
-		* `%title%`: A dynamic slug that updates with post title changes (until published or manually edited).
-		* `%ctax_parent_TAXONOMY_NAME%`: For immediate parent custom taxonomy slugs.
-		* `%ctax_parents_TAXONOMY_NAME%`: For all parent custom taxonomy slugs.
-		* `%custom_permalinks_TAG_NAME%`: Allows developers to define and resolve their own custom tags.
-	* **WP All Import Compatibility:** Added support to generate/update permalinks when importing posts using the WP All Import plugin.
-	* **New Filter Examples:** Included clear code examples for `custom_permalinks_post_permalink_tag` to set custom values from ACF fields, and for programmatically generating permalinks for single posts and entire post types.
+  * **Post Type Permalink Structures:** Introduced robust functionality to define custom permalink structures for each public Post Type directly within the plugin settings. This allows for automatic URL generation based on predefined tags upon content creation, offering greater flexibility while still allowing manual edits.
+  * **New Available Permalink Tags:** Expanded the list of dynamic tags that can be used in permalink structures, including:
+    * `%parent_postname%`: For immediate parent page slugs.
+    * `%parents_postnames%`: For all parent page slugs.
+    * `%title%`: A dynamic slug that updates with post title changes (until published or manually edited).
+    * `%ctax_parent_TAXONOMY_NAME%`: For immediate parent custom taxonomy slugs.
+    * `%ctax_parents_TAXONOMY_NAME%`: For all parent custom taxonomy slugs.
+    * `%custom_permalinks_TAG_NAME%`: Allows developers to define and resolve their own custom tags.
+  * **WP All Import Compatibility:** Added support to generate/update permalinks when importing posts using the WP All Import plugin.
+  * **New Filter Examples:** Included clear code examples for `custom_permalinks_post_permalink_tag` to set custom values from ACF fields, and for programmatically generating permalinks for single posts and entire post types.
 
 **Improved**
 
-	* **Post Caching:** Enhanced post caching mechanisms and optimized cache deletion upon updates for better performance.
-	* **Permalink Retrieval:** Improved logic to allow fetching posts against customized permalinks.
-	* **Filter Documentation:** Refined existing filter descriptions and improved code formatting for clarity.
-	* **Plugin Purpose Clarity:** Updated documentation to explicitly state that original post URLs will automatically redirect to the customized URLs, ensuring seamless transitions.
+  * **Post Caching:** Enhanced post caching mechanisms and optimized cache deletion upon updates for better performance.
+  * **Permalink Retrieval:** Improved logic to allow fetching posts against customized permalinks.
+  * **Filter Documentation:** Refined existing filter descriptions and improved code formatting for clarity.
+  * **Plugin Purpose Clarity:** Updated documentation to explicitly state that original post URLs will automatically redirect to the customized URLs, ensuring seamless transitions.
 
 = Earlier versions =
 
