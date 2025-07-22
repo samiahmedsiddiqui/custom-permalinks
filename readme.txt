@@ -4,7 +4,7 @@ Tags: permalink, url, link, address, redirect
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.8
-Stable tag: 3.0.0
+Stable tag: 3.0.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -80,6 +80,10 @@ You have two ways to install Custom Permalinks:
 3.  Activate Custom Permalinks through the "Plugins" menu in your WordPress dashboard.
 
 == Changelog ==
+
+= 3.0.1 - Jul 22, 2025 =
+
+Fix PHP warning on `url_to_postid()` filter.
 
 = 3.0.0 - Jul 22, 2025 =
 
