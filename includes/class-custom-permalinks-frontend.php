@@ -76,6 +76,7 @@ class Custom_Permalinks_Frontend {
 		add_filter( 'post_link', array( $this, 'custom_post_link' ), 10, 2 );
 		add_filter( 'post_type_link', array( $this, 'custom_post_link' ), 10, 2 );
 		add_filter( 'page_link', array( $this, 'custom_page_link' ), 10, 2 );
+		add_filter( 'url_to_postid', array( $this, 'postid_to_customized_permalink' ), 10, 1 );
 		add_filter( 'term_link', array( $this, 'custom_term_link' ), 10, 2 );
 		add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
 
@@ -922,6 +923,67 @@ class Custom_Permalinks_Frontend {
 		}
 
 		$permalink = $this->remove_double_slash( $permalink );
+
+		return $permalink;
+	}
+
+	/**
+	 * Fetch default permalink against the customized permalink.
+	 *
+	 * @since 3.0.0
+	 * @access public
+	 *
+	 * @param string $permalink URL Permalink to check.
+	 *
+	 * @return string Default Permalink or the same permalink if not found.
+	 */
+	public function postid_to_customized_permalink( $permalink ) {
+		$customized_permalink = ltrim( substr( $permalink, strlen( $url ) ), '/' );
+		if ( defined( 'POLYLANG_VERSION' ) ) {
+			$cp_form              = new Custom_Permalinks_Form();
+			$customized_permalink = $cp_form->check_conflicts( $customized_permalink );
+		}
+
+		$customized_permalink = preg_replace( '@/+@', '/', trim( $customized_permalink, '/' ) );
+		$posts                = $this->query_post( $customized_permalink );
+		if ( is_array( $posts ) && ! empty( $posts ) ) {
+			if ( 'draft' === $posts[0]->post_status
+				|| 'pending' === $posts[0]->post_status
+			) {
+				if ( 'page' === $posts[0]->post_type ) {
+					$original_url = '?page_id=' . $posts[0]->ID;
+				} else {
+					$original_url = '?post_type=' . $posts[0]->post_type . '&p=' . $posts[0]->ID;
+				}
+			} else {
+				$post_meta = trim( strtolower( $posts[0]->meta_value ), '/' );
+				if ( 'page' === $posts[0]->post_type ) {
+					$get_original_url = $this->original_page_link( $posts[0]->ID );
+					$original_url     = preg_replace(
+						'@/+@',
+						'/',
+						str_replace(
+							$post_meta,
+							$get_original_url,
+							strtolower( $customized_permalink )
+						)
+					);
+				} else {
+					$get_original_url = $this->original_post_link( $posts[0]->ID );
+					$original_url     = preg_replace(
+						'@/+@',
+						'/',
+						str_replace(
+							$post_meta,
+							$get_original_url,
+							strtolower( $customized_permalink )
+						)
+					);
+				}
+			}
+
+			$permalink = $original_url;
+		}
 
 		return $permalink;
 	}
