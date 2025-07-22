@@ -1,6 +1,6 @@
 # Custom Permalinks
 
-You want to take control of your WordPress site's URLs? The **Custom Permalinks** plugin gives you the power to set unique, custom URLs for any post, page, tag, or category. This means you can design your site's structure exactly how you envision it, rather than being limited by WordPress's default settings.
+You want to take control of your WordPress site's URLs? The **Custom Permalinks** plugin gives you the power to set unique, custom URLs for any post, page, tag, or category. This means you can design your site's structure exactly how you envision it, rather than being limited by WordPress's default settings. When you set a custom permalink, the original post URL will be automatically redirected to your new, customized URL.
 
 ## Key Features
 
@@ -41,6 +41,8 @@ When setting up your custom permalink structures, you can use a variety of tags 
 ## Advanced Customization and Filters
 
 Custom Permalinks offers developers a robust set of filters and actions to precisely control its behavior. This section outlines how to leverage these features for tasks like generating permalinks programmatically and fine-tuning URL structures.
+
+---
 
 ### Setting a Custom Value in Your Post Type Permalink
 
@@ -85,6 +87,8 @@ add_filter( 'custom_permalinks_post_permalink_tag', 'custom_permalinks_post_perm
 
 This `custom_permalinks_post_permalink_tag` filter allows you to dynamically insert values into your permalink structure. The example retrieves the `year` and `month` from your ACF date field named `press_date` and inserts them where `%custom_permalinks_year%` and `%custom_permalinks_month%` are defined in your permalink structure. You can integrate this code into your theme's `functions.php` file or a custom plugin to retrieve those values and return them for the respective permalink tags.
 
+---
+
 ### Manipulate Permalink Before Saving
 
 Make changes to a permalink string just before it's saved to the database. This is useful for enforcing specific formatting, like ensuring a trailing slash:
@@ -102,6 +106,8 @@ function custom_permalinks_permalink_before_saving( $permalink, $post_id, $langu
 add_filter( 'custom_permalink_before_saving', 'custom_permalinks_permalink_before_saving', 10, 3 );
 ```
 
+---
+
 ### Allow Accented Letters in Permalinks
 
 Enable the use of accented characters in permalinks:
@@ -109,6 +115,8 @@ Enable the use of accented characters in permalinks:
 ```php
 add_filter( 'custom_permalinks_allow_accents', '__return_true' );
 ```
+
+---
 
 ### Allow Uppercase Letters in Permalinks
 
@@ -118,6 +126,8 @@ Enable the use of uppercase characters in permalinks:
 add_filter( 'custom_permalinks_allow_caps', '__return_true' );
 ```
 
+---
+
 ### Allow Redundant Hyphens in Permalinks
 
 Allow permalinks to contain redundant hyphens (e.g., --):
@@ -125,6 +135,8 @@ Allow permalinks to contain redundant hyphens (e.g., --):
 ```php
 add_filter( 'custom_permalinks_redundant_hyphens', '__return_true' );
 ```
+
+---
 
 ### Generating Custom Permalinks
 
@@ -175,6 +187,8 @@ custom_permalinks_generate_permalinks_for_post_type( 'product' );
 
 This PHP function iterates through all published posts of the specified `$post_type` and applies the `do_action` hook to each, ensuring their permalinks are regenerated. You can integrate this code into your theme's `functions.php` file or a custom plugin, typically running it as a one-time process or via an administrative trigger.
 
+---
+
 ### Exclude Post Type from Custom Permalink Form
 
 Remove the custom permalink settings form from the edit screen of a specific post type:
@@ -191,6 +205,8 @@ function custom_permalinks_exclude_post_types( $post_type ) {
 add_filter( 'custom_permalinks_exclude_post_type', 'custom_permalinks_exclude_post_types' );
 ```
 
+---
+
 ### Exclude Specific Posts from Custom Permalink Form
 
 Remove the custom permalink settings form from individual posts based on criteria like their ID:
@@ -206,6 +222,8 @@ function custom_permalinks_exclude_posts( $post ) {
 }
 add_filter( 'custom_permalinks_exclude_posts', 'custom_permalinks_exclude_posts' );
 ```
+
+---
 
 ### Exclude Permalink from Processing
 
@@ -224,6 +242,8 @@ function custom_permalinks_xml_sitemap_url( $permalink ) {
 add_filter( 'custom_permalinks_request_ignore', 'custom_permalinks_xml_sitemap_url' );
 ```
 
+---
+
 ### Add `PATH_INFO` to `$_SERVER` Variable
 
 Enable `PATH_INFO` to be added to the `$_SERVER` superglobal variable:
@@ -231,6 +251,8 @@ Enable `PATH_INFO` to be added to the `$_SERVER` superglobal variable:
 ```php
 add_filter( 'custom_permalinks_path_info', '__return_true' );
 ```
+
+---
 
 ### Disable All Redirects
 
@@ -243,6 +265,8 @@ function custom_permalinks_avoid_redirect( $permalink ) {
 }
 add_filter( 'custom_permalinks_avoid_redirect', 'custom_permalinks_avoid_redirect' );
 ```
+
+---
 
 ### Disable Specific Redirects
 
@@ -259,6 +283,8 @@ function custom_permalinks_avoid_redirect( $permalink ) {
 add_filter( 'custom_permalinks_avoid_redirect', 'custom_permalinks_avoid_redirect' );
 ```
 
+---
+
 ### Disable `like` Query
 
 Disable the `like` query functionality, which can impact URL matching in some specific scenarios:
@@ -270,6 +296,15 @@ add_filter( 'cp_remove_like_query', '__return_false' );
 *Note: Use `custom_permalinks_like_query` if URLs don't work after upgrading to v1.2.9.*
 
 **Note:** If you experience issues with URLs after upgrading to v1.2.9, consider using `custom_permalinks_like_query` instead.
+
+---
+
+### For Assistance:
+
+* **Premium Users:** If you need assistance implementing these filters, please don't hesitate to reach out to us via our [Premium contact support](https://www.custompermalinks.com/contact-us/).
+* **Other Users:** You can also directly reach out to the plugin author via [LinkedIn](https://www.linkedin.com/in/sami-ahmed-siddiqui/).
+
+---
 
 ## Need Help or Found a Bug?
 
