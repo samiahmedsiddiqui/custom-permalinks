@@ -44,6 +44,12 @@ class Custom_Permalinks_Form {
 		add_action( 'add_meta_boxes', array( $this, 'permalink_edit_box' ) );
 		add_action( 'save_post', array( $this, 'save_post' ), 10, 3 );
 		add_action( 'pmxi_saved_post', array( $this, 'pmxi_post_permalink' ), 10, 3 );
+		add_action(
+			'custom_permalinks_generate_post_permalink',
+			array( $this, 'generate_post_permalink' ),
+			10,
+			1
+		);
 		add_action( 'delete_post', array( $this, 'delete_permalink' ), 10 );
 		add_action( 'category_add_form', array( $this, 'term_options' ) );
 		add_action( 'category_edit_form', array( $this, 'term_options' ) );
@@ -604,7 +610,7 @@ class Custom_Permalinks_Form {
 	}
 
 	/**
-	 * This action fires when WP All Import saves a post of any type. The
+	 * This action fires when WP All Import saves a post of any type.
 	 *
 	 * @since 3.0.0
 	 * @access public
@@ -617,13 +623,30 @@ class Custom_Permalinks_Form {
 	 */
 	public function pmxi_post_permalink( $post_id, $xml_node, $is_update ) {
 		$post = get_post( $post_id );
-		if ( is_object( $post, $post->post_type ) ) {
+		if ( is_object( $post ) && isset( $post->post_type ) ) {
 			$updated = false;
 			if ( 1 === $is_update ) {
 				$updated = true;
 			}
 
 			$this->save_post( $post_id, $post, $updated );
+		}
+	}
+
+	/**
+	 * Generates post permalink for the provided post id.
+	 *
+	 * @since 3.0.0
+	 * @access public
+	 *
+	 * @param int $post_id Post ID.
+	 *
+	 * @return void
+	 */
+	public function generate_post_permalink( $post_id ) {
+		$post = get_post( $post_id );
+		if ( is_object( $post ) && isset( $post->post_type ) ) {
+			$this->save_post( $post_id, $post, false );
 		}
 	}
 
