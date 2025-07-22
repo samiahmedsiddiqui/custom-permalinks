@@ -938,7 +938,7 @@ class Custom_Permalinks_Frontend {
 	 * @return string Default Permalink or the same permalink if not found.
 	 */
 	public function postid_to_customized_permalink( $permalink ) {
-		$customized_permalink = ltrim( substr( $permalink, strlen( $url ) ), '/' );
+		$customized_permalink = ltrim( $permalink, '/' );
 		if ( defined( 'POLYLANG_VERSION' ) ) {
 			$cp_form              = new Custom_Permalinks_Form();
 			$customized_permalink = $cp_form->check_conflicts( $customized_permalink );
