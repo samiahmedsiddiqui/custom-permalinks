@@ -928,15 +928,15 @@ class Custom_Permalinks_Frontend {
 	}
 
 	/**
-   * Fetch default permalink against the customized permalink.
-   *
-   * @since 3.0.0
-   * @access public
-   *
-   * @param string $permalink URL Permalink to check.
-   *
-   * @return string Default Permalink or the same permalink if not found.
-   */
+	 * Fetch default permalink against the customized permalink.
+	 *
+	 * @since 3.0.0
+	 * @access public
+	 *
+	 * @param string $permalink URL Permalink to check.
+	 *
+	 * @return string Default Permalink or the same permalink if not found.
+	 */
 	public function postid_to_customized_permalink( $permalink ) {
 		$customized_permalink = ltrim( substr( $permalink, strlen( $url ) ), '/' );
 		if ( defined( 'POLYLANG_VERSION' ) ) {
