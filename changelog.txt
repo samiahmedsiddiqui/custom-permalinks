@@ -2,6 +2,55 @@
 
 This file contains only old changelog. See readme.txt for newer versions.
 
+= 2.8.0 - Apr 29, 2025 =
+
+* Bug:
+  * Resolved pagination issue with custom permalinks (now supports /page/{number} format correctly).
+* Enhancements:
+	* Added compatibility with Polylang 3.7.
+	* Metabox is now hidden for post types that are not publicly queryable.
+
+= 2.7.0 - Aug 20, 2024 =
+
+* Bug
+  * [Passing null to parameter string is deprecated](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/86)
+  * [Fix PHP warning with empty permalink on new page/post](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/87)
+	* [Authenticated(Editor+) Stored Cross-Site Scripting](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/96)
+* Enhancement:
+	* [Improve I18N](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/72)
+
+= 2.6.0 - Aug 15, 2024 =
+
+* Feature Additions:
+  * Compatibility with PolyLang Plugin
+
+= 2.5.2 - Feb 14, 2023 =
+
+* Bug
+  * [Error in new update](https://wordpress.org/support/topic/error-in-new-update-3/)
+
+= 2.5.1 - Feb 14, 2023 =
+
+* Bug
+  * [“http//” is added in front of permalinks](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/71)
+
+= 2.5.0 - Jan 02, 2023 =
+
+* Bugs
+  * [Retreiving info from installed plugin (GDPR)](https://wordpress.org/support/topic/retreiving-info-from-installed-plugin-gdpr/)
+* Enhancement
+	* Same permalink with WPML different domain
+
+= 2.4.0 - Nov 26, 2021 =
+
+* Bugs
+  * [filter for leading special characters](https://wordpress.org/support/topic/filter-for-leading-special-characters/)
+  * [“search Permalinks” button doesn’t work. (part2)](https://wordpress.org/support/topic/search-permalinks-button-doesnt-work-part2/)
+  * [PHP 8 errors on first visit of Taxonomy Permalinks tab](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/59)
+  * [Notice: Undefined variable: site_url in custom-permalinks/admin/class-custom-permalinks-post-types-table.php on line 306](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/56)
+* Enhancements
+  * [Pending Post Preview Link](https://wordpress.org/support/topic/pending-post-preview-link/)
+
 = 2.3.0 - Sep 21, 2021 =
 
 * Bugs

@@ -4,15 +4,15 @@ Tags: permalink, url, link, address, redirect
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.8
-Stable tag: 2.8.0
+Stable tag: 3.0.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Custom Permalinks gives you complete control over your WordPress site's URLs, letting you create custom, user-friendly permalinks for any post, page, category, or tag with automatic redirects for old links.
+Custom Permalinks is a powerful WordPress plugin that grants you complete control over your site's URLs. Easily set unique, custom permalinks for any post, page, tag, or category, allowing you to design an ideal site structure. It includes features for defining post type-specific structures with dynamic tags and automatically redirects old URLs to your new custom ones. Developers can also leverage a wide array of filters for advanced customization.
 
 == Description ==
 
-You want to take control of your WordPress site's URLs? The **Custom Permalinks** plugin gives you the power to set unique, custom URLs for any post, page, tag, or category. This means you can design your site's structure exactly how you envision it, rather than being limited by WordPress's default settings.
+You want to take control of your WordPress site's URLs? The **Custom Permalinks** plugin gives you the power to set unique, custom URLs for any post, page, tag, or category. This means you can design your site's structure exactly how you envision it, rather than being limited by WordPress's default settings. When you set a custom permalink, the original post URL will be automatically redirected to your new, customized URL.
 
 === Key Features ===
 
@@ -52,7 +52,10 @@ When setting up your custom permalink structures, you can use a variety of tags 
 
 Custom Permalinks offers a range of **filters** that empower developers to precisely control its behavior. You can explore all available filters, complete with example code snippets, in our [GitHub repository](https://github.com/samiahmedsiddiqui/custom-permalinks).
 
-If you need assistance implementing these filters, please don't hesitate to reach out to us via our **Premium contact support.
+**For Assistance:**
+
+* **Premium Users:** If you need assistance implementing these filters, please don't hesitate to reach out to us via our [Premium contact support](https://www.custompermalinks.com/contact-us/).
+* **Other Users:** You can also directly reach out to the plugin author via [LinkedIn](https://www.linkedin.com/in/sami-ahmed-siddiqui/).
 
 === Need Help or Found a Bug? ===
 
@@ -78,54 +81,29 @@ You have two ways to install Custom Permalinks:
 
 == Changelog ==
 
-= 2.8.0 - Apr 29, 2025 =
+= 3.0.0 - Jul 22, 2025 =
 
-* Bug:
-  * Resolved pagination issue with custom permalinks (now supports /page/{number} format correctly).
-* Enhancements:
-	* Added compatibility with Polylang 3.7.
-	* Metabox is now hidden for post types that are not publicly queryable.
+This release of Custom Permalinks brings significant enhancements to post type permalink management, introduces new customization options, and refines the overall user and developer experience.
 
-= 2.7.0 - Aug 20, 2024 =
+**Added**
 
-* Bug
-  * [Passing null to parameter string is deprecated](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/86)
-  * [Fix PHP warning with empty permalink on new page/post](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/87)
-	* [Authenticated(Editor+) Stored Cross-Site Scripting](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/96)
-* Enhancement:
-	* [Improve I18N](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/72)
+  * **Post Type Permalink Structures:** Introduced robust functionality to define custom permalink structures for each public Post Type directly within the plugin settings. This allows for automatic URL generation based on predefined tags upon content creation, offering greater flexibility while still allowing manual edits.
+	* **New Available Permalink Tags:** Expanded the list of dynamic tags that can be used in permalink structures, including:
+		* %parent_postname%: For immediate parent page slugs.
+		* %parents_postnames%: For all parent page slugs.
+		* %title%: A dynamic slug that updates with post title changes (until published or manually edited).
+		* %ctax_parent_TAXONOMY_NAME%: For immediate parent custom taxonomy slugs.
+		* %ctax_parents_TAXONOMY_NAME%: For all parent custom taxonomy slugs.
+		* %custom_permalinks_TAG_NAME%: Allows developers to define and resolve their own custom tags.
+	* **WP All Import Compatibility:** Added support to generate/update permalinks when importing posts using the WP All Import plugin.
+	* **New Filter Examples:** Included clear code examples for `custom_permalinks_post_permalink_tag` to set custom values from ACF fields, and for programmatically generating permalinks for single posts and entire post types.
 
-= 2.6.0 - Aug 15, 2024 =
+**Improved**
 
-* Feature Additions:
-  * Compatibility with PolyLang Plugin
-
-= 2.5.2 - Feb 14, 2023 =
-
-* Bug
-  * [Error in new update](https://wordpress.org/support/topic/error-in-new-update-3/)
-
-= 2.5.1 - Feb 14, 2023 =
-
-* Bug
-  * [“http//” is added in front of permalinks](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/71)
-
-= 2.5.0 - Jan 02, 2023 =
-
-* Bugs
-  * [Retreiving info from installed plugin (GDPR)](https://wordpress.org/support/topic/retreiving-info-from-installed-plugin-gdpr/)
-* Enhancement
-	* Same permalink with WPML different domain
-
-= 2.4.0 - Nov 26, 2021 =
-
-* Bugs
-  * [filter for leading special characters](https://wordpress.org/support/topic/filter-for-leading-special-characters/)
-  * [“search Permalinks” button doesn’t work. (part2)](https://wordpress.org/support/topic/search-permalinks-button-doesnt-work-part2/)
-  * [PHP 8 errors on first visit of Taxonomy Permalinks tab](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/59)
-  * [Notice: Undefined variable: site_url in custom-permalinks/admin/class-custom-permalinks-post-types-table.php on line 306](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/56)
-* Enhancements
-  * [Pending Post Preview Link](https://wordpress.org/support/topic/pending-post-preview-link/)
+	* **Post Caching:** Enhanced post caching mechanisms and optimized cache deletion upon updates for better performance.
+	* **Permalink Retrieval:** Improved logic to allow fetching posts against customized permalinks.
+	* **Filter Documentation:** Refined existing filter descriptions and improved code formatting for clarity.
+	* **Plugin Purpose Clarity:** Updated documentation to explicitly state that original post URLs will automatically redirect to the customized URLs, ensuring seamless transitions.
 
 = Earlier versions =
 
