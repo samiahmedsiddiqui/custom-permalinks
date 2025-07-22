@@ -25,7 +25,7 @@ final class Custom_Permalinks_Post_Types {
 		global $wpdb;
 
 		$total_posts = wp_cache_get( 'total_posts_result', 'custom_permalinks' );
-		if ( ! $total_posts ) {
+		if ( false === $total_posts ) {
 			$sql_query = "
 				SELECT COUNT(p.ID) FROM $wpdb->posts AS p
 				LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id)
@@ -62,7 +62,7 @@ final class Custom_Permalinks_Post_Types {
 				);
 			}
 
-			wp_cache_set( 'total_posts_result', $total_posts, 'custom_permalinks' );
+			wp_cache_set( 'total_posts_result', $total_posts, 'custom_permalinks', 60 );
 		}
 
 		return $total_posts;
@@ -83,7 +83,7 @@ final class Custom_Permalinks_Post_Types {
 		global $wpdb;
 
 		$posts = wp_cache_get( 'post_type_results', 'custom_permalinks' );
-		if ( ! $posts ) {
+		if ( false === $posts ) {
 			$page_offset = ( $page_number - 1 ) * $per_page;
 			$order_by    = 'p.ID';
 			$order       = null;
@@ -155,7 +155,7 @@ final class Custom_Permalinks_Post_Types {
 			// phpcs:disable WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 			// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
-			wp_cache_set( 'post_type_results', $posts, 'custom_permalinks' );
+			wp_cache_set( 'post_type_results', $posts, 'custom_permalinks', 60 );
 		}
 
 		return $posts;
