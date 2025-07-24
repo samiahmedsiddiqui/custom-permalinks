@@ -124,16 +124,12 @@ class Custom_Permalinks_Post_Types_Settings {
 				</p>
 
 				<p>
-					<?php
-					esc_html_e(
-						'You have the flexibility to set unique permalink structures for each Post Type — or stick with a unified format. If you don’t define a custom structure, WordPress will automatically fall back to the default structure configured in your',
+					<?php printf(
+					esc_html__(
+						'You have the flexibility to set unique permalink structures for each Post Type — or stick with a unified format. If you don’t define a custom structure, WordPress will automatically fall back to the default structure configured in your %1$sPermalink Settings%2$s.',
 						'custom-permalinks'
-					);
+					), '<a href="options-permalink.php" target="_blank">', '</a>');
 					?>
-
-					<a href="options-permalink.php" target="_blank">
-						<?php esc_html_e( ' Permalink Settings', 'custom-permalinks' ); ?>
-					</a>.
 				</p>
 
 				<p>
