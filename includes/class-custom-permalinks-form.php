@@ -83,7 +83,7 @@ class Custom_Permalinks_Form {
 	 *
 	 * @param object $post WP Post Object.
 	 *
-	 * return bool false Whether to show Custom Permalink form or not.
+	 * return bool Whether Custom Permalink is customizable or not.
 	 */
 	private function is_permalink_customizable( $post ) {
 		$exclude_post_types = apply_filters(
@@ -117,19 +117,18 @@ class Custom_Permalinks_Form {
 			}
 		}
 
+		$check_availability = true;
 		if ( isset( $this->permalink_metabox ) && 1 === $this->permalink_metabox ) {
-			$check_availability = true;
+			$check_availability = false;
 		} elseif ( 'attachment' === $post->post_type ) {
-			$check_availability = true;
+			$check_availability = false;
 		} elseif ( intval( get_option( 'page_on_front' ) ) === $post->ID ) {
-			$check_availability = true;
+			$check_availability = false;
 		} elseif ( ! isset( $public_post_types[ $post->post_type ] ) ) {
-			$check_availability = true;
+			$check_availability = false;
 		} elseif ( '__true' === $exclude_post_types ) {
-			$check_availability = true;
+			$check_availability = false;
 		} elseif ( is_bool( $exclude_posts ) && $exclude_posts ) {
-			$check_availability = true;
-		} else {
 			$check_availability = false;
 		}
 
@@ -494,6 +493,10 @@ class Custom_Permalinks_Form {
 	 * @param bool    $update  Whether this is an existing post being updated or not.
 	 */
 	public function save_post( $post_id, $post, $update ) {
+		if ( ! is_object( $post ) || false === $this->is_permalink_customizable( $post ) ) {
+			return;
+		}
+
 		/*
 		 * Enable permalink regeneration on creating new post if permalink structure
 		 * is defined for the post type.
@@ -850,7 +853,7 @@ class Custom_Permalinks_Form {
 
 		$is_customizable         = $this->is_permalink_customizable( $post );
 		$this->permalink_metabox = 1;
-		if ( $is_customizable ) {
+		if ( false === $is_customizable ) {
 			return $html;
 		}
 
@@ -869,7 +872,7 @@ class Custom_Permalinks_Form {
 	 */
 	public function meta_edit_form( $post ) {
 		$is_customizable = $this->is_permalink_customizable( $post );
-		if ( $is_customizable ) {
+		if ( false === $is_customizable ) {
 			wp_enqueue_script(
 				'custom-permalinks-form',
 				plugins_url(
