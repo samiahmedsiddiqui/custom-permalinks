@@ -548,11 +548,11 @@ class Custom_Permalinks_Form {
 		}
 
 		/*
-		 * Make sure that the post saved from quick edit form so, just make the
-		 * $_REQUEST['custom_permalink'] same as $current_permalink to regenerate permalink
-		 * if applicable.
+		 * Make sure that the post saved from quick edit form or from regeneration
+		 * code so, just make the $_REQUEST['custom_permalink'] same as
+		 * $current_permalink to regenerate permalink if applicable.
 		 */
-		if ( ! isset( $_REQUEST['custom_permalink'] ) ) {
+		if ( ! isset( $_REQUEST['custom_permalink'] ) || false === $update ) {
 			$_REQUEST['custom_permalink'] = $current_permalink;
 		}
 
