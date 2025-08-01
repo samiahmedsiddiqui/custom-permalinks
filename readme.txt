@@ -4,7 +4,7 @@ Tags: permalink, url, link, address, redirect
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.8
-Stable tag: 3.0.1
+Stable tag: 3.1.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -80,6 +80,26 @@ You have two ways to install Custom Permalinks:
 3.  Activate Custom Permalinks through the "Plugins" menu in your WordPress dashboard.
 
 == Changelog ==
+
+= 3.1.0 - Aug 01, 2025 =
+
+**Permalink Generation:**
+
+  * Resolved an issue where the `custom_permalinks_generate_post_permalink` function was creating duplicate permalinks with appended numbers when triggered programmatically. This ensures a unique, clean URL every time.
+  * Updated the `sanitize_text_field` function to prevent the truncation of permalink tags, such as `%category%` and `%day%`, guaranteeing your custom permalink structure remains intact.
+
+**Performance:**
+
+  * The `save_post` hook will now only run on public post types. This change prevents unnecessary processing on post types like "Menus", which can significantly improve performance on sites with complex configurations.
+
+**Maintenance:**
+
+  * Improved internationalization (I18N) support.
+  * Fixed a bug where the cache group was not properly clearing when using the flush button.
+
+**Language:**
+
+  * Updated the plugin with the latest language packs.
 
 = 3.0.1 - Jul 22, 2025 =
 

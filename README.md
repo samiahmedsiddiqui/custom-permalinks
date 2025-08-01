@@ -293,9 +293,9 @@ Disable the `like` query functionality, which can impact URL matching in some sp
 add_filter( 'cp_remove_like_query', '__return_false' );
 ```
 
-*Note: Use `custom_permalinks_like_query` if URLs don't work after upgrading to v1.2.9.*
+*Note: Use `cp_remove_like_query` if URLs don't work after upgrading to v1.2.9.*
 
-**Note:** If you experience issues with URLs after upgrading to v1.2.9, consider using `custom_permalinks_like_query` instead.
+**Note:** If you experience issues with URLs after upgrading to v1.2.9, consider using `cp_remove_like_query` instead.
 
 ---
 
