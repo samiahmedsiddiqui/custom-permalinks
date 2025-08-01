@@ -1,0 +1,255 @@
+# Translation of Plugins - Custom Permalinks - Stable (latest release) in Galician
+# This file is distributed under the same license as the Plugins - Custom Permalinks - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2022-09-10 01:06:29+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: gl_ES\n"
+"Project-Id-Version: Plugins - Custom Permalinks - Stable (latest release)\n"
+
+#: admin/class-custom-permalinks-admin.php:238
+msgid "by"
+msgstr "por"
+
+#: admin/class-custom-permalinks-admin.php:98
+#: admin/class-custom-permalinks-admin.php:269
+msgid "About"
+msgstr "Acerca de"
+
+#: admin/class-custom-permalinks-admin.php:275
+msgid "Contact"
+msgstr "Contacto"
+
+#: admin/class-custom-permalinks-post-types-table.php:37
+#: admin/class-custom-permalinks-taxonomies-table.php:37
+msgid "Permalinks"
+msgstr "Ligazóns permanentes"
+
+#: admin/class-custom-permalinks-admin.php:304
+msgid "contact us"
+msgstr "contactar con nós"
+
+#: admin/class-custom-permalinks-admin.php:244
+msgid "Support forums"
+msgstr "Foros de soporte"
+
+#: admin/class-custom-permalinks-admin.php:272
+msgid "Premium Support"
+msgstr "Soporte premium"
+
+#: admin/class-custom-permalinks-post-types-table.php:149
+#: admin/class-custom-permalinks-taxonomies-table.php:149
+msgid "Search results for: "
+msgstr "Resultados da busca de: "
+
+#: admin/class-custom-permalinks-admin.php:236
+msgid "Custom Permalinks version"
+msgstr "Custom Permalinks versión"
+
+#. Author URI of the plugin
+#: custom-permalinks.php
+msgid "https://www.linkedin.com/in/sami-ahmed-siddiqui/"
+msgstr "https://www.linkedin.com/in/sami-ahmed-siddiqui/"
+
+#: admin/class-custom-permalinks-admin.php:298
+msgid "This plugin collect information about the site like URL, WordPress version etc. This plugin doesn't collect any user related information. To have any kind of further query please feel free to"
+msgstr "Este plugin recompila información sobre o sitio, como a URL, a versión de WordPress, etc. Este plugin non recompila ningunha información relacionada co usuario. Para calquera consulta adicional, por favor, non dubides en"
+
+#: admin/class-custom-permalinks-post-types-table.php:179
+#: admin/class-custom-permalinks-taxonomies-table.php:179
+msgid "Search Permalinks"
+msgstr "Buscar ligazóns permanentes"
+
+#: admin/class-custom-permalinks-about.php:189
+msgid "It removes some meta data from the WordPress header so, your header keeps clean of useless information like shortlink, rsd_link, wlwmanifest_link, emoji_scripts, wp_embed, wp_json, emoji_styles, generator and so on."
+msgstr "Elimina algúns datos meta da cabeceira de WordPress, polo que a túa cabeceira se mantén limpa de información inútil como shortlink, rsd_link, wlwmanifest_link, emoji_scripts, wp_embed, wp_json, emoji_styles, generator e demais."
+
+#: admin/class-custom-permalinks-about.php:147
+msgid "Convert the paths(URLs) to relative instead of absolute. You can make Post, Category, Archive, Image URLs and Script and Style src as per your requirement. You can choose which you want to be relative from the settings Page."
+msgstr "Convirte as rutas (URL) en relativas en vez de en absolutas. Podes facer que a entrada, a categoría, o arquivo, as URL das imaxes e as fontes de script e de estilo sexan segundo as túas necesidades. Podes elixir cal queres que sexa relativa desde a páxina de axustes."
+
+#: admin/class-custom-permalinks-about.php:118
+#: admin/class-custom-permalinks-about.php:122
+#: admin/class-custom-permalinks-about.php:132
+msgid "HTTP Auth"
+msgstr "Identificación HTTP"
+
+#: admin/class-custom-permalinks-about.php:86
+msgid "Our List of Plugins provides the services which help you to prevent your site from XSS Attacks, Brute force attack, change absolute paths to relative, increase your site visitors by adding Structured JSON Markup and so on."
+msgstr "A nosa lista de plugins proporciona os servizos que che axudan a evitar no teu sitio ataques XSS, ataques de forza bruta, cambiar as rutas absolutas en relativas, aumentar os visitantes do teu sitio engadindo o marcado JSON estructurado e demais."
+
+#: includes/class-custom-permalinks-form.php:705
+#: includes/class-custom-permalinks-form.php:787
+msgid "View"
+msgstr "Ver"
+
+#. translators: After `v` there will be a Plugin version.
+#: admin/class-custom-permalinks-about.php:39
+msgid "Custom Permalinks v"
+msgstr "Custom Permalinks v"
+
+#: admin/class-custom-permalinks-post-types-table.php:105
+#: admin/class-custom-permalinks-taxonomies-table.php:105
+msgid "No permalinks found."
+msgstr "Non se encontraron ligazóns permanentes."
+
+#: admin/class-custom-permalinks-admin.php:81
+#: admin/class-custom-permalinks-admin.php:82
+#: admin/class-custom-permalinks-taxonomies-table.php:143
+msgid "Taxonomies Permalinks"
+msgstr "Ligazóns permanentes de taxonomías"
+
+#: admin/class-custom-permalinks-post-types-table.php:292
+#: admin/class-custom-permalinks-taxonomies-table.php:343
+msgid "Visit"
+msgstr "Visitar"
+
+#: includes/class-custom-permalinks.php:123
+msgid "Custom Permalinks Manager"
+msgstr "Xestor de ligazóns permanentes personalizadas"
+
+#: admin/class-custom-permalinks-about.php:82
+msgid "More from Sami Ahmed Siddiqui"
+msgstr "Máis de Sami Ahmed Siddiqui"
+
+#: admin/class-custom-permalinks-about.php:50
+msgid "Thank you for choosing Custom Permalinks! I hope that your experience with our plugin for updating permalinks is quick and easy. I am trying to make it more feasible for you and provide capabilities in it."
+msgstr "Grazas por elixir Custom Permalinks! Esperamos que a túa experiencia co noso plugin para actualizar as ligazóns permanentes sexa rápida e sinxela. Estou intentando facelo máis fácil para ti e proporcionar máis capacidades nel."
+
+#: admin/class-custom-permalinks-about.php:112
+#: admin/class-custom-permalinks-about.php:133
+#: admin/class-custom-permalinks-about.php:154
+#: admin/class-custom-permalinks-about.php:175
+#: admin/class-custom-permalinks-about.php:196
+#: admin/class-custom-permalinks-about.php:217
+#: admin/class-custom-permalinks-about.php:238
+msgid "Check it out"
+msgstr "Bota unha ollada"
+
+#: admin/class-custom-permalinks-about.php:160
+#: admin/class-custom-permalinks-about.php:164
+#: admin/class-custom-permalinks-about.php:174
+msgid "SCHEMA for Article"
+msgstr "SCHEMA para Article"
+
+#: admin/class-custom-permalinks-about.php:139
+#: admin/class-custom-permalinks-about.php:143
+#: admin/class-custom-permalinks-about.php:153
+msgid "Make Paths Relative"
+msgstr "Facer relativas as rutas"
+
+#: admin/class-custom-permalinks-about.php:202
+#: admin/class-custom-permalinks-about.php:206
+#: admin/class-custom-permalinks-about.php:216
+msgid "Media Post Permalink"
+msgstr "Ligazón permanente de entrada de medios"
+
+#: admin/class-custom-permalinks-about.php:223
+#: admin/class-custom-permalinks-about.php:227
+#: admin/class-custom-permalinks-about.php:237
+msgid "JSON Structuring Markup"
+msgstr "Formato de estructuración JSON"
+
+#: admin/class-custom-permalinks-about.php:181
+#: admin/class-custom-permalinks-about.php:185
+#: admin/class-custom-permalinks-about.php:195
+msgid "Remove Links and Scripts"
+msgstr "Eliminar as ligazóns e scripts"
+
+#: admin/class-custom-permalinks-about.php:95
+#: admin/class-custom-permalinks-about.php:100
+#: admin/class-custom-permalinks-about.php:111
+msgid "Prevent XSS Vulnerability"
+msgstr "Evitar vulnerabilidades XSS"
+
+#: admin/class-custom-permalinks-about.php:231
+msgid "Simply the easiest solution to add valid schema.org as a JSON script in the head of posts and pages. It provides you multiple SCHEMA types like Article, News Article, Organization and Website Schema."
+msgstr "Simplemente a solución máis fácil para engadir schema.org válido como script JSON na cabeceira das entradas e páxinas. Proporciónache varios tipos de SCHEMA como Article, News Article, Organization e Website."
+
+#: admin/class-custom-permalinks-about.php:168
+msgid "Simply the easiest solution to add valid schema.org as a JSON script in the head of blog posts or articles. You can choose the schema either to show with the type of Article or NewsArticle from the settings page."
+msgstr "Simplemente a solución máis fácil para engadir schema.org válido como script JSON na cabeceira das entradas ou artigos do blog. Podes elixir o schema a amosar co tipo de Article ou NewsArticle desde a páxina de axustes."
+
+#: admin/class-custom-permalinks-about.php:210
+msgid "On uploading  any image, let's say services.png, WordPress creates the attachment post with the permalink of /services/ and doesn't allow you to use that permalink to point your page. In this case, we come up with this great solution."
+msgstr "Ao subir calquera imaxe, digamos «servizos.png», WordPress crea a entrada do adxunto cunha ligazón permanente «/servizos/» e non che permite usar esa ligazón permanente para apuntar á túa páxina. Neste caso, traémosche esta xenial solución."
+
+#: admin/class-custom-permalinks-about.php:126
+msgid "Allows you apply HTTP Auth on your site. You can apply Http Authentication all over the site or only the admin pages. It helps to stop crawling on your site while on development or persist the Brute Attacks by locking the Admin Pages."
+msgstr "Permíteche aplicar HTTP Auth no teu sitio. Podes aplicar a identificación HTTP en todo o sitio ou só nas páxinas de administración. Axuda a deter o rastrexo do teu sitio mentres está en desenvolvemento ou a evitar ataques de forza bruta bloqueando as páxinas de administración."
+
+#: admin/class-custom-permalinks-about.php:105
+msgid "Secure your site from the XSS Attacks so, your users won't lose any kind of information or not redirected to any other site by visiting your site with the malicious code in the URL or so. In this way, users can open their site URLs without any hesitation."
+msgstr "Asegura o teu sitio fronte a ataques XSS para que os teus usuarios non perdan ningún tipo de información ou non sexan redirixidos a outro sitio ao visitar o teu sitio co código malintencionado na URL. Deste modo, os usuarios poden abrir as URL do sitio sen preocupación."
+
+#. Plugin URI of the plugin
+#: custom-permalinks.php
+msgid "https://www.custompermalinks.com/"
+msgstr "https://www.custompermalinks.com/"
+
+#: admin/class-custom-permalinks-post-types-table.php:120
+#: admin/class-custom-permalinks-taxonomies-table.php:120
+msgid "Type"
+msgstr "Tipo"
+
+#: admin/class-custom-permalinks-post-types-table.php:119
+#: admin/class-custom-permalinks-taxonomies-table.php:119
+msgid "Title"
+msgstr "Título"
+
+#: includes/class-custom-permalinks-form.php:690
+#: includes/class-custom-permalinks-form.php:772
+msgid "View Page"
+msgstr "Ver a páxina"
+
+#: admin/class-custom-permalinks-post-types-table.php:36
+#: admin/class-custom-permalinks-post-types-table.php:121
+#: admin/class-custom-permalinks-taxonomies-table.php:36
+#: admin/class-custom-permalinks-taxonomies-table.php:121
+msgid "Permalink"
+msgstr "Ligazón permanente"
+
+#: includes/class-custom-permalinks-form.php:752
+#: includes/class-custom-permalinks-form.php:790
+msgid "Permalink:"
+msgstr "Ligazón permanente:"
+
+#: includes/class-custom-permalinks-form.php:992
+msgid "Custom Permalink"
+msgstr "Ligazón permanente personalizada"
+
+#. Plugin Name of the plugin
+#: custom-permalinks.php admin/class-custom-permalinks-about.php:77
+#: includes/class-custom-permalinks-form.php:150
+msgid "Custom Permalinks"
+msgstr "Custom Permalinks"
+
+#: admin/class-custom-permalinks-post-types-table.php:309
+#: admin/class-custom-permalinks-taxonomies-table.php:361
+msgid "Delete Permalinks"
+msgstr "Borrar ligazóns permanentes"
+
+#. Author of the plugin
+#: custom-permalinks.php admin/class-custom-permalinks-admin.php:240
+#: admin/class-custom-permalinks-admin.php:249
+msgid "Sami Ahmed Siddiqui"
+msgstr "Sami Ahmed Siddiqui"
+
+#: admin/class-custom-permalinks-admin.php:73
+#: admin/class-custom-permalinks-admin.php:74
+#: admin/class-custom-permalinks-post-types-table.php:143
+msgid "Post Types Permalinks"
+msgstr "Ligazóns permanentes de tipos de contido"
+
+#: includes/class-custom-permalinks-form.php:1050
+msgid "Leave blank to disable"
+msgstr "Déixao en branco para desactivar"
+
+#. Description of the plugin
+#: custom-permalinks.php
+msgid "Set custom permalinks on a per-post basis."
+msgstr "Establece ligazóns permanentes personalizadas en base a cada entrada."

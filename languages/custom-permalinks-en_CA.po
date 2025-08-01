@@ -2,192 +2,157 @@
 # This file is distributed under the same license as the Plugins - Custom Permalinks - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-02-07 17:59:18+0000\n"
+"PO-Revision-Date: 2021-08-06 01:07:34+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: GlotPress/2.4.0-alpha\n"
+"X-Generator: GlotPress/4.0.1\n"
 "Language: en_CA\n"
 "Project-Id-Version: Plugins - Custom Permalinks - Stable (latest release)\n"
 
-#: admin/class-custom-permalinks-about.php:62
+#: includes/class-custom-permalinks.php:123
+msgid "Custom Permalinks Manager"
+msgstr "Custom Permalinks Manager"
+
+#: admin/class-custom-permalinks-about.php:82
 msgid "More from Sami Ahmed Siddiqui"
 msgstr "More from Sami Ahmed Siddiqui"
 
-#: admin/class-custom-permalinks-about.php:52
-msgid "Thank you for choosing Custom Permalinks! We hope that your experience with our plugin for updating permalinks is quick and easy. We are trying to make it more feasible for you and provide capabilities in it."
-msgstr "Thank you for choosing Custom Permalinks! We hope that your experience with our plugin for updating permalinks is quick and easy. We are trying to make it more feasible for you and provide capabilities in it."
+#: admin/class-custom-permalinks-about.php:50
+msgid "Thank you for choosing Custom Permalinks! I hope that your experience with our plugin for updating permalinks is quick and easy. I am trying to make it more feasible for you and provide capabilities in it."
+msgstr "Thank you for choosing Custom Permalinks! I hope that your experience with our plugin for updating permalinks is quick and easy. I am trying to make it more feasible for you and provide capabilities in it."
 
-#: admin/class-custom-permalinks-admin.php:504
-msgid "<a href=\"%s\" title=\"Premium Support\" target=\"_blank\">Premium Support</a>"
-msgstr "<a href=\"%s\" title=\"Premium Support\" target=\"_blank\">Premium Support</a>"
-
-#: admin/class-custom-permalinks-admin.php:500
-msgid "<a href=\"%s\" title=\"About\">About</a>"
-msgstr "<a href=\"%s\" title=\"About\">About</a>"
-
-#: admin/class-custom-permalinks-admin.php:486
-msgid "Custom Permalinks version %s by <a href=\"%s\" title=\"YAS Global Website\" target=\"_blank\">YAS Global</a> - <a href=\"%s\" title=\"Support forums\" target=\"_blank\">Support forums</a> - Follow on Twitter: <a href=\"%s\" title=\"Follow YAS Global on Twitter\" target=\"_blank\">YAS Global</a>"
-msgstr "Custom Permalinks version %s by <a href=\"%s\" title=\"YAS Global Website\" target=\"_blank\">YAS Global</a> - <a href=\"%s\" title=\"Support forums\" target=\"_blank\">Support forums</a> - Follow on Twitter: <a href=\"%s\" title=\"Follow YAS Global on Twitter\" target=\"_blank\">YAS Global</a>"
-
-#: admin/class-custom-permalinks-about.php:140
-msgid "On uploading  any image,  let's say services.png, WordPress creates the <strong>attachment post</strong> with the permalink of <strong>/services/</strong> and doesn't allow you to use that permalink to point your page. In this case, we comes up with this great solution."
-msgstr "On uploading  any image,  let's say services.png, WordPress creates the <strong>attachment post</strong> with the permalink of <strong>/services/</strong> and doesn't allow you to use that permalink to point your page. In this case, we comes up with this great solution."
-
-#: admin/class-custom-permalinks-about.php:139
+#: admin/class-custom-permalinks-about.php:202
+#: admin/class-custom-permalinks-about.php:206
+#: admin/class-custom-permalinks-about.php:216
 msgid "Media Post Permalink"
 msgstr "Media Post Permalink"
 
-#: admin/class-custom-permalinks-about.php:130
-msgid "It removes some meta data from the wordpress header so, your header keeps clean of useless information like <strong>shortlink</strong>, <strong>rsd_link</strong>, <strong>wlwmanifest_link</strong>, <strong>emoji_scripts</strong>, <strong>wp_embed</strong>, <strong>wp_json</strong>, <strong>emoji_styles</strong>, <strong>generator</strong> and so on."
-msgstr "It removes some meta data from the wordpress header so, your header keeps clean of useless information like <strong>shortlink</strong>, <strong>rsd_link</strong>, <strong>wlwmanifest_link</strong>, <strong>emoji_scripts</strong>, <strong>wp_embed</strong>, <strong>wp_json</strong>, <strong>emoji_styles</strong>, <strong>generator</strong> and so on."
-
-#: admin/class-custom-permalinks-about.php:129
+#: admin/class-custom-permalinks-about.php:181
+#: admin/class-custom-permalinks-about.php:185
+#: admin/class-custom-permalinks-about.php:195
 msgid "Remove Links and Scripts"
 msgstr "Remove Links and Scripts"
 
-#: admin/class-custom-permalinks-about.php:120
-msgid "Simply the easiest solution to add valid schema.org as a JSON script in the head of posts and pages. It provides you multiple <strong>SCHEMA</strong> types like Article, News Article, Organization and Website Schema."
-msgstr "Simply the easiest solution to add valid schema.org as a JSON script in the head of posts and pages. It provides you multiple <strong>SCHEMA</strong> types like Article, News Article, Organization and Website Schema."
-
-#: admin/class-custom-permalinks-about.php:119
+#: admin/class-custom-permalinks-about.php:223
+#: admin/class-custom-permalinks-about.php:227
+#: admin/class-custom-permalinks-about.php:237
 msgid "JSON Structuring Markup"
 msgstr "JSON Structuring Markup"
 
-#: admin/class-custom-permalinks-about.php:110
-msgid "Convert the paths(URLs) to relative instead of absolute. You can make <strong>Post</strong>, <strong>Category</strong>, <strong>Archive</strong>, <strong>Image</strong> URLs and <strong>Script</strong> and <strong>Style</strong> src as per your requirement. You can choose which you want to be relative from the settings Page."
-msgstr "Convert the paths(URLs) to relative instead of absolute. You can make <strong>Post</strong>, <strong>Category</strong>, <strong>Archive</strong>, <strong>Image</strong> URLs and <strong>Script</strong> and <strong>Style</strong> src as per your requirement. You can choose which you want to be relative from the settings Page."
-
-#: admin/class-custom-permalinks-about.php:109
+#: admin/class-custom-permalinks-about.php:139
+#: admin/class-custom-permalinks-about.php:143
+#: admin/class-custom-permalinks-about.php:153
 msgid "Make Paths Relative"
 msgstr "Make Paths Relative"
 
-#: admin/class-custom-permalinks-about.php:100
+#: admin/class-custom-permalinks-about.php:168
 msgid "Simply the easiest solution to add valid schema.org as a JSON script in the head of blog posts or articles. You can choose the schema either to show with the type of Article or NewsArticle from the settings page."
 msgstr "Simply the easiest solution to add valid schema.org as a JSON script in the head of blog posts or articles. You can choose the schema either to show with the type of Article or NewsArticle from the settings page."
 
-#: admin/class-custom-permalinks-about.php:99
+#: admin/class-custom-permalinks-about.php:160
+#: admin/class-custom-permalinks-about.php:164
+#: admin/class-custom-permalinks-about.php:174
 msgid "SCHEMA for Article"
 msgstr "SCHEMA for Article"
 
-#: admin/class-custom-permalinks-about.php:90
-msgid "Allows you apply <strong>HTTP Auth</strong> on your site. You can apply Http Authentication all over the site or only the admin pages. It helps to stop cralwing on your site while on development or persist the <strong>Brute Attacks</strong> by locking the Admin Pages."
-msgstr "Allows you apply <strong>HTTP Auth</strong> on your site. You can apply Http Authentication all over the site or only the admin pages. It helps to stop cralwing on your site while on development or persist the <strong>Brute Attacks</strong> by locking the Admin Pages."
-
-#: admin/class-custom-permalinks-about.php:89
-msgid "Http Auth"
-msgstr "Http Auth"
-
-#: admin/class-custom-permalinks-about.php:80
-msgid "Allows you to either define different Permalink Structure or define same Permalink Structure for default and Custom PostTypes, Taxonomies. Plugin automatically creates the user-friendly URLs as per your defined structured that can be edited from the single post/page."
-msgstr "Allows you to either define different Permalink Structure or define same Permalink Structure for default and Custom PostTypes, Taxonomies. Plugin automatically creates the user-friendly URLs as per your defined structured that can be edited from the single post/page."
-
-#: admin/class-custom-permalinks-about.php:79
-msgid "Permalinks Customizer"
-msgstr "Permalinks Customizer"
-
-#: admin/class-custom-permalinks-about.php:70
-msgid "Secure your site from the <strong>XSS Attacks</strong> so, your users won't lose any kind of information or not redirected to any other site by visiting to your site with the <strong>malicious code</strong> in the URL or so. In this way, users can open your site URLs without any hesitation."
-msgstr "Secure your site from the <strong>XSS Attacks</strong> so, your users won't lose any kind of information or not redirected to any other site by visiting to your site with the <strong>malicious code</strong> in the URL or so. In this way, users can open your site URLs without any hesitation."
-
-#: admin/class-custom-permalinks-about.php:69
+#: admin/class-custom-permalinks-about.php:95
+#: admin/class-custom-permalinks-about.php:100
+#: admin/class-custom-permalinks-about.php:111
 msgid "Prevent XSS Vulnerability"
 msgstr "Prevent XSS Vulnerability"
 
-#: admin/class-custom-permalinks-about.php:63
-msgid "Our List of Plugins provides the services which helps you to manage your site URLs(Permalinks), Prevent your site from XSS Attacks, Brute force attacks, increase your site visitors by adding Structured JSON Markup and so on."
-msgstr "Our List of Plugins provides the services which helps you to manage your site URLs(Permalinks), Prevent your site from XSS Attacks, Brute force attacks, increase your site visitors by adding Structured JSON Markup and so on."
-
-#: admin/class-custom-permalinks-about.php:53
-msgid "To support future development and help to make it even better just leaving us a <a href=\"%s\" title=\"Custom Permalinks Rating\" target=\"_blank\">%s</a> rating with a nice message to me :)"
-msgstr "To support future development and help to make it even better just leaving us a <a href=\"%s\" title=\"Custom Permalinks Rating\" target=\"_blank\">%s</a> rating with a nice message to me :)"
-
-#: admin/class-custom-permalinks-about.php:23
+#: admin/class-custom-permalinks-about.php:112
+#: admin/class-custom-permalinks-about.php:133
+#: admin/class-custom-permalinks-about.php:154
+#: admin/class-custom-permalinks-about.php:175
+#: admin/class-custom-permalinks-about.php:196
+#: admin/class-custom-permalinks-about.php:217
+#: admin/class-custom-permalinks-about.php:238
 msgid "Check it out"
 msgstr "Check it out"
 
-#. Author URI of the plugin/theme
+#: admin/class-custom-permalinks-about.php:231
+msgid "Simply the easiest solution to add valid schema.org as a JSON script in the head of posts and pages. It provides you multiple SCHEMA types like Article, News Article, Organization and Website Schema."
+msgstr "Simply the easiest solution to add valid schema.org as a JSON script in the head of posts and pages. It provides you multiple SCHEMA types like Article, News Article, Organization and Website Schema."
+
+#: admin/class-custom-permalinks-about.php:210
+msgid "On uploading  any image, let's say services.png, WordPress creates the attachment post with the permalink of /services/ and doesn't allow you to use that permalink to point your page. In this case, we come up with this great solution."
+msgstr "On uploading  any image, let's say services.png, WordPress creates the attachment post with the permalink of /services/ and doesn't allow you to use that permalink to point your page. In this case, we come up with this great solution."
+
+#: admin/class-custom-permalinks-about.php:126
+msgid "Allows you apply HTTP Auth on your site. You can apply Http Authentication all over the site or only the admin pages. It helps to stop crawling on your site while on development or persist the Brute Attacks by locking the Admin Pages."
+msgstr "Allows you apply HTTP Auth on your site. You can apply Http Authentication all over the site or only the admin pages. It helps to stop crawling on your site while on development or persist the Brute Attacks by locking the Admin Pages."
+
+#: admin/class-custom-permalinks-about.php:105
+msgid "Secure your site from the XSS Attacks so, your users won't lose any kind of information or not redirected to any other site by visiting your site with the malicious code in the URL or so. In this way, users can open their site URLs without any hesitation."
+msgstr "Secure your site from the XSS Attacks so, your users won't lose any kind of information or not redirected to any other site by visiting your site with the malicious code in the URL or so. In this way, users can open their site URLs without any hesitation."
+
+#. Plugin URI of the plugin
+#: custom-permalinks.php
 msgid "https://www.custompermalinks.com/"
 msgstr "https://www.custompermalinks.com/"
 
-#. Author of the plugin/theme
+#. Author of the plugin
+#: custom-permalinks.php admin/class-custom-permalinks-admin.php:240
+#: admin/class-custom-permalinks-admin.php:249
 msgid "Sami Ahmed Siddiqui"
 msgstr "Sami Ahmed Siddiqui"
 
-#. Description of the plugin/theme
-msgid "Set custom permalinks on a per-post basis"
-msgstr "Set custom permalinks on a per-post basis"
-
-#. Plugin URI of the plugin/theme
-msgid "https://wordpress.org/plugins/custom-permalinks/"
-msgstr "https://en-ca.wordpress.org/plugins/custom-permalinks/"
-
-#. #-#-#-#-#  custom-permalinks-code.pot (Custom Permalinks 1.2.16)  #-#-#-#-#
-#. Plugin Name of the plugin/theme
-#: admin/class-custom-permalinks-about.php:22
+#. Plugin Name of the plugin
+#: custom-permalinks.php admin/class-custom-permalinks-about.php:77
+#: includes/class-custom-permalinks-form.php:150
 msgid "Custom Permalinks"
 msgstr "Custom Permalinks"
 
-#: frontend/class-custom-permalinks-form.php:245
+#: includes/class-custom-permalinks-form.php:1050
 msgid "Leave blank to disable"
 msgstr "Leave blank to disable"
 
-#: frontend/class-custom-permalinks-form.php:127
-#: frontend/class-custom-permalinks-form.php:154
-#: frontend/class-custom-permalinks-form.php:219
+#: includes/class-custom-permalinks-form.php:992
 msgid "Custom Permalink"
 msgstr "Custom Permalink"
 
-#: frontend/class-custom-permalinks-form.php:110
+#: includes/class-custom-permalinks-form.php:752
+#: includes/class-custom-permalinks-form.php:790
 msgid "Permalink:"
 msgstr "Permalink:"
 
-#: frontend/class-custom-permalinks-form.php:97
-msgid "View Post"
-msgstr "View Post"
-
-#: frontend/class-custom-permalinks-form.php:97
+#: includes/class-custom-permalinks-form.php:690
+#: includes/class-custom-permalinks-form.php:772
 msgid "View Page"
 msgstr "View Page"
 
-#: admin/class-custom-permalinks-admin.php:249
-msgid "Category/Tags Permalinks"
-msgstr "Category/Tags Permalinks"
-
-#: admin/class-custom-permalinks-admin.php:215
-#: admin/class-custom-permalinks-admin.php:396
+#: admin/class-custom-permalinks-post-types-table.php:36
+#: admin/class-custom-permalinks-post-types-table.php:121
+#: admin/class-custom-permalinks-taxonomies-table.php:36
+#: admin/class-custom-permalinks-taxonomies-table.php:121
 msgid "Permalink"
 msgstr "Permalink"
 
-#: admin/class-custom-permalinks-admin.php:214
-#: admin/class-custom-permalinks-admin.php:395
+#: admin/class-custom-permalinks-post-types-table.php:120
+#: admin/class-custom-permalinks-taxonomies-table.php:120
 msgid "Type"
 msgstr "Type"
 
-#: admin/class-custom-permalinks-admin.php:212
-#: admin/class-custom-permalinks-admin.php:394
+#: admin/class-custom-permalinks-post-types-table.php:119
+#: admin/class-custom-permalinks-taxonomies-table.php:119
 msgid "Title"
 msgstr "Title"
 
-#: admin/class-custom-permalinks-admin.php:116
-#: admin/class-custom-permalinks-admin.php:189
-#: admin/class-custom-permalinks-admin.php:276
-#: admin/class-custom-permalinks-admin.php:366
+#: admin/class-custom-permalinks-post-types-table.php:309
+#: admin/class-custom-permalinks-taxonomies-table.php:361
 msgid "Delete Permalinks"
 msgstr "Delete Permalinks"
 
-#: admin/class-custom-permalinks-admin.php:115
-#: admin/class-custom-permalinks-admin.php:188
-#: admin/class-custom-permalinks-admin.php:275
-#: admin/class-custom-permalinks-admin.php:365
-msgid "Bulk Actions"
-msgstr "Bulk Actions"
+#. Description of the plugin
+#: custom-permalinks.php
+msgid "Set custom permalinks on a per-post basis."
+msgstr "Set custom permalinks on a per-post basis."
 
-#: admin/class-custom-permalinks-admin.php:66
-msgid "PostTypes Permalinks"
-msgstr "PostTypes Permalinks"
-
-#: admin/class-custom-permalinks-admin.php:61
-msgid "There is some error to proceed your request. Please retry with your request or contact to the plugin author."
-msgstr "There is some error to proceed your request. Please retry with your request or contact to the plugin author."
+#: admin/class-custom-permalinks-admin.php:73
+#: admin/class-custom-permalinks-admin.php:74
+#: admin/class-custom-permalinks-post-types-table.php:143
+msgid "Post Types Permalinks"
+msgstr "Post Types Permalinks"

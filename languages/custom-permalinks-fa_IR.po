@@ -1,0 +1,227 @@
+# Translation of Plugins - Custom Permalinks - Stable (latest release) in Persian
+# This file is distributed under the same license as the Plugins - Custom Permalinks - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2021-10-01 10:56:51+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: fa\n"
+"Project-Id-Version: Plugins - Custom Permalinks - Stable (latest release)\n"
+
+#: admin/class-custom-permalinks-post-types-table.php:149
+#: admin/class-custom-permalinks-taxonomies-table.php:149
+msgid "Search results for: "
+msgstr "نتایج جستجو برای:"
+
+#: admin/class-custom-permalinks-post-types-table.php:37
+#: admin/class-custom-permalinks-taxonomies-table.php:37
+msgid "Permalinks"
+msgstr "پیوندهای یکتا"
+
+#: admin/class-custom-permalinks-admin.php:304
+msgid "contact us"
+msgstr "ارتباط با ما"
+
+#: admin/class-custom-permalinks-admin.php:298
+msgid "This plugin collect information about the site like URL, WordPress version etc. This plugin doesn't collect any user related information. To have any kind of further query please feel free to"
+msgstr "این افزونه اطلاعاتی در مورد سایت مانند URL، نسخه وردپرس و غیره را جمع آوری می کند. این افزونه هیچگونه اطلاعات مربوط به کاربر را جمع نمی کند. برای داشتن هر نوع درخواست بیشتر لطفا "
+
+#: admin/class-custom-permalinks-admin.php:275
+msgid "Contact"
+msgstr "ارتباط"
+
+#: admin/class-custom-permalinks-admin.php:272
+msgid "Premium Support"
+msgstr "پشتیبانی ویژه"
+
+#: admin/class-custom-permalinks-admin.php:98
+#: admin/class-custom-permalinks-admin.php:269
+msgid "About"
+msgstr "درباره"
+
+#: admin/class-custom-permalinks-admin.php:244
+msgid "Support forums"
+msgstr "انجمن‌های پشتیبانی"
+
+#: admin/class-custom-permalinks-admin.php:238
+msgid "by"
+msgstr "توسط"
+
+#. Author URI of the plugin
+#: custom-permalinks.php
+msgid "https://www.linkedin.com/in/sami-ahmed-siddiqui/"
+msgstr "https://www.linkedin.com/in/sami-ahmed-siddiqui/"
+
+#: admin/class-custom-permalinks-post-types-table.php:179
+#: admin/class-custom-permalinks-taxonomies-table.php:179
+msgid "Search Permalinks"
+msgstr "جستجوی پیوند یکتا"
+
+#: admin/class-custom-permalinks-about.php:147
+msgid "Convert the paths(URLs) to relative instead of absolute. You can make Post, Category, Archive, Image URLs and Script and Style src as per your requirement. You can choose which you want to be relative from the settings Page."
+msgstr "به جای مطلق ، مسیرها (URL ها) را به نسبی تبدیل کنید. طبق شرایط مورد نیاز می توانید پست ، دسته ، بایگانی ، URL های تصویر و Script و Style src را تهیه کنید. می توانید از صفحه تنظیمات انتخاب کنید که می خواهید نسبی باشد."
+
+#: admin/class-custom-permalinks-about.php:118
+#: admin/class-custom-permalinks-about.php:122
+#: admin/class-custom-permalinks-about.php:132
+msgid "HTTP Auth"
+msgstr "HTTP Auth"
+
+#: admin/class-custom-permalinks-about.php:86
+msgid "Our List of Plugins provides the services which help you to prevent your site from XSS Attacks, Brute force attack, change absolute paths to relative, increase your site visitors by adding Structured JSON Markup and so on."
+msgstr "لیست افزونه‌های ما خدماتی را ارائه می دهد که به شما کمک می کند از سایت خود در مقابل XSS Attack ، حمله Brute Force ، تغییر مسیرهای مطلق به نسبی، افزایش بازدیدکنندگان سایت خود با افزودن Markup ساختار یافته JSON و غیره کمک بگیرید."
+
+#. translators: After `v` there will be a Plugin version.
+#: admin/class-custom-permalinks-about.php:39
+msgid "Custom Permalinks v"
+msgstr "پیوند یکتای سفارشی v"
+
+#: admin/class-custom-permalinks-post-types-table.php:105
+#: admin/class-custom-permalinks-taxonomies-table.php:105
+msgid "No permalinks found."
+msgstr "پیوند یکتایی یافت نشد."
+
+#: admin/class-custom-permalinks-admin.php:81
+#: admin/class-custom-permalinks-admin.php:82
+#: admin/class-custom-permalinks-taxonomies-table.php:143
+msgid "Taxonomies Permalinks"
+msgstr "پیوندهای یکتای طبقه‌بندی‌ها"
+
+#: includes/class-custom-permalinks-form.php:705
+#: includes/class-custom-permalinks-form.php:787
+msgid "View"
+msgstr "مشاهده"
+
+#: includes/class-custom-permalinks.php:123
+msgid "Custom Permalinks Manager"
+msgstr "مدیریت پیوند یکتای سفارشی"
+
+#: admin/class-custom-permalinks-about.php:82
+msgid "More from Sami Ahmed Siddiqui"
+msgstr "بیشتر از Sami Ahmed Siddiqui"
+
+#: admin/class-custom-permalinks-about.php:210
+msgid "On uploading  any image, let's say services.png, WordPress creates the attachment post with the permalink of /services/ and doesn't allow you to use that permalink to point your page. In this case, we come up with this great solution."
+msgstr "در باگذاری هر تصویری، به طور مثال services.png، وردپرس پیوستی با پیوند یکتای /services/ ایجاد می کند و به شما اجازه نمی دهد آن پیوند یکتا را به برگه‌ای نسبت دهید. در این حالت ما با این افزونه راه حل مناسبی برای شما ایجاد کرده ایم."
+
+#: admin/class-custom-permalinks-about.php:202
+#: admin/class-custom-permalinks-about.php:206
+#: admin/class-custom-permalinks-about.php:216
+msgid "Media Post Permalink"
+msgstr "پیوند یکتای نوشته رسانه"
+
+#: admin/class-custom-permalinks-about.php:181
+#: admin/class-custom-permalinks-about.php:185
+#: admin/class-custom-permalinks-about.php:195
+msgid "Remove Links and Scripts"
+msgstr "حذف لینک‌ها و اسکریپت‌ها"
+
+#: admin/class-custom-permalinks-about.php:231
+msgid "Simply the easiest solution to add valid schema.org as a JSON script in the head of posts and pages. It provides you multiple SCHEMA types like Article, News Article, Organization and Website Schema."
+msgstr "راه حل آسان برای افزودن schema.org معتبر به صورت اسکریپت JSON در سربرگ نوشته‌هی بلاگ یا مقالات. شما می توانید نوع اسکیما برای انواع مقالات یا اخبار و غیره را در برگه تنظیمات انتخاب کنید."
+
+#: admin/class-custom-permalinks-about.php:223
+#: admin/class-custom-permalinks-about.php:227
+#: admin/class-custom-permalinks-about.php:237
+msgid "JSON Structuring Markup"
+msgstr "نشانه‌گذاری ساختار JSON"
+
+#: admin/class-custom-permalinks-about.php:139
+#: admin/class-custom-permalinks-about.php:143
+#: admin/class-custom-permalinks-about.php:153
+msgid "Make Paths Relative"
+msgstr "مسیرها را نسبی کنید"
+
+#: admin/class-custom-permalinks-about.php:168
+msgid "Simply the easiest solution to add valid schema.org as a JSON script in the head of blog posts or articles. You can choose the schema either to show with the type of Article or NewsArticle from the settings page."
+msgstr "راه حل آسان برای افزودن schema.org معتبر به صورت اسکریپت JSON در سربرگ نوشته‌هی بلاگ یا مقالات. شما می توانید نوع اسکیما برای انواع مقالات یا اخبار و غیره را در برگه تنظیمات انتخاب کنید."
+
+#: admin/class-custom-permalinks-about.php:160
+#: admin/class-custom-permalinks-about.php:164
+#: admin/class-custom-permalinks-about.php:174
+msgid "SCHEMA for Article"
+msgstr "اسکیما برای مقاله"
+
+#: admin/class-custom-permalinks-about.php:126
+msgid "Allows you apply HTTP Auth on your site. You can apply Http Authentication all over the site or only the admin pages. It helps to stop crawling on your site while on development or persist the Brute Attacks by locking the Admin Pages."
+msgstr "به شما اجازه اعمال HTTP Auth در سایت می دهد. می توانید همه Http سایت را تائید هویت کرده یا فقط برگه‌های مدیر را تایید هویت کنید. به شم کمک می کند برای جلوگیری از مرور همه سایت تحت توسعه شما یا جلوگیری می کند از Brute Attacks در برگه‌های مدیر."
+
+#: admin/class-custom-permalinks-about.php:105
+msgid "Secure your site from the XSS Attacks so, your users won't lose any kind of information or not redirected to any other site by visiting your site with the malicious code in the URL or so. In this way, users can open their site URLs without any hesitation."
+msgstr "ایمن‌سازی سایت از حملات XSS، کاربران شما هیچ داده شخصی از دست نمی دهند یا با دیدن سایت شما به سایت دیگری از طریق کدهای مخرب تغییرمسیر نمی دهند. از این طریق کاربران می توانند بدون نگرانی آدرس های اینترنتی سایت شما را باز کنند."
+
+#: admin/class-custom-permalinks-about.php:95
+#: admin/class-custom-permalinks-about.php:100
+#: admin/class-custom-permalinks-about.php:111
+msgid "Prevent XSS Vulnerability"
+msgstr "جلوگیری از آسیب پذیری XSS "
+
+#: admin/class-custom-permalinks-about.php:112
+#: admin/class-custom-permalinks-about.php:133
+#: admin/class-custom-permalinks-about.php:154
+#: admin/class-custom-permalinks-about.php:175
+#: admin/class-custom-permalinks-about.php:196
+#: admin/class-custom-permalinks-about.php:217
+#: admin/class-custom-permalinks-about.php:238
+msgid "Check it out"
+msgstr "بررسی آن"
+
+#. Plugin URI of the plugin
+#: custom-permalinks.php
+msgid "https://www.custompermalinks.com/"
+msgstr "https://www.custompermalinks.com/"
+
+#. Author of the plugin
+#: custom-permalinks.php admin/class-custom-permalinks-admin.php:240
+#: admin/class-custom-permalinks-admin.php:249
+msgid "Sami Ahmed Siddiqui"
+msgstr "Sami Ahmed Siddiqui"
+
+#. Plugin Name of the plugin
+#: custom-permalinks.php admin/class-custom-permalinks-about.php:77
+#: includes/class-custom-permalinks-form.php:150
+msgid "Custom Permalinks"
+msgstr "پیوند یکتاهای سفارشی"
+
+#: includes/class-custom-permalinks-form.php:1050
+msgid "Leave blank to disable"
+msgstr "برای غیر فعال کردن خالی بگذارید"
+
+#: includes/class-custom-permalinks-form.php:992
+msgid "Custom Permalink"
+msgstr "پیوند یکتای سفارشی"
+
+#: includes/class-custom-permalinks-form.php:752
+#: includes/class-custom-permalinks-form.php:790
+msgid "Permalink:"
+msgstr "پیوند یکتا"
+
+#: includes/class-custom-permalinks-form.php:690
+#: includes/class-custom-permalinks-form.php:772
+msgid "View Page"
+msgstr "مشاهده برگه"
+
+#: admin/class-custom-permalinks-post-types-table.php:36
+#: admin/class-custom-permalinks-post-types-table.php:121
+#: admin/class-custom-permalinks-taxonomies-table.php:36
+#: admin/class-custom-permalinks-taxonomies-table.php:121
+msgid "Permalink"
+msgstr "پیوند یکتا"
+
+#: admin/class-custom-permalinks-post-types-table.php:120
+#: admin/class-custom-permalinks-taxonomies-table.php:120
+msgid "Type"
+msgstr "نوع"
+
+#: admin/class-custom-permalinks-post-types-table.php:119
+#: admin/class-custom-permalinks-taxonomies-table.php:119
+msgid "Title"
+msgstr "عنوان"
+
+#: admin/class-custom-permalinks-post-types-table.php:309
+#: admin/class-custom-permalinks-taxonomies-table.php:361
+msgid "Delete Permalinks"
+msgstr "حذف پیوند یکتا"
