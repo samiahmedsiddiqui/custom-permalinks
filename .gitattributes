@@ -6,8 +6,8 @@
 
 # Remove files for archives generated using `git archive`.
 /.*                export-ignore
-assets/css/src    export-ignore
-assets/js/src     export-ignore
+assets/css/src     export-ignore
+assets/js/src      export-ignore
 composer.*         export-ignore
 gulpfile.js        export-ignore
 package.json       export-ignore
