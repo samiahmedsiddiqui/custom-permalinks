@@ -42,8 +42,15 @@ class Custom_Permalinks_Post_Types_Settings {
 		) {
 			$update_post_settings = array();
 			foreach ( $saved_data['post_type'] as $key => $value ) {
+				// Avoid truncating %category% to tegory%.
+				$value = str_replace( '%category%', '##CP_DEFAULT_CATEGORY##', $value );
+				// Avoid truncating %day% to y%.
+				$value = str_replace( '%day%', '##CP_POST_DAY##', $value );
 				$key   = sanitize_text_field( $key );
 				$value = sanitize_text_field( $value );
+
+				$value = str_replace( '##CP_DEFAULT_CATEGORY##', '%category%', $value );
+				$value = str_replace( '##CP_POST_DAY##', '%day%', $value );
 
 				if ( false !== strpos( $value, 'ctax_TAXONOMY_NAME' )
 					|| false !== strpos( $value, 'ctax_parent_TAXONOMY_NAME' )
