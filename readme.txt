@@ -86,7 +86,7 @@ You have two ways to install Custom Permalinks:
 **Permalink Generation:**
 
   * Resolved an issue where the `custom_permalinks_generate_post_permalink` function was creating duplicate permalinks with appended numbers when triggered programmatically. This ensures a unique, clean URL every time.
-	* Updated the `sanitize_text_field` function to prevent the truncation of permalink tags, such as `%category%` and `%day%`, guaranteeing your custom permalink structure remains intact.
+  * Updated the `sanitize_text_field` function to prevent the truncation of permalink tags, such as `%category%` and `%day%`, guaranteeing your custom permalink structure remains intact.
 
 **Performance:**
 
