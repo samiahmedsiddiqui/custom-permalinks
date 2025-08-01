@@ -1,0 +1,274 @@
+# Translation of Plugins - Custom Permalinks - Stable (latest release) in Dutch (Belgium)
+# This file is distributed under the same license as the Plugins - Custom Permalinks - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2024-08-22 08:17:46+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: nl_BE\n"
+"Project-Id-Version: Plugins - Custom Permalinks - Stable (latest release)\n"
+
+#: admin/class-custom-permalinks-admin.php:64
+#: admin/class-custom-permalinks-admin.php:65
+msgctxt "Menu Item"
+msgid "Custom Permalinks"
+msgstr "Aangepaste permalinks"
+
+#: admin/class-custom-permalinks-admin.php:97
+msgid "About Custom Permalinks"
+msgstr "Over aangepaste permalinks"
+
+#: admin/class-custom-permalinks-post-types-table.php:247
+#: admin/class-custom-permalinks-taxonomies-table.php:252
+msgid "Edit"
+msgstr "Bewerken"
+
+#: admin/class-custom-permalinks-about.php:59
+msgid "To support future development and to help make it even better please leave a <a href=\"https://wordpress.org/support/plugin/custom-permalinks/reviews/?rate=5#new-post\" title=\"Custom Permalinks Rating\" target=\"_blank\">5-star</a> rating with a nice message to me :)"
+msgstr "Laat een <a href=\"https://wordpress.org/support/plugin/custom-permalinks/reviews/?rate=5#new-post\" title=\"Custom permalinks beoordeling\" target=\"_blank\">5-sterren</a> beoordeling met een leuk bericht voor me achter ter ondersteuning van de toekomstige ontwikkeling en om te helpen het nog beter te maken :)"
+
+#. Author URI of the plugin
+#: custom-permalinks.php
+msgid "https://www.linkedin.com/in/sami-ahmed-siddiqui/"
+msgstr "https://www.linkedin.com/in/sami-ahmed-siddiqui/"
+
+#: admin/class-custom-permalinks-admin.php:275
+msgid "Contact"
+msgstr "Contact"
+
+#: admin/class-custom-permalinks-admin.php:238
+msgid "by"
+msgstr "door"
+
+#: admin/class-custom-permalinks-admin.php:98
+#: admin/class-custom-permalinks-admin.php:269
+msgid "About"
+msgstr "Over"
+
+#: admin/class-custom-permalinks-admin.php:304
+msgid "contact us"
+msgstr "contacteer ons"
+
+#: admin/class-custom-permalinks-post-types-table.php:37
+#: admin/class-custom-permalinks-taxonomies-table.php:37
+msgid "Permalinks"
+msgstr "Permalinks"
+
+#: admin/class-custom-permalinks-post-types-table.php:149
+#: admin/class-custom-permalinks-taxonomies-table.php:149
+msgid "Search results for: "
+msgstr "Zoekresultaten voor: "
+
+#: admin/class-custom-permalinks-admin.php:236
+msgid "Custom Permalinks version"
+msgstr "Custom Permalinks versie"
+
+#: admin/class-custom-permalinks-admin.php:244
+msgid "Support forums"
+msgstr "Ondersteuningsforums"
+
+#: admin/class-custom-permalinks-admin.php:272
+msgid "Premium Support"
+msgstr "Premium ondersteuning"
+
+#: admin/class-custom-permalinks-admin.php:298
+msgid "This plugin collect information about the site like URL, WordPress version etc. This plugin doesn't collect any user related information. To have any kind of further query please feel free to"
+msgstr "Deze plugin verzamelt informatie over de website zoals URL, WordPress versie enz. Deze plugin verzamelt geen gebruikersgerelateerde informatie. Als je verdere vragen hebt, aarzel dan niet om"
+
+#: admin/class-custom-permalinks-post-types-table.php:179
+#: admin/class-custom-permalinks-taxonomies-table.php:179
+msgid "Search Permalinks"
+msgstr "Zoek permalinks"
+
+#: admin/class-custom-permalinks-about.php:147
+msgid "Convert the paths(URLs) to relative instead of absolute. You can make Post, Category, Archive, Image URLs and Script and Style src as per your requirement. You can choose which you want to be relative from the settings Page."
+msgstr "Converteer de paden (URL's) naar relatief in plaats van absoluut. Je kan bericht, categorie, archief, afbeelding URL's en script en stijl src maken volgens je vereisten. Je kan kiezen welke je relatief wil laten zijn op de pagina met instellingen."
+
+#: admin/class-custom-permalinks-about.php:189
+msgid "It removes some meta data from the WordPress header so, your header keeps clean of useless information like shortlink, rsd_link, wlwmanifest_link, emoji_scripts, wp_embed, wp_json, emoji_styles, generator and so on."
+msgstr "Het verwijdert enkele metadata uit de WordPress header, zodat je header schoon blijft van nutteloze informatie. Zoals shortlink, rsd_link, wlwmanifest_link, emoji_scripts, wp_embed, wp_json, emoji_styles, generator enzovoort."
+
+#: admin/class-custom-permalinks-about.php:118
+#: admin/class-custom-permalinks-about.php:122
+#: admin/class-custom-permalinks-about.php:132
+msgid "HTTP Auth"
+msgstr "HTTP Auth"
+
+#: admin/class-custom-permalinks-about.php:86
+msgid "Our List of Plugins provides the services which help you to prevent your site from XSS Attacks, Brute force attack, change absolute paths to relative, increase your site visitors by adding Structured JSON Markup and so on."
+msgstr "Onze lijst met plugins biedt de diensten die je helpen, je website te beschermen tegen XSS aanvallen, brute force aanvallen, absolute paden in relatief te veranderen, je websitebezoekers te vergroten door gestructureerde JSON markeringen toe te voegen, enzovoort."
+
+#: includes/class-custom-permalinks-form.php:705
+#: includes/class-custom-permalinks-form.php:787
+msgid "View"
+msgstr "Weergave"
+
+#. translators: After `v` there will be a Plugin version.
+#: admin/class-custom-permalinks-about.php:39
+msgid "Custom Permalinks v"
+msgstr "Custom Permalinks v"
+
+#: admin/class-custom-permalinks-admin.php:81
+#: admin/class-custom-permalinks-admin.php:82
+#: admin/class-custom-permalinks-taxonomies-table.php:143
+msgid "Taxonomies Permalinks"
+msgstr "Taxonomieën permalinks"
+
+#: admin/class-custom-permalinks-post-types-table.php:105
+#: admin/class-custom-permalinks-taxonomies-table.php:105
+msgid "No permalinks found."
+msgstr "Geen permalinks gevonden."
+
+#: admin/class-custom-permalinks-post-types-table.php:292
+#: admin/class-custom-permalinks-taxonomies-table.php:343
+msgid "Visit"
+msgstr "Bezoek"
+
+#: includes/class-custom-permalinks.php:123
+msgid "Custom Permalinks Manager"
+msgstr "Custom Permalinks beheerder"
+
+#: admin/class-custom-permalinks-about.php:82
+msgid "More from Sami Ahmed Siddiqui"
+msgstr "Meer van Sami Ahmed Siddiqui"
+
+#: admin/class-custom-permalinks-about.php:50
+msgid "Thank you for choosing Custom Permalinks! I hope that your experience with our plugin for updating permalinks is quick and easy. I am trying to make it more feasible for you and provide capabilities in it."
+msgstr "Dank je voor je keuze voor Custom Permalinks! Ik hoop dat je ervaring met onze plugin voor het updaten van permalinks snel en gemakkelijk is. Ik probeer het voor je haalbaarder te maken en er rechten in aan te brengen."
+
+#: admin/class-custom-permalinks-about.php:112
+#: admin/class-custom-permalinks-about.php:133
+#: admin/class-custom-permalinks-about.php:154
+#: admin/class-custom-permalinks-about.php:175
+#: admin/class-custom-permalinks-about.php:196
+#: admin/class-custom-permalinks-about.php:217
+#: admin/class-custom-permalinks-about.php:238
+msgid "Check it out"
+msgstr "Bekijk het"
+
+#: admin/class-custom-permalinks-about.php:95
+#: admin/class-custom-permalinks-about.php:100
+#: admin/class-custom-permalinks-about.php:111
+msgid "Prevent XSS Vulnerability"
+msgstr "XSS kwetsbaarheid voorkomen"
+
+#: admin/class-custom-permalinks-about.php:160
+#: admin/class-custom-permalinks-about.php:164
+#: admin/class-custom-permalinks-about.php:174
+msgid "SCHEMA for Article"
+msgstr "SCHEMA voor artikel"
+
+#: admin/class-custom-permalinks-about.php:139
+#: admin/class-custom-permalinks-about.php:143
+#: admin/class-custom-permalinks-about.php:153
+msgid "Make Paths Relative"
+msgstr "Paden relatief maken"
+
+#: admin/class-custom-permalinks-about.php:105
+msgid "Secure your site from the XSS Attacks so, your users won't lose any kind of information or not redirected to any other site by visiting your site with the malicious code in the URL or so. In this way, users can open their site URLs without any hesitation."
+msgstr "Beveilig je website tegen de XSS aanvallen, zodat je gebruikers geen informatie verliezen of niet worden geredirect naar een andere website door je website te bezoeken met de schadelijke code in de URL of zo. Op deze manier kunnen gebruikers zonder aarzelen hun website URL's openen."
+
+#: admin/class-custom-permalinks-about.php:223
+#: admin/class-custom-permalinks-about.php:227
+#: admin/class-custom-permalinks-about.php:237
+msgid "JSON Structuring Markup"
+msgstr "JSON structuring markup"
+
+#: admin/class-custom-permalinks-about.php:231
+msgid "Simply the easiest solution to add valid schema.org as a JSON script in the head of posts and pages. It provides you multiple SCHEMA types like Article, News Article, Organization and Website Schema."
+msgstr "Gewoon de gemakkelijkste oplossing om een geldig schema.org toe te voegen als een JSON script in de header van berichten en pagina's. Het biedt je meerdere SCHEMA typen zoals artikel, nieuwsartikel, organisatie en website schema."
+
+#: admin/class-custom-permalinks-about.php:181
+#: admin/class-custom-permalinks-about.php:185
+#: admin/class-custom-permalinks-about.php:195
+msgid "Remove Links and Scripts"
+msgstr "Links en scripts verwijderen"
+
+#: admin/class-custom-permalinks-about.php:202
+#: admin/class-custom-permalinks-about.php:206
+#: admin/class-custom-permalinks-about.php:216
+msgid "Media Post Permalink"
+msgstr "Media bericht permalink"
+
+#: admin/class-custom-permalinks-about.php:210
+msgid "On uploading  any image, let's say services.png, WordPress creates the attachment post with the permalink of /services/ and doesn't allow you to use that permalink to point your page. In this case, we come up with this great solution."
+msgstr "Bij het uploaden van elke afbeelding, laten we zeggen services.png, maakt WordPress het bijlage bericht met de permalink van /diensten/ en staat je niet toe om die permalink te gebruiken om naar je pagina te wijzen. In dit geval komen we met deze geweldige oplossing."
+
+#: admin/class-custom-permalinks-about.php:168
+msgid "Simply the easiest solution to add valid schema.org as a JSON script in the head of blog posts or articles. You can choose the schema either to show with the type of Article or NewsArticle from the settings page."
+msgstr "Gewoon de gemakkelijkste oplossing om geldige schema.org toe te voegen als een JSON script in de header van blogberichten of artikelen. Je kan het schema kiezen om te tonen met het type artikel of nieuwsartikel op de instellingenpagina."
+
+#: admin/class-custom-permalinks-about.php:126
+msgid "Allows you apply HTTP Auth on your site. You can apply Http Authentication all over the site or only the admin pages. It helps to stop crawling on your site while on development or persist the Brute Attacks by locking the Admin Pages."
+msgstr "Hiermee kan je HTTP verificatie toepassen op je website. Je kan http authenticatie overal op de website toepassen of alleen op de beheerder pagina's. Het helpt om het crawlen op je website tijdens de ontwikkeling te stoppen of de brute aanvallen voort te zetten door de beheerder pagina's te vergrendelen."
+
+#. Plugin URI of the plugin
+#: custom-permalinks.php
+msgid "https://www.custompermalinks.com/"
+msgstr "https://www.custompermalinks.com/"
+
+#. Author of the plugin
+#: custom-permalinks.php admin/class-custom-permalinks-admin.php:240
+#: admin/class-custom-permalinks-admin.php:249
+msgid "Sami Ahmed Siddiqui"
+msgstr "Sami Ahmed Siddiqui"
+
+#. Plugin Name of the plugin
+#: custom-permalinks.php admin/class-custom-permalinks-about.php:77
+#: includes/class-custom-permalinks-form.php:150
+msgid "Custom Permalinks"
+msgstr "Custom Permalinks"
+
+#: includes/class-custom-permalinks-form.php:992
+msgid "Custom Permalink"
+msgstr "Aangepaste permalink"
+
+#: includes/class-custom-permalinks-form.php:1050
+msgid "Leave blank to disable"
+msgstr "Laat leeg om uit te schakelen"
+
+#: includes/class-custom-permalinks-form.php:690
+#: includes/class-custom-permalinks-form.php:772
+msgid "View Page"
+msgstr "Pagina bekijken"
+
+#: includes/class-custom-permalinks-form.php:752
+#: includes/class-custom-permalinks-form.php:790
+msgid "Permalink:"
+msgstr "Permalink:"
+
+#: admin/class-custom-permalinks-post-types-table.php:120
+#: admin/class-custom-permalinks-taxonomies-table.php:120
+msgid "Type"
+msgstr "Type"
+
+#: admin/class-custom-permalinks-post-types-table.php:119
+#: admin/class-custom-permalinks-taxonomies-table.php:119
+msgid "Title"
+msgstr "Titel"
+
+#: admin/class-custom-permalinks-post-types-table.php:36
+#: admin/class-custom-permalinks-post-types-table.php:121
+#: admin/class-custom-permalinks-taxonomies-table.php:36
+#: admin/class-custom-permalinks-taxonomies-table.php:121
+msgid "Permalink"
+msgstr "Permalink"
+
+#: admin/class-custom-permalinks-post-types-table.php:309
+#: admin/class-custom-permalinks-taxonomies-table.php:361
+msgid "Delete Permalinks"
+msgstr "Permalinks verwijderen"
+
+#: admin/class-custom-permalinks-admin.php:73
+#: admin/class-custom-permalinks-admin.php:74
+#: admin/class-custom-permalinks-post-types-table.php:143
+msgid "Post Types Permalinks"
+msgstr "Berichttypes permalinks"
+
+#. Description of the plugin
+#: custom-permalinks.php
+msgid "Set custom permalinks on a per-post basis."
+msgstr "Stel aangepaste permalinks in per bericht basis."

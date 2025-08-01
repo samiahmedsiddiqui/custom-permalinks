@@ -7,89 +7,58 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: GlotPress/2.4.0-alpha\n"
+"X-Generator: GlotPress/4.0.1\n"
 "Language: en_GB\n"
 "Project-Id-Version: Plugins - Custom Permalinks - Stable (latest release)\n"
 
-#. Author URI of the plugin/theme
-msgid "https://www.yasglobal.com/web-design-development/wordpress/custom-permalinks/"
-msgstr "https://www.yasglobal.com/web-design-development/wordpress/custom-permalinks/"
-
-#. Author of the plugin/theme
+#. Author of the plugin
+#: custom-permalinks.php admin/class-custom-permalinks-admin.php:240
+#: admin/class-custom-permalinks-admin.php:249
 msgid "Sami Ahmed Siddiqui"
 msgstr "Sami Ahmed Siddiqui"
 
-#. Description of the plugin/theme
-msgid "Set custom permalinks on a per-post basis"
-msgstr "Set custom permalinks on a per-post basis"
-
-#. Plugin URI of the plugin/theme
-msgid "https://wordpress.org/plugins/custom-permalinks/"
-msgstr "https://wordpress.org/plugins/custom-permalinks/"
-
-#. Plugin Name of the plugin/theme
+#. Plugin Name of the plugin
+#: custom-permalinks.php admin/class-custom-permalinks-about.php:77
+#: includes/class-custom-permalinks-form.php:150
 msgid "Custom Permalinks"
 msgstr "Custom Permalinks"
 
-#: frontend/class-custom-permalinks-form.php:238
+#: includes/class-custom-permalinks-form.php:1050
 msgid "Leave blank to disable"
 msgstr "Leave blank to disable"
 
-#: frontend/class-custom-permalinks-form.php:125
-#: frontend/class-custom-permalinks-form.php:151
-#: frontend/class-custom-permalinks-form.php:212
+#: includes/class-custom-permalinks-form.php:992
 msgid "Custom Permalink"
 msgstr "Custom Permalink"
 
-#: frontend/class-custom-permalinks-form.php:108
+#: includes/class-custom-permalinks-form.php:752
+#: includes/class-custom-permalinks-form.php:790
 msgid "Permalink:"
 msgstr "Permalink:"
 
-#: frontend/class-custom-permalinks-form.php:95
-msgid "View Post"
-msgstr "View Post"
-
-#: frontend/class-custom-permalinks-form.php:95
+#: includes/class-custom-permalinks-form.php:690
+#: includes/class-custom-permalinks-form.php:772
 msgid "View Page"
 msgstr "View Page"
 
-#: admin/class-custom-permalinks-admin.php:203
-msgid "Category/Tags Permalinks"
-msgstr "Category/Tags Permalinks"
-
-#: admin/class-custom-permalinks-admin.php:169
-#: admin/class-custom-permalinks-admin.php:332
+#: admin/class-custom-permalinks-post-types-table.php:36
+#: admin/class-custom-permalinks-post-types-table.php:121
+#: admin/class-custom-permalinks-taxonomies-table.php:36
+#: admin/class-custom-permalinks-taxonomies-table.php:121
 msgid "Permalink"
 msgstr "Permalink"
 
-#: admin/class-custom-permalinks-admin.php:168
-#: admin/class-custom-permalinks-admin.php:331
+#: admin/class-custom-permalinks-post-types-table.php:120
+#: admin/class-custom-permalinks-taxonomies-table.php:120
 msgid "Type"
 msgstr "Type"
 
-#: admin/class-custom-permalinks-admin.php:167
-#: admin/class-custom-permalinks-admin.php:330
+#: admin/class-custom-permalinks-post-types-table.php:119
+#: admin/class-custom-permalinks-taxonomies-table.php:119
 msgid "Title"
 msgstr "Title"
 
-#: admin/class-custom-permalinks-admin.php:96
-#: admin/class-custom-permalinks-admin.php:150
-#: admin/class-custom-permalinks-admin.php:230
-#: admin/class-custom-permalinks-admin.php:306
+#: admin/class-custom-permalinks-post-types-table.php:309
+#: admin/class-custom-permalinks-taxonomies-table.php:361
 msgid "Delete Permalinks"
 msgstr "Delete Permalinks"
-
-#: admin/class-custom-permalinks-admin.php:95
-#: admin/class-custom-permalinks-admin.php:149
-#: admin/class-custom-permalinks-admin.php:229
-#: admin/class-custom-permalinks-admin.php:305
-msgid "Bulk Actions"
-msgstr "Bulk Actions"
-
-#: admin/class-custom-permalinks-admin.php:47
-msgid "PostTypes Permalinks"
-msgstr "PostTypes Permalinks"
-
-#: admin/class-custom-permalinks-admin.php:43
-msgid "There is some error to proceed your request. Please retry with your request or contact to the plugin author."
-msgstr "There is some error to proceed your request. Please retry with your request or contact to the plugin author."

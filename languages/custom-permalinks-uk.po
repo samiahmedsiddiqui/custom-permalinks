@@ -1,0 +1,255 @@
+# Translation of Plugins - Custom Permalinks - Stable (latest release) in Ukrainian
+# This file is distributed under the same license as the Plugins - Custom Permalinks - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2022-09-06 08:28:39+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: uk_UA\n"
+"Project-Id-Version: Plugins - Custom Permalinks - Stable (latest release)\n"
+
+#: admin/class-custom-permalinks-admin.php:98
+#: admin/class-custom-permalinks-admin.php:269
+msgid "About"
+msgstr "Інфо"
+
+#: admin/class-custom-permalinks-admin.php:275
+msgid "Contact"
+msgstr "Контакти"
+
+#: admin/class-custom-permalinks-admin.php:304
+msgid "contact us"
+msgstr "зв’язатися з нами"
+
+#: admin/class-custom-permalinks-post-types-table.php:37
+#: admin/class-custom-permalinks-taxonomies-table.php:37
+msgid "Permalinks"
+msgstr "Постійні посилання"
+
+#: admin/class-custom-permalinks-post-types-table.php:149
+#: admin/class-custom-permalinks-taxonomies-table.php:149
+msgid "Search results for: "
+msgstr "Результати пошуку для: "
+
+#. Author URI of the plugin
+#: custom-permalinks.php
+msgid "https://www.linkedin.com/in/sami-ahmed-siddiqui/"
+msgstr "https://www.linkedin.com/in/sami-ahmed-siddiqui/"
+
+#: admin/class-custom-permalinks-admin.php:236
+msgid "Custom Permalinks version"
+msgstr "Версія Custom Permalinks"
+
+#: admin/class-custom-permalinks-admin.php:244
+msgid "Support forums"
+msgstr "Форуми підтримки"
+
+#: admin/class-custom-permalinks-admin.php:272
+msgid "Premium Support"
+msgstr "Преміум підтримка"
+
+#: admin/class-custom-permalinks-admin.php:238
+msgid "by"
+msgstr "by"
+
+#: admin/class-custom-permalinks-admin.php:298
+msgid "This plugin collect information about the site like URL, WordPress version etc. This plugin doesn't collect any user related information. To have any kind of further query please feel free to"
+msgstr "Цей плагін збирає інформацію про сайт, наприклад URL-адресу, версію WordPress тощо. Цей плагін не збирає інформацію, пов’язану з користувачем. Якщо у вас є будь-які додаткові запитання, будь ласка, не соромтеся"
+
+#: admin/class-custom-permalinks-post-types-table.php:179
+#: admin/class-custom-permalinks-taxonomies-table.php:179
+msgid "Search Permalinks"
+msgstr "Пошук постійних посилань"
+
+#: admin/class-custom-permalinks-about.php:147
+msgid "Convert the paths(URLs) to relative instead of absolute. You can make Post, Category, Archive, Image URLs and Script and Style src as per your requirement. You can choose which you want to be relative from the settings Page."
+msgstr "Перетворіть шляхи (URL) на відносні замість абсолютних. Ви можете створити pfgbc, категорію, архів, URL-адреси зображень, сценарій і стиль src відповідно до ваших вимог. На сторінці налаштувань ви можете вибрати, який параметр буде відносним."
+
+#: admin/class-custom-permalinks-about.php:189
+msgid "It removes some meta data from the WordPress header so, your header keeps clean of useless information like shortlink, rsd_link, wlwmanifest_link, emoji_scripts, wp_embed, wp_json, emoji_styles, generator and so on."
+msgstr "Він видаляє деякі метадані із заголовка WordPress, тому ваш заголовок очищає від такої непотрібної інформації, як shortlink, rsd_link, wlwmanifest_link, emoji_scripts, wp_embed, wp_json, emoji_styles, generator тощо."
+
+#: admin/class-custom-permalinks-about.php:118
+#: admin/class-custom-permalinks-about.php:122
+#: admin/class-custom-permalinks-about.php:132
+msgid "HTTP Auth"
+msgstr "Аутентифікація HTTP"
+
+#: admin/class-custom-permalinks-about.php:86
+msgid "Our List of Plugins provides the services which help you to prevent your site from XSS Attacks, Brute force attack, change absolute paths to relative, increase your site visitors by adding Structured JSON Markup and so on."
+msgstr "Наш список плагінів надає послуги, які допоможуть вам захистити ваш сайт від атак XSS, атак грубою силою, змінити абсолютні шляхи на відносні, збільшити кількість відвідувачів вашого сайту шляхом додавання структурованої розмітки JSON тощо."
+
+#: includes/class-custom-permalinks-form.php:705
+#: includes/class-custom-permalinks-form.php:787
+msgid "View"
+msgstr "Перегляд"
+
+#: admin/class-custom-permalinks-admin.php:81
+#: admin/class-custom-permalinks-admin.php:82
+#: admin/class-custom-permalinks-taxonomies-table.php:143
+msgid "Taxonomies Permalinks"
+msgstr "Таксономії Постійні посилання"
+
+#: admin/class-custom-permalinks-post-types-table.php:105
+#: admin/class-custom-permalinks-taxonomies-table.php:105
+msgid "No permalinks found."
+msgstr "Постійних посилань не знайдено."
+
+#. translators: After `v` there will be a Plugin version.
+#: admin/class-custom-permalinks-about.php:39
+msgid "Custom Permalinks v"
+msgstr "Custom Permalinks v"
+
+#: admin/class-custom-permalinks-post-types-table.php:292
+#: admin/class-custom-permalinks-taxonomies-table.php:343
+msgid "Visit"
+msgstr "Відвідати"
+
+#: includes/class-custom-permalinks.php:123
+msgid "Custom Permalinks Manager"
+msgstr "Custom Permalinks Менеджер"
+
+#: admin/class-custom-permalinks-about.php:82
+msgid "More from Sami Ahmed Siddiqui"
+msgstr "Більше від Sami Ahmed Siddiqui"
+
+#: admin/class-custom-permalinks-about.php:50
+msgid "Thank you for choosing Custom Permalinks! I hope that your experience with our plugin for updating permalinks is quick and easy. I am trying to make it more feasible for you and provide capabilities in it."
+msgstr "Дякуємо Вам за вибір Custom Permalinks! Ми сподіваємося, що ваш досвід роботи з плагіном є легким та швидким. Ми намагаємося зробити його більш зручним для Вас та розшири його можливості."
+
+#: admin/class-custom-permalinks-about.php:181
+#: admin/class-custom-permalinks-about.php:185
+#: admin/class-custom-permalinks-about.php:195
+msgid "Remove Links and Scripts"
+msgstr "Видалити посилання та скрипти"
+
+#: admin/class-custom-permalinks-about.php:160
+#: admin/class-custom-permalinks-about.php:164
+#: admin/class-custom-permalinks-about.php:174
+msgid "SCHEMA for Article"
+msgstr "Схема для статті"
+
+#: admin/class-custom-permalinks-about.php:210
+msgid "On uploading  any image, let's say services.png, WordPress creates the attachment post with the permalink of /services/ and doesn't allow you to use that permalink to point your page. In this case, we come up with this great solution."
+msgstr "При завантаженні будь-якого зображення, скажімо, services.png, WordPress створює <strong>пост з прикріпленням</strong> з постійним посиланням на <strong>/services/</strong>і не дозволяє вам використовувати це постійний постійне посилання у якості лінку на сторінку. У цьому випадку ми придумали це чудове рішення."
+
+#: admin/class-custom-permalinks-about.php:223
+#: admin/class-custom-permalinks-about.php:227
+#: admin/class-custom-permalinks-about.php:237
+msgid "JSON Structuring Markup"
+msgstr "Розмітка структури JSON"
+
+#: admin/class-custom-permalinks-about.php:139
+#: admin/class-custom-permalinks-about.php:143
+#: admin/class-custom-permalinks-about.php:153
+msgid "Make Paths Relative"
+msgstr "Зробити шляхи відносними"
+
+#: admin/class-custom-permalinks-about.php:95
+#: admin/class-custom-permalinks-about.php:100
+#: admin/class-custom-permalinks-about.php:111
+msgid "Prevent XSS Vulnerability"
+msgstr "Запобігання XSS вразливостей"
+
+#: admin/class-custom-permalinks-about.php:112
+#: admin/class-custom-permalinks-about.php:133
+#: admin/class-custom-permalinks-about.php:154
+#: admin/class-custom-permalinks-about.php:175
+#: admin/class-custom-permalinks-about.php:196
+#: admin/class-custom-permalinks-about.php:217
+#: admin/class-custom-permalinks-about.php:238
+msgid "Check it out"
+msgstr "Перевірте це"
+
+#: admin/class-custom-permalinks-about.php:231
+msgid "Simply the easiest solution to add valid schema.org as a JSON script in the head of posts and pages. It provides you multiple SCHEMA types like Article, News Article, Organization and Website Schema."
+msgstr "Просто найпростіше рішення додати дійсний schema.org як сценарій JSON до заголовку повідомлень і сторінок. Надає Вам декілька типів <strong> SCHEMA </strong>, таких як стаття, новини, організація та схема веб-сайту."
+
+#: admin/class-custom-permalinks-about.php:168
+msgid "Simply the easiest solution to add valid schema.org as a JSON script in the head of blog posts or articles. You can choose the schema either to show with the type of Article or NewsArticle from the settings page."
+msgstr "Просто найпростіше рішення додати дійсний schema.org як скрипт JSON в заголовок публікацій блогу чи статей. Ви можете вибрати схему яка буде відображатися для типів Стаття або Новина на сторінці налаштувань."
+
+#: admin/class-custom-permalinks-about.php:105
+msgid "Secure your site from the XSS Attacks so, your users won't lose any kind of information or not redirected to any other site by visiting your site with the malicious code in the URL or so. In this way, users can open their site URLs without any hesitation."
+msgstr "Захистіть свій сайт від <strong>XSS атак</strong>, щоб ваші користувачі не втратили будь-яку інформацію або не перенаправлялися на жодний інший сайт, перейшовши на ваш сайт за допомогою <strong>зловмисного коду</strong> URL-адреси або т.п.. Таким чином користувачі без вагань та сумнівів зможуть відкривати URL-адреси вашого сайту."
+
+#: admin/class-custom-permalinks-about.php:126
+msgid "Allows you apply HTTP Auth on your site. You can apply Http Authentication all over the site or only the admin pages. It helps to stop crawling on your site while on development or persist the Brute Attacks by locking the Admin Pages."
+msgstr "Дозволяє застосовувати <strong> HTTP Auth </strong> на Вашому сайті. Ви можете застосувати http автентифікацію для всього сайту або лише на сторінках адміністратора. Це надає можливість зупинити сканування на Вашому сайті під час розробки або зберегти <strong>Brute Attacks</strong> заблокувавши сторінки адміністратора."
+
+#: admin/class-custom-permalinks-about.php:202
+#: admin/class-custom-permalinks-about.php:206
+#: admin/class-custom-permalinks-about.php:216
+msgid "Media Post Permalink"
+msgstr "Постійне посилання на медіа-записи"
+
+#. Plugin URI of the plugin
+#: custom-permalinks.php
+msgid "https://www.custompermalinks.com/"
+msgstr "https://www.custompermalinks.com/"
+
+#. Plugin Name of the plugin
+#: custom-permalinks.php admin/class-custom-permalinks-about.php:77
+#: includes/class-custom-permalinks-form.php:150
+msgid "Custom Permalinks"
+msgstr "Custom Permalinks"
+
+#. Author of the plugin
+#: custom-permalinks.php admin/class-custom-permalinks-admin.php:240
+#: admin/class-custom-permalinks-admin.php:249
+msgid "Sami Ahmed Siddiqui"
+msgstr "Sami Ahmed Siddiqui"
+
+#: includes/class-custom-permalinks-form.php:992
+msgid "Custom Permalink"
+msgstr "Custom Permalink"
+
+#: includes/class-custom-permalinks-form.php:1050
+msgid "Leave blank to disable"
+msgstr "Залиште порожнім щоб вимкнути"
+
+#: admin/class-custom-permalinks-post-types-table.php:309
+#: admin/class-custom-permalinks-taxonomies-table.php:361
+msgid "Delete Permalinks"
+msgstr "Видалити постійне посилання"
+
+#: admin/class-custom-permalinks-post-types-table.php:119
+#: admin/class-custom-permalinks-taxonomies-table.php:119
+msgid "Title"
+msgstr "Заголовок"
+
+#: includes/class-custom-permalinks-form.php:690
+#: includes/class-custom-permalinks-form.php:772
+msgid "View Page"
+msgstr "Переглянути сторінку"
+
+#: admin/class-custom-permalinks-post-types-table.php:120
+#: admin/class-custom-permalinks-taxonomies-table.php:120
+msgid "Type"
+msgstr "Тип"
+
+#: admin/class-custom-permalinks-post-types-table.php:36
+#: admin/class-custom-permalinks-post-types-table.php:121
+#: admin/class-custom-permalinks-taxonomies-table.php:36
+#: admin/class-custom-permalinks-taxonomies-table.php:121
+msgid "Permalink"
+msgstr "Постійне посилання"
+
+#: admin/class-custom-permalinks-admin.php:73
+#: admin/class-custom-permalinks-admin.php:74
+#: admin/class-custom-permalinks-post-types-table.php:143
+msgid "Post Types Permalinks"
+msgstr "Типи записів постійних посилань"
+
+#: includes/class-custom-permalinks-form.php:752
+#: includes/class-custom-permalinks-form.php:790
+msgid "Permalink:"
+msgstr "Постійне посилання:"
+
+#. Description of the plugin
+#: custom-permalinks.php
+msgid "Set custom permalinks on a per-post basis."
+msgstr "Налаштування користувальницьких постійних посилань на основі кожного повідомлення."

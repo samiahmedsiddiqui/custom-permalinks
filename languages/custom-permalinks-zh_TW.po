@@ -1,0 +1,327 @@
+# Translation of Plugins - Custom Permalinks - Stable (latest release) in Chinese (Taiwan)
+# This file is distributed under the same license as the Plugins - Custom Permalinks - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2025-07-24 08:09:35+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: zh_TW\n"
+"Project-Id-Version: Plugins - Custom Permalinks - Stable (latest release)\n"
+
+#: admin/class-custom-permalinks-post-types-settings.php:153
+msgid "View Permalink Tags & Documentation"
+msgstr "查看永久連結標籤及線上說明"
+
+#: admin/class-custom-permalinks-post-types-settings.php:142
+msgid "Make use of <strong>Structure Tags</strong> to craft URLs that are meaningful and optimized. Apply them thoughtfully to your Post Types for better clarity, organization, and SEO."
+msgstr "使用<strong>結構標籤</strong>製作具備意義及經過最佳化的網址。審慎考慮後將相關設定套用至網站的內容類型，便能獲得更佳明確、更具組織性及 SEO 的網址。"
+
+#: admin/class-custom-permalinks-post-types-settings.php:135
+msgid " Permalink Settings"
+msgstr "永久連結設定"
+
+#: admin/class-custom-permalinks-post-types-settings.php:128
+msgid "You have the flexibility to set unique permalink structures for each Post Type — or stick with a unified format. If you don’t define a custom structure, WordPress will automatically fall back to the default structure configured in your"
+msgstr "網站管理員必須為全部內容類型設定唯一或統一格式的永久連結結構。如果沒有定義自訂結構，WordPress 會自動使用預設結構。預設結構設定:"
+
+#: admin/class-custom-permalinks-post-types-settings.php:118
+msgid "Customize Permalinks for Each Post Type"
+msgstr "自訂個別內容類型的永久連結"
+
+#: admin/class-custom-permalinks-post-types-settings.php:97
+msgid "Post Types Permalinks Settings"
+msgstr "內容類型永久連結設定"
+
+#: admin/class-custom-permalinks-post-types-settings.php:83
+msgid "Post Types Permalinks Settings are updated."
+msgstr "[內容類型永久連結設定] 已更新。"
+
+#: admin/class-custom-permalinks-post-types-settings.php:81
+msgid "Post Types Permalinks Settings are updated and cache cleared."
+msgstr "[內容類型永久連結設定] 已更新並清除快取。"
+
+#: admin/class-custom-permalinks-post-types-settings.php:73
+msgid "UPDATE FAILED: Replace \"TAG_NAME\" with the valid tag name (string) in the highlighted input fields."
+msgstr "更新失敗: 請在強調顯示的輸入欄位中，以有效的標籤名稱 (字串) 取代 TAG_NAME。"
+
+#: admin/class-custom-permalinks-post-types-settings.php:71
+msgid "UPDATE FAILED: Replace \"TAG_NAME\" with the valid tag name (string) in the highlighted input field."
+msgstr "更新失敗: 請在強調顯示的輸入欄位中，以有效的標籤名稱 (字串) 取代 TAG_NAME。"
+
+#: admin/class-custom-permalinks-post-types-settings.php:67
+msgid "UPDATE FAILED: Replace \"TAXONOMY_NAME\" with the valid taxonomy name in the highlighted input fields."
+msgstr "更新失敗: 請在強調顯示的輸入欄位中，以有效的分類法名稱取代 TAXONOMY_NAME。"
+
+#: admin/class-custom-permalinks-post-types-settings.php:65
+msgid "UPDATE FAILED: Replace \"TAXONOMY_NAME\" with the valid taxonomy name in the highlighted input field."
+msgstr "更新失敗: 請在強調顯示的輸入欄位中，以有效的分類法名稱取代 TAXONOMY_NAME。"
+
+#: admin/class-custom-permalinks-admin.php:89
+#: admin/class-custom-permalinks-admin.php:90
+msgid "Post Types Settings"
+msgstr "內容類型設定"
+
+#: admin/class-custom-permalinks-post-types-table.php:247
+#: admin/class-custom-permalinks-taxonomies-table.php:252
+msgid "Edit"
+msgstr "編輯"
+
+#: admin/class-custom-permalinks-admin.php:97
+msgid "About Custom Permalinks"
+msgstr "關於 Custom Permalinks"
+
+#: admin/class-custom-permalinks-admin.php:64
+#: admin/class-custom-permalinks-admin.php:65
+msgctxt "Menu Item"
+msgid "Custom Permalinks"
+msgstr "自訂永久連結"
+
+#: admin/class-custom-permalinks-about.php:59
+msgid "To support future development and to help make it even better please leave a <a href=\"https://wordpress.org/support/plugin/custom-permalinks/reviews/?rate=5#new-post\" title=\"Custom Permalinks Rating\" target=\"_blank\">5-star</a> rating with a nice message to me :)"
+msgstr "為了支持外掛的開發工作，並協助外掛的改進，請為這個外掛撰寫 <a href=\"https://wordpress.org/support/plugin/custom-permalinks/reviews/?rate=5#new-post\" title=\"為 Custom Permalinks 撰寫評論\" target=\"_blank\">5 星</a>評論。"
+
+#: admin/class-custom-permalinks-post-types-table.php:149
+#: admin/class-custom-permalinks-taxonomies-table.php:149
+msgid "Search results for: "
+msgstr "搜尋關鍵字: "
+
+#: admin/class-custom-permalinks-post-types-table.php:37
+#: admin/class-custom-permalinks-taxonomies-table.php:37
+msgid "Permalinks"
+msgstr "永久連結"
+
+#: admin/class-custom-permalinks-admin.php:304
+msgid "contact us"
+msgstr "與我們聯絡"
+
+#: admin/class-custom-permalinks-admin.php:298
+msgid "This plugin collect information about the site like URL, WordPress version etc. This plugin doesn't collect any user related information. To have any kind of further query please feel free to"
+msgstr "這個外掛會收集如網站網址及 WordPress 核心程式版本等網站相關資訊，但是不會收集使用者相關資訊。如需進一步了解相關資訊，隨時可以"
+
+#: admin/class-custom-permalinks-admin.php:275
+msgid "Contact"
+msgstr "聯絡我們"
+
+#: admin/class-custom-permalinks-admin.php:272
+msgid "Premium Support"
+msgstr "付費技術支援"
+
+#: admin/class-custom-permalinks-admin.php:98
+#: admin/class-custom-permalinks-admin.php:269
+msgid "About"
+msgstr "相關資訊"
+
+#: admin/class-custom-permalinks-admin.php:244
+msgid "Support forums"
+msgstr "技術支援論壇"
+
+#: admin/class-custom-permalinks-admin.php:238
+msgid "by"
+msgstr "的開發者為"
+
+#: admin/class-custom-permalinks-admin.php:236
+msgid "Custom Permalinks version"
+msgstr "Custom Permalinks v"
+
+#. Author URI of the plugin
+#: custom-permalinks.php
+msgid "https://www.linkedin.com/in/sami-ahmed-siddiqui/"
+msgstr "https://www.linkedin.com/in/sami-ahmed-siddiqui/"
+
+#: admin/class-custom-permalinks-post-types-table.php:179
+#: admin/class-custom-permalinks-taxonomies-table.php:179
+msgid "Search Permalinks"
+msgstr "搜尋永久連結"
+
+#: admin/class-custom-permalinks-about.php:189
+msgid "It removes some meta data from the WordPress header so, your header keeps clean of useless information like shortlink, rsd_link, wlwmanifest_link, emoji_scripts, wp_embed, wp_json, emoji_styles, generator and so on."
+msgstr "這個外掛會移除 WordPress 標頭的某些中繼資料，讓網站的標頭藉由清除如 shortlink、rsd_link、wlwmanifest_link、emoji_scripts、wp_embed、wp_json、emoji_styles、generator 等無用資訊保持簡潔。"
+
+#: admin/class-custom-permalinks-about.php:147
+msgid "Convert the paths(URLs) to relative instead of absolute. You can make Post, Category, Archive, Image URLs and Script and Style src as per your requirement. You can choose which you want to be relative from the settings Page."
+msgstr "這個外掛能將路徑 (網址) 從絕對路徑變更為相對路徑，網站管理員可以在設定頁面，將文章、分類、彙整、圖片網址、指令碼及樣式 src 依據需求變更為相對路徑。"
+
+#: admin/class-custom-permalinks-about.php:118
+#: admin/class-custom-permalinks-about.php:122
+#: admin/class-custom-permalinks-about.php:132
+msgid "HTTP Auth"
+msgstr "HTTP Auth"
+
+#: admin/class-custom-permalinks-about.php:86
+msgid "Our List of Plugins provides the services which help you to prevent your site from XSS Attacks, Brute force attack, change absolute paths to relative, increase your site visitors by adding Structured JSON Markup and so on."
+msgstr "我們的外掛清單所提供的服務能協助網站管理員讓網站免受 XSS 攻擊、暴力破解密碼攻擊、將絕對路徑變更相對路徑，並透過加入結構化 JSON 標記以增加這個網站的訪客數量。"
+
+#. translators: After `v` there will be a Plugin version.
+#: admin/class-custom-permalinks-about.php:39
+msgid "Custom Permalinks v"
+msgstr "Custom Permalinks v"
+
+#: admin/class-custom-permalinks-post-types-table.php:105
+#: admin/class-custom-permalinks-taxonomies-table.php:105
+msgid "No permalinks found."
+msgstr "找不到符合條件的永久連結。"
+
+#: admin/class-custom-permalinks-admin.php:81
+#: admin/class-custom-permalinks-admin.php:82
+#: admin/class-custom-permalinks-taxonomies-table.php:143
+msgid "Taxonomies Permalinks"
+msgstr "分類法永久連結"
+
+#: includes/class-custom-permalinks-form.php:705
+#: includes/class-custom-permalinks-form.php:787
+msgid "View"
+msgstr "檢視"
+
+#: admin/class-custom-permalinks-post-types-table.php:292
+#: admin/class-custom-permalinks-taxonomies-table.php:343
+msgid "Visit"
+msgstr "點擊前往目標:"
+
+#: includes/class-custom-permalinks.php:123
+msgid "Custom Permalinks Manager"
+msgstr "Custom Permalinks 管理員"
+
+#: admin/class-custom-permalinks-about.php:82
+msgid "More from Sami Ahmed Siddiqui"
+msgstr "更多 Sami Ahmed Siddiqui 開發的外掛"
+
+#: admin/class-custom-permalinks-about.php:50
+msgid "Thank you for choosing Custom Permalinks! I hope that your experience with our plugin for updating permalinks is quick and easy. I am trying to make it more feasible for you and provide capabilities in it."
+msgstr "感謝採用 Custom Permalinks！希望這個外掛對於更新永久連結的使用體驗，對使用者而言是快速易用，目前開發團隊正在努力讓這個外掛可用性更高，並提供更多功能。"
+
+#: admin/class-custom-permalinks-about.php:210
+msgid "On uploading  any image, let's say services.png, WordPress creates the attachment post with the permalink of /services/ and doesn't allow you to use that permalink to point your page. In this case, we come up with this great solution."
+msgstr "上傳如 services.png 的任何圖片後，WordPress 會建立包含 /services/ 這個永久連結的附件文章，並且不允許使用這個永久連結指向其他網站頁面，因此我們開發了這個外掛作為這種預設狀況的解決方案。"
+
+#: admin/class-custom-permalinks-about.php:202
+#: admin/class-custom-permalinks-about.php:206
+#: admin/class-custom-permalinks-about.php:216
+msgid "Media Post Permalink"
+msgstr "Media Post Permalink"
+
+#: admin/class-custom-permalinks-about.php:181
+#: admin/class-custom-permalinks-about.php:185
+#: admin/class-custom-permalinks-about.php:195
+msgid "Remove Links and Scripts"
+msgstr "Remove Links and Scripts"
+
+#: admin/class-custom-permalinks-about.php:231
+msgid "Simply the easiest solution to add valid schema.org as a JSON script in the head of posts and pages. It provides you multiple SCHEMA types like Article, News Article, Organization and Website Schema."
+msgstr "這個外掛能在網站文章及頁面的 head 標籤中加入有效的 schema.org 標記，作為 JSON 指令碼的解決方案。這個外掛還能讓網站使用多重架構，例如文章、新聞文章、組織及網站等架構。"
+
+#: admin/class-custom-permalinks-about.php:223
+#: admin/class-custom-permalinks-about.php:227
+#: admin/class-custom-permalinks-about.php:237
+msgid "JSON Structuring Markup"
+msgstr "JSON Structuring Markup"
+
+#: admin/class-custom-permalinks-about.php:139
+#: admin/class-custom-permalinks-about.php:143
+#: admin/class-custom-permalinks-about.php:153
+msgid "Make Paths Relative"
+msgstr "Make Paths Relative"
+
+#: admin/class-custom-permalinks-about.php:168
+msgid "Simply the easiest solution to add valid schema.org as a JSON script in the head of blog posts or articles. You can choose the schema either to show with the type of Article or NewsArticle from the settings page."
+msgstr "這個外掛能在網站文章的 head 標籤中加入有效的 schema.org 標記，作為 JSON 指令碼的解決方案。網站管理員可以在設定頁面中依據需求選取 Article 或 NewsArticle 類型作為顯示內容的架構。"
+
+#: admin/class-custom-permalinks-about.php:160
+#: admin/class-custom-permalinks-about.php:164
+#: admin/class-custom-permalinks-about.php:174
+msgid "SCHEMA for Article"
+msgstr "SCHEMA for Article"
+
+#: admin/class-custom-permalinks-about.php:126
+msgid "Allows you apply HTTP Auth on your site. You can apply Http Authentication all over the site or only the admin pages. It helps to stop crawling on your site while on development or persist the Brute Attacks by locking the Admin Pages."
+msgstr "這個外掛能讓網站管理員為網站啟用 HTTP 驗證功能，以便在整個網站或僅有管理後台頁面套用 HTTP 驗證功能。這能協助防止搜尋引擎在網站開發期間對網站的檢索，或以鎖定後台管理頁面的方式阻擋暴力密碼破解攻擊。"
+
+#: admin/class-custom-permalinks-about.php:105
+msgid "Secure your site from the XSS Attacks so, your users won't lose any kind of information or not redirected to any other site by visiting your site with the malicious code in the URL or so. In this way, users can open their site URLs without any hesitation."
+msgstr "這個外掛能保護這個網站免受 XSS 攻擊，網站使用者便不會失去任何類型的資訊，更不會因為瀏覽這個網站包含惡意程式碼的網址而將他們重新導向至其他網站。透過這種方式，網站使用者可以安心的開啟網站所提供的網址。"
+
+#: admin/class-custom-permalinks-about.php:95
+#: admin/class-custom-permalinks-about.php:100
+#: admin/class-custom-permalinks-about.php:111
+msgid "Prevent XSS Vulnerability"
+msgstr "Prevent XSS Vulnerability"
+
+#: admin/class-custom-permalinks-about.php:112
+#: admin/class-custom-permalinks-about.php:133
+#: admin/class-custom-permalinks-about.php:154
+#: admin/class-custom-permalinks-about.php:175
+#: admin/class-custom-permalinks-about.php:196
+#: admin/class-custom-permalinks-about.php:217
+#: admin/class-custom-permalinks-about.php:238
+msgid "Check it out"
+msgstr "進一步了解"
+
+#. Plugin URI of the plugin
+#: custom-permalinks.php
+msgid "https://www.custompermalinks.com/"
+msgstr "https://www.custompermalinks.com/"
+
+#. Author of the plugin
+#: custom-permalinks.php admin/class-custom-permalinks-admin.php:240
+#: admin/class-custom-permalinks-admin.php:249
+msgid "Sami Ahmed Siddiqui"
+msgstr "Sami Ahmed Siddiqui"
+
+#. Description of the plugin
+#: custom-permalinks.php
+msgid "Set custom permalinks on a per-post basis."
+msgstr "為每一篇內容的目錄起點設定自訂永久連結。"
+
+#. Plugin Name of the plugin
+#: custom-permalinks.php admin/class-custom-permalinks-about.php:77
+#: includes/class-custom-permalinks-form.php:150
+msgid "Custom Permalinks"
+msgstr "Custom Permalinks"
+
+#: includes/class-custom-permalinks-form.php:1050
+msgid "Leave blank to disable"
+msgstr "欄位留空代表停用。"
+
+#: includes/class-custom-permalinks-form.php:992
+msgid "Custom Permalink"
+msgstr "自訂永久連結"
+
+#: includes/class-custom-permalinks-form.php:752
+#: includes/class-custom-permalinks-form.php:790
+msgid "Permalink:"
+msgstr "永久連結:"
+
+#: includes/class-custom-permalinks-form.php:690
+#: includes/class-custom-permalinks-form.php:772
+msgid "View Page"
+msgstr "檢視頁面"
+
+#: admin/class-custom-permalinks-post-types-table.php:36
+#: admin/class-custom-permalinks-post-types-table.php:121
+#: admin/class-custom-permalinks-taxonomies-table.php:36
+#: admin/class-custom-permalinks-taxonomies-table.php:121
+msgid "Permalink"
+msgstr "永久連結"
+
+#: admin/class-custom-permalinks-post-types-table.php:120
+#: admin/class-custom-permalinks-taxonomies-table.php:120
+msgid "Type"
+msgstr "類型"
+
+#: admin/class-custom-permalinks-post-types-table.php:119
+#: admin/class-custom-permalinks-taxonomies-table.php:119
+msgid "Title"
+msgstr "標題"
+
+#: admin/class-custom-permalinks-post-types-table.php:309
+#: admin/class-custom-permalinks-taxonomies-table.php:361
+msgid "Delete Permalinks"
+msgstr "刪除永久連結"
+
+#: admin/class-custom-permalinks-admin.php:73
+#: admin/class-custom-permalinks-admin.php:74
+#: admin/class-custom-permalinks-post-types-table.php:143
+msgid "Post Types Permalinks"
+msgstr "內容類型永久連結"
