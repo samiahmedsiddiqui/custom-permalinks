@@ -84,6 +84,7 @@ class Custom_Permalinks_Post_Types_Settings {
 				if ( isset( $saved_data['save_changes_flush_cache'] ) ) {
 					// Remove rewrite rules and then recreate rewrite rules.
 					flush_rewrite_rules();
+					wp_cache_flush_group( 'custom_permalinks' );
 
 					$notifications[] = __( 'Post Types Permalinks Settings are updated and cache cleared.', 'custom-permalinks' );
 				} else {
@@ -132,27 +133,30 @@ class Custom_Permalinks_Post_Types_Settings {
 
 				<p>
 					<?php
-					esc_html_e(
-						'You have the flexibility to set unique permalink structures for each Post Type — or stick with a unified format. If you don’t define a custom structure, WordPress will automatically fall back to the default structure configured in your',
-						'custom-permalinks'
+					printf(
+						// translators: %1$s and %2$s adds link on the text.
+						esc_html__(
+							'You have the flexibility to set unique permalink structures for each Post Type — or stick with a unified format. If you don’t define a custom structure, WordPress will automatically fall back to the default structure configured in your %1$sPermalink Settings%2$s.',
+							'custom-permalinks'
+						),
+						'<a href="options-permalink.php" target="_blank">',
+						'</a>'
 					);
 					?>
-
-					<a href="options-permalink.php" target="_blank">
-						<?php esc_html_e( ' Permalink Settings', 'custom-permalinks' ); ?>
-					</a>.
 				</p>
 
 				<p>
-				<?php
-					echo wp_kses(
-						_e(
-							'Make use of <strong>Structure Tags</strong> to craft URLs that are meaningful and optimized. Apply them thoughtfully to your Post Types for better clarity, organization, and SEO.',
+					<?php
+					printf(
+						// translators: %1$s and %2$s makes the text bold.
+						esc_html__(
+							'Make use of %1$sStructure Tags%2$s to craft URLs that are meaningful and optimized. Apply them thoughtfully to your Post Types for better clarity, organization, and SEO.',
 							'custom-permalinks'
 						),
-						array( 'strong' => array() )
+						'<strong>',
+						'</strong>'
 					);
-				?>
+					?>
 				</p>
 
 				<p>
