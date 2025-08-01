@@ -19,12 +19,12 @@
 		"lint:js:fix": "eslint . --fix"
 	},
 	"devDependencies": {
-		"@wordpress/eslint-plugin": "20.2.0",
-		"@wordpress/stylelint-config": "22.5.0",
+		"@wordpress/eslint-plugin": "22.13.0",
+		"@wordpress/stylelint-config": "23.19.0",
 		"eslint": "8.57.0",
-		"gulp": "5.0.0",
+		"gulp": "5.0.1",
 		"gulp-clean-css": "4.3.0",
-		"gulp-rename": "2.0.0",
+		"gulp-rename": "2.1.0",
 		"gulp-uglify": "3.0.2"
 	}
 }
