@@ -741,7 +741,10 @@ class Custom_Permalinks_Frontend {
 
 		$custom_permalink   = '';
 		$original_permalink = '';
-		$get_post_id        = url_to_postid( $this->request_uri );
+
+		remove_filter( 'url_to_postid', array( $this, 'postid_to_customized_permalink' ) );
+		$get_post_id = url_to_postid( $this->request_uri );
+		add_filter( 'url_to_postid', array( $this, 'postid_to_customized_permalink' ), 10, 1 );
 
 		// Redirect original post permalink.
 		if ( ! empty( $get_post_id ) ) {
