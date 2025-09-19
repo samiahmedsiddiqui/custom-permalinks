@@ -4,7 +4,7 @@ Tags: permalink, url, link, address, redirect
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 6.8
-Stable tag: 3.1.0
+Stable tag: 3.1.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -80,6 +80,14 @@ You have two ways to install Custom Permalinks:
 3.  Activate Custom Permalinks through the "Plugins" menu in your WordPress dashboard.
 
 == Changelog ==
+
+= 3.1.1 - Sep 19, 2025 =
+
+* Bugs:
+  * [PHP 8.x Warnings Admin](https://wordpress.org/support/topic/php-8-x-warnings-admin/)
+	* [Polylang Redirect Issue](https://wordpress.org/support/topic/polylang-redirect-issue-2/)
+	* [Lost password link conflict](https://wordpress.org/support/topic/lost-password-link-conflict/)
+	* [Custom Permalinks is conflicting with Gravity View plugin](https://wordpress.org/support/topic/custom-permalinks-is-conflicting-with-gravity-view-plugin/)
 
 = 3.1.0 - Aug 01, 2025 =
 
