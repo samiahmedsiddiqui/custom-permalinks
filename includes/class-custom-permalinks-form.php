@@ -86,6 +86,10 @@ class Custom_Permalinks_Form {
 	 * return bool Whether Custom Permalink is customizable or not.
 	 */
 	private function is_permalink_customizable( $post ) {
+		if ( ! is_object( $post ) ) {
+			return false;
+		}
+
 		$exclude_post_types = apply_filters(
 			'custom_permalinks_exclude_post_type',
 			$post->post_type
