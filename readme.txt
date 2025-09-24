@@ -81,6 +81,11 @@ You have two ways to install Custom Permalinks:
 
 == Changelog ==
 
+= 3.1.2 - Sep 24, 2025 =
+
+* Bug:
+  * [Prevent adding slash if `home_url()` contains one](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/136)
+
 = 3.1.1 - Sep 19, 2025 =
 
 * Bugs:
