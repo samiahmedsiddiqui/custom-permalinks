@@ -689,6 +689,27 @@ class Custom_Permalinks_Frontend {
 	}
 
 	/**
+	 * Trigger safe redirect.
+	 *
+	 * @since 3.1.2
+	 * @access private
+	 *
+	 * @param string $url Relative URL.
+	 *
+	 * @return void
+	 */
+	private function safe_redirect( $url ) {
+		$home_url = home_url();
+		if ( '/' === substr( $home_url, -1 ) ) {
+			wp_safe_redirect( $home_url . $url, 301 );
+		} else {
+			wp_safe_redirect( $home_url . '/' . $url, 301 );
+		}
+
+		exit( 0 );
+	}
+
+	/**
 	 * Action to redirect to the custom permalink.
 	 *
 	 * @since 0.1.0
@@ -752,9 +773,7 @@ class Custom_Permalinks_Frontend {
 			if ( ! empty( $custom_permalink ) ) {
 				// Append any query component.
 				$custom_permalink .= strstr( $this->request_uri, '?' );
-
-				wp_safe_redirect( home_url() . '/' . $custom_permalink, 301 );
-				exit( 0 );
+				$this->safe_redirect( $custom_permalink );
 			}
 		} else {
 			if ( defined( 'POLYLANG_VERSION' ) ) {
@@ -822,9 +841,7 @@ class Custom_Permalinks_Frontend {
 
 				// Append any query component.
 				$url .= strstr( $this->request_uri, '?' );
-
-				wp_safe_redirect( home_url() . '/' . $url, 301 );
-				exit( 0 );
+				$this->safe_redirect( $url );
 			}
 		}
 	}
