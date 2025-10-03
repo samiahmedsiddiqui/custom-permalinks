@@ -806,9 +806,11 @@ class Custom_Permalinks_Frontend {
 						$original_permalink = $this->original_post_link( $post->ID );
 					}
 				} elseif ( is_tag() || is_category() ) {
-					$the_term           = $wp_query->get_queried_object();
-					$custom_permalink   = $this->term_permalink( $the_term->term_id );
-					$original_permalink = $this->original_term_link( $the_term->term_id );
+					$the_term = $wp_query->get_queried_object();
+					if ( isset( $the_term, $the_term->term_id ) ) {
+						$custom_permalink   = $this->term_permalink( $the_term->term_id );
+						$original_permalink = $this->original_term_link( $the_term->term_id );
+					}
 				}
 			}
 
