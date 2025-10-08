@@ -1076,8 +1076,8 @@ class Custom_Permalinks_Form {
 	public function save_term( $term_id ) {
 		$term = get_term( $term_id );
 
-		if ( ! isset( $_REQUEST['_custom_permalinks_term_nonce'] )
-			&& ! isset( $_REQUEST['custom_permalink'] )
+		if ( ! isset( $_REQUEST['custom_permalink'] )
+			|| ! isset( $_REQUEST['_custom_permalinks_term_nonce'] )
 		) {
 			return;
 		}
