@@ -116,34 +116,40 @@ final class Custom_Permalinks_Generate_Post_Permalinks {
 		// Handle %ctax_parent_TAXONOMY_NAME%.
 		if ( false !== strpos( $replace_tag, '%ctax_parent_' ) ) {
 			preg_match_all( '/%ctax_parent_([^%]+)%/', $replace_tag, $matches );
-			if ( isset( $matches[1], $matches[1][0] ) ) {
-				$category    = $this->get_taxonomy_slug( $post_id, $matches[1][0], 'immediate' );
-				$replace_tag = str_replace( "%ctax_parent_{$matches[1][0]}%", $category, $replace_tag );
+			if ( isset( $matches[1] ) && ! empty( $matches[1] ) ) {
+				foreach ( $matches[1] as $match ) {
+					$category    = $this->get_taxonomy_slug( $post_id, $match, 'immediate' );
+					$replace_tag = str_replace( "%ctax_parent_{$match}%", $category, $replace_tag );
+				}
 			}
 		}
 
 		// Handle %ctax_parents_TAXONOMY_NAME%.
 		if ( false !== strpos( $replace_tag, '%ctax_parents_' ) ) {
 			preg_match_all( '/%ctax_parents_([^%]+)%/', $replace_tag, $matches );
-			if ( isset( $matches[1], $matches[1][0] ) ) {
-				$category    = $this->get_taxonomy_slug( $post_id, $matches[1][0], 'all' );
-				$replace_tag = str_replace( "%ctax_parents_{$matches[1][0]}%", $category, $replace_tag );
+			if ( isset( $matches[1] ) && ! empty( $matches[1] ) ) {
+				foreach ( $matches[1] as $match ) {
+					$category    = $this->get_taxonomy_slug( $post_id, $match, 'all' );
+					$replace_tag = str_replace( "%ctax_parents_{$match}%", $category, $replace_tag );
+				}
 			}
 		}
 
 		// Handle %ctax_TAXONOMY_NAME%.
 		if ( false !== strpos( $replace_tag, '%ctax_' ) ) {
 			preg_match_all( '/%ctax_([^%]+)%/', $replace_tag, $matches );
-			if ( isset( $matches[1], $matches[1][0] ) ) {
-				$category    = $this->get_taxonomy_slug( $post_id, $matches[1][0], 'abc' );
-				$replace_tag = str_replace( "%ctax_{$matches[1][0]}%", $category, $replace_tag );
+			if ( isset( $matches[1] ) && ! empty( $matches[1] ) ) {
+				foreach ( $matches[1] as $match ) {
+					$category    = $this->get_taxonomy_slug( $post_id, $match, 'immediate' );
+					$replace_tag = str_replace( "%ctax_{$match}%", $category, $replace_tag );
+				}
 			}
 		}
 
 		// Handle custom tags.
 		if ( false !== strpos( $replace_tag, '%custom_permalinks_' ) ) {
 			preg_match_all( '/%custom_permalinks_([^%]+)%/', $replace_tag, $matches );
-			if ( isset( $matches[1] ) ) {
+			if ( isset( $matches[1] ) && ! empty( $matches[1] ) ) {
 				foreach ( $matches[1] as $match ) {
 					$custom_tag_value = apply_filters( 'custom_permalinks_post_permalink_tag', $match, $post->post_type, $post );
 					$custom_tag_value = wp_strip_all_tags( $custom_tag_value );
