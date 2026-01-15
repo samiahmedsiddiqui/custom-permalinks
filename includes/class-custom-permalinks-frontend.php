@@ -65,7 +65,7 @@ class Custom_Permalinks_Frontend {
 
 		if ( isset( $_SERVER['REQUEST_URI'] ) ) {
 			$this->request_uri = sanitize_url(
-				wp_unslash( $_SERVER['REQUEST_URI'] )
+				urldecode( wp_unslash( $_SERVER['REQUEST_URI'] ) )
 			);
 		}
 
@@ -370,7 +370,7 @@ class Custom_Permalinks_Frontend {
 			&& $_SERVER['REQUEST_URI'] !== $this->request_uri
 		) {
 			$this->request_uri = sanitize_url(
-				wp_unslash( $_SERVER['REQUEST_URI'] )
+				urldecode( wp_unslash( $_SERVER['REQUEST_URI'] ) )
 			);
 		}
 
@@ -732,7 +732,7 @@ class Custom_Permalinks_Frontend {
 			&& $_SERVER['REQUEST_URI'] !== $this->request_uri
 		) {
 			$this->request_uri = sanitize_url(
-				wp_unslash( $_SERVER['REQUEST_URI'] )
+				urldecode( wp_unslash( $_SERVER['REQUEST_URI'] ) )
 			);
 		}
 
