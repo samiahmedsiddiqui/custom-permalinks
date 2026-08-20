@@ -554,6 +554,13 @@ class Custom_Permalinks_Form {
 			$is_refresh = 0;
 		}
 
+		/*
+		 * Use a local copy of the requested permalink instead of mutating the
+		 * `$_REQUEST` superglobal. Bulk actions (e.g. WooCommerce/WordPress
+		 * bulk edit) call `wp_update_post()` for every selected post within
+		 * the same request, so writing back to `$_REQUEST` here would leak
+		 * one post's permalink into the next post processed in that request.
+		 */
 		$requested_permalink = isset( $_REQUEST['custom_permalink'] )
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 			? $_REQUEST['custom_permalink']
