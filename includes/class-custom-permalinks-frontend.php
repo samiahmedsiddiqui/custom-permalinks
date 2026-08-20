@@ -789,6 +789,56 @@ class Custom_Permalinks_Frontend {
 	}
 
 	/**
+	 * Redirect a request for the original permalink to the custom one,
+	 * preserving any extra path (e.g. a WooCommerce endpoint) after it.
+	 *
+	 * @since 3.2.0
+	 * @access private
+	 *
+	 * @param string $request            Requested path with query string stripped.
+	 * @param string $custom_permalink   Custom permalink, or empty if none set.
+	 * @param string $original_permalink Default/original permalink.
+	 *
+	 * @return void
+	 */
+	private function redirect_to_custom_permalink( $request, $custom_permalink, $original_permalink ) {
+		if ( ! $custom_permalink ) {
+			return;
+		}
+
+		$custom_length = strlen( $custom_permalink );
+		if ( substr( $request, 0, $custom_length ) === $custom_permalink
+			&& $request !== $custom_permalink . '/'
+		) {
+			// Already on the custom permalink, optionally with an endpoint appended.
+			return;
+		}
+
+		// Request doesn't match permalink - redirect.
+		$url             = $custom_permalink;
+		$original_length = strlen( $original_permalink );
+		if ( substr( $request, 0, $original_length ) === $original_permalink
+			&& trim( $request, '/' ) !== trim( $original_permalink, '/' )
+		) {
+			// This is the original link; we can use this URL to derive the new one.
+			$url = preg_replace(
+				'@//*@',
+				'/',
+				str_replace(
+					trim( $original_permalink, '/' ),
+					trim( $custom_permalink, '/' ),
+					$request
+				)
+			);
+			$url = preg_replace( '@([^?]*)&@', '\1?', $url );
+		}
+
+		// Append any query component.
+		$url .= strstr( $this->request_uri, '?' );
+		$this->safe_redirect( $url );
+	}
+
+	/**
 	 * Action to redirect to the custom permalink.
 	 *
 	 * @since 0.1.0
@@ -849,10 +899,16 @@ class Custom_Permalinks_Frontend {
 		// Redirect original post permalink.
 		if ( ! empty( $get_post_id ) ) {
 			$custom_permalink = get_post_meta( $get_post_id, 'custom_permalink', true );
-			if ( ! empty( $custom_permalink ) ) {
-				// Append any query component.
-				$custom_permalink .= strstr( $this->request_uri, '?' );
-				$this->safe_redirect( $custom_permalink );
+			if ( $custom_permalink ) {
+				$original_permalink = 'page' === get_post_type( $get_post_id )
+					? $this->original_page_link( $get_post_id )
+					: $this->original_post_link( $get_post_id );
+
+				$this->redirect_to_custom_permalink(
+					$request,
+					$custom_permalink,
+					$original_permalink
+				);
 			}
 		} else {
 			if ( defined( 'POLYLANG_VERSION' ) ) {
@@ -893,37 +949,11 @@ class Custom_Permalinks_Frontend {
 				}
 			}
 
-			$custom_length = strlen( $custom_permalink );
-			if ( $custom_permalink
-				&& (
-					substr( $request, 0, $custom_length ) !== $custom_permalink
-					|| $request === $custom_permalink . '/'
-				)
-			) {
-				// Request doesn't match permalink - redirect.
-				$url             = $custom_permalink;
-				$original_length = strlen( $original_permalink );
-
-				if ( substr( $request, 0, $original_length ) === $original_permalink
-					&& trim( $request, '/' ) !== trim( $original_permalink, '/' )
-				) {
-					// This is the original link; we can use this URL to derive the new one.
-					$url = preg_replace(
-						'@//*@',
-						'/',
-						str_replace(
-							trim( $original_permalink, '/' ),
-							trim( $custom_permalink, '/' ),
-							$request
-						)
-					);
-					$url = preg_replace( '@([^?]*)&@', '\1?', $url );
-				}
-
-				// Append any query component.
-				$url .= strstr( $this->request_uri, '?' );
-				$this->safe_redirect( $url );
-			}
+			$this->redirect_to_custom_permalink(
+				$request,
+				$custom_permalink,
+				$original_permalink
+			);
 		}
 	}
 
