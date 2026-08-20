@@ -89,22 +89,28 @@ final class Custom_Permalinks_Generate_Post_Permalinks {
 			}
 		}
 
-		// Handle %postname%.
-		if ( false !== strpos( $replace_tag, '%postname%' ) ) {
-			$post_name   = $this->get_current_post_slug( $post );
-			$replace_tag = str_replace( '%postname%', $post_name, $replace_tag );
-		}
+		// Handle %postname%, %parent_postname%, and %parents_postnames%.
+		if ( false !== strpos( $replace_tag, '%postname%' )
+			|| false !== strpos( $replace_tag, '%parent_postname%' )
+			|| false !== strpos( $replace_tag, '%parents_postnames%' )
+		) {
+			$post_name = $this->get_current_post_slug( $post );
 
-		// Handle %parent_postname%.
-		if ( false !== strpos( $replace_tag, '%parent_postname%' ) ) {
-			$parent      = $this->get_post_parents_slug( $post_id, $post->post_type, 'immediate' );
-			$replace_tag = str_replace( '%parent_postname%', $parent . '/' . $post_name, $replace_tag );
-		}
+			if ( false !== strpos( $replace_tag, '%postname%' ) ) {
+				$replace_tag = str_replace( '%postname%', $post_name, $replace_tag );
+			}
 
-		// Handle %parents_postnames%.
-		if ( false !== strpos( $replace_tag, '%parents_postnames%' ) ) {
-			$parents     = $this->get_post_parents_slug( $post_id, $post->post_type, 'all' );
-			$replace_tag = str_replace( '%parents_postnames%', $parents . $post_name, $replace_tag );
+			// Handle %parent_postname%.
+			if ( false !== strpos( $replace_tag, '%parent_postname%' ) ) {
+				$parent      = $this->get_post_parents_slug( $post_id, $post->post_type, 'immediate' );
+				$replace_tag = str_replace( '%parent_postname%', $parent . '/' . $post_name, $replace_tag );
+			}
+
+			// Handle %parents_postnames%.
+			if ( false !== strpos( $replace_tag, '%parents_postnames%' ) ) {
+				$parents     = $this->get_post_parents_slug( $post_id, $post->post_type, 'all' );
+				$replace_tag = str_replace( '%parents_postnames%', $parents . $post_name, $replace_tag );
+			}
 		}
 
 		// Handle %category%.
