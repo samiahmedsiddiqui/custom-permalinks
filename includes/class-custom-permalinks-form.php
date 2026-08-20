@@ -554,29 +554,39 @@ class Custom_Permalinks_Form {
 			$is_refresh = 0;
 		}
 
+		$requested_permalink = isset( $_REQUEST['custom_permalink'] )
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+			? $_REQUEST['custom_permalink']
+			: null;
+
 		/*
 		 * Make sure that the post saved from quick edit form or from regeneration
-		 * code so, just make the $_REQUEST['custom_permalink'] same as
-		 * $current_permalink to regenerate permalink if applicable.
+		 * code so, just make the $requested_permalink same as $current_permalink
+		 * to regenerate permalink if applicable.
 		 */
-		if ( ! isset( $_REQUEST['custom_permalink'] ) || false === $update ) {
-			$_REQUEST['custom_permalink'] = $current_permalink;
+		if ( null === $requested_permalink || false === $update ) {
+			$requested_permalink = $current_permalink;
 		}
 
 		$is_regenerated = false;
 		if ( 'trash' !== $post->post_status
-			&& $current_permalink === $_REQUEST['custom_permalink']
+			&& $current_permalink === $requested_permalink
 			&& 1 === (int) $is_refresh
 		) {
-			$cp_post_permalinks = new Custom_Permalinks_Generate_Post_Permalinks();
-			$is_regenerated     = $cp_post_permalinks->generate( $post_id, $post );
+			$cp_post_permalinks  = new Custom_Permalinks_Generate_Post_Permalinks();
+			$generated_permalink = $cp_post_permalinks->generate( $post_id, $post );
+
+			if ( false !== $generated_permalink ) {
+				$requested_permalink = $generated_permalink;
+				$is_regenerated      = true;
+			}
 		}
 
 		$cp_frontend   = new Custom_Permalinks_Frontend();
 		$original_link = $cp_frontend->original_post_link( $post_id );
-		if ( ! empty( $_REQUEST['custom_permalink'] )
-			&& $_REQUEST['custom_permalink'] !== $original_link
-			&& $_REQUEST['custom_permalink'] !== $current_permalink
+		if ( ! empty( $requested_permalink )
+			&& $requested_permalink !== $original_link
+			&& $requested_permalink !== $current_permalink
 		) {
 			$language_code = apply_filters(
 				'wpml_element_language_code',
@@ -594,7 +604,7 @@ class Custom_Permalinks_Form {
 
 			$permalink = $this->sanitize_permalink(
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-				wp_unslash( $_REQUEST['custom_permalink'] ),
+				wp_unslash( $requested_permalink ),
 				$language_code
 			);
 			$permalink = $this->check_permalink_exists( $post_id, $permalink, $language_code );

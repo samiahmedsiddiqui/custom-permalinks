@@ -93,6 +93,7 @@ You have two ways to install Custom Permalinks:
 
 * Bug:
   * Fixed [WPML internal links pointing to the original page](https://wpml.org/errata/custom-permalinks-internal-links-point-to-original-pages/) instead of the translated page's own custom permalink (e.g. links created with the Gutenberg link tool).
+  * Fixed custom permalinks getting overwritten with another product's permalink when [bulk editing multiple products/posts](https://wordpress.org/support/topic/bulk-edit-in-all-products/) in a single request.
 
 = 3.1.2 - Sep 24, 2025 =
 
