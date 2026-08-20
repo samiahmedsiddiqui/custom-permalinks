@@ -238,6 +238,53 @@ class Custom_Permalinks_Frontend {
 	}
 
 	/**
+	 * Get the current WPML/Polylang language code, regardless of negotiation type.
+	 *
+	 * @since 3.2.0
+	 * @access private
+	 *
+	 * @return string Current language code, or empty string if none.
+	 */
+	private function current_language() {
+		$current_language = '';
+
+		if ( class_exists( 'SitePress' ) ) {
+			$current_language = apply_filters( 'wpml_current_language', null );
+		} elseif ( defined( 'POLYLANG_VERSION' ) && function_exists( 'pll_current_language' ) ) {
+			$current_language = pll_current_language();
+		}
+
+		return $current_language ? $current_language : '';
+	}
+
+	/**
+	 * Search a permalink in the posts table, preferring a post matching the
+	 * current language, and falling back to a language-agnostic lookup.
+	 *
+	 * @since 3.2.0
+	 * @access private
+	 *
+	 * @param string $requested_url Requested URL.
+	 *
+	 * @return object|null Containing Post ID, Permalink, Post Type, and Post status
+	 *                     if URL matched otherwise returns null.
+	 */
+	private function query_post_current_language( $requested_url ) {
+		$current_language = $this->current_language();
+		$posts            = null;
+
+		if ( ! empty( $current_language ) ) {
+			$posts = $this->query_post_language( $requested_url, $current_language );
+		}
+
+		if ( ! $posts ) {
+			$posts = $this->query_post( $requested_url );
+		}
+
+		return $posts;
+	}
+
+	/**
 	 * Search a permalink in the posts table and return its result.
 	 *
 	 * @since 2.0.0
@@ -466,43 +513,10 @@ class Custom_Permalinks_Frontend {
 			$request = $cp_form->check_conflicts( $request );
 		}
 
-		$current_language  = '';
-		$different_domain  = false;
 		$found_permalink   = '';
 		$permalink_matched = false;
 		$request_no_slash  = preg_replace( '@/+@', '/', trim( $request, '/' ) );
-
-		if ( class_exists( 'SitePress' ) ) {
-			$wpml_lang_format = apply_filters(
-				'wpml_setting',
-				0,
-				'language_negotiation_type'
-			);
-
-			// Different domain per language.
-			if ( 2 === intval( $wpml_lang_format ) ) {
-				$current_language = apply_filters( 'wpml_current_language', null );
-				$different_domain = true;
-			}
-		} elseif ( defined( 'POLYLANG_VERSION' ) ) {
-			$polylang_config = get_option( 'polylang' );
-			if ( 1 === $polylang_config['force_lang'] ) {
-				$current_language = pll_current_language();
-				$different_domain = true;
-			}
-		}
-
-		// Different domain per language.
-		if ( $different_domain && ! empty( $current_language ) ) {
-			$posts = $this->query_post_language( $request_no_slash, $current_language );
-
-			// Backward compatibility.
-			if ( ! $posts ) {
-				$posts = $this->query_post( $request_no_slash );
-			}
-		} else {
-			$posts = $this->query_post( $request_no_slash );
-		}
+		$posts             = $this->query_post_current_language( $request_no_slash );
 
 		if ( $posts ) {
 			/*
@@ -847,7 +861,7 @@ class Custom_Permalinks_Frontend {
 			}
 
 			$request_no_slash = preg_replace( '@/+@', '/', trim( $request, '/' ) );
-			$posts            = $this->query_post( $request_no_slash );
+			$posts            = $this->query_post_current_language( $request_no_slash );
 
 			if ( ! isset( $posts[0]->ID ) || ! isset( $posts[0]->meta_value )
 				|| empty( $posts[0]->meta_value )
@@ -1040,7 +1054,7 @@ class Custom_Permalinks_Frontend {
 		}
 
 		$customized_permalink = preg_replace( '@/+@', '/', trim( $customized_permalink, '/' ) );
-		$posts                = $this->query_post( $customized_permalink );
+		$posts                = $this->query_post_current_language( $customized_permalink );
 		if ( is_array( $posts ) && ! empty( $posts ) ) {
 			if ( 'draft' === $posts[0]->post_status
 				|| 'pending' === $posts[0]->post_status
