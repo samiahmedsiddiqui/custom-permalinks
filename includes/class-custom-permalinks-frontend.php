@@ -186,6 +186,42 @@ class Custom_Permalinks_Frontend {
 	}
 
 	/**
+	 * Resolve the WPML-translated post/page for a permalink lookup.
+	 *
+	 * @since 3.2.0
+	 * @access private
+	 *
+	 * @param int    $element_id   Post/Page ID being linked to.
+	 * @param string $element_type Element type (`post`, `page`, or a custom post type).
+	 *
+	 * @return array Translated (or original) post/page ID and its custom permalink.
+	 */
+	private function wpml_translated_permalink( $element_id, $element_type ) {
+		$custom_permalink = get_post_meta( $element_id, 'custom_permalink', true );
+
+		if ( class_exists( 'SitePress' ) ) {
+			$current_language = apply_filters( 'wpml_current_language', null );
+			$translated_id    = apply_filters(
+				'wpml_object_id',
+				$element_id,
+				$element_type,
+				true,
+				$current_language
+			);
+
+			if ( $translated_id && (int) $translated_id !== (int) $element_id ) {
+				$translated_permalink = get_post_meta( $translated_id, 'custom_permalink', true );
+				if ( $translated_permalink ) {
+					$element_id       = $translated_id;
+					$custom_permalink = $translated_permalink;
+				}
+			}
+		}
+
+		return array( $element_id, $custom_permalink );
+	}
+
+	/**
 	 * Search a permalink in the posts table and return its result.
 	 *
 	 * @since 2.0.0
@@ -872,18 +908,22 @@ class Custom_Permalinks_Frontend {
 	 * @return string customized Post Permalink.
 	 */
 	public function custom_post_link( $permalink, $post ) {
-		$custom_permalink = get_post_meta( $post->ID, 'custom_permalink', true );
-		if ( $custom_permalink ) {
-			$post_type = 'post';
-			if ( isset( $post->post_type ) ) {
-				$post_type = $post->post_type;
-			}
+		$post_type = 'post';
+		if ( isset( $post->post_type ) ) {
+			$post_type = $post->post_type;
+		}
 
+		list( $post_id, $custom_permalink ) = $this->wpml_translated_permalink(
+			$post->ID,
+			$post_type
+		);
+
+		if ( $custom_permalink ) {
 			$language_code = apply_filters(
 				'wpml_element_language_code',
 				null,
 				array(
-					'element_id'   => $post->ID,
+					'element_id'   => $post_id,
 					'element_type' => $post_type,
 				)
 			);
@@ -925,7 +965,11 @@ class Custom_Permalinks_Frontend {
 	 * @return string customized Page Permalink.
 	 */
 	public function custom_page_link( $permalink, $page ) {
-		$custom_permalink = get_post_meta( $page, 'custom_permalink', true );
+		list( $page, $custom_permalink ) = $this->wpml_translated_permalink(
+			$page,
+			'page'
+		);
+
 		if ( $custom_permalink ) {
 			$language_code = apply_filters(
 				'wpml_element_language_code',

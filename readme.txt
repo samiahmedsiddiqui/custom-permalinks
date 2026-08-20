@@ -91,6 +91,9 @@ You have two ways to install Custom Permalinks:
 	* Use multiple custom taxonomies tags at the same time in permalink
 	* Updated documentation to describe the new tags and clarify the difference between slug-based and name-based taxonomy tags.
 
+* Bug:
+  * Fixed [WPML internal links pointing to the original page](https://wpml.org/errata/custom-permalinks-internal-links-point-to-original-pages/) instead of the translated page's own custom permalink (e.g. links created with the Gutenberg link tool).
+
 = 3.1.2 - Sep 24, 2025 =
 
 * Bug:
