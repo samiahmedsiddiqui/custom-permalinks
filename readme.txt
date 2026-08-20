@@ -2,9 +2,9 @@
 Contributors: sasiddiqui
 Tags: permalink, url, link, address, redirect
 Requires at least: 5.0
-Requires PHP: 5.6
-Tested up to: 6.8
-Stable tag: 3.2.0-alpha
+Requires PHP: 7.0
+Tested up to: 7.1
+Stable tag: 3.2.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -19,10 +19,13 @@ You want to take control of your WordPress site's URLs? The **Custom Permalinks*
 * **Individual Permalink Control**: Assign unique URLs to any post, page, tag, or category.
 * **Site Structure Control**: Gain ultimate control over how your site's URLs are organized.
 * **Post Type Permalink Structures (v3.0.0+)**: Define custom permalink structures for each public Post Type using predefined tags, automatically generating URLs upon content creation. You can still manually edit any permalink. If left empty, default settings will apply.
+* **Automatic Redirects**: Old URLs keep working — visitors and search engines are redirected to the new custom permalink automatically.
 
 === Getting Started: Plugin Settings ===
 
 You can configure Custom Permalinks by navigating to **Settings \> Custom Permalinks** in your WordPress Dashboard.
+
+To set a permalink for an individual post, page, category, or tag, edit that item and look for the **Custom Permalink** field near the top (or in the sidebar) of the editor screen — enter the URL path you want and save.
 
 === Available Tags for Permalink Structures ===
 
@@ -42,8 +45,11 @@ When setting up your custom permalink structures, you can use a variety of tags 
 * **%parents_postnames%**: Similar to `%postname%`, but includes all parent page slugs if parents are selected.
 * **%title%**: The title of the post, converted to a slug. For example, "This Is A Great Post\!" becomes `this-is-a-great-post`. Unlike `%postname%` which is set once, `%title%` automatically updates in the permalink if the post title changes (unless the post is published or the permalink is manually edited).
 * **%ctax_TAXONOMY_NAME%**: A clean version of a custom taxonomy's name. Replace `TAXONOMY_NAME` with the actual taxonomy name. You can also provide a default slug for when no category/taxonomy is selected by using `??` (e.g., `%ctax_type??sales%` will use "sales" as a default).
+* **%ctax_TAXONOMY_NAME_name%**: The custom taxonomy term's name (instead of its slug). Replace `TAXONOMY_NAME` with the actual taxonomy name. Supports a default value using `??` when no term is selected (e.g., `%ctax_type_name??Sales%`).
 * **%ctax_parent_TAXONOMY_NAME%**: Similar to `%ctax_TAXONOMY_NAME%`, but includes the immediate parent category/tag slug in the URL if a parent is selected.
+* **%ctax_parent_TAXONOMY_NAME_name%**: Similar to `%ctax_TAXONOMY_NAME_name%`, but includes the immediate parent term's name if a parent is selected.
 * **%ctax_parents_TAXONOMY_NAME%**: Similar to `%ctax_TAXONOMY_NAME%`, but includes all parent category/tag slugs in the URL if parents are selected.
+* **%ctax_parents_TAXONOMY_NAME_name%**: Similar to `%ctax_TAXONOMY_NAME_name%`, but includes all parent term names if parents are selected.
 * **%custom_permalinks_TAG_NAME%**: Developers have the flexibility to define their own custom tags(replace `_TAG_NAME` with your desired name). To ensure these tags resolve to the correct permalinks, simply apply the `custom_permalinks_post_permalink_tag` filter.
 
 **Important Note:** For new posts, Custom Permalinks will keep updating the permalink while the post is in draft mode, assuming a structure is defined in the plugin settings. Once the post is published or its permalink is manually updated, the plugin will stop automatic updates for that specific post.
@@ -64,7 +70,50 @@ Custom Permalinks offers a range of **filters** that empower developers to preci
 
 If you experience any site-breaking issues after upgrading, please report them on the [WordPress Forum](https://wordpress.org/support/plugin/custom-permalinks/) or [GitHub](https://github.com/samiahmedsiddiqui/custom-permalinks) with detailed information. You can always revert to an older version by downloading it from [https://wordpress.org/plugins/custom-permalinks/advanced/](https://wordpress.org/plugins/custom-permalinks/advanced/).
 
+== Installation ==
+You have two ways to install Custom Permalinks:
+
+#### From within WordPress
+
+1.  Go to **Plugins \> Add New** in your WordPress dashboard.
+2.  Search for "Custom Permalinks".
+3.  Click "Install Now" and then "Activate" the plugin from your Plugins page.
+
+#### Manually via FTP
+
+1.  Download the `custom-permalinks` folder.
+2.  Upload the `custom-permalinks` folder to your `/wp-content/plugins/` directory.
+3.  Activate Custom Permalinks through the "Plugins" menu in your WordPress dashboard.
+
 == Frequently Asked Questions ==
+
+= What happens to the original URL when I set a custom permalink? =
+
+Custom Permalinks automatically redirects the original (default) URL to your new custom permalink, so existing links, bookmarks, and search engine rankings keep working.
+
+= Will this affect my site's SEO? =
+
+It shouldn't hurt it — since the original URL redirects to the new one, search engines and existing backlinks continue to resolve correctly. Using clean, descriptive custom permalinks can also make your URLs more readable, which is generally good for SEO.
+
+= Can I set custom permalinks for categories and tags, not just posts and pages? =
+
+Yes. Custom Permalinks supports posts, pages, any public custom post type, and categories/tags (and other custom taxonomy terms).
+
+= Does it work with custom post types, like WooCommerce products? =
+
+Yes. You can set an individual custom permalink on any public custom post type, or define an automatic permalink structure for the entire post type from **Settings \> Custom Permalinks**.
+
+= Is Custom Permalinks compatible with WPML or Polylang? =
+
+Yes, the plugin is compatible with both WPML and Polylang, including translated posts that each have their own custom permalink.
+
+= Can I let a non-administrator manage permalinks? =
+
+Yes. The plugin adds a dedicated **Custom Permalinks Manager** role (and matching capabilities) so you can let specific non-admin users view or edit permalinks without giving them full administrator access.
+
+= Can I use accented letters, uppercase letters, or extra hyphens in my permalinks? =
+
+By default, Custom Permalinks sanitizes permalinks the same way WordPress core does (lowercase, no accents, no repeated hyphens). Developers can lift these restrictions with the `custom_permalinks_allow_accents`, `custom_permalinks_allow_caps`, and `custom_permalinks_redundant_hyphens` filters. See the [Advanced Customization and Filters section on GitHub](https://github.com/samiahmedsiddiqui/custom-permalinks#advanced-customization-and-filters).
 
 = A page builder's front-end preview (Cornerstone, etc.) breaks or loses its editing mode on pages with a custom permalink =
 
@@ -83,24 +132,20 @@ add_filter( 'custom_permalinks_avoid_redirect', function( $permalink ) {
 
 See the [Advanced Customization and Filters section on GitHub](https://github.com/samiahmedsiddiqui/custom-permalinks#advanced-customization-and-filters) for this and other available filters.
 
-== Installation ==
-You have two ways to install Custom Permalinks:
+= What happens to my custom permalinks if I deactivate or uninstall the plugin? =
 
-#### From within WordPress
+Deactivating the plugin keeps all your saved custom permalinks in the database — reactivating it restores them immediately. Uninstalling (deleting) the plugin permanently removes all saved custom permalinks and plugin settings, and your URLs will revert to WordPress' default permalink structure.
 
-1.  Go to **Plugins \> Add New** in your WordPress dashboard.
-2.  Search for "Custom Permalinks".
-3.  Click "Install Now" and then "Activate" the plugin from your Plugins page.
+= My custom permalink isn't saving, or the page isn't redirecting — what should I check? =
 
-#### Manually via FTP
-
-1.  Download the `custom-permalinks` folder.
-2.  Upload the `custom-permalinks` folder to your `/wp-content/plugins/` directory.
-3.  Activate Custom Permalinks through the "Plugins" menu in your WordPress dashboard.
+* Make sure **Settings \> Permalinks** isn't set to "Plain".
+* Confirm no other SEO/redirection plugin (Yoast, RankMath, Redirection, etc.) has a conflicting rule for the same URL.
+* Check that the permalink isn't already used by another post — Custom Permalinks won't apply a duplicate URL.
+* Still stuck? See "Need Help or Found a Bug?" above, or reach out via [GitHub](https://github.com/samiahmedsiddiqui/custom-permalinks) or [Premium support](https://www.custompermalinks.com/contact-us/).
 
 == Changelog ==
 
-= 3.2.0 =
+= 3.2.0 - Aug 20, 2026 =
 
 **Permalink Generation:**
   * Added support for name-based custom taxonomy permalink tags:
@@ -111,12 +156,18 @@ You have two ways to install Custom Permalinks:
 	* Updated documentation to describe the new tags and clarify the difference between slug-based and name-based taxonomy tags.
 
 * Bug:
+  * Fixed a PHP warning ("Attempt to read property 'term_id' on null") on tag/category archive pages in some setups. [PR #138](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/138)
+  * Fixed an ["Undefined array key `_custom_permalinks_term_nonce`"](https://wordpress.org/support/topic/undefined-array-key-_custom_permalinks_term_nonce-2/) warning when saving a category or tag without touching its Custom Permalink field.
+  * Fixed the auto-generated slug silently failing to save on posts that didn't yet have a `post_name`, when a permalink structure was set to auto-generate permalinks. [PR #148](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/148)
+  * Fixed `%parent_postname%` and `%parents_postnames%` silently dropping the post's own slug from the generated permalink when used without also including `%postname%` in the structure. [PR #149](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/149)
   * Fixed [WPML internal links pointing to the original page](https://wpml.org/errata/custom-permalinks-internal-links-point-to-original-pages/) instead of the translated page's own custom permalink (e.g. links created with the Gutenberg link tool).
   * Fixed custom permalinks getting overwritten with another product's permalink when [bulk editing multiple products/posts](https://wordpress.org/support/topic/bulk-edit-in-all-products/) in a single request.
   * Fixed the language directory getting duplicated (e.g. `/de/de/your-slug/`) in permalinks generated for [WPML directory-based language negotiation](https://wordpress.org/support/topic/rest-api-json-errors-wpml-directory-duplication-de-de/), and hardened the WPML permalink filter against a non-string return value that could corrupt the REST API's JSON response when saving a post from the Block Editor.
+  * Fixed a stale permalink cache entry for permalinks with a trailing slash, which could cause a newly saved custom permalink to 404 until the cache expired. [PR #153](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/153)
   * Fixed [translated pages resolving to the wrong language's post](https://wordpress.org/support/topic/redirection-to-english-pages-instead-of-french-ones/) (wrong-language redirects, 404s on a translation, editor opening the wrong translation) when two WPML/Polylang translations shared the same custom permalink outside of "different domain per language" mode.
   * Fixed [WooCommerce My Account endpoints (e.g. edit-address, edit-account) redirecting back to the base My Account page](https://wordpress.org/support/topic/woocommerce-my-account-page-redirection/) instead of loading, when the My Account page has a custom permalink set.
   * Fixed [emptying the Custom Permalink field and saving not removing the saved permalink](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/100).
+  * Fixed a request that only differed from the saved permalink by a trailing slash failing to resolve — it now redirects to the canonical permalink instead.
   * Fixed the trailing-slash redirect ignoring the `custom_permalinks_avoid_redirect` filter, which could still break page builders' front-end preview iframes (e.g. [Cornerstone](https://wordpress.org/support/topic/conflict-with-the-cornerstone-page-builder/)) after applying the documented workaround.
 
 = 3.1.2 - Sep 24, 2025 =
@@ -183,3 +234,8 @@ This release of Custom Permalinks brings significant enhancements to post type p
 = Earlier versions =
 
   * For the changelog of earlier versions, please refer to the separate changelog.txt file.
+
+== Upgrade Notice ==
+
+= 3.2.0 =
+Recommended update: fixes custom permalinks not saving as removed, WooCommerce My Account redirect loops, WPML/Polylang translations resolving to the wrong post, and adds name-based custom taxonomy tags.

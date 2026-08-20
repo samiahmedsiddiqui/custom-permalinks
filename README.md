@@ -1,16 +1,51 @@
 # Custom Permalinks
 
-You want to take control of your WordPress site's URLs? The **Custom Permalinks** plugin gives you the power to set unique, custom URLs for any post, page, tag, or category. This means you can design your site's structure exactly how you envision it, rather than being limited by WordPress's default settings. When you set a custom permalink, the original post URL will be automatically redirected to your new, customized URL.
+[![WordPress Plugin Version](https://img.shields.io/wordpress/plugin/v/custom-permalinks?label=stable%20version)](https://wordpress.org/plugins/custom-permalinks/)
+[![Tested up to](https://img.shields.io/wordpress/v/custom-permalinks?label=tested%20up%20to)](https://wordpress.org/plugins/custom-permalinks/)
+[![WordPress Active Installs](https://img.shields.io/wordpress/plugin/installs/custom-permalinks)](https://wordpress.org/plugins/custom-permalinks/)
+[![WordPress Rating](https://img.shields.io/wordpress/plugin/rating/custom-permalinks)](https://wordpress.org/support/plugin/custom-permalinks/reviews/)
+[![License: GPLv3](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
+
+Take full control of your WordPress site's URLs. **Custom Permalinks** lets you set a unique, custom URL for any post, page, tag, or category — instead of being limited to WordPress's default permalink structure. When you set a custom permalink, the original URL automatically redirects to your new one, so nothing breaks.
+
+## Table of Contents
+
+- [Key Features](#key-features)
+- [Installation](#installation)
+- [Getting Started: Plugin Settings](#getting-started-plugin-settings)
+- [Available Tags for Permalink Structures](#available-tags-for-permalink-structures)
+- [Frequently Asked Questions](#frequently-asked-questions)
+- [Advanced Customization and Filters](#advanced-customization-and-filters)
+- [Need Help or Found a Bug?](#need-help-or-found-a-bug)
 
 ## Key Features
 
 * **Individual Permalink Control**: Assign unique URLs to any post, page, tag, or category.
 * **Site Structure Control**: Gain ultimate control over how your site's URLs are organized.
 * **Post Type Permalink Structures (v3.0.0+)**: Define custom permalink structures for each public Post Type using predefined tags, automatically generating URLs upon content creation. You can still manually edit any permalink. If left empty, default settings will apply.
+* **Automatic Redirects**: Old URLs keep working — visitors and search engines are redirected to the new custom permalink automatically.
+
+## Installation
+
+You have two ways to install Custom Permalinks:
+
+#### From within WordPress
+
+1.  Go to **Plugins \> Add New** in your WordPress dashboard.
+2.  Search for "Custom Permalinks".
+3.  Click "Install Now" and then "Activate" the plugin from your Plugins page.
+
+#### Manually via FTP
+
+1.  Download the `custom-permalinks` folder.
+2.  Upload the `custom-permalinks` folder to your `/wp-content/plugins/` directory.
+3.  Activate Custom Permalinks through the "Plugins" menu in your WordPress dashboard.
 
 ## Getting Started: Plugin Settings
 
 You can configure Custom Permalinks by navigating to **Settings \> Custom Permalinks** in your WordPress Dashboard.
+
+To set a permalink for an individual post, page, category, or tag, edit that item and look for the **Custom Permalink** field near the top (or in the sidebar) of the editor screen — enter the URL path you want and save.
 
 ### Available Tags for Permalink Structures
 
@@ -40,6 +75,62 @@ When setting up your custom permalink structures, you can use a variety of tags 
 | `%custom_permalinks_TAG_NAME%` | Developers have the flexibility to define their own custom tags(replace `_TAG_NAME` with your desired name). To ensure these tags resolve to the correct permalinks, simply apply the `custom_permalinks_post_permalink_tag` filter. |
 
 **Important Note:** For new posts, Custom Permalinks will keep updating the permalink while the post is in draft mode, assuming a structure is defined in the plugin settings. Once the post is published or its permalink is manually updated, the plugin will stop automatic updates for that specific post.
+
+## Frequently Asked Questions
+
+#### What happens to the original URL when I set a custom permalink?
+
+Custom Permalinks automatically redirects the original (default) URL to your new custom permalink, so existing links, bookmarks, and search engine rankings keep working.
+
+#### Will this affect my site's SEO?
+
+It shouldn't hurt it — since the original URL redirects to the new one, search engines and existing backlinks continue to resolve correctly. Using clean, descriptive custom permalinks can also make your URLs more readable, which is generally good for SEO.
+
+#### Can I set custom permalinks for categories and tags, not just posts and pages?
+
+Yes. Custom Permalinks supports posts, pages, any public custom post type, and categories/tags (and other custom taxonomy terms).
+
+#### Does it work with custom post types, like WooCommerce products?
+
+Yes. You can set an individual custom permalink on any public custom post type, or define an automatic permalink structure for the entire post type from **Settings \> Custom Permalinks**.
+
+#### Is Custom Permalinks compatible with WPML or Polylang?
+
+Yes, the plugin is compatible with both WPML and Polylang, including translated posts that each have their own custom permalink.
+
+#### Can I let a non-administrator manage permalinks?
+
+Yes. The plugin adds a dedicated **Custom Permalinks Manager** role (and matching capabilities) so you can let specific non-admin users view or edit permalinks without giving them full administrator access.
+
+#### Can I use accented letters, uppercase letters, or extra hyphens in my permalinks?
+
+By default, Custom Permalinks sanitizes permalinks the same way WordPress core does (lowercase, no accents, no repeated hyphens). Developers can lift these restrictions with the `custom_permalinks_allow_accents`, `custom_permalinks_allow_caps`, and `custom_permalinks_redundant_hyphens` filters — see [Advanced Customization and Filters](#advanced-customization-and-filters) below.
+
+#### A page builder's front-end preview (Cornerstone, etc.) breaks or loses its editing mode on pages with a custom permalink
+
+Some page builders load their live/front-end preview in an iframe using a `POST` request carrying special values the builder needs (for example Cornerstone's `cs_preview_time`). If that page also has a custom permalink, Custom Permalinks may redirect the request, and since redirects are followed as `GET`, the builder's `POST` data is lost and the preview breaks.
+
+You can tell Custom Permalinks to skip its redirect for that request with the `custom_permalinks_avoid_redirect` filter, added to your theme or a site-specific plugin:
+
+```php
+add_filter( 'custom_permalinks_avoid_redirect', function( $permalink ) {
+	if ( isset( $_POST['cs_preview_time'] ) ) { // Adjust to match the field your builder sends.
+		return true;
+	}
+	return false;
+} );
+```
+
+#### What happens to my custom permalinks if I deactivate or uninstall the plugin?
+
+Deactivating the plugin keeps all your saved custom permalinks in the database — reactivating it restores them immediately. **Uninstalling** (deleting) the plugin permanently removes all saved custom permalinks and plugin settings, and your URLs will revert to WordPress' default permalink structure.
+
+#### My custom permalink isn't saving, or the page isn't redirecting — what should I check?
+
+* Make sure **Settings \> Permalinks** isn't set to "Plain".
+* Confirm no other SEO/redirection plugin (Yoast, RankMath, Redirection, etc.) has a conflicting rule for the same URL.
+* Check that the permalink isn't already used by another post — Custom Permalinks won't apply a duplicate URL.
+* Still stuck? See [Need Help or Found a Bug?](#need-help-or-found-a-bug) below.
 
 ## Advanced Customization and Filters
 
@@ -298,8 +389,6 @@ add_filter( 'cp_remove_like_query', '__return_false' );
 
 *Note: Use `cp_remove_like_query` if URLs don't work after upgrading to v1.2.9.*
 
-**Note:** If you experience issues with URLs after upgrading to v1.2.9, consider using `cp_remove_like_query` instead.
-
 ---
 
 ### For Assistance:
@@ -307,27 +396,9 @@ add_filter( 'cp_remove_like_query', '__return_false' );
 * **Premium Users:** If you need assistance implementing these filters, please don't hesitate to reach out to us via our [Premium contact support](https://www.custompermalinks.com/contact-us/).
 * **Other Users:** You can also directly reach out to the plugin author via [LinkedIn](https://www.linkedin.com/in/sami-ahmed-siddiqui/).
 
----
-
 ## Need Help or Found a Bug?
 
 * **Support:** For one-on-one email support, consider purchasing [Custom Permalinks Premium](https://www.custompermalinks.com/#pricing-section). While some basic support may be provided on the WordPress.org forums, email support is prioritized for premium users.
 * **Bug Reports:** If you encounter a bug, please report it on [GitHub](https://github.com/samiahmedsiddiqui/custom-permalinks). Make sure to provide complete information to reproduce the issue. GitHub is for bug reports, not general support questions.
 
 If you experience any site-breaking issues after upgrading, please report them on the [WordPress Forum](https://wordpress.org/support/plugin/custom-permalinks/) or [GitHub](https://github.com/samiahmedsiddiqui/custom-permalinks) with detailed information. You can always revert to an older version by downloading it from [https://wordpress.org/plugins/custom-permalinks/advanced/](https://wordpress.org/plugins/custom-permalinks/advanced/).
-
-## Installation
-
-You have two ways to install Custom Permalinks:
-
-#### From within WordPress
-
-1.  Go to **Plugins \> Add New** in your WordPress dashboard.
-2.  Search for "Custom Permalinks".
-3.  Click "Install Now" and then "Activate" the plugin from your Plugins page.
-
-#### Manually via FTP
-
-1.  Download the `custom-permalinks` folder.
-2.  Upload the `custom-permalinks` folder to your `/wp-content/plugins/` directory.
-3.  Activate Custom Permalinks through the "Plugins" menu in your WordPress dashboard.
