@@ -210,7 +210,7 @@ final class Custom_Permalinks_Generate_Post_Permalinks {
 		} else {
 			$current_post_name = sanitize_title( $post->post_title );
 			if ( ! empty( $current_post_name ) ) {
-				$this->update_post_name( $post_id, $current_post_name );
+				$this->update_post_name( $post->ID, $current_post_name );
 			}
 		}
 
