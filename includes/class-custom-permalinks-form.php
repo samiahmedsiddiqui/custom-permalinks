@@ -479,8 +479,10 @@ class Custom_Permalinks_Form {
 	 */
 	private function clear_post_permalink_cache( $cached_permalink ) {
 		if ( ! empty( $cached_permalink ) ) {
-			$cache_name   = 'cp$_' . str_replace( '/', '-', $cached_permalink ) . '_#cp';
-			$cache_exists = wp_cache_get( $cache_name, 'custom_permalinks' );
+			// Match the slash-trimmed key used by query_post() in the frontend.
+			$cached_permalink = trim( $cached_permalink, '/' );
+			$cache_name       = 'cp$_' . str_replace( '/', '-', $cached_permalink ) . '_#cp';
+			$cache_exists     = wp_cache_get( $cache_name, 'custom_permalinks' );
 			if ( false !== $cache_exists ) {
 				wp_cache_delete( $cache_name, 'custom_permalinks' );
 			}
