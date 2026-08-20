@@ -23,7 +23,8 @@ final class Custom_Permalinks_Generate_Post_Permalinks {
 	 * @param int     $post_id Post ID.
 	 * @param WP_Post $post    Post object.
 	 *
-	 * @return bool
+	 * @return string|bool Generated permalink or `false` if a permalink
+	 *                      structure is not defined for the post type.
 	 */
 	public function generate( $post_id, $post ) {
 		$permalink_structure = '';
@@ -39,7 +40,7 @@ final class Custom_Permalinks_Generate_Post_Permalinks {
 			return false;
 		}
 
-		$_REQUEST['custom_permalink'] = $this->replace_post_type_tags(
+		$generated_permalink = $this->replace_post_type_tags(
 			$post_id,
 			$post,
 			$permalink_structure
@@ -53,7 +54,7 @@ final class Custom_Permalinks_Generate_Post_Permalinks {
 			update_post_meta( $post_id, 'custom_permalink_regenerate_status', 1 );
 		}
 
-		return true;
+		return $generated_permalink;
 	}
 
 	/**
