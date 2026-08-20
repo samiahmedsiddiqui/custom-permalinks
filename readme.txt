@@ -64,6 +64,25 @@ Custom Permalinks offers a range of **filters** that empower developers to preci
 
 If you experience any site-breaking issues after upgrading, please report them on the [WordPress Forum](https://wordpress.org/support/plugin/custom-permalinks/) or [GitHub](https://github.com/samiahmedsiddiqui/custom-permalinks) with detailed information. You can always revert to an older version by downloading it from [https://wordpress.org/plugins/custom-permalinks/advanced/](https://wordpress.org/plugins/custom-permalinks/advanced/).
 
+== Frequently Asked Questions ==
+
+= A page builder's front-end preview (Cornerstone, etc.) breaks or loses its editing mode on pages with a custom permalink =
+
+Some page builders load their live/front-end preview in an iframe using a `POST` request carrying special values the builder needs (for example Cornerstone's `cs_preview_time`). If that page also has a custom permalink, Custom Permalinks may redirect the request, and since redirects are followed as `GET`, the builder's `POST` data is lost and the preview breaks.
+
+You can tell Custom Permalinks to skip its redirect for that request with the `custom_permalinks_avoid_redirect` filter, added to your theme or a site-specific plugin:
+
+`
+add_filter( 'custom_permalinks_avoid_redirect', function( $permalink ) {
+	if ( isset( $_POST['cs_preview_time'] ) ) { // Adjust to match the field your builder sends.
+		return true;
+	}
+	return false;
+} );
+`
+
+See the [Advanced Customization and Filters section on GitHub](https://github.com/samiahmedsiddiqui/custom-permalinks#advanced-customization-and-filters) for this and other available filters.
+
 == Installation ==
 You have two ways to install Custom Permalinks:
 
@@ -98,6 +117,7 @@ You have two ways to install Custom Permalinks:
   * Fixed [translated pages resolving to the wrong language's post](https://wordpress.org/support/topic/redirection-to-english-pages-instead-of-french-ones/) (wrong-language redirects, 404s on a translation, editor opening the wrong translation) when two WPML/Polylang translations shared the same custom permalink outside of "different domain per language" mode.
   * Fixed [WooCommerce My Account endpoints (e.g. edit-address, edit-account) redirecting back to the base My Account page](https://wordpress.org/support/topic/woocommerce-my-account-page-redirection/) instead of loading, when the My Account page has a custom permalink set.
   * Fixed [emptying the Custom Permalink field and saving not removing the saved permalink](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/100).
+  * Fixed the trailing-slash redirect ignoring the `custom_permalinks_avoid_redirect` filter, which could still break page builders' front-end preview iframes (e.g. [Cornerstone](https://wordpress.org/support/topic/conflict-with-the-cornerstone-page-builder/)) after applying the documented workaround.
 
 = 3.1.2 - Sep 24, 2025 =
 

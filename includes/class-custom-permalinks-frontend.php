@@ -628,9 +628,12 @@ class Custom_Permalinks_Frontend {
 				if ( $permalink_without_trailing === $request
 					|| $permalink_without_trailing . '/' === $request
 				) {
-					$this->safe_redirect( $found_permalink );
+					$avoid_redirect = apply_filters( 'custom_permalinks_avoid_redirect', $request );
+					if ( ! is_bool( $avoid_redirect ) || ! $avoid_redirect ) {
+						$this->safe_redirect( $found_permalink );
 
-					return $query;
+						return $query;
+					}
 				}
 			}
 
