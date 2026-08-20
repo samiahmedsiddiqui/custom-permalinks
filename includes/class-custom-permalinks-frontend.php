@@ -171,8 +171,21 @@ class Custom_Permalinks_Frontend {
 				$trailing_permalink,
 				$language_code
 			);
+
+			// A non-string return here would trip a PHP warning below and corrupt a REST API JSON response.
+			if ( ! is_string( $permalink ) || '' === $permalink ) {
+				$permalink = $trailing_permalink;
+			}
+
 			$site_url  = site_url();
 			$wpml_href = str_replace( $site_url, '', $permalink );
+
+			// Collapse a duplicated language directory, e.g. `/de/de/slug`, back to a single `/{lang}/` prefix.
+			$duplicate_prefix = '/' . $language_code . '/' . $language_code . '/';
+			if ( 0 === strpos( $wpml_href, $duplicate_prefix ) ) {
+				$permalink = $site_url . '/' . $language_code . '/' . substr( $wpml_href, strlen( $duplicate_prefix ) );
+			}
+
 			if ( 0 === strpos( $wpml_href, '//' ) ) {
 				if ( 0 !== strpos( $wpml_href, '//' . $language_code . '/' ) ) {
 					$permalink = $site_url . '/' . $language_code . '/' . $custom_permalink;
@@ -180,6 +193,9 @@ class Custom_Permalinks_Frontend {
 			}
 		} else {
 			$permalink = apply_filters( 'wpml_permalink', $trailing_permalink );
+			if ( ! is_string( $permalink ) || '' === $permalink ) {
+				$permalink = $trailing_permalink;
+			}
 		}
 
 		return $permalink;
