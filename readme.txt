@@ -97,6 +97,7 @@ You have two ways to install Custom Permalinks:
   * Fixed the language directory getting duplicated (e.g. `/de/de/your-slug/`) in permalinks generated for [WPML directory-based language negotiation](https://wordpress.org/support/topic/rest-api-json-errors-wpml-directory-duplication-de-de/), and hardened the WPML permalink filter against a non-string return value that could corrupt the REST API's JSON response when saving a post from the Block Editor.
   * Fixed [translated pages resolving to the wrong language's post](https://wordpress.org/support/topic/redirection-to-english-pages-instead-of-french-ones/) (wrong-language redirects, 404s on a translation, editor opening the wrong translation) when two WPML/Polylang translations shared the same custom permalink outside of "different domain per language" mode.
   * Fixed [WooCommerce My Account endpoints (e.g. edit-address, edit-account) redirecting back to the base My Account page](https://wordpress.org/support/topic/woocommerce-my-account-page-redirection/) instead of loading, when the My Account page has a custom permalink set.
+  * Fixed [emptying the Custom Permalink field and saving not removing the saved permalink](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/100).
 
 = 3.1.2 - Sep 24, 2025 =
 

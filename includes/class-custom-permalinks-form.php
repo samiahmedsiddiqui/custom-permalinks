@@ -635,6 +635,12 @@ class Custom_Permalinks_Form {
 				// Delete to prevent generating permalink on updating the post.
 				delete_post_meta( $post_id, 'custom_permalink_regenerate_status' );
 			}
+		} elseif ( '' === $requested_permalink && '' !== $current_permalink ) {
+			delete_post_meta( $post_id, 'custom_permalink' );
+			delete_metadata( 'post', $post_id, 'custom_permalink_language' );
+			delete_post_meta( $post_id, 'custom_permalink_regenerate_status' );
+
+			$this->clear_post_permalink_cache( $current_permalink );
 		}
 	}
 
