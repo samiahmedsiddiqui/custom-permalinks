@@ -86,7 +86,7 @@ class Custom_Permalinks_Form {
 	 * return bool Whether Custom Permalink is customizable or not.
 	 */
 	private function is_permalink_customizable( $post ) {
-		if ( ! is_object( $post ) ) {
+		if ( ! is_object( $post ) || (!$post instanceof('\WP_Post')) ) {
 			return false;
 		}
 
