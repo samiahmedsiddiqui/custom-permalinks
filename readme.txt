@@ -150,6 +150,7 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
 * Bug:
   * Fixed the trailing-slash redirect added in 3.2.0 [dropping the query string](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/159) (e.g. `/page?utm_source=x` redirected to `/page/` instead of `/page/?utm_source=x`), which broke [campaign tracking](https://wordpress.org/support/topic/3-2-0-affect-on-redirect-query-strings/), AJAX endpoints, search and other requests relying on GET parameters.
   * Custom Permalinks redirects now send no-cache headers, so hosts and proxies don't cache a redirect and serve it, along with another visitor's query string (e.g. UTM parameters), to later visitors.
+  * Fixed an [infinite loop exhausting server memory](https://wordpress.org/support/topic/critical-bug-infinite-loop-causes-memory-crash-2gb-ram-on-parent-child-slug/) when saving a post whose custom permalink is nested under another post's custom permalink (e.g. `example/child-post/` under `example/`).
 
 = 3.2.0 - Aug 20, 2026 =
 
