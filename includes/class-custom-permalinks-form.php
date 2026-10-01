@@ -451,10 +451,12 @@ class Custom_Permalinks_Form {
 			if ( empty( $check_exist_url ) ) {
 				// Only check native permalinks to prevent an infinite loop.
 				Custom_Permalinks_Frontend::$skip_url_to_postid = true;
+				try {
+					$existing_post_id = url_to_postid( $permalink );
+				} finally {
+					Custom_Permalinks_Frontend::$skip_url_to_postid = false;
+				}
 
-				$existing_post_id = url_to_postid( $permalink );
-
-				Custom_Permalinks_Frontend::$skip_url_to_postid = false;
 				if ( 0 === $existing_post_id || $post_id === $existing_post_id ) {
 					break;
 				}
