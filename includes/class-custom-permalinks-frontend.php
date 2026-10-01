@@ -630,7 +630,10 @@ class Custom_Permalinks_Frontend {
 				) {
 					$avoid_redirect = apply_filters( 'custom_permalinks_avoid_redirect', $request );
 					if ( ! is_bool( $avoid_redirect ) || ! $avoid_redirect ) {
-						$this->safe_redirect( $found_permalink );
+						// Append any query component.
+						$this->safe_redirect(
+							$found_permalink . strstr( $this->request_uri, '?' )
+						);
 
 						return $query;
 					}
@@ -781,6 +784,12 @@ class Custom_Permalinks_Frontend {
 	 * @return void
 	 */
 	private function safe_redirect( $url ) {
+		/*
+		 * Prevent caches from storing the redirect, as it carries the visitor's
+		 * query string (e.g. UTM parameters) which caches may not key on.
+		 */
+		nocache_headers();
+
 		$home_url = home_url();
 		if ( '/' === substr( $home_url, -1 ) ) {
 			wp_safe_redirect( $home_url . $url, 301 );
