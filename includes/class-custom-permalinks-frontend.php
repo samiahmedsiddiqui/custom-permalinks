@@ -49,6 +49,13 @@ class Custom_Permalinks_Frontend {
 	private $is_paged = 0;
 
 	/**
+	 * Skip `postid_to_customized_permalink()` when `true`.
+	 *
+	 * @var bool
+	 */
+	public static $skip_url_to_postid = false;
+
+	/**
 	 * Initialize WordPress Hooks.
 	 *
 	 * @since 1.2.0
@@ -1089,6 +1096,10 @@ class Custom_Permalinks_Frontend {
 	 * @return string Default Permalink or the same permalink if not found.
 	 */
 	public function postid_to_customized_permalink( $permalink ) {
+		if ( self::$skip_url_to_postid ) {
+			return $permalink;
+		}
+
 		$customized_permalink = ltrim( $permalink, '/' );
 		if ( defined( 'POLYLANG_VERSION' ) ) {
 			$cp_form              = new Custom_Permalinks_Form();
