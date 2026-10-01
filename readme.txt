@@ -3,8 +3,8 @@ Contributors: sasiddiqui
 Tags: permalink, url, link, address, redirect
 Requires at least: 5.0
 Requires PHP: 7.0
-Tested up to: 7.1
-Stable tag: 3.2.0
+Tested up to: 7.2
+Stable tag: 3.2.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -145,7 +145,7 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
 
 == Changelog ==
 
-= 3.2.1 =
+= 3.2.1 - Oct 1, 2026 =
 
 * Bug:
   * Fixed the trailing-slash redirect added in 3.2.0 [dropping the query string](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/159) (e.g. `/page?utm_source=x` redirected to `/page/` instead of `/page/?utm_source=x`), which broke [campaign tracking](https://wordpress.org/support/topic/3-2-0-affect-on-redirect-query-strings/), AJAX endpoints, search and other requests relying on GET parameters.
@@ -177,72 +177,14 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
   * Fixed a request that only differed from the saved permalink by a trailing slash failing to resolve â€” it now redirects to the canonical permalink instead.
   * Fixed the trailing-slash redirect ignoring the `custom_permalinks_avoid_redirect` filter, which could still break page builders' front-end preview iframes (e.g. [Cornerstone](https://wordpress.org/support/topic/conflict-with-the-cornerstone-page-builder/)) after applying the documented workaround.
 
-= 3.1.2 - Sep 24, 2025 =
-
-* Bug:
-  * [Prevent adding slash if `home_url()` contains one](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/136)
-
-= 3.1.1 - Sep 19, 2025 =
-
-* Bugs:
-  * [PHP 8.x Warnings Admin](https://wordpress.org/support/topic/php-8-x-warnings-admin/)
-	* [Polylang Redirect Issue](https://wordpress.org/support/topic/polylang-redirect-issue-2/)
-	* [Lost password link conflict](https://wordpress.org/support/topic/lost-password-link-conflict/)
-	* [Custom Permalinks is conflicting with Gravity View plugin](https://wordpress.org/support/topic/custom-permalinks-is-conflicting-with-gravity-view-plugin/)
-
-= 3.1.0 - Aug 01, 2025 =
-
-**Permalink Generation:**
-
-  * Resolved an issue where the `custom_permalinks_generate_post_permalink` function was creating duplicate permalinks with appended numbers when triggered programmatically. This ensures a unique, clean URL every time.
-  * Updated the `sanitize_text_field` function to prevent the truncation of permalink tags, such as `%category%` and `%day%`, guaranteeing your custom permalink structure remains intact.
-
-**Performance:**
-
-  * The `save_post` hook will now only run on public post types. This change prevents unnecessary processing on post types like "Menus", which can significantly improve performance on sites with complex configurations.
-
-**Maintenance:**
-
-  * Improved internationalization (I18N) support.
-  * Fixed a bug where the cache group was not properly clearing when using the flush button.
-
-**Language:**
-
-  * Updated the plugin with the latest language packs.
-
-= 3.0.1 - Jul 22, 2025 =
-
-Fix PHP warning on `url_to_postid()` filter.
-
-= 3.0.0 - Jul 22, 2025 =
-
-This release of Custom Permalinks brings significant enhancements to post type permalink management, introduces new customization options, and refines the overall user and developer experience.
-
-**Added**
-
-  * **Post Type Permalink Structures:** Introduced robust functionality to define custom permalink structures for each public Post Type directly within the plugin settings. This allows for automatic URL generation based on predefined tags upon content creation, offering greater flexibility while still allowing manual edits.
-  * **New Available Permalink Tags:** Expanded the list of dynamic tags that can be used in permalink structures, including:
-    * `%parent_postname%`: For immediate parent page slugs.
-    * `%parents_postnames%`: For all parent page slugs.
-    * `%title%`: A dynamic slug that updates with post title changes (until published or manually edited).
-    * `%ctax_parent_TAXONOMY_NAME%`: For immediate parent custom taxonomy slugs.
-    * `%ctax_parents_TAXONOMY_NAME%`: For all parent custom taxonomy slugs.
-    * `%custom_permalinks_TAG_NAME%`: Allows developers to define and resolve their own custom tags.
-  * **WP All Import Compatibility:** Added support to generate/update permalinks when importing posts using the WP All Import plugin.
-  * **New Filter Examples:** Included clear code examples for `custom_permalinks_post_permalink_tag` to set custom values from ACF fields, and for programmatically generating permalinks for single posts and entire post types.
-
-**Improved**
-
-  * **Post Caching:** Enhanced post caching mechanisms and optimized cache deletion upon updates for better performance.
-  * **Permalink Retrieval:** Improved logic to allow fetching posts against customized permalinks.
-  * **Filter Documentation:** Refined existing filter descriptions and improved code formatting for clarity.
-  * **Plugin Purpose Clarity:** Updated documentation to explicitly state that original post URLs will automatically redirect to the customized URLs, ensuring seamless transitions.
-
 = Earlier versions =
 
   * For the changelog of earlier versions, please refer to the separate changelog.txt file.
 
 == Upgrade Notice ==
+
+= 3.2.1 =
+Recommended update: fixes redirects dropping the query string (e.g. UTM parameters) and an infinite loop that could exhaust server memory when saving a permalink nested under another custom permalink.
 
 = 3.2.0 =
 Recommended update: fixes custom permalinks not saving as removed, WooCommerce My Account redirect loops, WPML/Polylang translations resolving to the wrong post, and adds name-based custom taxonomy tags.
