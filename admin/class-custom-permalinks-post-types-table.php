@@ -41,6 +41,9 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 
 		// Handle screen options.
 		$this->screen_options();
+
+		// Runs on the load-{page} hook, before any output, so the redirect works.
+		$this->process_bulk_action();
 	}
 
 	/**
@@ -433,9 +436,6 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 		$sortable = $this->get_sortable_columns();
 
 		$this->_column_headers = array( $columns, $hidden, $sortable );
-
-		// Process bulk action.
-		$this->process_bulk_action();
 
 		$per_page     = $this->get_items_per_page( "{$this->screen->id}_per_page" );
 		$current_page = $this->get_pagenum();
