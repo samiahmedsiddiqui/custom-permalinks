@@ -370,6 +370,39 @@ class Custom_Permalinks_Frontend {
 	}
 
 	/**
+	 * Get a post's language from WPML/Polylang, falling back to the stored meta.
+	 *
+	 * @since 3.2.2
+	 * @access private
+	 *
+	 * @param int    $post_id   Post ID.
+	 * @param string $post_type Post type.
+	 *
+	 * @return string Language code, or empty string if none.
+	 */
+	private function post_language( $post_id, $post_type ) {
+		// The meta can be missing or stale, e.g. saved before Polylang assigned the language.
+		$language_code = apply_filters(
+			'wpml_element_language_code',
+			null,
+			array(
+				'element_id'   => $post_id,
+				'element_type' => $post_type,
+			)
+		);
+
+		if ( ! $language_code && function_exists( 'pll_get_post_language' ) ) {
+			$language_code = pll_get_post_language( $post_id );
+		}
+
+		if ( ! $language_code ) {
+			$language_code = get_post_meta( $post_id, 'custom_permalink_language', true );
+		}
+
+		return $language_code ? $language_code : '';
+	}
+
+	/**
 	 * Search a permalink in the posts table with respect to WPML language for
 	 * different domain per language.
 	 *
@@ -412,18 +445,7 @@ class Custom_Permalinks_Frontend {
 
 			if ( ! empty( $posts ) ) {
 				foreach ( $posts as $check_data ) {
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-					$post_lang = $wpdb->get_row(
-						$wpdb->prepare(
-							"SELECT * FROM $wpdb->postmeta AS pm " .
-							" WHERE pm.meta_key = 'custom_permalink_language' " .
-							' AND pm.post_id = %d AND pm.meta_value = %s',
-							$check_data->ID,
-							$language_code
-						)
-					);
-
-					if ( $post_lang ) {
+					if ( $this->post_language( $check_data->ID, $check_data->post_type ) === $language_code ) {
 						$matched_post[] = $check_data;
 						break;
 					}
