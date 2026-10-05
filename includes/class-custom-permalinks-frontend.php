@@ -222,9 +222,24 @@ class Custom_Permalinks_Frontend {
 	private function wpml_translated_permalink( $element_id, $element_type ) {
 		$custom_permalink = get_post_meta( $element_id, 'custom_permalink', true );
 
-		if ( class_exists( 'SitePress' ) ) {
+		if ( class_exists( 'SitePress' ) && ! is_admin() ) {
 			$current_language = apply_filters( 'wpml_current_language', null );
-			$translated_id    = apply_filters(
+			$default_language = apply_filters( 'wpml_default_language', null );
+			$element_language = apply_filters(
+				'wpml_element_language_code',
+				null,
+				array(
+					'element_id'   => $element_id,
+					'element_type' => $element_type,
+				)
+			);
+
+			// Only swap links to the original, so a translation keeps its own URL.
+			if ( ! $element_language || $element_language !== $default_language ) {
+				return array( $element_id, $custom_permalink );
+			}
+
+			$translated_id = apply_filters(
 				'wpml_object_id',
 				$element_id,
 				$element_type,
