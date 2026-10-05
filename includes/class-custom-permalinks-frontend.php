@@ -86,6 +86,8 @@ class Custom_Permalinks_Frontend {
 		add_filter( 'url_to_postid', array( $this, 'postid_to_customized_permalink' ), 10, 1 );
 		add_filter( 'term_link', array( $this, 'custom_term_link' ), 10, 2 );
 		add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
+		add_filter( 'get_comment_link', array( $this, 'custom_comment_link' ), 10, 2 );
+		add_filter( 'get_comments_pagenum_link', array( $this, 'custom_comments_pagenum_link' ) );
 
 		// WPSEO Filters.
 		add_filter(
@@ -1099,6 +1101,78 @@ class Custom_Permalinks_Frontend {
 		$permalink = $this->remove_double_slash( $permalink );
 
 		return $permalink;
+	}
+
+	/**
+	 * Match the comment page segment's trailing slash to the post's custom
+	 * permalink.
+	 *
+	 * @since 3.2.2
+	 * @access private
+	 *
+	 * @param string $url  Comment URL.
+	 * @param mixed  $post Post ID or object the comment URL belongs to.
+	 *
+	 * @return string Comment URL with the trailing slash adjusted.
+	 */
+	private function comment_page_trailingslash( $url, $post ) {
+		global $wp_rewrite;
+
+		$post = get_post( $post );
+		if ( ! $post || ! is_string( $url ) || empty( $wp_rewrite->comments_pagination_base ) ) {
+			return $url;
+		}
+
+		list( , $custom_permalink ) = $this->wpml_translated_permalink(
+			$post->ID,
+			$post->post_type
+		);
+
+		if ( ! $custom_permalink ) {
+			return $url;
+		}
+
+		$trailing_slash = '/' === substr( $custom_permalink, -1 ) ? '/' : '';
+		$pattern        = '@(/' . preg_quote( $wp_rewrite->comments_pagination_base, '@' ) . '-\d+)/?(?=[?#]|$)@';
+
+		return preg_replace( $pattern, '$1' . $trailing_slash, $url );
+	}
+
+	/**
+	 * Filter to keep the comment link in line with the custom permalink.
+	 *
+	 * @since 3.2.2
+	 * @access public
+	 *
+	 * @param string     $comment_link The comment permalink.
+	 * @param WP_Comment $comment      The comment object.
+	 *
+	 * @return string Comment link.
+	 */
+	public function custom_comment_link( $comment_link, $comment ) {
+		if ( ! isset( $comment->comment_post_ID ) ) {
+			return $comment_link;
+		}
+
+		return $this->comment_page_trailingslash(
+			$comment_link,
+			$comment->comment_post_ID
+		);
+	}
+
+	/**
+	 * Filter to keep the comments pagination link in line with the custom
+	 * permalink.
+	 *
+	 * @since 3.2.2
+	 * @access public
+	 *
+	 * @param string $result The comments page link.
+	 *
+	 * @return string Comments page link.
+	 */
+	public function custom_comments_pagenum_link( $result ) {
+		return $this->comment_page_trailingslash( $result, get_post() );
 	}
 
 	/**
