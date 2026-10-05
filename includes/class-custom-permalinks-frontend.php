@@ -65,9 +65,9 @@ class Custom_Permalinks_Frontend {
 	 */
 	public function init() {
 		if ( isset( $_SERVER['QUERY_STRING'] ) ) {
-			$this->query_string_uri = sanitize_url(
-				wp_unslash( $_SERVER['QUERY_STRING'] )
-			);
+			// Kept as-is: only used to restore $_SERVER after parse_request.
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+			$this->query_string_uri = $_SERVER['QUERY_STRING'];
 		}
 
 		if ( isset( $_SERVER['REQUEST_URI'] ) ) {
