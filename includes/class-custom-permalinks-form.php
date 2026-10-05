@@ -239,7 +239,7 @@ class Custom_Permalinks_Form {
 		// Restore octets.
 		$permalink = preg_replace( '|---([a-fA-F0-9][a-fA-F0-9])---|', '%$1', $permalink );
 
-		if ( 'en' === $language_code || strpos( $language_code, 'en_' ) === 0 ) {
+		if ( preg_match( '/^en(?:[-_]|$)/', $language_code ) ) {
 			if ( seems_utf8( $permalink ) ) {
 				if ( ! $allow_accents ) {
 					if ( function_exists( 'mb_strtolower' ) ) {
@@ -311,7 +311,7 @@ class Custom_Permalinks_Form {
 		$permalink = preg_replace( '/&.+?;/', '', $permalink );
 
 		// Avoid removing characters of other languages like persian etc.
-		if ( 'en' === $language_code || strpos( $language_code, 'en_' ) === 0 ) {
+		if ( preg_match( '/^en(?:[-_]|$)/', $language_code ) ) {
 			// Allow Alphanumeric and few symbols only.
 			if ( ! $allow_caps ) {
 				$permalink = preg_replace( '/[^%a-z0-9 \.\/_-]/', '', $permalink );
