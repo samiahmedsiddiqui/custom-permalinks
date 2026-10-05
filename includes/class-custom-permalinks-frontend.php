@@ -173,9 +173,10 @@ class Custom_Permalinks_Frontend {
 		$custom_permalink   = $permalink;
 		$trailing_permalink = trailingslashit( home_url() ) . $custom_permalink;
 		if ( $language_code ) {
+			// Start from the unfiltered home so the current language isn't already baked into the URL.
 			$permalink = apply_filters(
 				'wpml_permalink',
-				$trailing_permalink,
+				trailingslashit( set_url_scheme( get_option( 'home' ) ) ) . $custom_permalink,
 				$language_code
 			);
 
