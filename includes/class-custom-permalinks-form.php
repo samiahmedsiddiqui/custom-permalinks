@@ -41,7 +41,7 @@ class Custom_Permalinks_Form {
 		 */
 		$this->js_file_suffix = '-' . CUSTOM_PERMALINKS_VERSION . '.min.js';
 
-		add_action( 'add_meta_boxes', array( $this, 'permalink_edit_box' ) );
+		add_action( 'add_meta_boxes', array( $this, 'permalink_edit_box' ), 10, 2 );
 		add_action( 'save_post', array( $this, 'save_post' ), 10, 3 );
 		add_action( 'pmxi_saved_post', array( $this, 'pmxi_post_permalink' ), 10, 3 );
 		add_action(
@@ -145,9 +145,15 @@ class Custom_Permalinks_Form {
 	 * @since 1.4.0
 	 * @access public
 	 *
+	 * @param string $post_type Post type.
+	 * @param mixed  $post      Post being edited.
+	 *
 	 * @return void
 	 */
-	public function permalink_edit_box() {
+	public function permalink_edit_box( $post_type = '', $post = null ) {
+		// Pin the edited post; global $post may be changed by other loops before render.
+		$post_id = $post instanceof WP_Post ? $post->ID : 0;
+
 		add_meta_box(
 			'custom-permalinks-edit-box',
 			__( 'Custom Permalinks', 'custom-permalinks' ),
@@ -157,6 +163,7 @@ class Custom_Permalinks_Form {
 			'high',
 			array(
 				'__back_compat_meta_box' => false,
+				'post_id'                => $post_id,
 			)
 		);
 	}
@@ -902,11 +909,16 @@ class Custom_Permalinks_Form {
 	 *
 	 * @access public
 	 *
-	 * @param object $post WP Post Object.
+	 * @param object $post    WP Post Object.
+	 * @param array  $metabox Meta box arguments.
 	 *
 	 * @return void
 	 */
-	public function meta_edit_form( $post ) {
+	public function meta_edit_form( $post, $metabox = array() ) {
+		if ( ! empty( $metabox['args']['post_id'] ) ) {
+			$post = get_post( $metabox['args']['post_id'] );
+		}
+
 		$is_customizable = $this->is_permalink_customizable( $post );
 		if ( false === $is_customizable ) {
 			wp_enqueue_script(
