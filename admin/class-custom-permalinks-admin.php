@@ -43,7 +43,6 @@ class Custom_Permalinks_Admin {
 
 		add_action( 'admin_init', array( $this, 'privacy_policy' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-		add_action( 'init', array( $this, 'allow_redirection' ) );
 
 		add_filter(
 			'plugin_action_links_' . CUSTOM_PERMALINKS_BASENAME,
@@ -308,22 +307,6 @@ class Custom_Permalinks_Admin {
 			'Custom Permalinks',
 			wp_kses_post( wpautop( $cp_privacy, false ) )
 		);
-	}
-
-	/**
-	 * Buffer the output to allow redirection, even if the website starts to send
-	 * output to the browser.
-	 *
-	 * @since 2.4.0
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function allow_redirection() {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( isset( $_REQUEST['_custom_permalinks_post_nonce'], $_REQUEST['_custom_permalinks_taxonomy_nonce'] ) ) {
-			ob_start();
-		}
 	}
 }
 
