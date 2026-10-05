@@ -149,6 +149,7 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
 
 * Bug:
   * Fixed WPML translations returning [another language's custom permalink](https://wordpress.org/support/topic/no-input-field-in-the-metabox-for-a-wpml-translation/) depending on the active (admin) language, which listed wrong URLs in Post Types Permalinks and in SEO plugins' indexables and XML sitemaps (e.g. Yoast SEO).
+  * Fixed [Post Types and Taxonomies Permalinks pagination](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/101) showing the first page's results on every page, ignoring sorting and search, when a persistent object cache (e.g. Redis or Memcached) is enabled. The lists now also refresh right after a permalink is added, changed or deleted.
 
 = 3.2.1 - Oct 1, 2026 =
 
