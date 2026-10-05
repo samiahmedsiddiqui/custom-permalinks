@@ -306,6 +306,12 @@ class Custom_Permalinks_Frontend {
 			$posts = $this->query_post( $requested_url );
 		}
 
+		// Permalinks saved under an English locale are stored percent-encoded.
+		$encoded_url = utf8_uri_encode( $requested_url );
+		if ( ! $posts && $encoded_url !== $requested_url ) {
+			$posts = $this->query_post_current_language( $encoded_url );
+		}
+
 		return $posts;
 	}
 
@@ -545,6 +551,8 @@ class Custom_Permalinks_Frontend {
 			$request = substr( $request, 0, $pos );
 		}
 
+		// Browsers percent-encode non-ASCII paths; match them decoded.
+		$request = rawurldecode( $request );
 		$request = $this->remove_page_number( $request );
 		if ( ! $request ) {
 			return $query;
@@ -566,16 +574,17 @@ class Custom_Permalinks_Frontend {
 		$posts             = $this->query_post_current_language( $request_no_slash );
 
 		if ( $posts ) {
+			$found_permalink = rawurldecode( $posts[0]->meta_value );
+
 			/*
 			 * A post matches our request. Preserve this URL for later use. If it's
 			 * the same as the permalink (no extra stuff).
 			 */
-			if ( trim( $posts[0]->meta_value, '/' ) === $request_no_slash ) {
+			if ( trim( $found_permalink, '/' ) === $request_no_slash ) {
 				$this->registered_url = $request;
 				$permalink_matched    = true;
 			}
 
-			$found_permalink = $posts[0]->meta_value;
 			if ( 'draft' === $posts[0]->post_status
 				|| 'pending' === $posts[0]->post_status
 			) {
@@ -585,7 +594,7 @@ class Custom_Permalinks_Frontend {
 					$original_url = '?post_type=' . $posts[0]->post_type . '&p=' . $posts[0]->ID;
 				}
 			} else {
-				$post_meta = trim( strtolower( $posts[0]->meta_value ), '/' );
+				$post_meta = trim( strtolower( $found_permalink ), '/' );
 				if ( 'page' === $posts[0]->post_type ) {
 					$get_original_url = $this->original_page_link( $posts[0]->ID );
 					$original_url     = preg_replace(
@@ -619,7 +628,8 @@ class Custom_Permalinks_Frontend {
 			$table = get_option( 'custom_permalink_table' );
 			if ( $table ) {
 				$term_permalink = false;
-				foreach ( array_keys( $table ) as $permalink ) {
+				foreach ( $table as $table_key => $term ) {
+					$permalink   = rawurldecode( $table_key );
 					$perm_length = strlen( $permalink );
 					if ( ! $term_permalink
 						&& null !== $original_url
@@ -631,7 +641,6 @@ class Custom_Permalinks_Frontend {
 					if ( substr( $request_no_slash, 0, $perm_length ) === $permalink
 						|| substr( $request_no_slash . '/', 0, $perm_length ) === $permalink
 					) {
-						$term           = $table[ $permalink ];
 						$term_permalink = true;
 
 						/*
@@ -865,7 +874,10 @@ class Custom_Permalinks_Frontend {
 			return;
 		}
 
-		$custom_length = strlen( $custom_permalink );
+		// Compare against the decoded request.
+		$custom_permalink   = rawurldecode( $custom_permalink );
+		$original_permalink = rawurldecode( $original_permalink );
+		$custom_length      = strlen( $custom_permalink );
 		if ( substr( $request, 0, $custom_length ) === $custom_permalink
 			&& $request !== $custom_permalink . '/'
 		) {
@@ -933,6 +945,8 @@ class Custom_Permalinks_Frontend {
 			$request = substr( $request, 0, $pos );
 		}
 
+		// Browsers percent-encode non-ASCII paths; match them decoded.
+		$request = rawurldecode( $request );
 		$request = $this->remove_page_number( $request );
 		if ( ! $request ) {
 			return;
@@ -1218,7 +1232,7 @@ class Custom_Permalinks_Frontend {
 			$customized_permalink = $cp_form->check_conflicts( $customized_permalink );
 		}
 
-		$customized_permalink = preg_replace( '@/+@', '/', trim( $customized_permalink, '/' ) );
+		$customized_permalink = preg_replace( '@/+@', '/', trim( rawurldecode( $customized_permalink ), '/' ) );
 		$posts                = $this->query_post_current_language( $customized_permalink );
 		if ( is_array( $posts ) && ! empty( $posts ) ) {
 			if ( 'draft' === $posts[0]->post_status
@@ -1230,7 +1244,7 @@ class Custom_Permalinks_Frontend {
 					$original_url = '?post_type=' . $posts[0]->post_type . '&p=' . $posts[0]->ID;
 				}
 			} else {
-				$post_meta = trim( strtolower( $posts[0]->meta_value ), '/' );
+				$post_meta = trim( strtolower( rawurldecode( $posts[0]->meta_value ) ), '/' );
 				if ( 'page' === $posts[0]->post_type ) {
 					$get_original_url = $this->original_page_link( $posts[0]->ID );
 					$original_url     = preg_replace(
