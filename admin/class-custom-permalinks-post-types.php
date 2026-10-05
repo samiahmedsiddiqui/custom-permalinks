@@ -14,6 +14,27 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 final class Custom_Permalinks_Post_Types {
 	/**
+	 * Build a cache key from the list query and the last permalink change.
+	 *
+	 * @since 3.2.2
+	 * @access private
+	 *
+	 * @param string $name Cache name.
+	 * @param array  $args Query arguments which affect the result.
+	 *
+	 * @return string
+	 */
+	private static function get_cache_key( $name, $args = array() ) {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		foreach ( array( 's', 'orderby', 'order' ) as $param ) {
+			$args[ $param ] = isset( $_REQUEST[ $param ] ) ? sanitize_text_field( wp_unslash( $_REQUEST[ $param ] ) ) : '';
+		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+		return $name . '_' . md5( wp_json_encode( $args ) ) . '_' . wp_cache_get_last_changed( 'custom_permalinks' );
+	}
+
+	/**
 	 * Returns the count of records in the database.
 	 *
 	 * @since 2.0.0
@@ -24,7 +45,8 @@ final class Custom_Permalinks_Post_Types {
 	public static function total_permalinks() {
 		global $wpdb;
 
-		$total_posts = wp_cache_get( 'total_posts_result', 'custom_permalinks' );
+		$cache_name  = self::get_cache_key( 'total_posts_result' );
+		$total_posts = wp_cache_get( $cache_name, 'custom_permalinks' );
 		if ( false === $total_posts ) {
 			$sql_query = "
 				SELECT COUNT(p.ID) FROM $wpdb->posts AS p
@@ -62,7 +84,7 @@ final class Custom_Permalinks_Post_Types {
 				);
 			}
 
-			wp_cache_set( 'total_posts_result', $total_posts, 'custom_permalinks', 60 );
+			wp_cache_set( $cache_name, $total_posts, 'custom_permalinks', 60 );
 		}
 
 		return $total_posts;
@@ -82,7 +104,8 @@ final class Custom_Permalinks_Post_Types {
 	public static function get_permalinks( $per_page = 20, $page_number = 1 ) {
 		global $wpdb;
 
-		$posts = wp_cache_get( 'post_type_results', 'custom_permalinks' );
+		$cache_name = self::get_cache_key( 'post_type_results', array( $per_page, $page_number ) );
+		$posts      = wp_cache_get( $cache_name, 'custom_permalinks' );
 		if ( false === $posts ) {
 			$page_offset = ( $page_number - 1 ) * $per_page;
 			$order_by    = 'p.ID';
@@ -155,7 +178,7 @@ final class Custom_Permalinks_Post_Types {
 			// phpcs:disable WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 			// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
-			wp_cache_set( 'post_type_results', $posts, 'custom_permalinks', 60 );
+			wp_cache_set( $cache_name, $posts, 'custom_permalinks', 60 );
 		}
 
 		return $posts;
