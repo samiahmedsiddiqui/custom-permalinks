@@ -145,6 +145,11 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
 
 == Changelog ==
 
+= 3.2.2 - Unreleased =
+
+* Bug:
+  * Fixed WPML translations returning [another language's custom permalink](https://wordpress.org/support/topic/no-input-field-in-the-metabox-for-a-wpml-translation/) depending on the active (admin) language, which listed wrong URLs in Post Types Permalinks and in SEO plugins' indexables and XML sitemaps (e.g. Yoast SEO).
+
 = 3.2.1 - Oct 1, 2026 =
 
 * Bug:
