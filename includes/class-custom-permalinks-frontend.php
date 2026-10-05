@@ -134,7 +134,20 @@ class Custom_Permalinks_Frontend {
 	 * @return string Cleaned URL without the trailing /page/{number}.
 	 */
 	public function remove_page_number( $url ) {
+		$this->is_paged = 0;
 		if ( ! is_string( $url ) ) {
+			return $url;
+		}
+
+		/**
+		 * Keep the trailing /page/{number} segment in the requested URL.
+		 *
+		 * @since 3.2.2
+		 *
+		 * @param bool   $disable Whether to keep the pagination segment. Default false.
+		 * @param string $url     URL that may contain a pagination segment.
+		 */
+		if ( true === apply_filters( 'custom_permalinks_disable_remove_page_number', false, $url ) ) {
 			return $url;
 		}
 
@@ -155,6 +168,27 @@ class Custom_Permalinks_Frontend {
 		}
 
 		return $url;
+	}
+
+	/**
+	 * Appends the /page/{number} segment removed by `remove_page_number()`.
+	 *
+	 * @since 3.2.2
+	 *
+	 * @param string $url URL without the pagination segment.
+	 *
+	 * @return string URL with the pagination segment if the request was paged.
+	 */
+	private function add_page_number( $url ) {
+		if ( 0 >= $this->is_paged ) {
+			return $url;
+		}
+
+		if ( '/' === substr( $url, -1 ) ) {
+			return $url . 'page/' . $this->is_paged . '/';
+		}
+
+		return $url . '/page/' . $this->is_paged;
 	}
 
 	/**
@@ -654,7 +688,8 @@ class Custom_Permalinks_Frontend {
 					if ( ! is_bool( $avoid_redirect ) || ! $avoid_redirect ) {
 						// Append any query component.
 						$this->safe_redirect(
-							$found_permalink . strstr( $this->request_uri, '?' )
+							$this->add_page_number( $found_permalink )
+								. strstr( $this->request_uri, '?' )
 						);
 
 						return $query;
@@ -868,6 +903,7 @@ class Custom_Permalinks_Frontend {
 		}
 
 		// Append any query component.
+		$url  = $this->add_page_number( $url );
 		$url .= strstr( $this->request_uri, '?' );
 		$this->safe_redirect( $url );
 	}

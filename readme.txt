@@ -149,6 +149,10 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
 
 * Bug:
   * Fixed WPML translations returning [another language's custom permalink](https://wordpress.org/support/topic/no-input-field-in-the-metabox-for-a-wpml-translation/) depending on the active (admin) language, which listed wrong URLs in Post Types Permalinks and in SEO plugins' indexables and XML sitemaps (e.g. Yoast SEO).
+  * Fixed the trailing-slash redirect and the redirect to the custom permalink dropping the page number (e.g. `/news/page/2` redirected to `/news/` instead of `/news/page/2/`).
+
+* Enhancement:
+  * Added the `custom_permalinks_disable_remove_page_number` filter to keep the `/page/{number}` segment in the requested URL, for [custom archive pages whose pagination doesn't advance](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/110).
 
 = 3.2.1 - Oct 1, 2026 =
 
