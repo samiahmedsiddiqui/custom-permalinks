@@ -242,7 +242,7 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 		$title_with_edit_link = esc_html( $post_title );
 		if ( ! empty( $edit_link ) ) {
 			$title_with_edit_link = sprintf(
-				'<a href="%1s" target="_blank" title="%2s">%3s</a>',
+				'<a href="%s" target="_blank" title="%s">%s</a>',
 				esc_url( $edit_link ),
 				esc_attr__( 'Edit', 'custom-permalinks' ) . ' ' . esc_attr( $post_title ),
 				$title_with_edit_link
@@ -287,7 +287,7 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 		$page_url = esc_url( $page_url );
 
 		$permalink = sprintf(
-			'<a href="%1s" target="_blank" title="%2s">%3s</a>',
+			'<a href="%s" target="_blank" title="%s">%s</a>',
 			$page_url,
 			esc_attr__( 'Visit', 'custom-permalinks' ) . ' ' . esc_attr( $item['post_title'] ),
 			$page_url
