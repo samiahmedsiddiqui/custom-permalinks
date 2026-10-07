@@ -41,6 +41,9 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 
 		// Handle screen options.
 		$this->screen_options();
+
+		// Runs on the load-{page} hook, before any output, so the redirect works.
+		$this->process_bulk_action();
 	}
 
 	/**
@@ -242,7 +245,7 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 		$title_with_edit_link = esc_html( $post_title );
 		if ( ! empty( $edit_link ) ) {
 			$title_with_edit_link = sprintf(
-				'<a href="%1s" target="_blank" title="%2s">%3s</a>',
+				'<a href="%s" target="_blank" title="%s">%s</a>',
 				esc_url( $edit_link ),
 				esc_attr__( 'Edit', 'custom-permalinks' ) . ' ' . esc_attr( $post_title ),
 				$title_with_edit_link
@@ -287,7 +290,7 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 		$page_url = esc_url( $page_url );
 
 		$permalink = sprintf(
-			'<a href="%1s" target="_blank" title="%2s">%3s</a>',
+			'<a href="%s" target="_blank" title="%s">%s</a>',
 			$page_url,
 			esc_attr__( 'Visit', 'custom-permalinks' ) . ' ' . esc_attr( $item['post_title'] ),
 			$page_url
@@ -433,9 +436,6 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 		$sortable = $this->get_sortable_columns();
 
 		$this->_column_headers = array( $columns, $hidden, $sortable );
-
-		// Process bulk action.
-		$this->process_bulk_action();
 
 		$per_page     = $this->get_items_per_page( "{$this->screen->id}_per_page" );
 		$current_page = $this->get_pagenum();

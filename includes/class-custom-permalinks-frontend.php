@@ -65,9 +65,9 @@ class Custom_Permalinks_Frontend {
 	 */
 	public function init() {
 		if ( isset( $_SERVER['QUERY_STRING'] ) ) {
-			$this->query_string_uri = sanitize_url(
-				wp_unslash( $_SERVER['QUERY_STRING'] )
-			);
+			// Kept as-is: only used to restore $_SERVER after parse_request.
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+			$this->query_string_uri = $_SERVER['QUERY_STRING'];
 		}
 
 		if ( isset( $_SERVER['REQUEST_URI'] ) ) {
@@ -86,6 +86,8 @@ class Custom_Permalinks_Frontend {
 		add_filter( 'url_to_postid', array( $this, 'postid_to_customized_permalink' ), 10, 1 );
 		add_filter( 'term_link', array( $this, 'custom_term_link' ), 10, 2 );
 		add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
+		add_filter( 'get_comment_link', array( $this, 'custom_comment_link' ), 10, 2 );
+		add_filter( 'get_comments_pagenum_link', array( $this, 'custom_comments_pagenum_link' ) );
 
 		// WPSEO Filters.
 		add_filter(
@@ -173,9 +175,10 @@ class Custom_Permalinks_Frontend {
 		$custom_permalink   = $permalink;
 		$trailing_permalink = trailingslashit( home_url() ) . $custom_permalink;
 		if ( $language_code ) {
+			// Start from the unfiltered home so the current language isn't already baked into the URL.
 			$permalink = apply_filters(
 				'wpml_permalink',
-				$trailing_permalink,
+				trailingslashit( set_url_scheme( get_option( 'home' ) ) ) . $custom_permalink,
 				$language_code
 			);
 
@@ -303,6 +306,12 @@ class Custom_Permalinks_Frontend {
 			$posts = $this->query_post( $requested_url );
 		}
 
+		// Permalinks saved under an English locale are stored percent-encoded.
+		$encoded_url = utf8_uri_encode( $requested_url );
+		if ( ! $posts && $encoded_url !== $requested_url ) {
+			$posts = $this->query_post_current_language( $encoded_url );
+		}
+
 		return $posts;
 	}
 
@@ -367,6 +376,39 @@ class Custom_Permalinks_Frontend {
 	}
 
 	/**
+	 * Get a post's language from WPML/Polylang, falling back to the stored meta.
+	 *
+	 * @since 3.2.2
+	 * @access private
+	 *
+	 * @param int    $post_id   Post ID.
+	 * @param string $post_type Post type.
+	 *
+	 * @return string Language code, or empty string if none.
+	 */
+	private function post_language( $post_id, $post_type ) {
+		// The meta can be missing or stale, e.g. saved before Polylang assigned the language.
+		$language_code = apply_filters(
+			'wpml_element_language_code',
+			null,
+			array(
+				'element_id'   => $post_id,
+				'element_type' => $post_type,
+			)
+		);
+
+		if ( ! $language_code && function_exists( 'pll_get_post_language' ) ) {
+			$language_code = pll_get_post_language( $post_id );
+		}
+
+		if ( ! $language_code ) {
+			$language_code = get_post_meta( $post_id, 'custom_permalink_language', true );
+		}
+
+		return $language_code ? $language_code : '';
+	}
+
+	/**
 	 * Search a permalink in the posts table with respect to WPML language for
 	 * different domain per language.
 	 *
@@ -409,18 +451,7 @@ class Custom_Permalinks_Frontend {
 
 			if ( ! empty( $posts ) ) {
 				foreach ( $posts as $check_data ) {
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-					$post_lang = $wpdb->get_row(
-						$wpdb->prepare(
-							"SELECT * FROM $wpdb->postmeta AS pm " .
-							" WHERE pm.meta_key = 'custom_permalink_language' " .
-							' AND pm.post_id = %d AND pm.meta_value = %s',
-							$check_data->ID,
-							$language_code
-						)
-					);
-
-					if ( $post_lang ) {
+					if ( $this->post_language( $check_data->ID, $check_data->post_type ) === $language_code ) {
 						$matched_post[] = $check_data;
 						break;
 					}
@@ -520,6 +551,8 @@ class Custom_Permalinks_Frontend {
 			$request = substr( $request, 0, $pos );
 		}
 
+		// Browsers percent-encode non-ASCII paths; match them decoded.
+		$request = rawurldecode( $request );
 		$request = $this->remove_page_number( $request );
 		if ( ! $request ) {
 			return $query;
@@ -541,16 +574,17 @@ class Custom_Permalinks_Frontend {
 		$posts             = $this->query_post_current_language( $request_no_slash );
 
 		if ( $posts ) {
+			$found_permalink = rawurldecode( $posts[0]->meta_value );
+
 			/*
 			 * A post matches our request. Preserve this URL for later use. If it's
 			 * the same as the permalink (no extra stuff).
 			 */
-			if ( trim( $posts[0]->meta_value, '/' ) === $request_no_slash ) {
+			if ( trim( $found_permalink, '/' ) === $request_no_slash ) {
 				$this->registered_url = $request;
 				$permalink_matched    = true;
 			}
 
-			$found_permalink = $posts[0]->meta_value;
 			if ( 'draft' === $posts[0]->post_status
 				|| 'pending' === $posts[0]->post_status
 			) {
@@ -560,7 +594,7 @@ class Custom_Permalinks_Frontend {
 					$original_url = '?post_type=' . $posts[0]->post_type . '&p=' . $posts[0]->ID;
 				}
 			} else {
-				$post_meta = trim( strtolower( $posts[0]->meta_value ), '/' );
+				$post_meta = trim( strtolower( $found_permalink ), '/' );
 				if ( 'page' === $posts[0]->post_type ) {
 					$get_original_url = $this->original_page_link( $posts[0]->ID );
 					$original_url     = preg_replace(
@@ -594,7 +628,8 @@ class Custom_Permalinks_Frontend {
 			$table = get_option( 'custom_permalink_table' );
 			if ( $table ) {
 				$term_permalink = false;
-				foreach ( array_keys( $table ) as $permalink ) {
+				foreach ( $table as $table_key => $term ) {
+					$permalink   = rawurldecode( $table_key );
 					$perm_length = strlen( $permalink );
 					if ( ! $term_permalink
 						&& null !== $original_url
@@ -606,7 +641,6 @@ class Custom_Permalinks_Frontend {
 					if ( substr( $request_no_slash, 0, $perm_length ) === $permalink
 						|| substr( $request_no_slash . '/', 0, $perm_length ) === $permalink
 					) {
-						$term           = $table[ $permalink ];
 						$term_permalink = true;
 
 						/*
@@ -840,7 +874,10 @@ class Custom_Permalinks_Frontend {
 			return;
 		}
 
-		$custom_length = strlen( $custom_permalink );
+		// Compare against the decoded request.
+		$custom_permalink   = rawurldecode( $custom_permalink );
+		$original_permalink = rawurldecode( $original_permalink );
+		$custom_length      = strlen( $custom_permalink );
 		if ( substr( $request, 0, $custom_length ) === $custom_permalink
 			&& $request !== $custom_permalink . '/'
 		) {
@@ -908,6 +945,8 @@ class Custom_Permalinks_Frontend {
 			$request = substr( $request, 0, $pos );
 		}
 
+		// Browsers percent-encode non-ASCII paths; match them decoded.
+		$request = rawurldecode( $request );
 		$request = $this->remove_page_number( $request );
 		if ( ! $request ) {
 			return;
@@ -1101,6 +1140,78 @@ class Custom_Permalinks_Frontend {
 	}
 
 	/**
+	 * Match the comment page segment's trailing slash to the post's custom
+	 * permalink.
+	 *
+	 * @since 3.2.2
+	 * @access private
+	 *
+	 * @param string $url  Comment URL.
+	 * @param mixed  $post Post ID or object the comment URL belongs to.
+	 *
+	 * @return string Comment URL with the trailing slash adjusted.
+	 */
+	private function comment_page_trailingslash( $url, $post ) {
+		global $wp_rewrite;
+
+		$post = get_post( $post );
+		if ( ! $post || ! is_string( $url ) || empty( $wp_rewrite->comments_pagination_base ) ) {
+			return $url;
+		}
+
+		list( , $custom_permalink ) = $this->wpml_translated_permalink(
+			$post->ID,
+			$post->post_type
+		);
+
+		if ( ! $custom_permalink ) {
+			return $url;
+		}
+
+		$trailing_slash = '/' === substr( $custom_permalink, -1 ) ? '/' : '';
+		$pattern        = '@(/' . preg_quote( $wp_rewrite->comments_pagination_base, '@' ) . '-\d+)/?(?=[?#]|$)@';
+
+		return preg_replace( $pattern, '$1' . $trailing_slash, $url );
+	}
+
+	/**
+	 * Filter to keep the comment link in line with the custom permalink.
+	 *
+	 * @since 3.2.2
+	 * @access public
+	 *
+	 * @param string     $comment_link The comment permalink.
+	 * @param WP_Comment $comment      The comment object.
+	 *
+	 * @return string Comment link.
+	 */
+	public function custom_comment_link( $comment_link, $comment ) {
+		if ( ! isset( $comment->comment_post_ID ) ) {
+			return $comment_link;
+		}
+
+		return $this->comment_page_trailingslash(
+			$comment_link,
+			$comment->comment_post_ID
+		);
+	}
+
+	/**
+	 * Filter to keep the comments pagination link in line with the custom
+	 * permalink.
+	 *
+	 * @since 3.2.2
+	 * @access public
+	 *
+	 * @param string $result The comments page link.
+	 *
+	 * @return string Comments page link.
+	 */
+	public function custom_comments_pagenum_link( $result ) {
+		return $this->comment_page_trailingslash( $result, get_post() );
+	}
+
+	/**
 	 * Fetch default permalink against the customized permalink.
 	 *
 	 * @since 3.0.0
@@ -1121,7 +1232,7 @@ class Custom_Permalinks_Frontend {
 			$customized_permalink = $cp_form->check_conflicts( $customized_permalink );
 		}
 
-		$customized_permalink = preg_replace( '@/+@', '/', trim( $customized_permalink, '/' ) );
+		$customized_permalink = preg_replace( '@/+@', '/', trim( rawurldecode( $customized_permalink ), '/' ) );
 		$posts                = $this->query_post_current_language( $customized_permalink );
 		if ( is_array( $posts ) && ! empty( $posts ) ) {
 			if ( 'draft' === $posts[0]->post_status
@@ -1133,7 +1244,7 @@ class Custom_Permalinks_Frontend {
 					$original_url = '?post_type=' . $posts[0]->post_type . '&p=' . $posts[0]->ID;
 				}
 			} else {
-				$post_meta = trim( strtolower( $posts[0]->meta_value ), '/' );
+				$post_meta = trim( strtolower( rawurldecode( $posts[0]->meta_value ) ), '/' );
 				if ( 'page' === $posts[0]->post_type ) {
 					$get_original_url = $this->original_page_link( $posts[0]->ID );
 					$original_url     = preg_replace(

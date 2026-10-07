@@ -14,6 +14,25 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 final class Custom_Permalinks_Taxonomies {
 	/**
+	 * Build a cache key from the list query and the last permalink change.
+	 *
+	 * @since 3.2.2
+	 * @access private
+	 *
+	 * @param string $name Cache name.
+	 * @param array  $args Query arguments which affect the result.
+	 *
+	 * @return string
+	 */
+	private static function get_cache_key( $name, $args = array() ) {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		$args['s'] = isset( $_REQUEST['s'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['s'] ) ) : '';
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+		return $name . '_' . md5( wp_json_encode( $args ) ) . '_' . wp_cache_get_last_changed( 'custom_permalinks' );
+	}
+
+	/**
 	 * Sort the terms array in desc order using term id.
 	 *
 	 * @since 1.2.0
@@ -37,7 +56,8 @@ final class Custom_Permalinks_Taxonomies {
 	 * @return null|int
 	 */
 	public static function total_permalinks() {
-		$total_taxonomies = wp_cache_get( 'total_taxonomies_result', 'custom_permalinks' );
+		$cache_name       = self::get_cache_key( 'total_taxonomies_result' );
+		$total_taxonomies = wp_cache_get( $cache_name, 'custom_permalinks' );
 		if ( false === $total_taxonomies ) {
 			$search_taxonomy  = array();
 			$taxonomy_table   = get_option( 'custom_permalink_table' );
@@ -65,7 +85,7 @@ final class Custom_Permalinks_Taxonomies {
 				$total_taxonomies = count( $taxonomy_table );
 			}
 
-			wp_cache_set( 'total_taxonomies_result', $total_taxonomies, 'custom_permalinks', 60 );
+			wp_cache_set( $cache_name, $total_taxonomies, 'custom_permalinks', 60 );
 		}
 
 		return $total_taxonomies;
@@ -83,7 +103,8 @@ final class Custom_Permalinks_Taxonomies {
 	 * @return array Title, Post Type and Permalink set using this plugin.
 	 */
 	public static function get_permalinks( $per_page = 20, $page_number = 1 ) {
-		$taxonomies = wp_cache_get( 'taxonomies_results', 'custom_permalinks' );
+		$cache_name = self::get_cache_key( 'taxonomies_results', array( $per_page, $page_number ) );
+		$taxonomies = wp_cache_get( $cache_name, 'custom_permalinks' );
 		if ( false === $taxonomies ) {
 			$page_offset     = ( $page_number - 1 ) * $per_page;
 			$taxonomy_table  = get_option( 'custom_permalink_table' );
@@ -129,7 +150,7 @@ final class Custom_Permalinks_Taxonomies {
 				}
 			}
 
-			wp_cache_set( 'taxonomies_results', $taxonomies, 'custom_permalinks', 60 );
+			wp_cache_set( $cache_name, $taxonomies, 'custom_permalinks', 60 );
 		}
 
 		return $taxonomies;
