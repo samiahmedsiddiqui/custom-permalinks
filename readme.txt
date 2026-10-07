@@ -154,6 +154,7 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
   * Fixed [comment links](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/80) on paginated comments (e.g. `/my-post/comment-page-2/`) not following the custom permalink's trailing slash, so a custom permalink without a trailing slash no longer gets comment URLs with one, and vice versa.
   * Fixed [Polylang translations sharing the same custom permalink](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/64) (e.g. `/en/technology` and `/zh/technology`) redirecting to the other language when the translation's stored language was missing or out of date.
   * Fixed [custom permalinks in non-Latin scripts](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/61) (e.g. Thai, Arabic, Cyrillic) returning a 404 or redirecting in an infinite loop, as the browser requests them percent-encoded while they are saved unencoded (or vice versa, depending on the site language).
+  * Fixed WPML language directories that differ from the language code (e.g. `/de-de/` for `de`, as in WPML 5.0) not being repaired when duplicated, and the default language getting its directory added to a permalink when "hide the default language directory" is on.
 
 = 3.2.1 - Oct 1, 2026 =
 
