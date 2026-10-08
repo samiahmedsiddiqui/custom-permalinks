@@ -1,0 +1,28 @@
+name: PR Preview
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened, edited ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  preview:
+    name: Add Playground preview link
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      # Lets the action add the preview link to the PR description.
+      pull-requests: write
+
+    steps:
+      # Playground loads the plugin from the PR branch; the min files are committed, so no build is needed.
+      - uses: WordPress/action-wp-playground-pr-preview@v4
+        with:
+          plugin-path: .
+          github-token: ${{ secrets.GITHUB_TOKEN }}
