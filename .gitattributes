@@ -9,6 +9,7 @@
 assets/css/src     export-ignore
 assets/js/src      export-ignore
 composer.*         export-ignore
+CONTRIBUTING.md    export-ignore
 build.mjs          export-ignore
 eslint.config.mjs  export-ignore
 package.json       export-ignore
@@ -17,3 +18,4 @@ phpstan.neon.dist  export-ignore
 phpunit.xml.dist   export-ignore
 tests              export-ignore
 README.md          export-ignore
+SECURITY.md        export-ignore
