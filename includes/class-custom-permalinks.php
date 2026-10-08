@@ -142,8 +142,7 @@ class Custom_Permalinks {
 
 	/**
 	 * Check if role not exist then call the function to add it. Update site
-	 * details if plugin gets updated. Also, loads the plugin language files to
-	 * support different languages.
+	 * details if plugin gets updated.
 	 *
 	 * @since 1.2.18
 	 * @access public
@@ -159,12 +158,6 @@ class Custom_Permalinks {
 				self::add_roles();
 			}
 		}
-
-		load_plugin_textdomain(
-			'custom-permalinks',
-			false,
-			basename( dirname( CUSTOM_PERMALINKS_FILE ) ) . '/languages/'
-		);
 	}
 }
 
