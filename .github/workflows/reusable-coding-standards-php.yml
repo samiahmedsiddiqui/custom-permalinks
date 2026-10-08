@@ -10,14 +10,10 @@ jobs:
   phpcs:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        php-versions: ['7.0', '7.4', '8.0', '8.1', '8.2', '8.3']
-
     permissions:
       contents: read
 
-    name: Run coding standards checks on ${{ matrix.php-versions }}
+    name: Run coding standards checks
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -27,7 +23,7 @@ jobs:
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: ${{ matrix.php-versions }}
+        php-version: '8.4'
         tools: cs2pr
       env:
         runner: self-hosted
@@ -48,3 +44,29 @@ jobs:
 
     - name: Ensure version-controlled files are not modified or deleted
       run: git diff --exit-code
+
+  phpstan:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    name: Run static analysis
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.4'
+      env:
+        runner: self-hosted
+
+    - name: Install Composer dependencies
+      run: composer install
+
+    - name: Run PHPStan
+      run: composer analyse -- --error-format=github
