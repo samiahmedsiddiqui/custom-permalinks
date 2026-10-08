@@ -20,8 +20,7 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' || ! github.event.release.prerelease }}
 
     permissions:
-      # Lets the job attach the plugin zip to the release.
-      contents: write
+      contents: read
 
     env:
       TAG: ${{ github.event.release.tag_name || inputs.tag }}
@@ -65,15 +64,8 @@ jobs:
       - name: Deploy to WordPress.org
         id: deploy
         uses: 10up/action-wordpress-plugin-deploy@54bd289b8525fd23a5c365ec369185f2966529c2 # 2.3.0
-        with:
-          generate-zip: true
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
           SLUG: custom-permalinks
           VERSION: ${{ steps.version.outputs.version }}
-
-      - name: Attach the plugin zip to the release
-        run: gh release upload "$TAG" "${{ steps.deploy.outputs.zip-path }}" --clobber
-        env:
-          GH_TOKEN: ${{ github.token }}
