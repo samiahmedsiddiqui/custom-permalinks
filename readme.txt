@@ -1,6 +1,6 @@
 === Custom Permalinks ===
 Contributors: sasiddiqui
-Tags: permalink, url, link, address, redirect
+Tags: permalink, custom url, slug, redirect, seo
 Requires at least: 5.0
 Requires PHP: 7.0
 Tested up to: 7.2
@@ -16,14 +16,21 @@ You want to take control of your WordPress site's URLs? The **Custom Permalinks*
 
 === Key Features ===
 
-* **Individual Permalink Control**: Assign unique URLs to any post, page, tag, or category.
-* **Site Structure Control**: Gain ultimate control over how your site's URLs are organized.
-* **Post Type Permalink Structures (v3.0.0+)**: Define custom permalink structures for each public Post Type using predefined tags, automatically generating URLs upon content creation. You can still manually edit any permalink. If left empty, default settings will apply.
-* **Automatic Redirects**: Old URLs keep working — visitors and search engines are redirected to the new custom permalink automatically.
+* **A custom URL for any content**: Set a unique permalink for any post, page, public custom post type (e.g. WooCommerce products), category, tag, or custom taxonomy term.
+* **Permalink structures per post type**: Define a structure for each public post type from tags like `%year%`, `%category%`, or your custom taxonomies. New content gets its permalink automatically, and you can still edit any permalink by hand.
+* **Automatic redirects**: The original URL redirects to the custom permalink, so existing links, bookmarks, and search rankings keep working.
+* **Multilingual**: Works with WPML and Polylang, with a separate custom permalink for each translation.
+* **URLs in any language**: Permalinks in non-Latin scripts, such as Arabic, Thai, or Cyrillic, work as you type them.
+* **All permalinks in one place**: The Post Types Permalinks and Taxonomies Permalinks screens list every custom permalink, with search and bulk delete.
+* **A role for permalink managers**: The Custom Permalinks Manager role lets non-administrators view and edit permalinks.
+* **Developer friendly**: Filters and actions to add your own tags, generate permalinks in code, and control sanitizing and redirects.
 
 === Getting Started: Plugin Settings ===
 
-You can configure Custom Permalinks by navigating to **Settings \> Custom Permalinks** in your WordPress Dashboard.
+Custom Permalinks adds a **Custom Permalinks** menu to your WordPress dashboard:
+
+* **Post Types Permalinks** and **Taxonomies Permalinks**: Every custom permalink on your site, with search and bulk delete.
+* **Post Types Settings**: A permalink structure for each public post type, built from the tags below. Leave a structure empty to keep WordPress's default for that post type.
 
 To set a permalink for an individual post, page, category, or tag, edit that item and look for the **Custom Permalink** field near the top (or in the sidebar) of the editor screen — enter the URL path you want and save.
 
@@ -38,19 +45,19 @@ When setting up your custom permalink structures, you can use a variety of tags 
 * **%minute%**: Minute of the hour, the post was published, eg: 43
 * **%second%**: Second of the minute, the post was published, eg: 33
 * **%post_id%**: The unique ID of the post, eg: 123
-* **%category%**: A clean version of the category name (its slug). Nested sub-categories will appear as nested directories in the URL..
-* **%author%**: A sanitized version of the post author’s name.
+* **%category%**: A clean version of the category name (its slug). Nested sub-categories will appear as nested directories in the URL.
+* **%author%**: The post author's username (login name). Note that this makes usernames visible in your URLs.
 * **%postname%**: A clean version of the post or page title (its slug). For example, "This Is A Great Post\!" becomes `this-is-a-great-post` in the URL.
 * **%parent_postname%**: Similar to `%postname%`, but uses the immediate parent page's slug if a parent is selected.
 * **%parents_postnames%**: Similar to `%postname%`, but includes all parent page slugs if parents are selected.
 * **%title%**: The title of the post, converted to a slug. For example, "This Is A Great Post\!" becomes `this-is-a-great-post`. Unlike `%postname%` which is set once, `%title%` automatically updates in the permalink if the post title changes (unless the post is published or the permalink is manually edited).
-* **%ctax_TAXONOMY_NAME%**: A clean version of a custom taxonomy's name. Replace `TAXONOMY_NAME` with the actual taxonomy name. You can also provide a default slug for when no category/taxonomy is selected by using `??` (e.g., `%ctax_type??sales%` will use "sales" as a default).
-* **%ctax_TAXONOMY_NAME_name%**: The custom taxonomy term's name (instead of its slug). Replace `TAXONOMY_NAME` with the actual taxonomy name. Supports a default value using `??` when no term is selected (e.g., `%ctax_type_name??Sales%`).
+* **%ctax_TAXONOMY_NAME%**: A clean version of a custom taxonomy's name. Replace `TAXONOMY_NAME` with the actual taxonomy name.
+* **%ctax_TAXONOMY_NAME_name%**: The custom taxonomy term's name (instead of its slug). Replace `TAXONOMY_NAME` with the actual taxonomy name.
 * **%ctax_parent_TAXONOMY_NAME%**: Similar to `%ctax_TAXONOMY_NAME%`, but includes the immediate parent category/tag slug in the URL if a parent is selected.
 * **%ctax_parent_TAXONOMY_NAME_name%**: Similar to `%ctax_TAXONOMY_NAME_name%`, but includes the immediate parent term's name if a parent is selected.
 * **%ctax_parents_TAXONOMY_NAME%**: Similar to `%ctax_TAXONOMY_NAME%`, but includes all parent category/tag slugs in the URL if parents are selected.
 * **%ctax_parents_TAXONOMY_NAME_name%**: Similar to `%ctax_TAXONOMY_NAME_name%`, but includes all parent term names if parents are selected.
-* **%custom_permalinks_TAG_NAME%**: Developers have the flexibility to define their own custom tags(replace `_TAG_NAME` with your desired name). To ensure these tags resolve to the correct permalinks, simply apply the `custom_permalinks_post_permalink_tag` filter.
+* **%custom_permalinks_TAG_NAME%**: Developers have the flexibility to define their own custom tags (replace `_TAG_NAME` with your desired name). To ensure these tags resolve to the correct permalinks, simply apply the `custom_permalinks_post_permalink_tag` filter.
 
 **Important Note:** For new posts, Custom Permalinks will keep updating the permalink while the post is in draft mode, assuming a structure is defined in the plugin settings. Once the post is published or its permalink is manually updated, the plugin will stop automatic updates for that specific post.
 
@@ -101,11 +108,19 @@ Yes. Custom Permalinks supports posts, pages, any public custom post type, and c
 
 = Does it work with custom post types, like WooCommerce products? =
 
-Yes. You can set an individual custom permalink on any public custom post type, or define an automatic permalink structure for the entire post type from **Settings \> Custom Permalinks**.
+Yes. You can set an individual custom permalink on any public custom post type, or define an automatic permalink structure for the entire post type from **Custom Permalinks \> Post Types Settings**.
 
 = Is Custom Permalinks compatible with WPML or Polylang? =
 
 Yes, the plugin is compatible with both WPML and Polylang, including translated posts that each have their own custom permalink.
+
+= Can I use non-English characters in my permalinks? =
+
+Yes. Permalinks in non-Latin scripts, such as Arabic, Thai, Cyrillic, or Chinese, work as you type them. Browsers request these URLs percent-encoded, and Custom Permalinks matches them either way.
+
+= Where do the plugin's translations come from? =
+
+From [translate.wordpress.org](https://translate.wordpress.org/projects/wp-plugins/custom-permalinks/). WordPress downloads them automatically for your site's language. If the plugin shows in English on a translated site, update the translations from **Dashboard \> Updates**. You can also help translate it there.
 
 = Can I let a non-administrator manage permalinks? =
 
@@ -142,6 +157,14 @@ Deactivating the plugin keeps all your saved custom permalinks in the database �
 * Confirm no other SEO/redirection plugin (Yoast, RankMath, Redirection, etc.) has a conflicting rule for the same URL.
 * Check that the permalink isn't already used by another post — Custom Permalinks won't apply a duplicate URL.
 * Still stuck? See "Need Help or Found a Bug?" above, or reach out via [GitHub](https://github.com/samiahmedsiddiqui/custom-permalinks) or [Premium support](https://www.custompermalinks.com/contact-us/).
+
+== Screenshots ==
+
+1. Set a custom permalink for any post or page from the Custom Permalinks box in the editor.
+2. Post Types Permalinks lists every post, page, and custom post type with a custom permalink, with search and bulk delete.
+3. Taxonomies Permalinks lists every category, tag, and custom taxonomy term with a custom permalink.
+4. Post Types Settings: build a permalink structure for each post type from the available tags.
+5. Set a custom permalink for a category, tag, or custom taxonomy term on its edit screen.
 
 == Changelog ==
 
