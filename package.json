@@ -15,6 +15,9 @@
 	},
 	"scripts": {
 		"build": "node build.mjs",
+		"env:start": "wp-env start",
+		"env:stop": "wp-env stop",
+		"test:php": "wp-env run cli --env-cwd=wp-content/plugins/custom-permalinks vendor/bin/phpunit",
 		"lint": "npm run lint:css && npm run lint:js",
 		"lint:fix": "npm run lint:css:fix && npm run lint:js:fix",
 		"lint:css": "stylelint '**/*.css'",
@@ -23,6 +26,7 @@
 		"lint:js:fix": "eslint . --fix"
 	},
 	"devDependencies": {
+		"@wordpress/env": "11.17.0",
 		"@wordpress/eslint-plugin": "27.1.0",
 		"@wordpress/stylelint-config": "26.1.0",
 		"esbuild": "0.28.2",
