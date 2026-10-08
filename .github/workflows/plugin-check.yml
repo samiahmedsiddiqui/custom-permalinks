@@ -20,6 +20,8 @@ jobs:
 
     permissions:
       contents: read
+      # Lets the action post its results as a PR comment.
+      pull-requests: write
 
     steps:
       # Check out into a subfolder so the action doesn't pick up the tests' .wp-env.json.
