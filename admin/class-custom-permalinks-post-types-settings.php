@@ -84,7 +84,15 @@ class Custom_Permalinks_Post_Types_Settings {
 				if ( isset( $saved_data['save_changes_flush_cache'] ) ) {
 					// Remove rewrite rules and then recreate rewrite rules.
 					flush_rewrite_rules();
-					wp_cache_flush_group( 'custom_permalinks' );
+
+					// Group flushing needs WP 6.1+ and a cache that supports it.
+					if ( function_exists( 'wp_cache_supports' ) && function_exists( 'wp_cache_flush_group' )
+						&& wp_cache_supports( 'flush_group' )
+					) {
+						wp_cache_flush_group( 'custom_permalinks' );
+					} else {
+						wp_cache_flush();
+					}
 
 					$notifications[] = __( 'Post Types Permalinks Settings are updated and cache cleared.', 'custom-permalinks' );
 				} else {

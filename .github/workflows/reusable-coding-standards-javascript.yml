@@ -1,7 +1,7 @@
 ##
 # A reusable workflow that checks the JavaScript coding standards.
 ##
-name: JavaScript coding standards
+name: JavaScript and CSS coding standards
 
 on:
   workflow_call:
@@ -10,10 +10,6 @@ jobs:
   eslint:
     name: Run coding standards checks
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
 
     permissions:
       contents: read
@@ -27,7 +23,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 24.x
           cache: 'npm'
 
       - name: Log debug information
@@ -39,8 +35,14 @@ jobs:
       - name: Install npm Dependencies
         run: npm ci
 
+      - name: Run Stylelint
+        run: npm run lint:css
+
       - name: Run ESLint
         run: npm run lint:js
+
+      - name: Build minified files
+        run: npm run build
 
       - name: Ensure version-controlled files are not modified or deleted
         run: git diff --exit-code

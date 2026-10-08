@@ -14,7 +14,7 @@ project.properties
 *.sublime-workspace
 .sublimelinterrc
 
-# Gulp
+# npm
 /node_modules/
 
 # OS X metadata

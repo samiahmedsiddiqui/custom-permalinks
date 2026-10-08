@@ -1,0 +1,41 @@
+name: Plugin Check
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  plugin-check:
+    name: Run Plugin Check
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      # Lets the action post its results as a PR comment.
+      pull-requests: write
+
+    steps:
+      # Check out into a subfolder so the action doesn't pick up the tests' .wp-env.json.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          path: source
+          show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
+
+      # Check what ships: the repository without the export-ignored files.
+      - name: Build the plugin
+        run: git -C source archive --format=tar --prefix=custom-permalinks/ HEAD | tar -x
+
+      - name: Run Plugin Check
+        uses: wordpress/plugin-check-action@v1
+        with:
+          build-dir: ./custom-permalinks
