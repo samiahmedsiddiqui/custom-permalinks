@@ -6,7 +6,7 @@
 	/**
 	 * Highlight buttons whose tags are used in the currently selected input field.
 	 *
-	 * @param {*} input
+	 * @param {HTMLInputElement} input Selected settings input field.
 	 */
 	function updateButtonStatesForInput(input) {
 		const value = input.value;
