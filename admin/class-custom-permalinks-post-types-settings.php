@@ -86,7 +86,9 @@ class Custom_Permalinks_Post_Types_Settings {
 					flush_rewrite_rules();
 
 					// Group flushing needs WP 6.1+ and a cache that supports it.
-					if ( function_exists( 'wp_cache_supports' ) && wp_cache_supports( 'flush_group' ) ) {
+					if ( function_exists( 'wp_cache_supports' ) && function_exists( 'wp_cache_flush_group' )
+						&& wp_cache_supports( 'flush_group' )
+					) {
 						wp_cache_flush_group( 'custom_permalinks' );
 					} else {
 						wp_cache_flush();
