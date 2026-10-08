@@ -3,6 +3,12 @@ name: Deploy to WordPress.org
 on:
   release:
     types: [ published ]
+  # Redeploys an existing release tag, e.g. after a failed run.
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to deploy (e.g. v3.3.0)'
+        required: true
 
 permissions: {}
 
@@ -11,22 +17,27 @@ jobs:
     name: Deploy release
     runs-on: ubuntu-latest
     # Pre-releases (e.g. v3.2.0-alpha) stay on GitHub only.
-    if: ${{ ! github.event.release.prerelease }}
+    if: ${{ github.event_name == 'workflow_dispatch' || ! github.event.release.prerelease }}
 
     permissions:
       # Lets the job attach the plugin zip to the release.
       contents: write
 
+    env:
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
         with:
+          ref: ${{ env.TAG }}
           show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
 
       # Stop before publishing if any version number disagrees with the tag.
       - name: Check version numbers
+        id: version
         run: |
-          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          TAG_VERSION="${TAG#v}"
           HEADER_VERSION=$(sed -n 's/^ \* Version: *//p' custom-permalinks.php)
           CLASS_VERSION=$(sed -n "s/^[[:space:]]*public \$version = '\(.*\)';/\1/p" includes/class-custom-permalinks.php)
           STABLE_TAG=$(sed -n 's/^Stable tag: *//p' readme.txt)
@@ -36,7 +47,7 @@ jobs:
 
           for version in "$HEADER_VERSION" "$CLASS_VERSION" "$STABLE_TAG" "$PACKAGE_VERSION"; do
             if [ "$version" != "$TAG_VERSION" ]; then
-              echo "::error::Version numbers don't match the tag $GITHUB_REF_NAME."
+              echo "::error::Version numbers don't match the tag $TAG."
               exit 1
             fi
           done
@@ -48,18 +59,21 @@ jobs:
             test -f "$file-$TAG_VERSION.min.css" || { echo "::error::Missing $file-$TAG_VERSION.min.css; run npm run build."; exit 1; }
           done
 
+          echo "version=$TAG_VERSION" >> "$GITHUB_OUTPUT"
+
       # Publishes the files `git archive` would ship, honoring .gitattributes export-ignore.
       - name: Deploy to WordPress.org
         id: deploy
-        uses: 10up/action-wordpress-plugin-deploy@v2
+        uses: 10up/action-wordpress-plugin-deploy@54bd289b8525fd23a5c365ec369185f2966529c2 # 2.3.0
         with:
           generate-zip: true
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
           SLUG: custom-permalinks
+          VERSION: ${{ steps.version.outputs.version }}
 
       - name: Attach the plugin zip to the release
-        run: gh release upload "$GITHUB_REF_NAME" "${{ steps.deploy.outputs.zip-path }}" --clobber
+        run: gh release upload "$TAG" "${{ steps.deploy.outputs.zip-path }}" --clobber
         env:
           GH_TOKEN: ${{ github.token }}
