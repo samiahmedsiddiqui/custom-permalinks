@@ -56,6 +56,14 @@ class Custom_Permalinks_Frontend {
 	public static $skip_url_to_postid = false;
 
 	/**
+	 * Return links unchanged from the custom link filters when `true`, while
+	 * the original links are built.
+	 *
+	 * @var bool
+	 */
+	private static $skip_custom_links = false;
+
+	/**
 	 * Initialize WordPress Hooks.
 	 *
 	 * @since 1.2.0
@@ -1114,6 +1122,10 @@ class Custom_Permalinks_Frontend {
 	 * @return string customized Post Permalink.
 	 */
 	public function custom_post_link( $permalink, $post ) {
+		if ( self::$skip_custom_links ) {
+			return $permalink;
+		}
+
 		$post_type = 'post';
 		if ( isset( $post->post_type ) ) {
 			$post_type = $post->post_type;
@@ -1171,6 +1183,10 @@ class Custom_Permalinks_Frontend {
 	 * @return string customized Page Permalink.
 	 */
 	public function custom_page_link( $permalink, $page ) {
+		if ( self::$skip_custom_links ) {
+			return $permalink;
+		}
+
 		list( $page, $custom_permalink ) = $this->wpml_translated_permalink(
 			$page,
 			'page'
@@ -1360,6 +1376,10 @@ class Custom_Permalinks_Frontend {
 	 * @return string customized Term Permalink.
 	 */
 	public function custom_term_link( $permalink, $term ) {
+		if ( self::$skip_custom_links ) {
+			return $permalink;
+		}
+
 		if ( isset( $term ) ) {
 			$custom_permalink = '';
 			if ( isset( $term->term_id ) ) {
@@ -1416,8 +1436,8 @@ class Custom_Permalinks_Frontend {
 	}
 
 	/**
-	 * Remove the post_link and user_trailingslashit filter to get the original
-	 * permalink of the default and custom post type and apply right after that.
+	 * Get the original permalink of the default and custom post types, without
+	 * the custom permalink filters.
 	 *
 	 * @access public
 	 *
@@ -1426,8 +1446,8 @@ class Custom_Permalinks_Frontend {
 	 * @return string Original Permalink for Posts.
 	 */
 	public function original_post_link( $post_id ) {
-		remove_filter( 'post_link', array( $this, 'custom_post_link' ) );
-		remove_filter( 'post_type_link', array( $this, 'custom_post_link' ) );
+		$skip_custom_links       = self::$skip_custom_links;
+		self::$skip_custom_links = true;
 
 		$post_file_path = ABSPATH . '/wp-admin/includes/post.php';
 		include_once $post_file_path;
@@ -1440,15 +1460,14 @@ class Custom_Permalinks_Frontend {
 		);
 		$permalink                     = ltrim( str_replace( home_url(), '', $permalink ), '/' );
 
-		add_filter( 'post_link', array( $this, 'custom_post_link' ), 10, 2 );
-		add_filter( 'post_type_link', array( $this, 'custom_post_link' ), 10, 2 );
+		self::$skip_custom_links = $skip_custom_links;
 
 		return $permalink;
 	}
 
 	/**
-	 * Remove the page_link and user_trailingslashit filter to get the original
-	 * permalink of the page and apply right after that.
+	 * Get the original permalink of the page, without the custom permalink
+	 * filters.
 	 *
 	 * @access public
 	 *
@@ -1457,11 +1476,8 @@ class Custom_Permalinks_Frontend {
 	 * @return string Original Permalink for the Page.
 	 */
 	public function original_page_link( $post_id ) {
-		remove_filter( 'page_link', array( $this, 'custom_page_link' ) );
-		remove_filter(
-			'user_trailingslashit',
-			array( $this, 'custom_trailingslash' )
-		);
+		$skip_custom_links       = self::$skip_custom_links;
+		self::$skip_custom_links = true;
 
 		$post_file_path = ABSPATH . '/wp-admin/includes/post.php';
 		include_once $post_file_path;
@@ -1474,15 +1490,14 @@ class Custom_Permalinks_Frontend {
 		);
 		$permalink                     = ltrim( str_replace( home_url(), '', $permalink ), '/' );
 
-		add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
-		add_filter( 'page_link', array( $this, 'custom_page_link' ), 10, 2 );
+		self::$skip_custom_links = $skip_custom_links;
 
 		return $permalink;
 	}
 
 	/**
-	 * Remove the term_link and user_trailingslashit filter to get the original
-	 * permalink of the Term and apply right after that.
+	 * Get the original permalink of the term, without the custom permalink
+	 * filters.
 	 *
 	 * @since 1.6.0
 	 * @access public
@@ -1492,17 +1507,13 @@ class Custom_Permalinks_Frontend {
 	 * @return string Original Permalink for Posts.
 	 */
 	public function original_term_link( $term_id ) {
-		remove_filter( 'term_link', array( $this, 'custom_term_link' ) );
-		remove_filter(
-			'user_trailingslashit',
-			array( $this, 'custom_trailingslash' )
-		);
+		$skip_custom_links       = self::$skip_custom_links;
+		self::$skip_custom_links = true;
 
 		$term      = get_term( $term_id );
 		$term_link = get_term_link( $term );
 
-		add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
-		add_filter( 'term_link', array( $this, 'custom_term_link' ), 10, 2 );
+		self::$skip_custom_links = $skip_custom_links;
 
 		if ( is_wp_error( $term_link ) ) {
 			return '';
@@ -1523,6 +1534,10 @@ class Custom_Permalinks_Frontend {
 	 * @return string Adds/removes a trailing slash based on the permalink structure.
 	 */
 	public function custom_trailingslash( $url_string ) {
+		if ( self::$skip_custom_links ) {
+			return $url_string;
+		}
+
 		remove_filter(
 			'user_trailingslashit',
 			array( $this, 'custom_trailingslash' )
