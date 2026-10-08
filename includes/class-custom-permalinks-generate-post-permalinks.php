@@ -355,7 +355,7 @@ final class Custom_Permalinks_Generate_Post_Permalinks {
 				if ( ! empty( $parents ) ) {
 					$reversed_parents = array_reverse( $parents );
 					$parents_slugs    = array_map(
-						function ( $pid ) {
+						function ( $pid ) use ( $name ) {
 							$term      = get_term( $pid );
 							$term_slug = '';
 

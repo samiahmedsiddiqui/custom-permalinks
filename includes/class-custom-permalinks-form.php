@@ -55,9 +55,9 @@ class Custom_Permalinks_Form {
 		add_action( 'category_edit_form', array( $this, 'term_options' ) );
 		add_action( 'post_tag_add_form', array( $this, 'term_options' ) );
 		add_action( 'post_tag_edit_form', array( $this, 'term_options' ) );
-		add_action( 'created_term', array( $this, 'save_term' ), 10, 3 );
-		add_action( 'edited_term', array( $this, 'save_term' ), 10, 3 );
-		add_action( 'delete_term', array( $this, 'delete_term_permalink' ), 10, 3 );
+		add_action( 'created_term', array( $this, 'save_term' ) );
+		add_action( 'edited_term', array( $this, 'save_term' ) );
+		add_action( 'delete_term', array( $this, 'delete_term_permalink' ) );
 		add_action( 'rest_api_init', array( $this, 'rest_edit_form' ) );
 		add_action(
 			'update_option_page_on_front',
@@ -277,7 +277,14 @@ class Custom_Permalinks_Form {
 		$permalink = preg_replace( '|---([a-fA-F0-9][a-fA-F0-9])---|', '%$1', $permalink );
 
 		if ( preg_match( '/^en(?:[-_]|$)/', $language_code ) ) {
-			if ( seems_utf8( $permalink ) ) {
+			if ( function_exists( 'wp_is_valid_utf8' ) ) {
+				$is_utf8 = wp_is_valid_utf8( $permalink );
+			} else {
+				// phpcs:ignore WordPress.WP.DeprecatedFunctions.seems_utf8Found -- Fallback for WP < 6.9.
+				$is_utf8 = seems_utf8( $permalink );
+			}
+
+			if ( $is_utf8 ) {
 				if ( ! $allow_accents ) {
 					if ( function_exists( 'mb_strtolower' ) ) {
 						if ( ! $allow_caps ) {
@@ -843,7 +850,7 @@ class Custom_Permalinks_Form {
 	 *
 	 * @param object $post WP Post Object.
 	 *
-	 * @return void.
+	 * @return void
 	 */
 	private function get_permalink_meta_html( $post ) {
 		$cp_frontend = new Custom_Permalinks_Frontend();
@@ -977,7 +984,7 @@ class Custom_Permalinks_Form {
 			echo '<input value="add" type="hidden" name="custom-permalinks-add" id="custom-permalinks-add" />';
 		}
 
-		$this->get_permalink_meta_html( $post, true );
+		$this->get_permalink_meta_html( $post );
 	}
 
 	/**
