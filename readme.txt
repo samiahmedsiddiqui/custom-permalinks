@@ -3,8 +3,8 @@ Contributors: sasiddiqui
 Tags: permalink, custom url, slug, redirect, seo
 Requires at least: 5.0
 Requires PHP: 7.0
-Tested up to: 7.2
-Stable tag: 3.2.1
+Tested up to: 7.1
+Stable tag: 3.3.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -168,7 +168,7 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
 
 == Changelog ==
 
-= 3.3.0 - Unreleased =
+= 3.3.0 - Oct 8, 2026 =
 
 **Changes to be aware of:**
   * Translations now come from [translate.wordpress.org](https://translate.wordpress.org/projects/wp-plugins/custom-permalinks/) instead of files bundled with the plugin. It covers every bundled language and adds Serbian. Sites that installed the plugin outside wordpress.org, or turned off automatic translation updates, show English until the language pack is installed from Dashboard â†’ Updates.
