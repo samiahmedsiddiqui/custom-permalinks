@@ -50,7 +50,7 @@ body:
     attributes:
       label: Multilingual plugin
       options:
-        - None
+        - No multilingual plugin
         - WPML
         - Polylang
         - Other
