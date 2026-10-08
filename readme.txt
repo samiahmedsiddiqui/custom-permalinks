@@ -145,23 +145,39 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
 
 == Changelog ==
 
-= 3.2.2 - Unreleased =
+= 3.3.0 - Unreleased =
 
-* Bug:
-  * Fixed WPML translations returning [another language's custom permalink](https://wordpress.org/support/topic/no-input-field-in-the-metabox-for-a-wpml-translation/) depending on the active (admin) language, which listed wrong URLs in Post Types Permalinks and in SEO plugins' indexables and XML sitemaps (e.g. Yoast SEO).
-  * Fixed English custom permalinks not being lowercased and cleaned of special characters with WPML 5.0's region-based language codes (e.g. `en-us`).
-  * Fixed [Post Types and Taxonomies Permalinks pagination](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/101) showing the first page's results on every page, ignoring sorting and search, when a persistent object cache (e.g. Redis or Memcached) is enabled. The lists now also refresh right after a permalink is added, changed or deleted.
-  * Fixed the [WPML language switcher](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/98) linking back to the current language instead of the translation when languages are in directories (e.g. `/en/`, `/de/`) and the translation uses the same custom permalink.
-  * Fixed [comment links](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/80) on paginated comments (e.g. `/my-post/comment-page-2/`) not following the custom permalink's trailing slash, so a custom permalink without a trailing slash no longer gets comment URLs with one, and vice versa.
-  * Fixed [Polylang translations sharing the same custom permalink](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/64) (e.g. `/en/technology` and `/zh/technology`) redirecting to the other language when the translation's stored language was missing or out of date.
+**Changes to be aware of:**
+  * Translations now come from [translate.wordpress.org](https://translate.wordpress.org/projects/wp-plugins/custom-permalinks/) instead of files bundled with the plugin. It covers every bundled language and adds Serbian. Sites that installed the plugin outside wordpress.org, or turned off automatic translation updates, show English until the language pack is installed from Dashboard â†’ Updates.
+  * WPML translations now always resolve to their own custom permalink. Previously they returned [another language's custom permalink](https://wordpress.org/support/topic/no-input-field-in-the-metabox-for-a-wpml-translation/) depending on the active (admin) language, which listed wrong URLs in Post Types Permalinks and in SEO plugins' indexables and XML sitemaps (e.g. Yoast SEO).
+  * `%ctax_parents_TAXONOMY_NAME_name%` now uses the parent terms' names, as documented, instead of their slugs. Permalinks generated from now on change where a parent term's name differs from its slug; saved permalinks are not changed.
+
+**Redirects and URLs:**
   * Fixed [custom permalinks in non-Latin scripts](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/61) (e.g. Thai, Arabic, Cyrillic) returning a 404 or redirecting in an infinite loop, as the browser requests them percent-encoded while they are saved unencoded (or vice versa, depending on the site language).
-  * Fixed WPML language directories that differ from the language code (e.g. `/de-de/` for `de`, as in WPML 5.0) not being repaired when duplicated, and the default language getting its directory added to a permalink when "hide the default language directory" is on.
   * Fixed the trailing-slash redirect and the redirect to the custom permalink dropping the page number (e.g. `/news/page/2` redirected to `/news/` instead of `/news/page/2/`).
-  * Fixed the original permalink resolving to the custom permalink when looked up while saving a post or term, in the edit screen's permalink box and in the block editor, which also left extra link filters running for the rest of the request.
-
-* Enhancement:
   * Added the `custom_permalinks_disable_remove_page_number` filter to keep the `/page/{number}` segment in the requested URL, for [custom archive pages whose pagination doesn't advance](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/110).
-  * Removed the bundled translations; WordPress now loads the plugin's translations from [translate.wordpress.org](https://translate.wordpress.org/projects/wp-plugins/custom-permalinks/), which covers every bundled language and adds Serbian.
+  * Fixed the [query string being corrupted](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/82) (e.g. `foo=bar` became `http://foo=bar`) after a custom permalink was resolved.
+  * Fixed [comment links](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/80) on paginated comments (e.g. `/my-post/comment-page-2/`) not following the custom permalink's trailing slash, so a custom permalink without a trailing slash no longer gets comment URLs with one, and vice versa.
+
+**WPML and Polylang:**
+  * Fixed the [WPML language switcher](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/98) linking back to the current language instead of the translation when languages are in directories (e.g. `/en/`, `/de/`) and the translation uses the same custom permalink.
+  * Fixed WPML language directories that differ from the language code (e.g. `/de-de/` for `de`, as in WPML 5.0) not being repaired when duplicated, and the default language getting its directory added to a permalink when "hide the default language directory" is on.
+  * Fixed English custom permalinks not being lowercased and cleaned of special characters with WPML 5.0's region-based language codes (e.g. `en-us`).
+  * Fixed [Polylang translations sharing the same custom permalink](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/64) (e.g. `/en/technology` and `/zh/technology`) redirecting to the other language when the translation's stored language was missing or out of date.
+
+**Admin screens:**
+  * Fixed [Post Types and Taxonomies Permalinks pagination](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/101) showing the first page's results on every page, ignoring sorting and search, when a persistent object cache (e.g. Redis or Memcached) is enabled. The lists now also refresh right after a permalink is added, changed or deleted.
+  * Fixed [bulk delete and search](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/75) in Post Types and Taxonomies Permalinks failing with a "headers already sent" warning instead of redirecting.
+  * Fixed short titles and permalinks being padded with leading spaces in the [Post Types and Taxonomies Permalinks lists](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/77).
+  * Fixed every post of a type showing and saving the same custom permalink when a theme or plugin runs a custom loop in the admin without resetting the global post.
+  * Fixed the original permalink showing as the custom permalink in the edit screen's permalink box and in the block editor, and being compared against when saving a post or term.
+  * Fixed a fatal error on WordPress 5.0 to 6.0 when saving the Post Types Permalinks settings with the cache flush option, as `wp_cache_flush_group()` needs WordPress 6.1. Object caches that can't flush a single group now get a full cache flush.
+  * Fixed the "Custom Permalinks Manager" role name not being translatable.
+
+**Compatibility:**
+  * Fixed WooCommerce notices about accessing order data directly on order screens, as the permalink form read post fields from the `WC_Order` object.
+  * Fixed posts updated by WP All Import being handled as new posts, which turned permalink regeneration back on and could replace their custom permalink with the post type's structure.
+  * Fixed the `seems_utf8()` deprecation notice on WordPress 6.9 and later.
 
 = 3.2.1 - Oct 1, 2026 =
 
@@ -200,6 +216,9 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
   * For the changelog of earlier versions, please refer to the separate changelog.txt file.
 
 == Upgrade Notice ==
+
+= 3.3.0 =
+Recommended update: fixes non-Latin permalinks returning 404s or redirect loops, WPML and Polylang permalink issues, admin list pagination with object caches, and a fatal error on WordPress 5.0 to 6.0. Translations now load from translate.wordpress.org.
 
 = 3.2.1 =
 Recommended update: fixes redirects dropping the query string (e.g. UTM parameters) and an infinite loop that could exhaust server memory when saving a permalink nested under another custom permalink.

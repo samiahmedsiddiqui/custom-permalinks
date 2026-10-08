@@ -152,7 +152,7 @@ class Custom_Permalinks_Frontend {
 		/**
 		 * Keep the trailing /page/{number} segment in the requested URL.
 		 *
-		 * @since 3.2.2
+		 * @since 3.3.0
 		 *
 		 * @param bool   $disable Whether to keep the pagination segment. Default false.
 		 * @param string $url     URL that may contain a pagination segment.
@@ -183,7 +183,7 @@ class Custom_Permalinks_Frontend {
 	/**
 	 * Appends the /page/{number} segment removed by `remove_page_number()`.
 	 *
-	 * @since 3.2.2
+	 * @since 3.3.0
 	 *
 	 * @param string $url URL without the pagination segment.
 	 *
@@ -262,7 +262,7 @@ class Custom_Permalinks_Frontend {
 	 * Get the URL directory WPML serves a language under, which can differ
 	 * from its code (e.g. `de-de` for `de`).
 	 *
-	 * @since 3.2.2
+	 * @since 3.3.0
 	 * @access private
 	 *
 	 * @param string $language_code WPML language code.
@@ -459,7 +459,7 @@ class Custom_Permalinks_Frontend {
 	/**
 	 * Get a post's language from WPML/Polylang, falling back to the stored meta.
 	 *
-	 * @since 3.2.2
+	 * @since 3.3.0
 	 * @access private
 	 *
 	 * @param int    $post_id   Post ID.
@@ -1232,7 +1232,7 @@ class Custom_Permalinks_Frontend {
 	 * Match the comment page segment's trailing slash to the post's custom
 	 * permalink.
 	 *
-	 * @since 3.2.2
+	 * @since 3.3.0
 	 * @access private
 	 *
 	 * @param string $url  Comment URL.
@@ -1266,7 +1266,7 @@ class Custom_Permalinks_Frontend {
 	/**
 	 * Filter to keep the comment link in line with the custom permalink.
 	 *
-	 * @since 3.2.2
+	 * @since 3.3.0
 	 * @access public
 	 *
 	 * @param string     $comment_link The comment permalink.
@@ -1289,7 +1289,7 @@ class Custom_Permalinks_Frontend {
 	 * Filter to keep the comments pagination link in line with the custom
 	 * permalink.
 	 *
-	 * @since 3.2.2
+	 * @since 3.3.0
 	 * @access public
 	 *
 	 * @param string $result The comments page link.
