@@ -2,6 +2,38 @@
 
 This file contains only old changelog. See readme.txt for newer versions.
 
+= 3.2.1 - Oct 1, 2026 =
+
+* Bug:
+  * Fixed the trailing-slash redirect added in 3.2.0 [dropping the query string](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/159) (e.g. `/page?utm_source=x` redirected to `/page/` instead of `/page/?utm_source=x`), which broke [campaign tracking](https://wordpress.org/support/topic/3-2-0-affect-on-redirect-query-strings/), AJAX endpoints, search and other requests relying on GET parameters.
+  * Custom Permalinks redirects now send no-cache headers, so hosts and proxies don't cache a redirect and serve it, along with another visitor's query string (e.g. UTM parameters), to later visitors.
+  * Fixed an [infinite loop exhausting server memory](https://wordpress.org/support/topic/critical-bug-infinite-loop-causes-memory-crash-2gb-ram-on-parent-child-slug/) when saving a post whose custom permalink is nested under another post's custom permalink (e.g. `example/child-post/` under `example/`).
+
+= 3.2.0 - Aug 20, 2026 =
+
+**Permalink Generation:**
+  * Added support for name-based custom taxonomy permalink tags:
+		* `%ctax_TAXONOMY_NAME_name%`
+		* `%ctax_parent_TAXONOMY_NAME_name%`
+		* `%ctax_parents_TAXONOMY_NAME_name%`
+	* Use multiple custom taxonomies tags at the same time in permalink
+	* Updated documentation to describe the new tags and clarify the difference between slug-based and name-based taxonomy tags.
+
+* Bug:
+  * Fixed a PHP warning ("Attempt to read property 'term_id' on null") on tag/category archive pages in some setups. [PR #138](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/138)
+  * Fixed an ["Undefined array key `_custom_permalinks_term_nonce`"](https://wordpress.org/support/topic/undefined-array-key-_custom_permalinks_term_nonce-2/) warning when saving a category or tag without touching its Custom Permalink field.
+  * Fixed the auto-generated slug silently failing to save on posts that didn't yet have a `post_name`, when a permalink structure was set to auto-generate permalinks. [PR #148](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/148)
+  * Fixed `%parent_postname%` and `%parents_postnames%` silently dropping the post's own slug from the generated permalink when used without also including `%postname%` in the structure. [PR #149](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/149)
+  * Fixed [WPML internal links pointing to the original page](https://wpml.org/errata/custom-permalinks-internal-links-point-to-original-pages/) instead of the translated page's own custom permalink (e.g. links created with the Gutenberg link tool).
+  * Fixed custom permalinks getting overwritten with another product's permalink when [bulk editing multiple products/posts](https://wordpress.org/support/topic/bulk-edit-in-all-products/) in a single request.
+  * Fixed the language directory getting duplicated (e.g. `/de/de/your-slug/`) in permalinks generated for [WPML directory-based language negotiation](https://wordpress.org/support/topic/rest-api-json-errors-wpml-directory-duplication-de-de/), and hardened the WPML permalink filter against a non-string return value that could corrupt the REST API's JSON response when saving a post from the Block Editor.
+  * Fixed a stale permalink cache entry for permalinks with a trailing slash, which could cause a newly saved custom permalink to 404 until the cache expired. [PR #153](https://github.com/samiahmedsiddiqui/custom-permalinks/pull/153)
+  * Fixed [translated pages resolving to the wrong language's post](https://wordpress.org/support/topic/redirection-to-english-pages-instead-of-french-ones/) (wrong-language redirects, 404s on a translation, editor opening the wrong translation) when two WPML/Polylang translations shared the same custom permalink outside of "different domain per language" mode.
+  * Fixed [WooCommerce My Account endpoints (e.g. edit-address, edit-account) redirecting back to the base My Account page](https://wordpress.org/support/topic/woocommerce-my-account-page-redirection/) instead of loading, when the My Account page has a custom permalink set.
+  * Fixed [emptying the Custom Permalink field and saving not removing the saved permalink](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/100).
+  * Fixed a request that only differed from the saved permalink by a trailing slash failing to resolve — it now redirects to the canonical permalink instead.
+  * Fixed the trailing-slash redirect ignoring the `custom_permalinks_avoid_redirect` filter, which could still break page builders' front-end preview iframes (e.g. [Cornerstone](https://wordpress.org/support/topic/conflict-with-the-cornerstone-page-builder/)) after applying the documented workaround.
+
 = 3.1.2 - Sep 24, 2025 =
 
 * Bug:
