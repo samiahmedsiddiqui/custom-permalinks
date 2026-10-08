@@ -43,9 +43,9 @@
 			</properties>
 		</rule>
 
-		<!-- Check for cross-version support for PHP 7.0 and higher. -->
-    <config name="testVersion" value="7.0-"/>
+		<!-- Check for cross-version support for PHP 7.4 and higher. -->
+    <config name="testVersion" value="7.4-"/>
 
     <!-- Minimum WordPress version the plugin supports. -->
-    <config name="minimum_wp_version" value="5.0"/>
+    <config name="minimum_wp_version" value="5.9"/>
 </ruleset>

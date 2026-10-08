@@ -2,7 +2,7 @@ parameters:
 	level: 5
 	treatPhpDocTypesAsCertain: false
 	phpVersion:
-		min: 70100
+		min: 70400
 		max: 80599
 	paths:
 		- custom-permalinks.php
