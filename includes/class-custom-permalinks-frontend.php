@@ -694,9 +694,7 @@ class Custom_Permalinks_Frontend {
 			}
 		}
 
-		if ( null === $original_url
-			|| ( null !== $original_url && ! $permalink_matched )
-		) {
+		if ( null === $original_url || ! $permalink_matched ) {
 			// See if any terms have a matching permalink.
 			$table = get_option( 'custom_permalink_table' );
 			if ( $table ) {
@@ -808,7 +806,7 @@ class Custom_Permalinks_Frontend {
 				parse_str( wp_unslash( $_SERVER['QUERY_STRING'] ), $query_array );
 			}
 
-			if ( is_array( $query_array ) && count( $query_array ) > 0 ) {
+			if ( ! empty( $query_array ) ) {
 				foreach ( $query_array as $key => $value ) {
 					$old_values[ $key ] = '';
 					// phpcs:disable WordPress.Security.NonceVerification.Recommended
@@ -1569,7 +1567,7 @@ class Custom_Permalinks_Frontend {
 	 *
 	 * @param int $term_id Term id.
 	 *
-	 * @return bool Term link.
+	 * @return string|false Term link, or false if the term has no custom permalink.
 	 */
 	public function term_permalink( $term_id ) {
 		$table = get_option( 'custom_permalink_table' );

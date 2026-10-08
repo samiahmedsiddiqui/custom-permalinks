@@ -269,7 +269,7 @@ final class Custom_Permalinks_Generate_Post_Permalinks {
 	 * @param WP_Term $a First term object.
 	 * @param WP_Term $b Second term object.
 	 *
-	 * @return bool
+	 * @return int
 	 */
 	private function usort_term_comparison( $a, $b ) {
 		return $a->term_id - $b->term_id;
