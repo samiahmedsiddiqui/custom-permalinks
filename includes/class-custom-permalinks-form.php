@@ -85,7 +85,7 @@ class Custom_Permalinks_Form {
 	/**
 	 * Clear the admin permalink list cache when a post permalink changes.
 	 *
-	 * @since 3.2.2
+	 * @since 3.3.0
 	 * @access public
 	 *
 	 * @param int|array $meta_id   Meta ID(s).
@@ -103,7 +103,7 @@ class Custom_Permalinks_Form {
 	/**
 	 * Invalidate the cached admin permalink lists.
 	 *
-	 * @since 3.2.2
+	 * @since 3.3.0
 	 * @access public
 	 *
 	 * @return void

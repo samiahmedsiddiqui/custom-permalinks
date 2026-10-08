@@ -16,7 +16,7 @@ final class Custom_Permalinks_Taxonomies {
 	/**
 	 * Build a cache key from the list query and the last permalink change.
 	 *
-	 * @since 3.2.2
+	 * @since 3.3.0
 	 * @access private
 	 *
 	 * @param string $name Cache name.
