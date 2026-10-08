@@ -460,7 +460,7 @@ composer install
 | --- | --- |
 | `npm run build` | Minifies `assets/css/src` and `assets/js/src` into versioned `.min` files. Commit the result; CI checks it's up to date. |
 | `npm run lint` | Runs Stylelint and ESLint. |
-| `composer lint` | Runs PHP_CodeSniffer with the WordPress Coding Standards and PHP 7.0+ compatibility checks. |
+| `composer lint` | Runs PHP_CodeSniffer with the WordPress Coding Standards and PHP 7.4+ compatibility checks. |
 | `composer analyse` | Runs PHPStan. |
 | `npm run env:start` | Starts WordPress in Docker with [`@wordpress/env`](https://www.npmjs.com/package/@wordpress/env). |
 | `npm run test:php` | Runs the PHPUnit integration tests in that environment. |

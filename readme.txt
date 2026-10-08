@@ -1,10 +1,10 @@
 === Custom Permalinks ===
 Contributors: sasiddiqui
 Tags: permalink, custom url, slug, redirect, seo
-Requires at least: 5.0
-Requires PHP: 7.0
-Tested up to: 7.2
-Stable tag: 3.2.1
+Requires at least: 5.9
+Requires PHP: 7.4
+Tested up to: 7.1
+Stable tag: 3.3.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -168,9 +168,10 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
 
 == Changelog ==
 
-= 3.3.0 - Unreleased =
+= 3.3.0 - Oct 8, 2026 =
 
 **Changes to be aware of:**
+  * Requires WordPress 5.9 and PHP 7.4 or later, the oldest versions the plugin is now tested on. Sites on older versions keep 3.2.1.
   * Translations now come from [translate.wordpress.org](https://translate.wordpress.org/projects/wp-plugins/custom-permalinks/) instead of files bundled with the plugin. It covers every bundled language and adds Serbian. Sites that installed the plugin outside wordpress.org, or turned off automatic translation updates, show English until the language pack is installed from Dashboard â†’ Updates.
   * WPML translations now always resolve to their own custom permalink. Previously they returned [another language's custom permalink](https://wordpress.org/support/topic/no-input-field-in-the-metabox-for-a-wpml-translation/) depending on the active (admin) language, which listed wrong URLs in Post Types Permalinks and in SEO plugins' indexables and XML sitemaps (e.g. Yoast SEO).
   * `%ctax_parents_TAXONOMY_NAME_name%` now uses the parent terms' names, as documented, instead of their slugs. Permalinks generated from now on change where a parent term's name differs from its slug; saved permalinks are not changed.
@@ -194,7 +195,7 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
   * Fixed short titles and permalinks being padded with leading spaces in the [Post Types and Taxonomies Permalinks lists](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/77).
   * Fixed every post of a type showing and saving the same custom permalink when a theme or plugin runs a custom loop in the admin without resetting the global post.
   * Fixed the original permalink showing as the custom permalink in the edit screen's permalink box and in the block editor, and being compared against when saving a post or term.
-  * Fixed a fatal error on WordPress 5.0 to 6.0 when saving the Post Types Permalinks settings with the cache flush option, as `wp_cache_flush_group()` needs WordPress 6.1. Object caches that can't flush a single group now get a full cache flush.
+  * Fixed a fatal error on WordPress 5.9 and 6.0 when saving the Post Types Permalinks settings with the cache flush option, as `wp_cache_flush_group()` needs WordPress 6.1. Object caches that can't flush a single group now get a full cache flush.
   * Fixed the "Custom Permalinks Manager" role name not being translatable.
   * Fixed Post Types Settings showing the WordPress address instead of the site address before each structure, which is wrong when WordPress is installed in a subdirectory.
 
@@ -210,7 +211,7 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
 == Upgrade Notice ==
 
 = 3.3.0 =
-Recommended update: fixes non-Latin permalinks returning 404s or redirect loops, WPML and Polylang permalink issues, admin list pagination with object caches, and a fatal error on WordPress 5.0 to 6.0. Translations now load from translate.wordpress.org.
+Recommended update: fixes non-Latin permalinks returning 404s or redirect loops, WPML and Polylang permalink issues, admin list pagination with object caches, and a fatal error on WordPress 6.0. Requires WordPress 5.9 and PHP 7.4.
 
 = 3.2.1 =
 Recommended update: fixes redirects dropping the query string (e.g. UTM parameters) and an infinite loop that could exhaust server memory when saving a permalink nested under another custom permalink.
