@@ -364,8 +364,8 @@ class Custom_Permalinks_Frontend {
 	 *
 	 * @param string $requested_url Requested URL.
 	 *
-	 * @return object|null Containing Post ID, Permalink, Post Type, and Post status
-	 *                     if URL matched otherwise returns null.
+	 * @return object[]|null Rows containing Post ID, Permalink, Post Type, and Post
+	 *                       status if URL matched otherwise returns null.
 	 */
 	private function query_post_current_language( $requested_url ) {
 		$current_language = $this->current_language();
@@ -396,8 +396,8 @@ class Custom_Permalinks_Frontend {
 	 *
 	 * @param string $requested_url Requested URL.
 	 *
-	 * @return object|null Containing Post ID, Permalink, Post Type, and Post status
-	 *                     if URL matched otherwise returns null.
+	 * @return object[]|null Rows containing Post ID, Permalink, Post Type, and Post
+	 *                       status if URL matched otherwise returns null.
 	 */
 	private function query_post( $requested_url ) {
 		global $wpdb;
@@ -491,8 +491,8 @@ class Custom_Permalinks_Frontend {
 	 * @param string $requested_url Requested URL.
 	 * @param string $language_code Language code.
 	 *
-	 * @return object|null Containing Post ID, Permalink, Post Type, and Post status
-	 *                     if URL matched otherwise returns null.
+	 * @return object[]|null Rows containing Post ID, Permalink, Post Type, and Post
+	 *                       status if URL matched otherwise returns null.
 	 */
 	private function query_post_language( $requested_url, $language_code = null ) {
 		global $wpdb;
@@ -1363,6 +1363,7 @@ class Custom_Permalinks_Frontend {
 	 */
 	public function custom_term_link( $permalink, $term ) {
 		if ( isset( $term ) ) {
+			$custom_permalink = '';
 			if ( isset( $term->term_id ) ) {
 				$custom_permalink = $this->term_permalink( $term->term_id );
 			}
@@ -1441,7 +1442,7 @@ class Custom_Permalinks_Frontend {
 		);
 		$permalink                     = ltrim( str_replace( home_url(), '', $permalink ), '/' );
 
-		add_filter( 'post_link', array( $this, 'custom_post_link' ), 10, 3 );
+		add_filter( 'post_link', array( $this, 'custom_post_link' ), 10, 2 );
 		add_filter( 'post_type_link', array( $this, 'custom_post_link' ), 10, 2 );
 
 		return $permalink;
