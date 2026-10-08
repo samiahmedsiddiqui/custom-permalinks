@@ -54,7 +54,6 @@
 		document.getElementById('custom_permalink').value =
 			setPermlinks.custom_permalink;
 		if (setPermlinks.custom_permalink === '') {
-			// eslint-disable-next-line camelcase
 			setPermlinks.custom_permalink = setPermlinks.original_permalink;
 		}
 
