@@ -1,5 +1,6 @@
 parameters:
-	level: 2
+	level: 5
+	treatPhpDocTypesAsCertain: false
 	phpVersion:
 		min: 70100
 		max: 80599
@@ -11,8 +12,9 @@ parameters:
 	bootstrapFiles:
 		- .phpstan/bootstrap.php
 	ignoreErrors:
-		# Defensive checks on values WordPress may pass as null.
-		- identifier: isset.variable
+		# Defensive checks on values WordPress or other plugins may pass as null.
+		- identifier: isset.property
+		- identifier: isset.offset
 		# Singleton instance() used as a load-{page} callback.
 		-
 			identifier: return.void

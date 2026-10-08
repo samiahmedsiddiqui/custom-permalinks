@@ -710,7 +710,7 @@ class Custom_Permalinks_Form {
 	 *
 	 * @param int              $post_id   The ID of the item (post/user/taxonomy) saved or updated.
 	 * @param SimpleXMLElement $xml_node  The libxml resource of the current XML element.
-	 * @param bool             $is_update Returns 0 for new item 1 for updated item.
+	 * @param int|bool         $is_update Returns 0 for new item 1 for updated item.
 	 *
 	 * @return void
 	 */
@@ -718,7 +718,7 @@ class Custom_Permalinks_Form {
 		$post = get_post( $post_id );
 		if ( is_object( $post ) && isset( $post->post_type ) ) {
 			$updated = false;
-			if ( 1 === $is_update ) {
+			if ( $is_update ) {
 				$updated = true;
 			}
 
@@ -1157,7 +1157,7 @@ class Custom_Permalinks_Form {
 	 * @since 1.6.0
 	 * @access public
 	 *
-	 * @param string $term_id Term ID.
+	 * @param int $term_id Term ID.
 	 *
 	 * @return void
 	 */
@@ -1198,7 +1198,7 @@ class Custom_Permalinks_Form {
 				// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				// phpcs:enable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 
-				if ( empty( $new_permalink ) || '' === $new_permalink ) {
+				if ( empty( $new_permalink ) ) {
 					return;
 				}
 
@@ -1283,7 +1283,7 @@ class Custom_Permalinks_Form {
 	 */
 	public function check_conflicts( $requested_url = '' ) {
 		if ( '' === $requested_url ) {
-			return;
+			return $requested_url;
 		}
 
 		// Check if the Polylang Plugin is installed so, make changes in the URL.

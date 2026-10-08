@@ -20,7 +20,7 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	/**
 	 * Singleton instance variable
 	 *
-	 * @var object
+	 * @var Custom_Permalinks_Post_Types_Table|null
 	 */
 	private static $instance;
 
@@ -444,9 +444,9 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 
 		$this->set_pagination_args(
 			array(
-				'total_items' => $total_items,
+				'total_items' => (int) $total_items,
 				'per_page'    => $per_page,
-				'total_pages' => ceil( $total_items / $per_page ),
+				'total_pages' => (int) ceil( $total_items / $per_page ),
 			)
 		);
 	}

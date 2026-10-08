@@ -38,8 +38,8 @@ final class Custom_Permalinks_Taxonomies {
 	 * @since 1.2.0
 	 * @access public
 	 *
-	 * @param int $comp1 Value 1.
-	 * @param int $comp2 Value 2.
+	 * @param array $comp1 Value 1.
+	 * @param array $comp2 Value 2.
 	 *
 	 * @return int
 	 */
