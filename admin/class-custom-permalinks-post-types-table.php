@@ -218,9 +218,13 @@ final class Custom_Permalinks_Post_Types_Table extends WP_List_Table {
 	 * @return string
 	 */
 	protected function column_cb( $item ) {
+		$title = $item['post_title'] ? $item['post_title'] : __( '(no title)', 'custom-permalinks' );
+
 		return sprintf(
-			'<input type="checkbox" name="permalink[]" value="%s" />',
-			$item['ID']
+			'<label class="screen-reader-text" for="cb-select-%1$s">%2$s</label><input id="cb-select-%1$s" type="checkbox" name="permalink[]" value="%1$s" />',
+			esc_attr( $item['ID'] ),
+			/* translators: %s: Post title. */
+			esc_html( sprintf( __( 'Select %s', 'custom-permalinks' ), $title ) )
 		);
 	}
 

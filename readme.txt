@@ -173,6 +173,9 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
 * Bug:
   * Fixed the editor's View Post and preview links not updating, or the wrong links being updated, after saving a custom permalink when the post's previous URL contained characters such as `?`, `+` or `(` (e.g. `?p=123` for drafts).
   * Hardened the editor script to only update links with an http(s) URL on the site's own domain.
+* Accessibility:
+  * Added labels for screen readers to the checkboxes in Post Types Permalinks and Taxonomies Permalinks, the structure fields in Post Types Settings, and the Custom Permalink field on category, tag, and term screens.
+  * Raised the text contrast of the structure tags in Post Types Settings and of the plugin descriptions on the About screen, and underlined links in its text.
 
 = 3.3.0 - Oct 8, 2026 =
 

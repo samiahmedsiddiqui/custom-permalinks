@@ -25,7 +25,7 @@
 }
 
 p a {
-	text-decoration: none;
+	text-decoration: underline;
 }
 
 .box > a {
@@ -111,7 +111,7 @@ a .star svg:hover polygon {
 }
 
 .product p {
-	color: #888;
+	color: #50575e;
 	font-size: 14px;
 	line-height: 26px;
 	text-align: left;

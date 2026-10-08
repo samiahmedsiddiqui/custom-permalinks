@@ -218,9 +218,14 @@ final class Custom_Permalinks_Taxonomies_Table extends WP_List_Table {
 	 * @return string
 	 */
 	protected function column_cb( $item ) {
+		$term  = get_term( $item['ID'] );
+		$title = is_object( $term ) && isset( $term->name ) ? $term->name : __( '(no title)', 'custom-permalinks' );
+
 		return sprintf(
-			'<input type="checkbox" name="permalink[]" value="%s" />',
-			$item['ID']
+			'<label class="screen-reader-text" for="cb-select-%1$s">%2$s</label><input id="cb-select-%1$s" type="checkbox" name="permalink[]" value="%1$s" />',
+			esc_attr( $item['ID'] ),
+			/* translators: %s: Term name. */
+			esc_html( sprintf( __( 'Select %s', 'custom-permalinks' ), $title ) )
 		);
 	}
 

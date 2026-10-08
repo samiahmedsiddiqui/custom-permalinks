@@ -27,15 +27,9 @@ The plugin hasn't yet been tested with specific screen readers. Reports from peo
 
 ## Known limitations
 
-From an automated check of the plugin's screens with [axe-core](https://github.com/dequelabs/axe-core) 4.14 against WCAG 2.2 AA (October 2026, version 3.3.0):
+An automated check of all the plugin's screens with [axe-core](https://github.com/dequelabs/axe-core) 4.14 against WCAG 2.2 AA (October 2026) finds no issues as of version 3.3.1. Earlier versions had unlabeled checkboxes and fields, and low-contrast text on Post Types Settings and About; see the changelog.
 
-* **Post Types Permalinks and Taxonomies Permalinks:** the checkbox on each row has no accessible label, so screen readers announce it without saying which item it selects (WCAG 4.1.2).
-* **Post Types Settings:** the structure field for each post type has no programmatically associated label (WCAG 4.1.2), and the structure tag buttons don't have enough text contrast (WCAG 1.4.3).
-* **Category, tag, and term screens:** the Custom Permalink field has no programmatically associated label (WCAG 4.1.2).
-
-The editor's Custom Permalinks box passed the check. The About screen hasn't been checked yet.
-
-Automated checks only find some kinds of problems, so there may be others. These are planned to be fixed in an upcoming release.
+Automated checks only find some kinds of problems, and the plugin hasn't yet been tested with screen readers, so there may be others. Please report anything you run into.
 
 ## Reporting a barrier
 
