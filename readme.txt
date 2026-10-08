@@ -148,15 +148,25 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
 = 3.2.2 - Unreleased =
 
 * Bug:
+  * Fixed WooCommerce notices about accessing order data directly on order screens, as the permalink form read post fields from the `WC_Order` object.
+  * Fixed every post of a type showing and saving the same custom permalink when a theme or plugin runs a custom loop in the admin without resetting the global post.
   * Fixed WPML translations returning [another language's custom permalink](https://wordpress.org/support/topic/no-input-field-in-the-metabox-for-a-wpml-translation/) depending on the active (admin) language, which listed wrong URLs in Post Types Permalinks and in SEO plugins' indexables and XML sitemaps (e.g. Yoast SEO).
   * Fixed English custom permalinks not being lowercased and cleaned of special characters with WPML 5.0's region-based language codes (e.g. `en-us`).
   * Fixed [Post Types and Taxonomies Permalinks pagination](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/101) showing the first page's results on every page, ignoring sorting and search, when a persistent object cache (e.g. Redis or Memcached) is enabled. The lists now also refresh right after a permalink is added, changed or deleted.
   * Fixed the [WPML language switcher](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/98) linking back to the current language instead of the translation when languages are in directories (e.g. `/en/`, `/de/`) and the translation uses the same custom permalink.
+  * Fixed the [query string being corrupted](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/82) (e.g. `foo=bar` became `http://foo=bar`) after a custom permalink was resolved.
   * Fixed [comment links](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/80) on paginated comments (e.g. `/my-post/comment-page-2/`) not following the custom permalink's trailing slash, so a custom permalink without a trailing slash no longer gets comment URLs with one, and vice versa.
+  * Fixed short titles and permalinks being padded with leading spaces in the [Post Types and Taxonomies Permalinks lists](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/77).
+  * Fixed [bulk delete and search](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/75) in Post Types and Taxonomies Permalinks failing with a "headers already sent" warning instead of redirecting.
   * Fixed [Polylang translations sharing the same custom permalink](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/64) (e.g. `/en/technology` and `/zh/technology`) redirecting to the other language when the translation's stored language was missing or out of date.
   * Fixed [custom permalinks in non-Latin scripts](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/61) (e.g. Thai, Arabic, Cyrillic) returning a 404 or redirecting in an infinite loop, as the browser requests them percent-encoded while they are saved unencoded (or vice versa, depending on the site language).
   * Fixed WPML language directories that differ from the language code (e.g. `/de-de/` for `de`, as in WPML 5.0) not being repaired when duplicated, and the default language getting its directory added to a permalink when "hide the default language directory" is on.
   * Fixed the trailing-slash redirect and the redirect to the custom permalink dropping the page number (e.g. `/news/page/2` redirected to `/news/` instead of `/news/page/2/`).
+  * Fixed `%ctax_parents_TAXONOMY_NAME_name%` using the parent terms' slugs instead of their names, and the PHP warning it logged.
+  * Fixed the `seems_utf8()` deprecation notice on WordPress 6.9 and later.
+  * Fixed a fatal error on WordPress 5.0 to 6.0 when saving the Post Types Permalinks settings with the cache flush option, as `wp_cache_flush_group()` needs WordPress 6.1. Object caches that can't flush a single group now get a full cache flush.
+  * Fixed the "Custom Permalinks Manager" role name not being translatable.
+  * Fixed posts updated by WP All Import being handled as new posts, which turned permalink regeneration back on and could replace their custom permalink with the post type's structure.
   * Fixed the original permalink resolving to the custom permalink when looked up while saving a post or term, in the edit screen's permalink box and in the block editor, which also left extra link filters running for the rest of the request.
 
 * Enhancement:
