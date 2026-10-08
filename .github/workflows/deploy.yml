@@ -1,0 +1,65 @@
+name: Deploy to WordPress.org
+
+on:
+  release:
+    types: [ published ]
+
+permissions: {}
+
+jobs:
+  deploy:
+    name: Deploy release
+    runs-on: ubuntu-latest
+    # Pre-releases (e.g. v3.2.0-alpha) stay on GitHub only.
+    if: ${{ ! github.event.release.prerelease }}
+
+    permissions:
+      # Lets the job attach the plugin zip to the release.
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
+
+      # Stop before publishing if any version number disagrees with the tag.
+      - name: Check version numbers
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          HEADER_VERSION=$(sed -n 's/^ \* Version: *//p' custom-permalinks.php)
+          CLASS_VERSION=$(sed -n "s/^[[:space:]]*public \$version = '\(.*\)';/\1/p" includes/class-custom-permalinks.php)
+          STABLE_TAG=$(sed -n 's/^Stable tag: *//p' readme.txt)
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+
+          echo "Tag: $TAG_VERSION, header: $HEADER_VERSION, class: $CLASS_VERSION, stable tag: $STABLE_TAG, package.json: $PACKAGE_VERSION"
+
+          for version in "$HEADER_VERSION" "$CLASS_VERSION" "$STABLE_TAG" "$PACKAGE_VERSION"; do
+            if [ "$version" != "$TAG_VERSION" ]; then
+              echo "::error::Version numbers don't match the tag $GITHUB_REF_NAME."
+              exit 1
+            fi
+          done
+
+          for file in assets/js/script-form assets/js/post-settings; do
+            test -f "$file-$TAG_VERSION.min.js" || { echo "::error::Missing $file-$TAG_VERSION.min.js; run npm run build."; exit 1; }
+          done
+          for file in assets/css/about-plugins assets/css/post-settings; do
+            test -f "$file-$TAG_VERSION.min.css" || { echo "::error::Missing $file-$TAG_VERSION.min.css; run npm run build."; exit 1; }
+          done
+
+      # Publishes the files `git archive` would ship, honoring .gitattributes export-ignore.
+      - name: Deploy to WordPress.org
+        id: deploy
+        uses: 10up/action-wordpress-plugin-deploy@v2
+        with:
+          generate-zip: true
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: custom-permalinks
+
+      - name: Attach the plugin zip to the release
+        run: gh release upload "$GITHUB_REF_NAME" "${{ steps.deploy.outputs.zip-path }}" --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
