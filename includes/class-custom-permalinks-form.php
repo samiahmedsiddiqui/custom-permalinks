@@ -73,6 +73,43 @@ class Custom_Permalinks_Form {
 			2
 		);
 		add_filter( 'is_protected_meta', array( $this, 'protect_meta' ), 10, 2 );
+
+		// Refresh the admin permalink lists whenever a permalink changes.
+		add_action( 'added_post_meta', array( $this, 'post_meta_changed' ), 10, 3 );
+		add_action( 'updated_post_meta', array( $this, 'post_meta_changed' ), 10, 3 );
+		add_action( 'deleted_post_meta', array( $this, 'post_meta_changed' ), 10, 3 );
+		add_action( 'add_option_custom_permalink_table', array( $this, 'clear_list_cache' ) );
+		add_action( 'update_option_custom_permalink_table', array( $this, 'clear_list_cache' ) );
+	}
+
+	/**
+	 * Clear the admin permalink list cache when a post permalink changes.
+	 *
+	 * @since 3.2.2
+	 * @access public
+	 *
+	 * @param int|array $meta_id   Meta ID(s).
+	 * @param int       $object_id Post ID.
+	 * @param string    $meta_key  Meta key.
+	 *
+	 * @return void
+	 */
+	public function post_meta_changed( $meta_id, $object_id, $meta_key ) {
+		if ( 'custom_permalink' === $meta_key ) {
+			$this->clear_list_cache();
+		}
+	}
+
+	/**
+	 * Invalidate the cached admin permalink lists.
+	 *
+	 * @since 3.2.2
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function clear_list_cache() {
+		wp_cache_delete( 'last_changed', 'custom_permalinks' );
 	}
 
 	/**
@@ -239,7 +276,7 @@ class Custom_Permalinks_Form {
 		// Restore octets.
 		$permalink = preg_replace( '|---([a-fA-F0-9][a-fA-F0-9])---|', '%$1', $permalink );
 
-		if ( 'en' === $language_code || strpos( $language_code, 'en_' ) === 0 ) {
+		if ( preg_match( '/^en(?:[-_]|$)/', $language_code ) ) {
 			if ( seems_utf8( $permalink ) ) {
 				if ( ! $allow_accents ) {
 					if ( function_exists( 'mb_strtolower' ) ) {
@@ -311,7 +348,7 @@ class Custom_Permalinks_Form {
 		$permalink = preg_replace( '/&.+?;/', '', $permalink );
 
 		// Avoid removing characters of other languages like persian etc.
-		if ( 'en' === $language_code || strpos( $language_code, 'en_' ) === 0 ) {
+		if ( preg_match( '/^en(?:[-_]|$)/', $language_code ) ) {
 			// Allow Alphanumeric and few symbols only.
 			if ( ! $allow_caps ) {
 				$permalink = preg_replace( '/[^%a-z0-9 \.\/_-]/', '', $permalink );
