@@ -16,14 +16,19 @@ Take full control of your WordPress site's URLs. **Custom Permalinks** lets you 
 - [Available Tags for Permalink Structures](#available-tags-for-permalink-structures)
 - [Frequently Asked Questions](#frequently-asked-questions)
 - [Advanced Customization and Filters](#advanced-customization-and-filters)
+- [Development](#development)
 - [Need Help or Found a Bug?](#need-help-or-found-a-bug)
 
 ## Key Features
 
-* **Individual Permalink Control**: Assign unique URLs to any post, page, tag, or category.
-* **Site Structure Control**: Gain ultimate control over how your site's URLs are organized.
-* **Post Type Permalink Structures (v3.0.0+)**: Define custom permalink structures for each public Post Type using predefined tags, automatically generating URLs upon content creation. You can still manually edit any permalink. If left empty, default settings will apply.
-* **Automatic Redirects**: Old URLs keep working — visitors and search engines are redirected to the new custom permalink automatically.
+* **A custom URL for any content**: Set a unique permalink for any post, page, public custom post type (e.g. WooCommerce products), category, tag, or custom taxonomy term.
+* **Permalink structures per post type**: Define a structure for each public post type from [tags](#available-tags-for-permalink-structures) like `%year%`, `%category%`, or your custom taxonomies. New content gets its permalink automatically, and you can still edit any permalink by hand.
+* **Automatic redirects**: The original URL redirects to the custom permalink, so existing links, bookmarks, and search rankings keep working.
+* **Multilingual**: Works with WPML and Polylang, with a separate custom permalink for each translation.
+* **URLs in any language**: Permalinks in non-Latin scripts, such as Arabic, Thai, or Cyrillic, work as you type them.
+* **All permalinks in one place**: The Post Types Permalinks and Taxonomies Permalinks screens list every custom permalink, with search and bulk delete.
+* **A role for permalink managers**: The Custom Permalinks Manager role lets non-administrators view and edit permalinks.
+* **Developer friendly**: [Filters and actions](#advanced-customization-and-filters) to add your own tags, generate permalinks in code, and control sanitizing and redirects.
 
 ## Installation
 
@@ -43,7 +48,10 @@ You have two ways to install Custom Permalinks:
 
 ## Getting Started: Plugin Settings
 
-You can configure Custom Permalinks by navigating to **Settings \> Custom Permalinks** in your WordPress Dashboard.
+Custom Permalinks adds a **Custom Permalinks** menu to your WordPress dashboard:
+
+* **Post Types Permalinks** and **Taxonomies Permalinks**: Every custom permalink on your site, with search and bulk delete.
+* **Post Types Settings**: A permalink structure for each public post type, built from the [tags below](#available-tags-for-permalink-structures). Leave a structure empty to keep WordPress's default for that post type.
 
 To set a permalink for an individual post, page, category, or tag, edit that item and look for the **Custom Permalink** field near the top (or in the sidebar) of the editor screen — enter the URL path you want and save.
 
@@ -61,18 +69,18 @@ When setting up your custom permalink structures, you can use a variety of tags 
 | `%second%` | Second of the minute, the post was published, eg: 33 |
 | `%post_id%` | The unique ID of the post, eg: 123 |
 | `%category%` | A clean version of the category name (its slug). Nested sub-categories will appear as nested directories in the URL. |
-| `%author%` | A sanitized version of the post author’s name. |
+| `%author%` | The post author's username (login name). Note that this makes usernames visible in your URLs. |
 | `%postname%` | A clean version of the post or page title (its slug). For example, "This Is A Great Post\!" becomes `this-is-a-great-post` in the URL. |
 | `%parent_postname%` | Similar to `%postname%`, but uses the immediate parent page's slug if a parent is selected. |
 | `%parents_postnames%` | Similar to `%postname%`, but includes all parent page slugs if parents are selected. |
 | `%title%` | The title of the post, converted to a slug. For example, "This Is A Great Post\!" becomes `this-is-a-great-post`. Unlike `%postname%` which is set once, `%title%` automatically updates in the permalink if the post title changes (unless the post is published or the permalink is manually edited). |
-| `%ctax_TAXONOMY_NAME%` | A clean version of a custom taxonomy term's **slug**. Replace `TAXONOMY_NAME` with the actual taxonomy name. You can also provide a default slug when no term is selected using `??` (e.g., `%ctax_type??sales%`). |
-| `%ctax_TAXONOMY_NAME_name%` | The custom taxonomy term's **name** (instead of its slug). Replace `TAXONOMY_NAME` with the actual taxonomy name. Supports a default value using `??` when no term is selected (e.g., `%ctax_type_name??Sales%`). |
+| `%ctax_TAXONOMY_NAME%` | A clean version of a custom taxonomy term's **slug**. Replace `TAXONOMY_NAME` with the actual taxonomy name. |
+| `%ctax_TAXONOMY_NAME_name%` | The custom taxonomy term's **name** (instead of its slug). Replace `TAXONOMY_NAME` with the actual taxonomy name. |
 | `%ctax_parent_TAXONOMY_NAME%` | Similar to `%ctax_TAXONOMY_NAME%`, but includes the immediate parent term's slug in the URL if a parent is selected. |
 | `%ctax_parent_TAXONOMY_NAME_name%` | Similar to `%ctax_TAXONOMY_NAME_name%`, but includes the immediate parent term's **name** if a parent is selected. |
 | `%ctax_parents_TAXONOMY_NAME%` | Similar to `%ctax_TAXONOMY_NAME%`, but includes all parent term slugs in the URL if parents are selected. |
 | `%ctax_parents_TAXONOMY_NAME_name%` | Similar to `%ctax_TAXONOMY_NAME_name%`, but includes all parent term **names** if parents are selected. |
-| `%custom_permalinks_TAG_NAME%` | Developers have the flexibility to define their own custom tags(replace `_TAG_NAME` with your desired name). To ensure these tags resolve to the correct permalinks, simply apply the `custom_permalinks_post_permalink_tag` filter. |
+| `%custom_permalinks_TAG_NAME%` | Developers have the flexibility to define their own custom tags (replace `_TAG_NAME` with your desired name). To ensure these tags resolve to the correct permalinks, simply apply the `custom_permalinks_post_permalink_tag` filter. |
 
 **Important Note:** For new posts, Custom Permalinks will keep updating the permalink while the post is in draft mode, assuming a structure is defined in the plugin settings. Once the post is published or its permalink is manually updated, the plugin will stop automatic updates for that specific post.
 
@@ -92,11 +100,19 @@ Yes. Custom Permalinks supports posts, pages, any public custom post type, and c
 
 #### Does it work with custom post types, like WooCommerce products?
 
-Yes. You can set an individual custom permalink on any public custom post type, or define an automatic permalink structure for the entire post type from **Settings \> Custom Permalinks**.
+Yes. You can set an individual custom permalink on any public custom post type, or define an automatic permalink structure for the entire post type from **Custom Permalinks \> Post Types Settings**.
 
 #### Is Custom Permalinks compatible with WPML or Polylang?
 
 Yes, the plugin is compatible with both WPML and Polylang, including translated posts that each have their own custom permalink.
+
+#### Can I use non-English characters in my permalinks?
+
+Yes. Permalinks in non-Latin scripts, such as Arabic, Thai, Cyrillic, or Chinese, work as you type them. Browsers request these URLs percent-encoded, and Custom Permalinks matches them either way.
+
+#### Where do the plugin's translations come from?
+
+From [translate.wordpress.org](https://translate.wordpress.org/projects/wp-plugins/custom-permalinks/). WordPress downloads them automatically for your site's language. If the plugin shows in English on a translated site, update the translations from **Dashboard \> Updates**. You can also help translate it there.
 
 #### Can I let a non-administrator manage permalinks?
 
@@ -391,6 +407,22 @@ add_filter( 'cp_remove_like_query', '__return_false' );
 
 ---
 
+### Hide Columns in the Permalinks Lists
+
+Choose which columns (`title`, `type`, `permalink`) are hidden on the Post Types Permalinks and Taxonomies Permalinks screens, on top of each user's own Screen Options:
+
+```php
+function custom_permalinks_hide_type_column( $hidden_columns ) {
+	$hidden_columns[] = 'type';
+
+	return $hidden_columns;
+}
+add_filter( 'custom_permalinks_post_types_table_hidden_columns', 'custom_permalinks_hide_type_column' );
+add_filter( 'custom_permalinks_taxonomy_table_hidden_columns', 'custom_permalinks_hide_type_column' );
+```
+
+---
+
 ### Keep the Page Number in Requests
 
 By default, Custom Permalinks removes the trailing `/page/{number}` from the requested URL before matching it and passes the page number to WordPress as `paged`. If pagination doesn't work on a custom archive page, you can keep the page number in the requested URL instead:
@@ -405,6 +437,27 @@ add_filter( 'custom_permalinks_disable_remove_page_number', '__return_true' );
 
 * **Premium Users:** If you need assistance implementing these filters, please don't hesitate to reach out to us via our [Premium contact support](https://www.custompermalinks.com/contact-us/).
 * **Other Users:** You can also directly reach out to the plugin author via [LinkedIn](https://www.linkedin.com/in/sami-ahmed-siddiqui/).
+
+## Development
+
+Contributions are welcome. To work on the plugin you need Node.js 20.19 or later, Composer, and Docker (for the tests).
+
+```bash
+npm install
+composer install
+```
+
+| Command | What it does |
+| --- | --- |
+| `npm run build` | Minifies `assets/css/src` and `assets/js/src` into versioned `.min` files. Commit the result; CI checks it's up to date. |
+| `npm run lint` | Runs Stylelint and ESLint. |
+| `composer lint` | Runs PHP_CodeSniffer with the WordPress Coding Standards and PHP 7.0+ compatibility checks. |
+| `composer analyse` | Runs PHPStan. |
+| `npm run env:start` | Starts WordPress in Docker with [`@wordpress/env`](https://www.npmjs.com/package/@wordpress/env). |
+| `npm run test:php` | Runs the PHPUnit integration tests in that environment. |
+| `npm run env:stop` | Stops the environment. |
+
+Every pull request runs these checks, plus [Plugin Check](https://github.com/WordPress/plugin-check), and gets a comment with a link to try the change in [WordPress Playground](https://playground.wordpress.net/), no local setup needed.
 
 ## Need Help or Found a Bug?
 
