@@ -3,7 +3,7 @@
  * Plugin Name: Custom Permalinks
  * Plugin URI: https://www.custompermalinks.com/
  * Description: Set custom permalinks, add automatic redirects, and use dynamic tags for full control over your site's URLs and SEO.
- * Version: 3.3.0
+ * Version: 3.3.1
  * Requires at least: 5.9
  * Requires PHP: 7.4
  * Author: Sami Ahmed Siddiqui

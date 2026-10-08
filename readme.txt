@@ -4,7 +4,7 @@ Tags: permalink, custom url, slug, redirect, seo
 Requires at least: 5.9
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 3.3.0
+Stable tag: 3.3.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -168,7 +168,7 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
 
 == Changelog ==
 
-= 3.3.1 - Unreleased =
+= 3.3.1 - Oct 8, 2026 =
 
 * Bug:
   * Fixed the editor's View Post and preview links not updating, or the wrong links being updated, after saving a custom permalink when the post's previous URL contained characters such as `?`, `+` or `(` (e.g. `?p=123` for drafts).
@@ -218,6 +218,9 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
   * For the changelog of earlier versions, please refer to the separate changelog.txt file.
 
 == Upgrade Notice ==
+
+= 3.3.1 =
+Recommended update: fixes the editor's View Post and preview links not updating after changing a custom permalink, and improves accessibility of the admin screens with screen reader labels and better text contrast.
 
 = 3.3.0 =
 Recommended update: fixes non-Latin permalinks returning 404s or redirect loops, WPML and Polylang permalink issues, admin list pagination with object caches, and a fatal error on WordPress 6.0. Requires WordPress 5.9 and PHP 7.4.
