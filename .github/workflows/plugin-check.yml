@@ -36,6 +36,6 @@ jobs:
         run: git -C source archive --format=tar --prefix=custom-permalinks/ HEAD | tar -x
 
       - name: Run Plugin Check
-        uses: wordpress/plugin-check-action@v1
+        uses: wordpress/plugin-check-action@10857da14b6c2246d15402b3e69f777edcf8c12e # v1.1.9
         with:
           build-dir: ./custom-permalinks
