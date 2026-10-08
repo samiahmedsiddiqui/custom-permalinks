@@ -187,18 +187,23 @@ class Custom_Permalinks_Frontend {
 				$permalink = $trailing_permalink;
 			}
 
-			$site_url  = site_url();
-			$wpml_href = str_replace( $site_url, '', $permalink );
+			// Unfiltered home, so repairs also work when WordPress lives in a subdirectory.
+			$home_url      = untrailingslashit( set_url_scheme( get_option( 'home' ) ) );
+			$wpml_href     = str_replace( $home_url, '', $permalink );
+			$language_path = $this->wpml_language_directory( $language_code, $home_url );
 
-			// Collapse a duplicated language directory, e.g. `/de/de/slug`, back to a single `/{lang}/` prefix.
-			$duplicate_prefix = '/' . $language_code . '/' . $language_code . '/';
-			if ( 0 === strpos( $wpml_href, $duplicate_prefix ) ) {
-				$permalink = $site_url . '/' . $language_code . '/' . substr( $wpml_href, strlen( $duplicate_prefix ) );
-			}
+			// No directory to repair for a hidden default language or a per-language domain.
+			if ( '' !== $language_path ) {
+				// Collapse a duplicated language directory, e.g. `/de/de/slug`, back to a single `/{lang}/` prefix.
+				$duplicate_prefix = '/' . $language_path . '/' . $language_path . '/';
+				if ( 0 === strpos( $wpml_href, $duplicate_prefix ) ) {
+					$permalink = $home_url . '/' . $language_path . '/' . substr( $wpml_href, strlen( $duplicate_prefix ) );
+				}
 
-			if ( 0 === strpos( $wpml_href, '//' ) ) {
-				if ( 0 !== strpos( $wpml_href, '//' . $language_code . '/' ) ) {
-					$permalink = $site_url . '/' . $language_code . '/' . $custom_permalink;
+				if ( 0 === strpos( $wpml_href, '//' ) ) {
+					if ( 0 !== strpos( $wpml_href, '//' . $language_path . '/' ) ) {
+						$permalink = $home_url . '/' . $language_path . '/' . $custom_permalink;
+					}
 				}
 			}
 		} else {
@@ -209,6 +214,40 @@ class Custom_Permalinks_Frontend {
 		}
 
 		return $permalink;
+	}
+
+	/**
+	 * Get the URL directory WPML serves a language under, which can differ
+	 * from its code (e.g. `de-de` for `de`).
+	 *
+	 * @since 3.2.2
+	 * @access private
+	 *
+	 * @param string $language_code WPML language code.
+	 * @param string $home_url      Unfiltered home URL, without a trailing slash.
+	 *
+	 * @return string Language directory, or empty string if the language has none.
+	 */
+	private function wpml_language_directory( $language_code, $home_url ) {
+		$language_home = apply_filters(
+			'wpml_permalink',
+			trailingslashit( $home_url ),
+			$language_code
+		);
+
+		if ( ! is_string( $language_home ) || 0 !== strpos( $language_home, $home_url ) ) {
+			return '';
+		}
+
+		$language_path = trim( substr( $language_home, strlen( $home_url ) ), '/' );
+
+		// Collapse a duplicated directory, e.g. `de/de`, to a single one.
+		$segments = explode( '/', $language_path );
+		if ( 2 === count( $segments ) && $segments[0] === $segments[1] ) {
+			$language_path = $segments[0];
+		}
+
+		return $language_path;
 	}
 
 	/**
