@@ -7,3 +7,5 @@ Thanks for helping improve Custom Permalinks!
 * **Pull requests:** see [Development](README.md#development) in the README for setup, linting, and running the tests. Every pull request runs the coding standards checks, PHPStan, Plugin Check, and the PHPUnit tests, and gets a link to try it in WordPress Playground.
 
 Please keep pull requests focused on one change, and include a test when fixing a bug.
+
+Everyone taking part is expected to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
