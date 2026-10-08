@@ -120,7 +120,7 @@ class Custom_Permalinks {
 		if ( empty( $cp_role ) ) {
 			add_role(
 				'custom_permalinks_manager',
-				__( 'Custom Permalinks Manager' ),
+				__( 'Custom Permalinks Manager', 'custom-permalinks' ),
 				array(
 					'custom_permalinks_post_settings' => true,
 					'cp_view_post_permalinks'         => true,
