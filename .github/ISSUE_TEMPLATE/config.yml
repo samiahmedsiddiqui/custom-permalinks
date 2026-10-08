@@ -6,6 +6,3 @@ contact_links:
   - name: Premium support
     url: https://www.custompermalinks.com/contact-us/
     about: One-on-one email support for Custom Permalinks Premium users.
-  - name: Report a security vulnerability
-    url: https://github.com/samiahmedsiddiqui/custom-permalinks/security/advisories/new
-    about: Please report security issues privately, not as a public issue.
