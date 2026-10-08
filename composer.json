@@ -31,21 +31,26 @@
 		"php": ">=7.0"
 	},
 	"require-dev": {
-		"squizlabs/php_codesniffer": "3.13.2",
-		"wp-coding-standards/wpcs": "3.2.0",
-		"phpcompatibility/phpcompatibility-wp": "2.1.7"
+		"squizlabs/php_codesniffer": "3.13.6",
+		"wp-coding-standards/wpcs": "3.4.1",
+		"phpcompatibility/phpcompatibility-wp": "2.1.8",
+		"phpstan/phpstan": "2.3.0",
+		"szepeviktor/phpstan-wordpress": "2.0.4",
+		"phpstan/extension-installer": "1.4.3"
 	},
 	"scripts": {
 		"format": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf --report=summary,source",
 		"lint": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs",
 		"lint:summary": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --report=summary",
-		"lint:errors": "@lint -n"
+		"lint:errors": "@lint -n",
+		"analyse": "@php ./vendor/bin/phpstan analyse --memory-limit=1G"
 	},
 	"prefer-stable": true,
 	"config": {
 		"allow-plugins": {
 			"composer/installers": true,
-			"dealerdirect/phpcodesniffer-composer-installer": true
+			"dealerdirect/phpcodesniffer-composer-installer": true,
+			"phpstan/extension-installer": true
 		}
 	}
 }
