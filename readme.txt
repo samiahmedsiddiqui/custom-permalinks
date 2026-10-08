@@ -196,6 +196,7 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
   * Fixed the original permalink showing as the custom permalink in the edit screen's permalink box and in the block editor, and being compared against when saving a post or term.
   * Fixed a fatal error on WordPress 5.0 to 6.0 when saving the Post Types Permalinks settings with the cache flush option, as `wp_cache_flush_group()` needs WordPress 6.1. Object caches that can't flush a single group now get a full cache flush.
   * Fixed the "Custom Permalinks Manager" role name not being translatable.
+  * Fixed Post Types Settings showing the WordPress address instead of the site address before each structure, which is wrong when WordPress is installed in a subdirectory.
 
 **Compatibility:**
   * Fixed WooCommerce notices about accessing order data directly on order screens, as the permalink form read post fields from the `WC_Order` object.

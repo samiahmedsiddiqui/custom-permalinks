@@ -219,7 +219,7 @@ class Custom_Permalinks_Post_Types_Settings {
 						<tr valign="top" class="<?php echo esc_attr( $tr_class ); ?>">
 							<th scope="row"><?php echo esc_html( $single->labels->name ); ?></th>
 							<td>
-								<?php echo esc_url( site_url() ); ?>/
+								<?php echo esc_url( untrailingslashit( set_url_scheme( get_option( 'home' ) ) ) ); ?>/
 								<input type="text" name="post_type[<?php echo esc_attr( $post_type_name ); ?>]" value="<?php echo esc_attr( $post_setting ); ?>" class="<?php echo esc_attr( $input_classes ); ?>" />
 							</td>
 						</tr>
