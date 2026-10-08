@@ -160,6 +160,7 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
 
 * Enhancement:
   * Added the `custom_permalinks_disable_remove_page_number` filter to keep the `/page/{number}` segment in the requested URL, for [custom archive pages whose pagination doesn't advance](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/110).
+  * Removed the bundled translations; WordPress now loads the plugin's translations from [translate.wordpress.org](https://translate.wordpress.org/projects/wp-plugins/custom-permalinks/), which covers every bundled language and adds Serbian.
 
 = 3.2.1 - Oct 1, 2026 =
 

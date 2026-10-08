@@ -12,7 +12,6 @@
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  *
  * Text Domain: custom-permalinks
- * Domain Path: /languages/
  *
  * @package CustomPermalinks
  */
