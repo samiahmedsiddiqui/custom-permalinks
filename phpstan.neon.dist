@@ -1,0 +1,19 @@
+parameters:
+	level: 2
+	phpVersion:
+		min: 70100
+		max: 80599
+	paths:
+		- custom-permalinks.php
+		- uninstall.php
+		- admin
+		- includes
+	bootstrapFiles:
+		- .phpstan/bootstrap.php
+	ignoreErrors:
+		# Defensive checks on values WordPress may pass as null.
+		- identifier: isset.variable
+		# Singleton instance() used as a load-{page} callback.
+		-
+			identifier: return.void
+			path: admin/class-custom-permalinks-admin.php

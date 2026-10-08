@@ -39,4 +39,7 @@
 
 		<!-- Check for cross-version support for PHP 7.0 and higher. -->
     <config name="testVersion" value="7.0-"/>
+
+    <!-- Minimum WordPress version the plugin supports. -->
+    <config name="minimum_wp_version" value="5.0"/>
 </ruleset>

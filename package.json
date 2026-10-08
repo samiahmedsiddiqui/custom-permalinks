@@ -10,21 +10,23 @@
 		"url": "https://github.com/samiahmedsiddiqui/custom-permalinks/issues"
 	},
 	"author": "Sami Ahmed Siddiqui",
+	"engines": {
+		"node": ">=20.19"
+	},
 	"scripts": {
+		"build": "node build.mjs",
 		"lint": "npm run lint:css && npm run lint:js",
 		"lint:fix": "npm run lint:css:fix && npm run lint:js:fix",
-		"lint:css": "npx stylelint **/*.css",
-		"lint:css:fix": "npx stylelint **/*.css --fix",
+		"lint:css": "stylelint '**/*.css'",
+		"lint:css:fix": "stylelint '**/*.css' --fix",
 		"lint:js": "eslint .",
 		"lint:js:fix": "eslint . --fix"
 	},
 	"devDependencies": {
-		"@wordpress/eslint-plugin": "22.13.0",
-		"@wordpress/stylelint-config": "23.19.0",
-		"eslint": "8.57.0",
-		"gulp": "5.0.1",
-		"gulp-clean-css": "4.3.0",
-		"gulp-rename": "2.1.0",
-		"gulp-uglify": "3.0.2"
+		"@wordpress/eslint-plugin": "27.1.0",
+		"@wordpress/stylelint-config": "26.1.0",
+		"esbuild": "0.28.2",
+		"eslint": "10.12.0",
+		"globals": "17.13.0"
 	}
 }
