@@ -17,6 +17,11 @@ abstract class Custom_Permalinks_TestCase extends WP_UnitTestCase {
 		parent::set_up();
 
 		$this->set_permalink_structure( '/%postname%/' );
+
+		// Taxonomies only get pretty links if registered with permalinks on.
+		create_initial_taxonomies();
+		flush_rewrite_rules( false );
+
 		delete_option( 'custom_permalink_table' );
 
 		add_filter(
