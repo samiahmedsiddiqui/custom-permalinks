@@ -39,6 +39,35 @@
 	}
 
 	/**
+	 * Build an absolute http(s) URL from the home URL and a permalink.
+	 *
+	 * @param {string} homeURL   Site home URL.
+	 * @param {string} permalink Permalink path.
+	 *
+	 * @return {string} Absolute URL, or an empty string if it isn't an http(s)
+	 *                  URL on the home URL's site.
+	 */
+	function buildViewURL(homeURL, permalink) {
+		let home;
+		let url;
+		try {
+			home = new URL(homeURL);
+			url = new URL(homeURL + permalink);
+		} catch {
+			return '';
+		}
+
+		if (
+			(url.protocol !== 'http:' && url.protocol !== 'https:') ||
+			url.origin !== home.origin
+		) {
+			return '';
+		}
+
+		return url.href;
+	}
+
+	/**
 	 * Update Permalink Value in View Button and hidden fields.
 	 *
 	 * @param {Object} setPermlinks
@@ -48,7 +77,6 @@
 			'custom_permalinks_home_url'
 		);
 		const permalinkAdd = document.getElementById('custom-permalinks-add');
-		let viewPermalink = '';
 		let replaceOldPermalink = '';
 
 		document.getElementById('custom_permalink').value =
@@ -57,49 +85,42 @@
 			setPermlinks.custom_permalink = setPermlinks.original_permalink;
 		}
 
-		if (setPermlinks.preview_permalink) {
-			viewPermalink = getHomeURL.value + setPermlinks.preview_permalink;
-		} else {
-			viewPermalink = getHomeURL.value + setPermlinks.custom_permalink;
-		}
+		const viewPermalink = buildViewURL(
+			getHomeURL.value,
+			setPermlinks.preview_permalink || setPermlinks.custom_permalink
+		);
 
 		document.getElementById('custom-permalinks-post-slug').value =
 			setPermlinks.custom_permalink;
 		document.getElementById('original-permalink').value =
 			setPermlinks.original_permalink;
 
-		if (document.querySelector('#view-post-btn a')) {
-			replaceOldPermalink =
-				document.querySelector('#view-post-btn a').href;
+		// Only update links with a valid http(s) URL.
+		if (viewPermalink !== '') {
+			if (document.querySelector('#view-post-btn a')) {
+				replaceOldPermalink =
+					document.querySelector('#view-post-btn a').href;
 
-			// Cannot be removed as replaceOldPermalink can be empty.
-			document.querySelector('#view-post-btn a').href = viewPermalink;
-		}
+				// Cannot be removed as replaceOldPermalink can be empty.
+				document.querySelector('#view-post-btn a').href = viewPermalink;
+			}
 
-		if (document.querySelector('a.editor-post-preview')) {
-			// Cannot be removed as replaceOldPermalink can be empty.
-			document.querySelector('a.editor-post-preview').href =
-				viewPermalink;
-		}
+			if (document.querySelector('a.editor-post-preview')) {
+				// Cannot be removed as replaceOldPermalink can be empty.
+				document.querySelector('a.editor-post-preview').href =
+					viewPermalink;
+			}
 
-		// Only works when replaceOldPermalink is not empty.
-		if (replaceOldPermalink !== '') {
-			replaceOldPermalink = replaceOldPermalink.replace(/\//g, '/');
-			let loopInit = 0;
-
-			const incrementNumber = 1;
-			const oldPermalinks = document.querySelectorAll('body a');
-			const replaceRegex = new RegExp(replaceOldPermalink, 'g');
-			const totalOldLinks = oldPermalinks.length;
-
-			while (loopInit < totalOldLinks) {
-				if (oldPermalinks[loopInit] && oldPermalinks[loopInit].href) {
-					oldPermalinks[loopInit].href = oldPermalinks[
-						loopInit
-					].href.replace(replaceRegex, viewPermalink);
-				}
-
-				loopInit += incrementNumber;
+			// Only works when replaceOldPermalink is not empty.
+			if (replaceOldPermalink !== '') {
+				// Plain text replace, so characters like `.` or `?` in the URL aren't regex syntax.
+				document.querySelectorAll('body a').forEach(function (link) {
+					if (link.href && link.href.includes(replaceOldPermalink)) {
+						link.href = link.href
+							.split(replaceOldPermalink)
+							.join(viewPermalink);
+					}
+				});
 			}
 		}
 
