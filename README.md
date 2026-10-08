@@ -391,6 +391,16 @@ add_filter( 'cp_remove_like_query', '__return_false' );
 
 ---
 
+### Keep the Page Number in Requests
+
+By default, Custom Permalinks removes the trailing `/page/{number}` from the requested URL before matching it and passes the page number to WordPress as `paged`. If pagination doesn't work on a custom archive page, you can keep the page number in the requested URL instead:
+
+```php
+add_filter( 'custom_permalinks_disable_remove_page_number', '__return_true' );
+```
+
+---
+
 ### For Assistance:
 
 * **Premium Users:** If you need assistance implementing these filters, please don't hesitate to reach out to us via our [Premium contact support](https://www.custompermalinks.com/contact-us/).
