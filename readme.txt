@@ -168,6 +168,12 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
 
 == Changelog ==
 
+= 3.3.1 - Unreleased =
+
+* Bug:
+  * Fixed the editor's View Post and preview links not updating, or the wrong links being updated, after saving a custom permalink when the post's previous URL contained characters such as `?`, `+` or `(` (e.g. `?p=123` for drafts).
+  * Hardened the editor script to only update links with an http(s) URL on the site's own domain.
+
 = 3.3.0 - Oct 8, 2026 =
 
 **Changes to be aware of:**
