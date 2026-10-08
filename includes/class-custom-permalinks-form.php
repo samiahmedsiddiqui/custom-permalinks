@@ -1084,7 +1084,7 @@ class Custom_Permalinks_Form {
 			<table class="form-table" id="custom_permalink_form">
 				<tr>
 					<th scope="row">
-						<?php esc_html_e( 'Custom Permalink', 'custom-permalinks' ); ?>
+						<label for="custom-permalinks-post-slug"><?php esc_html_e( 'Custom Permalink', 'custom-permalinks' ); ?></label>
 					</th>
 					<td>
 			<?php
