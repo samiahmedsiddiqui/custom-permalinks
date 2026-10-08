@@ -11,6 +11,7 @@ Take full control of your WordPress site's URLs. **Custom Permalinks** lets you 
 ## Table of Contents
 
 - [Key Features](#key-features)
+- [Screenshots](#screenshots)
 - [Installation](#installation)
 - [Getting Started: Plugin Settings](#getting-started-plugin-settings)
 - [Available Tags for Permalink Structures](#available-tags-for-permalink-structures)
@@ -29,6 +30,14 @@ Take full control of your WordPress site's URLs. **Custom Permalinks** lets you 
 * **All permalinks in one place**: The Post Types Permalinks and Taxonomies Permalinks screens list every custom permalink, with search and bulk delete.
 * **A role for permalink managers**: The Custom Permalinks Manager role lets non-administrators view and edit permalinks.
 * **Developer friendly**: [Filters and actions](#advanced-customization-and-filters) to add your own tags, generate permalinks in code, and control sanitizing and redirects.
+
+## Screenshots
+
+| Editor | All custom permalinks |
+| --- | --- |
+| ![The Custom Permalinks box in the block editor](.wordpress-org/screenshot-1.png) | ![Post Types Permalinks list](.wordpress-org/screenshot-2.png) |
+| **Post type structures** | **Category, tag, and term permalinks** |
+| ![Post Types Settings](.wordpress-org/screenshot-4.png) | ![Custom permalink on a category's edit screen](.wordpress-org/screenshot-5.png) |
 
 ## Installation
 

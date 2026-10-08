@@ -158,6 +158,14 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
 * Check that the permalink isn't already used by another post â€” Custom Permalinks won't apply a duplicate URL.
 * Still stuck? See "Need Help or Found a Bug?" above, or reach out via [GitHub](https://github.com/samiahmedsiddiqui/custom-permalinks) or [Premium support](https://www.custompermalinks.com/contact-us/).
 
+== Screenshots ==
+
+1. Set a custom permalink for any post or page from the Custom Permalinks box in the editor.
+2. Post Types Permalinks lists every post, page, and custom post type with a custom permalink, with search and bulk delete.
+3. Taxonomies Permalinks lists every category, tag, and custom taxonomy term with a custom permalink.
+4. Post Types Settings: build a permalink structure for each post type from the available tags.
+5. Set a custom permalink for a category, tag, or custom taxonomy term on its edit screen.
+
 == Changelog ==
 
 = 3.3.0 - Unreleased =
