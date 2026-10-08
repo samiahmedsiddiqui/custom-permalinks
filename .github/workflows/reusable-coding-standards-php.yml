@@ -16,7 +16,7 @@ jobs:
     name: Run coding standards checks
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
 
@@ -54,7 +54,7 @@ jobs:
     name: Run static analysis
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
 

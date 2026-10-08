@@ -26,7 +26,7 @@ jobs:
     steps:
       # Check out into a subfolder so the action doesn't pick up the tests' .wp-env.json.
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: source
           show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
