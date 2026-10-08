@@ -36,14 +36,17 @@
 		"phpcompatibility/phpcompatibility-wp": "2.1.8",
 		"phpstan/phpstan": "2.3.0",
 		"szepeviktor/phpstan-wordpress": "2.0.4",
-		"phpstan/extension-installer": "1.4.3"
+		"phpstan/extension-installer": "1.4.3",
+		"phpunit/phpunit": "9.6.38",
+		"yoast/phpunit-polyfills": "4.0.0"
 	},
 	"scripts": {
 		"format": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf --report=summary,source",
 		"lint": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs",
 		"lint:summary": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --report=summary",
 		"lint:errors": "@lint -n",
-		"analyse": "@php ./vendor/bin/phpstan analyse --memory-limit=1G"
+		"analyse": "@php ./vendor/bin/phpstan analyse --memory-limit=1G",
+		"test": "@php ./vendor/bin/phpunit"
 	},
 	"prefer-stable": true,
 	"config": {
@@ -51,6 +54,9 @@
 			"composer/installers": true,
 			"dealerdirect/phpcodesniffer-composer-installer": true,
 			"phpstan/extension-installer": true
+		},
+		"platform": {
+			"php": "7.4.33"
 		}
 	}
 }

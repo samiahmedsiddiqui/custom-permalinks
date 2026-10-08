@@ -9,6 +9,11 @@
     <exclude-pattern>*/vendor/*</exclude-pattern>
     <exclude-pattern>index.php</exclude-pattern>
 
+    <!-- Test files follow the WordPress core test-*.php naming. -->
+    <rule ref="WordPress.Files.FileName.InvalidClassFileName">
+        <exclude-pattern>tests/*</exclude-pattern>
+    </rule>
+
     <!-- Only check PHP files. -->
     <arg name="extensions" value="php"/>
 
