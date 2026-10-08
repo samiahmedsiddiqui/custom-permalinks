@@ -1,0 +1,86 @@
+name: PR Preview
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  preview:
+    name: Add Playground preview link
+    runs-on: ubuntu-latest
+
+    permissions:
+      # Lets the job post and update the preview comment.
+      pull-requests: write
+
+    steps:
+      # Playground loads the plugin from the PR branch; the min files are committed, so no build is needed.
+      - name: Post the Playground preview link
+        uses: actions/github-script@v9
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const issue_number = context.payload.pull_request.number;
+            const marker = '<!-- playground-preview -->';
+
+            // Opens Post Types Permalinks, logged in, with pretty permalinks and a sample post and category.
+            const setup = [
+              "<?php require '/wordpress/wp-load.php';",
+              "update_option( 'permalink_structure', '/%postname%/' );",
+              "$term = wp_insert_term( 'Sample Category', 'category', array( 'slug' => 'sample-category' ) );",
+              "$post_id = wp_insert_post( array( 'post_title' => 'Sample Post', 'post_name' => 'sample-post', 'post_status' => 'publish', 'post_category' => array( $term['term_id'] ) ) );",
+              "update_post_meta( $post_id, 'custom_permalink', 'custom/sample-post/' );",
+              "update_option( 'custom_permalink_table', array( 'custom/sample-category/' => array( 'id' => (int) $term['term_id'], 'kind' => 'category' ) ) );",
+              "flush_rewrite_rules();",
+            ].join( ' ' );
+
+            const blueprint = {
+              $schema: 'https://playground.wordpress.net/blueprint-schema.json',
+              landingPage: '/wp-admin/admin.php?page=cp-post-permalinks',
+              preferredVersions: { php: '8.3', wp: 'latest' },
+              steps: [
+                {
+                  step: 'installPlugin',
+                  pluginData: {
+                    resource: 'git:directory',
+                    url: `https://github.com/${ owner }/${ repo }.git`,
+                    ref: process.env.HEAD_REF,
+                    path: '/',
+                  },
+                  options: { activate: true, targetFolderName: 'custom-permalinks' },
+                },
+                { step: 'login', username: 'admin' },
+                { step: 'runPHP', code: setup },
+              ],
+            };
+
+            // Brackets are encoded too, so they can't end the Markdown link early.
+            const url = 'https://playground.wordpress.net/?blueprint-url=data:application/json,' +
+              encodeURIComponent( JSON.stringify( blueprint ) ).replace( /\(/g, '%28' ).replace( /\)/g, '%29' );
+
+            const body = [
+              marker,
+              '### WordPress Playground preview',
+              '',
+              `**[Open this PR in WordPress Playground](${ url })** (${ process.env.HEAD_SHA.slice( 0, 7 ) })`,
+              '',
+              'Logs in as admin with `/%postname%/` permalinks, a sample post (`/custom/sample-post/`) and category (`/custom/sample-category/`), and opens Post Types Permalinks.',
+            ].join( '\n' );
+
+            const comments = await github.paginate( github.rest.issues.listComments, { owner, repo, issue_number } );
+            const existing = comments.find( ( comment ) => comment.user.type === 'Bot' && comment.body.includes( marker ) );
+
+            if ( existing ) {
+              await github.rest.issues.updateComment( { owner, repo, comment_id: existing.id, body } );
+            } else {
+              await github.rest.issues.createComment( { owner, repo, issue_number, body } );
+            }
