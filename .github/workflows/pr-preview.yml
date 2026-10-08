@@ -22,7 +22,30 @@ jobs:
 
     steps:
       # Playground loads the plugin from the PR branch; the min files are committed, so no build is needed.
+      # Opens on Post Types Permalinks, logged in, with pretty permalinks and a sample post and category.
       - uses: WordPress/action-wp-playground-pr-preview@v4
         with:
-          plugin-path: .
+          blueprint: |
+            {
+              "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+              "landingPage": "/wp-admin/admin.php?page=cp-post-permalinks",
+              "preferredVersions": { "php": "8.3", "wp": "latest" },
+              "steps": [
+                {
+                  "step": "installPlugin",
+                  "pluginData": {
+                    "resource": "git:directory",
+                    "url": "https://github.com/${{ github.repository }}.git",
+                    "ref": "${{ github.event.pull_request.head.ref }}",
+                    "path": "/"
+                  },
+                  "options": { "activate": true, "targetFolderName": "custom-permalinks" }
+                },
+                { "step": "login", "username": "admin" },
+                {
+                  "step": "runPHP",
+                  "code": "<?php require '/wordpress/wp-load.php'; update_option( 'permalink_structure', '/%postname%/' ); $term = wp_insert_term( 'Sample Category', 'category', array( 'slug' => 'sample-category' ) ); $post_id = wp_insert_post( array( 'post_title' => 'Sample Post', 'post_name' => 'sample-post', 'post_status' => 'publish', 'post_category' => array( $term['term_id'] ) ) ); update_post_meta( $post_id, 'custom_permalink', 'custom/sample-post/' ); update_option( 'custom_permalink_table', array( 'custom/sample-category/' => array( 'id' => (int) $term['term_id'], 'kind' => 'category' ) ) ); flush_rewrite_rules();"
+                }
+              ]
+            }
           github-token: ${{ secrets.GITHUB_TOKEN }}
