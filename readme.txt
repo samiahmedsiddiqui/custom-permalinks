@@ -168,6 +168,12 @@ Deactivating the plugin keeps all your saved custom permalinks in the database �
 
 == Changelog ==
 
+= 3.3.2 - Unreleased =
+
+* Bug:
+  * Fixed [custom permalinks in non-Latin scripts returning a 404](https://wordpress.org/support/topic/eror-404-all-link-after-update/) (e.g. Persian) when a shorter custom permalink matched the start of the URL (e.g. a `product/` page for `product/سلام/`), a regression in 3.3.0.
+  * Fixed custom permalinks in non-Latin scripts not loading with an endpoint appended (e.g. `/سلام/feed/`).
+
 = 3.3.1 - Oct 8, 2026 =
 
 * Bug:
