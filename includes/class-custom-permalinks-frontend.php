@@ -377,23 +377,34 @@ class Custom_Permalinks_Frontend {
 	 */
 	private function query_post_current_language( $requested_url ) {
 		$current_language = $this->current_language();
-		$posts            = null;
-
-		if ( ! empty( $current_language ) ) {
-			$posts = $this->query_post_language( $requested_url, $current_language );
-		}
-
-		if ( ! $posts ) {
-			$posts = $this->query_post( $requested_url );
-		}
 
 		// Permalinks saved under an English locale are stored percent-encoded.
-		$encoded_url = utf8_uri_encode( $requested_url );
-		if ( ! $posts && $encoded_url !== $requested_url ) {
-			$posts = $this->query_post_current_language( $encoded_url );
+		$candidates = array_unique( array( $requested_url, utf8_uri_encode( $requested_url ) ) );
+
+		// Exact matches first, so a shorter permalink can't claim the request.
+		foreach ( $candidates as $candidate ) {
+			$posts = null;
+			if ( ! empty( $current_language ) ) {
+				$posts = $this->query_post_language( $candidate, $current_language );
+			}
+
+			if ( ! $posts ) {
+				$posts = $this->query_post_exact( $candidate );
+			}
+
+			if ( $posts ) {
+				return $posts;
+			}
 		}
 
-		return $posts;
+		foreach ( $candidates as $candidate ) {
+			$posts = $this->query_post_prefix( $candidate );
+			if ( $posts ) {
+				return $posts;
+			}
+		}
+
+		return null;
 	}
 
 	/**
@@ -408,9 +419,29 @@ class Custom_Permalinks_Frontend {
 	 *                       status if URL matched otherwise returns null.
 	 */
 	private function query_post( $requested_url ) {
+		$posts = $this->query_post_exact( $requested_url );
+		if ( ! $posts ) {
+			$posts = $this->query_post_prefix( $requested_url );
+		}
+
+		return $posts;
+	}
+
+	/**
+	 * Search a permalink in the posts table that exactly matches the request.
+	 *
+	 * @since 3.3.2
+	 * @access private
+	 *
+	 * @param string $requested_url Requested URL.
+	 *
+	 * @return object[]|null Rows containing Post ID, Permalink, Post Type, and Post
+	 *                       status if URL matched otherwise returns null.
+	 */
+	private function query_post_exact( $requested_url ) {
 		global $wpdb;
 
-		$cache_name = 'cp$_' . str_replace( '/', '-', $requested_url ) . '_#cp';
+		$cache_name = 'cp$e_' . str_replace( '/', '-', $requested_url ) . '_#cp';
 		$posts      = wp_cache_get( $cache_name, 'custom_permalinks' );
 
 		if ( false === $posts ) {
@@ -429,25 +460,54 @@ class Custom_Permalinks_Frontend {
 				)
 			);
 
-			$remove_like_query = apply_filters( 'cp_remove_like_query', '__true' );
-			if ( ! $posts && '__true' === $remove_like_query ) {
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-				$posts = $wpdb->get_results(
-					$wpdb->prepare(
-						"SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
-						" LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
-						" meta_key = 'custom_permalink' AND meta_value != '' AND " .
-						' ( LOWER(meta_value) = LEFT(LOWER(%s), LENGTH(meta_value)) OR ' .
-						'   LOWER(meta_value) = LEFT(LOWER(%s), LENGTH(meta_value)) ) ' .
-						"  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
-						' ORDER BY LENGTH(meta_value) DESC, ' .
-						" FIELD(post_status,'publish','private','pending','draft','auto-draft','inherit')," .
-						" FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
-						$requested_url,
-						$requested_url . '/'
-					)
-				);
-			}
+			// Cache permalink for 24 hours.
+			wp_cache_set( $cache_name, $posts, 'custom_permalinks', 86400 );
+		}
+
+		return $posts;
+	}
+
+	/**
+	 * Search the longest permalink in the posts table that the request starts
+	 * with, e.g. a permalink followed by an endpoint.
+	 *
+	 * @since 3.3.2
+	 * @access private
+	 *
+	 * @param string $requested_url Requested URL.
+	 *
+	 * @return object[]|null Rows containing Post ID, Permalink, Post Type, and Post
+	 *                       status if URL matched otherwise returns null.
+	 */
+	private function query_post_prefix( $requested_url ) {
+		global $wpdb;
+
+		$remove_like_query = apply_filters( 'cp_remove_like_query', '__true' );
+		if ( '__true' !== $remove_like_query ) {
+			return null;
+		}
+
+		$cache_name = 'cp$p_' . str_replace( '/', '-', $requested_url ) . '_#cp';
+		$posts      = wp_cache_get( $cache_name, 'custom_permalinks' );
+
+		if ( false === $posts ) {
+			// CHAR_LENGTH, as LEFT counts characters and the request may be multibyte.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+			$posts = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT p.ID, pm.meta_value, p.post_type, p.post_status FROM $wpdb->posts AS p " .
+					" LEFT JOIN $wpdb->postmeta AS pm ON (p.ID = pm.post_id) WHERE " .
+					" meta_key = 'custom_permalink' AND meta_value != '' AND " .
+					' ( LOWER(meta_value) = LEFT(LOWER(%s), CHAR_LENGTH(meta_value)) OR ' .
+					'   LOWER(meta_value) = LEFT(LOWER(%s), CHAR_LENGTH(meta_value)) ) ' .
+					"  AND post_status != 'trash' AND post_type != 'nav_menu_item'" .
+					' ORDER BY CHAR_LENGTH(meta_value) DESC, ' .
+					" FIELD(post_status,'publish','private','pending','draft','auto-draft','inherit')," .
+					" FIELD(post_type,'post','page'), p.ID ASC LIMIT 1",
+					$requested_url,
+					$requested_url . '/'
+				)
+			);
 
 			// Cache permalink for 24 hours.
 			wp_cache_set( $cache_name, $posts, 'custom_permalinks', 86400 );

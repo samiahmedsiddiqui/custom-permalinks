@@ -80,6 +80,41 @@ class Test_Post_Permalinks extends Custom_Permalinks_TestCase {
 	}
 
 	/**
+	 * A shorter permalink the request starts with doesn't win over an exact
+	 * percent-encoded match.
+	 */
+	public function test_encoded_permalink_wins_over_shorter_prefix_permalink() {
+		$page_id = self::factory()->post->create(
+			array(
+				'post_type' => 'page',
+				'post_name' => 'shop',
+			)
+		);
+		$this->set_post_permalink( $page_id, 'product/' );
+
+		$post_id = self::factory()->post->create( array( 'post_name' => 'original-post' ) );
+		$this->set_post_permalink( $post_id, 'product/' . utf8_uri_encode( 'سلام' ) . '/' );
+
+		$this->go_to( home_url( '/product/' . rawurlencode( 'سلام' ) . '/' ) );
+
+		$this->assertTrue( is_single() );
+		$this->assertSame( $post_id, get_queried_object_id() );
+	}
+
+	/**
+	 * A multibyte custom permalink still matches with an endpoint appended.
+	 */
+	public function test_multibyte_permalink_matches_with_endpoint() {
+		$post_id = self::factory()->post->create( array( 'post_name' => 'original-post' ) );
+		$this->set_post_permalink( $post_id, 'سلام/' );
+
+		$this->go_to( home_url( '/' . rawurlencode( 'سلام' ) . '/feed/' ) );
+
+		$this->assertTrue( is_feed() );
+		$this->assertSame( 'original-post', get_query_var( 'name' ) );
+	}
+
+	/**
 	 * Requesting the original permalink redirects to the custom one.
 	 */
 	public function test_original_permalink_redirects_to_custom_permalink() {
