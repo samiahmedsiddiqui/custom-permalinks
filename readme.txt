@@ -4,7 +4,7 @@ Tags: permalink, custom url, slug, redirect, seo
 Requires at least: 5.9
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 3.3.1
+Stable tag: 3.3.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -168,7 +168,7 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
 
 == Changelog ==
 
-= 3.3.2 - Unreleased =
+= 3.3.2 - Oct 11, 2026 =
 
 * Bug:
   * Fixed [custom permalinks in non-Latin scripts returning a 404](https://wordpress.org/support/topic/eror-404-all-link-after-update/) (e.g. Persian) when a shorter custom permalink matched the start of the URL (e.g. a `product/` page for `product/Ø³Ù„Ø§Ù…/`), a regression in 3.3.0.
@@ -185,26 +185,23 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
 
 = 3.3.0 - Oct 8, 2026 =
 
-**Changes to be aware of:**
+* Changes to be aware of:
   * Requires WordPress 5.9 and PHP 7.4 or later, the oldest versions the plugin is now tested on. Sites on older versions keep 3.2.1.
   * Translations now come from [translate.wordpress.org](https://translate.wordpress.org/projects/wp-plugins/custom-permalinks/) instead of files bundled with the plugin. It covers every bundled language and adds Serbian. Sites that installed the plugin outside wordpress.org, or turned off automatic translation updates, show English until the language pack is installed from Dashboard â†’ Updates.
   * WPML translations now always resolve to their own custom permalink. Previously they returned [another language's custom permalink](https://wordpress.org/support/topic/no-input-field-in-the-metabox-for-a-wpml-translation/) depending on the active (admin) language, which listed wrong URLs in Post Types Permalinks and in SEO plugins' indexables and XML sitemaps (e.g. Yoast SEO).
   * `%ctax_parents_TAXONOMY_NAME_name%` now uses the parent terms' names, as documented, instead of their slugs. Permalinks generated from now on change where a parent term's name differs from its slug; saved permalinks are not changed.
-
-**Redirects and URLs:**
+* Redirects and URLs:
   * Fixed [custom permalinks in non-Latin scripts](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/61) (e.g. Thai, Arabic, Cyrillic) returning a 404 or redirecting in an infinite loop, as the browser requests them percent-encoded while they are saved unencoded (or vice versa, depending on the site language).
   * Fixed the trailing-slash redirect and the redirect to the custom permalink dropping the page number (e.g. `/news/page/2` redirected to `/news/` instead of `/news/page/2/`).
   * Added the `custom_permalinks_disable_remove_page_number` filter to keep the `/page/{number}` segment in the requested URL, for [custom archive pages whose pagination doesn't advance](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/110).
   * Fixed the [query string being corrupted](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/82) (e.g. `foo=bar` became `http://foo=bar`) after a custom permalink was resolved.
   * Fixed [comment links](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/80) on paginated comments (e.g. `/my-post/comment-page-2/`) not following the custom permalink's trailing slash, so a custom permalink without a trailing slash no longer gets comment URLs with one, and vice versa.
-
-**WPML and Polylang:**
+* WPML and Polylang:
   * Fixed the [WPML language switcher](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/98) linking back to the current language instead of the translation when languages are in directories (e.g. `/en/`, `/de/`) and the translation uses the same custom permalink.
   * Fixed WPML language directories that differ from the language code (e.g. `/de-de/` for `de`, as in WPML 5.0) not being repaired when duplicated, and the default language getting its directory added to a permalink when "hide the default language directory" is on.
   * Fixed English custom permalinks not being lowercased and cleaned of special characters with WPML 5.0's region-based language codes (e.g. `en-us`).
   * Fixed [Polylang translations sharing the same custom permalink](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/64) (e.g. `/en/technology` and `/zh/technology`) redirecting to the other language when the translation's stored language was missing or out of date.
-
-**Admin screens:**
+* Admin screens:
   * Fixed [Post Types and Taxonomies Permalinks pagination](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/101) showing the first page's results on every page, ignoring sorting and search, when a persistent object cache (e.g. Redis or Memcached) is enabled. The lists now also refresh right after a permalink is added, changed or deleted.
   * Fixed [bulk delete and search](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/75) in Post Types and Taxonomies Permalinks failing with a "headers already sent" warning instead of redirecting.
   * Fixed short titles and permalinks being padded with leading spaces in the [Post Types and Taxonomies Permalinks lists](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/77).
@@ -213,17 +210,19 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
   * Fixed a fatal error on WordPress 5.9 and 6.0 when saving the Post Types Permalinks settings with the cache flush option, as `wp_cache_flush_group()` needs WordPress 6.1. Object caches that can't flush a single group now get a full cache flush.
   * Fixed the "Custom Permalinks Manager" role name not being translatable.
   * Fixed Post Types Settings showing the WordPress address instead of the site address before each structure, which is wrong when WordPress is installed in a subdirectory.
-
-**Compatibility:**
+* Compatibility:
   * Fixed WooCommerce notices about accessing order data directly on order screens, as the permalink form read post fields from the `WC_Order` object.
   * Fixed posts updated by WP All Import being handled as new posts, which turned permalink regeneration back on and could replace their custom permalink with the post type's structure.
   * Fixed the `seems_utf8()` deprecation notice on WordPress 6.9 and later.
 
 = Earlier versions =
 
-  * For the changelog of earlier versions, please refer to the separate changelog.txt file.
+* For the changelog of earlier versions, please refer to the separate changelog.txt file.
 
 == Upgrade Notice ==
+
+= 3.3.2 =
+Recommended update: fixes custom permalinks in non-Latin scripts (e.g. Persian) returning a 404 since 3.3.0 when a shorter custom permalink matched the start of the URL, and with an endpoint such as /feed/ appended.
 
 = 3.3.1 =
 Recommended update: fixes the editor's View Post and preview links not updating after changing a custom permalink, and improves accessibility of the admin screens with screen reader labels and better text contrast.
