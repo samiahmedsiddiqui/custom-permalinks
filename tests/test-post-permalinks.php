@@ -115,6 +115,28 @@ class Test_Post_Permalinks extends Custom_Permalinks_TestCase {
 	}
 
 	/**
+	 * The canonical redirect keeps a percent-encoded permalink without a
+	 * trailing slash, so it doesn't loop with the plugin's own redirect.
+	 */
+	public function test_encoded_permalink_without_trailing_slash_has_no_canonical_redirect() {
+		$page_id   = self::factory()->post->create(
+			array(
+				'post_type' => 'page',
+				'post_name' => 'original-page',
+			)
+		);
+		$permalink = utf8_uri_encode( 'パワーエレクトロニクス' );
+		$this->set_post_permalink( $page_id, $permalink );
+
+		$url = home_url( '/' . $permalink . '?utm_source=x' );
+		$this->go_to( $url );
+
+		$this->assertTrue( is_page() );
+		$this->assertSame( $page_id, get_queried_object_id() );
+		$this->assertNull( redirect_canonical( $url, false ) );
+	}
+
+	/**
 	 * Requesting the original permalink redirects to the custom one.
 	 */
 	public function test_original_permalink_redirects_to_custom_permalink() {

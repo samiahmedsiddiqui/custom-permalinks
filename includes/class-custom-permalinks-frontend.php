@@ -1616,19 +1616,15 @@ class Custom_Permalinks_Frontend {
 
 		add_filter( 'user_trailingslashit', array( $this, 'custom_trailingslash' ) );
 
-		if ( trim( $request ) ) {
-			if ( trim( $this->registered_url, '/' ) === trim( $request, '/' ) ) {
-				if ( '/' === $url_string[0] ) {
-					$trailingslash_string = '/';
-				} else {
-					$trailingslash_string = '';
-				}
-
-				if ( isset( $url['path'] ) ) {
-					$trailingslash_string .= trailingslashit( $url['path'] );
-				}
-
-				$trailingslash_string .= $this->registered_url;
+		// The registered URL is decoded, while WordPress passes encoded paths here.
+		if ( trim( $request )
+			&& trim( $this->registered_url, '/' ) === trim( rawurldecode( $request ), '/' )
+		) {
+			// Keep the URL's own encoding, only match the registered trailing slash.
+			if ( '/' === substr( $this->registered_url, -1 ) ) {
+				$trailingslash_string = trailingslashit( $url_string );
+			} else {
+				$trailingslash_string = untrailingslashit( $url_string );
 			}
 		}
 

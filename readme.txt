@@ -168,6 +168,11 @@ Deactivating the plugin keeps all your saved custom permalinks in the database â
 
 == Changelog ==
 
+= 3.3.3 - Unreleased =
+
+* Bug:
+  * Fixed an [infinite redirect loop](https://github.com/samiahmedsiddiqui/custom-permalinks/issues/208) on percent-encoded custom permalinks without a trailing slash (e.g. Japanese), a regression in 3.3.0.
+
 = 3.3.2 - Oct 11, 2026 =
 
 * Bug:
